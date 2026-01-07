@@ -38,10 +38,13 @@ interface GameState {
   setView: (view: ViewState) => void;
   setSelectedPokemon: (id: string | null) => void;
   addLog: (message: string, type?: LogEntry['type']) => void;
-  startBattle: (enemyId: string) => void; 
+  startBattle: (enemyId: string) => void;
   runAway: () => void;
   executeMove: (moveIndex: number) => Promise<void>;
   useItem: (itemId: string, targetId: string) => void;
+  addItem: (itemId: string, quantity?: number) => void;
+  throwPokeball: () => Promise<void>;
+  buyItem: (itemId: string, price: number, quantity?: number) => boolean;
   healParty: () => void;
   moveTo: (locationId: string) => void; // New Action
 }
@@ -273,6 +276,159 @@ export const useGameStore = create<GameState>((set, get) => ({
           });
       }
   })),
+
+  addItem: (itemId, quantity = 1) => set(produce((state: GameState) => {
+      const existingItem = state.inventory.find(i => i.id === itemId);
+      if (existingItem) {
+          existingItem.quantity += quantity;
+      }
+      // If item doesn't exist in inventory, we could add it here
+      // But for now, we only increment existing items
+      state.logs.push({
+          id: crypto.randomUUID(),
+          message: `获得了 ${existingItem?.name || '物品'} x${quantity}！`,
+          timestamp: Date.now(),
+          type: 'info'
+      });
+  })),
+
+  throwPokeball: async () => {
+      const { battle, playerParty, addLog } = get();
+      if (!battle.active || !battle.enemy || battle.phase !== 'INPUT') return;
+
+      const pokeballItem = get().inventory.find(i => i.id === 'pokeball');
+      if (!pokeballItem || pokeballItem.quantity <= 0) {
+          addLog('没有精灵球了！', 'urgent');
+          return;
+      }
+
+      // Set to processing
+      set(produce((state: GameState) => { state.battle.phase = 'PROCESSING'; }));
+
+      // Use pokeball
+      set(produce((state: GameState) => {
+          const item = state.inventory.find(i => i.id === 'pokeball');
+          if (item) item.quantity--;
+      }));
+
+      const enemy = battle.enemy;
+      const catchRate = enemy.speciesData.catchRate || 45;
+      const hpRatio = enemy.currentHp / enemy.maxHp;
+
+      // Catch formula: higher chance when HP is lower
+      const catchChance = (catchRate / 255) * (1 - hpRatio * 0.5);
+      const roll = Math.random();
+
+      addLog(`扔出了精灵球！`, 'combat');
+      await new Promise(r => setTimeout(r, 800));
+
+      if (roll < catchChance) {
+          // Successful catch
+          set(produce((state: GameState) => {
+              if (state.battle.enemy) {
+                  state.playerParty.push(state.battle.enemy);
+                  state.pokedex[state.battle.enemy.speciesData.pokedexId!] = 'CAUGHT';
+              }
+          }));
+
+          addLog(`成功捕获了 ${enemy.speciesName}！`, 'urgent');
+          await new Promise(r => setTimeout(r, 1200));
+
+          // End battle
+          set(produce((state: GameState) => {
+              state.battle.active = false;
+              state.battle.enemy = null;
+              state.battle.phase = 'ENDED';
+              state.view = 'ROAM';
+          }));
+      } else {
+          // Failed catch
+          addLog(`${enemy.speciesName} 挣脱了精灵球！`, 'combat');
+          await new Promise(r => setTimeout(r, 800));
+
+          // Enemy counter-attack
+          const playerMon = playerParty[battle.playerActiveIndex];
+          if (enemy.currentHp > 0 && playerMon.currentHp > 0) {
+              const enemyMoveData = enemy.moves[Math.floor(Math.random() * enemy.moves.length)];
+
+              addLog(`${enemy.speciesName} 使用了 ${enemyMoveData.move.name}！`, 'combat');
+              await new Promise(r => setTimeout(r, 800));
+
+              const result = calculateDamage(enemy, playerMon, enemyMoveData.move);
+
+              if (result.damage > 0) {
+                  let newHp = 0;
+                  set(produce((state: GameState) => {
+                      const p = state.playerParty[state.battle.playerActiveIndex];
+                      p.currentHp = Math.max(0, p.currentHp - result.damage);
+                      newHp = p.currentHp;
+                  }));
+
+                  let msg = `造成了 ${result.damage} 点伤害！`;
+                  if (result.effectiveness > 1) msg = `效果拔群！${msg}`;
+                  if (result.effectiveness < 1 && result.effectiveness > 0) msg = `效果不理想...${msg}`;
+                  if (result.isCritical) msg = `会心一击！${msg}`;
+
+                  addLog(msg, 'combat');
+                  await new Promise(r => setTimeout(r, 600));
+
+                  // Check if player fainted
+                  if (newHp === 0) {
+                      addLog(`${playerMon.speciesName} 失去了战斗能力！`, 'urgent');
+                      await new Promise(r => setTimeout(r, 1000));
+
+                      set(produce((state: GameState) => {
+                          state.battle.active = false;
+                          state.battle.enemy = null;
+                          state.battle.phase = 'ENDED';
+                          state.view = 'ROAM';
+                          state.playerMoney = Math.floor(state.playerMoney / 2);
+                      }));
+                      addLog(`失败了，损失了一半的金钱...`, 'urgent');
+                      return;
+                  }
+              }
+          }
+
+          // Back to input phase
+          set(produce((state: GameState) => {
+              state.battle.turnCount++;
+              state.battle.phase = 'INPUT';
+          }));
+      }
+  },
+
+  buyItem: (itemId, price, quantity = 1) => {
+      const state = get();
+      const totalCost = price * quantity;
+
+      if (state.playerMoney < totalCost) {
+          set(produce((draft: GameState) => {
+              draft.logs.push({
+                  id: crypto.randomUUID(),
+                  message: '金钱不足！',
+                  timestamp: Date.now(),
+                  type: 'urgent'
+              });
+          }));
+          return false;
+      }
+
+      set(produce((draft: GameState) => {
+          draft.playerMoney -= totalCost;
+          const existingItem = draft.inventory.find(i => i.id === itemId);
+          if (existingItem) {
+              existingItem.quantity += quantity;
+          }
+          draft.logs.push({
+              id: crypto.randomUUID(),
+              message: `购买了 ${existingItem?.name || '物品'} x${quantity}，花费 ¥${totalCost}`,
+              timestamp: Date.now(),
+              type: 'info'
+          });
+      }));
+      return true;
+  },
 
   healParty: () => set(produce((state: GameState) => {
       state.playerParty.forEach(p => {

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
-import { Compass, Moon, MessageCircle, Navigation } from 'lucide-react';
+import { Compass, Moon, MessageCircle, Navigation, ShoppingBag } from 'lucide-react';
 import { WORLD_MAP, SPECIES_DATA } from '../../constants';
 
 const RoamStage: React.FC = () => {
-  const { startBattle, healParty, addLog, playerLocationId, moveTo } = useGameStore();
+  const { startBattle, healParty, addLog, addItem, playerLocationId, moveTo, buyItem, playerMoney } = useGameStore();
+  const [showShop, setShowShop] = useState(false);
   
   const location = WORLD_MAP[playerLocationId];
   if (!location) return <div>Location Error</div>;
@@ -12,11 +13,12 @@ const RoamStage: React.FC = () => {
   const handleExplore = () => {
     const roll = Math.random();
     // Use location specific encounters if available, otherwise fallback (for safety)
-    const encounterPool = location.encounters && location.encounters.length > 0 
-        ? location.encounters 
+    const encounterPool = location.encounters && location.encounters.length > 0
+        ? location.encounters
         : ['rattata', 'pidgey'];
 
-    if (roll < 0.6) {
+    if (roll < 0.8) {
+      // 80% chance to encounter wild Pokemon
       const randomEnemy = encounterPool[Math.floor(Math.random() * encounterPool.length)];
       // Validate species exists
       if (SPECIES_DATA[randomEnemy]) {
@@ -24,9 +26,11 @@ const RoamStage: React.FC = () => {
       } else {
           addLog("草丛里有什么东西跑掉了...", "info");
       }
-    } else if (roll < 0.7) {
-      addLog("你发现了一个伤药！（功能未实装）", "info");
+    } else if (roll < 0.9) {
+      // 10% chance to find item
+      addItem('potion', 1);
     } else {
+      // 10% chance for nothing
       addLog("微风吹过，一切都很平静。", "info");
     }
   };
@@ -110,15 +114,76 @@ const RoamStage: React.FC = () => {
                     <span className="text-xs font-bold">原地休息</span>
                 </button>
 
-                <button 
-                    onClick={() => addLog("附近没有可以互动的NPC。", "info")}
-                    className="bg-slate-700/90 hover:bg-slate-700 active:bg-slate-800 text-slate-200 p-4 rounded-2xl shadow-lg border-b-4 border-slate-900 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
+                <button
+                    onClick={() => setShowShop(true)}
+                    className="bg-amber-600/90 hover:bg-amber-600 active:bg-amber-700 text-white p-4 rounded-2xl shadow-lg border-b-4 border-amber-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
                 >
-                    <MessageCircle size={20} className="group-hover:scale-110 transition-transform" />
-                    <span className="text-xs font-bold">交谈</span>
+                    <ShoppingBag size={20} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-xs font-bold">商店</span>
                 </button>
             </div>
         </div>
+
+        {/* Shop Modal */}
+        {showShop && (
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-slate-900 border-2 border-amber-500/50 rounded-2xl p-6 max-w-sm w-full max-h-[80vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                  <ShoppingBag size={24} className="text-amber-500" />
+                  道具商店
+                </h2>
+                <button
+                  onClick={() => setShowShop(false)}
+                  className="text-slate-400 hover:text-white text-sm px-3 py-1 bg-slate-800 rounded-lg"
+                >
+                  关闭
+                </button>
+              </div>
+
+              <div className="mb-4 bg-slate-800/50 p-3 rounded-lg">
+                <div className="text-sm text-slate-400">持有金钱</div>
+                <div className="text-2xl font-bold text-amber-400">¥{playerMoney}</div>
+              </div>
+
+              <div className="space-y-3">
+                {/* Potion */}
+                <div className="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                  <div className="flex items-start justify-between mb-2">
+                    <div>
+                      <h3 className="font-bold text-white">伤药</h3>
+                      <p className="text-xs text-slate-400">恢复宝可梦20点HP</p>
+                    </div>
+                    <div className="text-lg font-bold text-amber-400">¥300</div>
+                  </div>
+                  <button
+                    onClick={() => buyItem('potion', 300, 1)}
+                    className="w-full bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-white py-2 px-4 rounded-lg text-sm font-bold transition-colors"
+                  >
+                    购买
+                  </button>
+                </div>
+
+                {/* Pokeball */}
+                <div className="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                  <div className="flex items-start justify-between mb-2">
+                    <div>
+                      <h3 className="font-bold text-white">精灵球</h3>
+                      <p className="text-xs text-slate-400">用于捕捉野生宝可梦</p>
+                    </div>
+                    <div className="text-lg font-bold text-amber-400">¥200</div>
+                  </div>
+                  <button
+                    onClick={() => buyItem('pokeball', 200, 1)}
+                    className="w-full bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-white py-2 px-4 rounded-lg text-sm font-bold transition-colors"
+                  >
+                    购买
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
     </div>
   );
 };

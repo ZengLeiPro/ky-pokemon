@@ -4,8 +4,9 @@ import { BriefcaseMedical, Zap, Key } from 'lucide-react';
 import { ItemCategory } from '../../types';
 
 const BagView: React.FC = () => {
-  const { inventory } = useGameStore();
+  const { inventory, playerParty, useItem } = useGameStore();
   const [activeTab, setActiveTab] = useState<ItemCategory>('MEDICINE');
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
   const filteredItems = inventory.filter(item => item.category === activeTab);
 
@@ -14,6 +15,13 @@ const BagView: React.FC = () => {
     { id: 'POKEBALLS', label: '精灵球', icon: Zap },
     { id: 'KEY_ITEMS', label: '重要', icon: Key },
   ] as const;
+
+  const handleUseItem = (pokemonId: string) => {
+    if (selectedItem) {
+      useItem(selectedItem, pokemonId);
+      setSelectedItem(null);
+    }
+  };
 
   return (
     <div className="h-full bg-slate-950 flex flex-col">
@@ -48,7 +56,16 @@ const BagView: React.FC = () => {
             </div>
         ) : (
             filteredItems.map(item => (
-                <div key={item.id} className="bg-slate-800/80 p-4 rounded-xl border border-slate-700 flex items-start gap-4 active:scale-[0.99] transition-transform">
+                <button
+                    key={item.id}
+                    onClick={() => setSelectedItem(selectedItem === item.id ? null : item.id)}
+                    disabled={item.quantity === 0 || item.category === 'KEY_ITEMS'}
+                    className={`w-full bg-slate-800/80 p-4 rounded-xl border flex items-start gap-4 active:scale-[0.99] transition-all text-left disabled:opacity-50 disabled:cursor-not-allowed ${
+                        selectedItem === item.id
+                            ? 'border-cyan-500 shadow-lg shadow-cyan-500/20'
+                            : 'border-slate-700 hover:border-slate-600'
+                    }`}
+                >
                     <div className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center text-slate-400 shrink-0">
                         {/* Placeholder for item icon */}
                         <div className="w-6 h-6 rounded-full bg-slate-700/50 border border-slate-600"></div>
@@ -62,10 +79,41 @@ const BagView: React.FC = () => {
                         </div>
                         <p className="text-xs text-slate-400 leading-relaxed">{item.description}</p>
                     </div>
-                </div>
+                </button>
             ))
         )}
       </div>
+
+      {/* Pokemon Selection Panel - Shows when item is selected */}
+      {selectedItem && (
+        <div className="bg-slate-900 border-t border-slate-700 p-4">
+          <p className="text-xs text-slate-400 mb-3 font-mono">选择要使用道具的宝可梦：</p>
+          <div className="grid grid-cols-2 gap-2">
+            {playerParty.map(pokemon => (
+              <button
+                key={pokemon.id}
+                onClick={() => handleUseItem(pokemon.id)}
+                disabled={pokemon.currentHp === 0}
+                className="bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed p-3 rounded-lg border border-slate-700 text-left transition-all active:scale-95"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm font-bold text-slate-200">{pokemon.speciesName}</span>
+                  <span className="text-xs text-slate-500">Lv.{pokemon.level}</span>
+                </div>
+                <div className="text-xs text-slate-400">
+                  HP: {pokemon.currentHp}/{pokemon.maxHp}
+                </div>
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={() => setSelectedItem(null)}
+            className="w-full mt-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 text-xs rounded-lg border border-slate-700 transition-colors"
+          >
+            取消
+          </button>
+        </div>
+      )}
     </div>
   );
 };
