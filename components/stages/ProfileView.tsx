@@ -1,9 +1,11 @@
 import React from 'react';
 import { useGameStore } from '../../stores/gameStore';
-import { User, Clock, Award, Star } from 'lucide-react';
+import { useAuthStore } from '../../stores/authStore';
+import { User, Clock, Award, Star, LogOut } from 'lucide-react';
 
 const ProfileView: React.FC = () => {
-  const { playerMoney, logs } = useGameStore();
+  const { playerMoney, logs, setView } = useGameStore();
+  const { currentUser, logout } = useAuthStore();
   const startTime = logs.find(l => l.id === 'init')?.timestamp || Date.now();
   const playTimeMinutes = Math.floor((Date.now() - startTime) / 60000);
 
@@ -17,8 +19,8 @@ const ProfileView: React.FC = () => {
                 <div className="w-24 h-24 bg-slate-800 rounded-full border-4 border-slate-700 flex items-center justify-center shadow-xl mb-4">
                     <User size={48} className="text-slate-500" />
                 </div>
-                <h1 className="text-2xl font-bold text-white tracking-wide">训练家 小赤</h1>
-                <p className="text-indigo-200 text-sm mt-1">ID: 89301</p>
+                <h1 className="text-2xl font-bold text-white tracking-wide">训练家 {currentUser?.username || '小赤'}</h1>
+                <p className="text-indigo-200 text-sm mt-1">ID: {currentUser?.id.slice(0, 8) || '00000000'}</p>
             </div>
         </div>
 
@@ -60,10 +62,22 @@ const ProfileView: React.FC = () => {
 
             </div>
 
-             <div className="text-center">
+             <div className="text-center space-y-3">
                 <button className="text-xs text-slate-500 hover:text-slate-300 underline">
                     游戏设置
                 </button>
+                <div>
+                    <button
+                        onClick={() => {
+                            logout();
+                            setView('LOGIN');
+                        }}
+                        className="flex items-center gap-2 mx-auto px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 hover:text-red-300 text-sm font-medium transition-all"
+                    >
+                        <LogOut size={16} />
+                        退出登录
+                    </button>
+                </div>
              </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useGameStore } from './stores/gameStore';
+import { useAuthStore } from './stores/authStore';
 import Header from './components/Header';
 import MessageBox from './components/MessageBox';
 import ControlPad from './components/ControlPad';
@@ -14,11 +15,32 @@ import ProfileView from './components/stages/ProfileView';
 import SummaryView from './components/stages/SummaryView';
 import DexView from './components/stages/DexView';
 
+// Auth Views
+import LoginView from './components/auth/LoginView';
+import RegisterView from './components/auth/RegisterView';
+
 const App: React.FC = () => {
-  const { view } = useGameStore();
+  const { view, setView } = useGameStore();
+  const { isAuthenticated, checkAuth } = useAuthStore();
+
+  // 检查用户是否已登录
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  // 如果未登录，重定向到登录页
+  useEffect(() => {
+    if (!isAuthenticated && view !== 'LOGIN' && view !== 'REGISTER') {
+      setView('LOGIN');
+    }
+  }, [isAuthenticated, view, setView]);
 
   const renderStage = () => {
     switch (view) {
+      case 'LOGIN':
+        return <LoginView />;
+      case 'REGISTER':
+        return <RegisterView />;
       case 'BATTLE':
         return <BattleStage />;
       case 'TEAM':
@@ -41,6 +63,15 @@ const App: React.FC = () => {
   const showNavDock = ['ROAM', 'TEAM', 'BAG', 'PROFILE', 'DEX'].includes(view);
   const showMessageBox = view === 'ROAM' || view === 'BATTLE';
   const showControlPad = view === 'BATTLE';
+
+  // 认证页面使用全屏布局，无需 Header 和 Footer
+  if (view === 'LOGIN' || view === 'REGISTER') {
+    return (
+      <div className="h-screen w-screen bg-black">
+        {renderStage()}
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen w-screen flex flex-col bg-black max-w-md mx-auto shadow-2xl overflow-hidden relative">

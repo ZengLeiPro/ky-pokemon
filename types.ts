@@ -38,8 +38,8 @@ export interface Pokemon {
   baseStats: BaseStats;
   ivs: BaseStats;
   evs: BaseStats;
-  nature: string; 
-  
+  nature: string;
+
   // Dynamic State
   currentHp: number;
   maxHp: number;
@@ -48,13 +48,17 @@ export interface Pokemon {
   status?: 'BRN' | 'PAR' | 'SLP' | 'PSN' | 'FRZ';
   exp: number;
   nextLevelExp: number;
-  
+
   // Metadata
   spriteUrl?: string;
+  speciesData: {
+    pokedexId: number;
+    catchRate: number;
+  };
 }
 
 // 增加新的视图状态
-export type ViewState = 'ROAM' | 'BATTLE' | 'TEAM' | 'BAG' | 'PROFILE' | 'DEX' | 'SUMMARY';
+export type ViewState = 'ROAM' | 'BATTLE' | 'TEAM' | 'BAG' | 'PROFILE' | 'DEX' | 'SUMMARY' | 'LOGIN' | 'REGISTER';
 
 export interface LogEntry {
   id: string;
@@ -85,4 +89,20 @@ export interface LocationData {
   connections: string[]; // IDs of other locations
   encounters?: string[]; // Potential wild pokemon IDs
   bgGradient?: string; // CSS gradient class
+}
+
+// 用户认证相关类型
+export interface User {
+  id: string;
+  username: string;
+  createdAt: number;
+}
+
+export interface UserCredentials {
+  username: string;
+  password: string;
+}
+
+export interface RegisterData extends UserCredentials {
+  // 注册和登录使用相同的字段
 }

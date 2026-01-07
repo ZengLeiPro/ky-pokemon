@@ -57,6 +57,7 @@ export const MOVES: Record<string, Move> = {
 // Mock Species Data
 interface SpeciesData extends Partial<Pokemon> {
     pokedexId: number;
+    catchRate: number;
 }
 
 export const SPECIES_DATA: Record<string, SpeciesData> = {
@@ -65,6 +66,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     speciesName: '妙蛙种子',
     types: ['Grass', 'Poison'],
     baseStats: { hp: 45, atk: 49, def: 49, spa: 65, spd: 65, spe: 45 },
+    catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
   },
   charmander: {
@@ -72,6 +74,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     speciesName: '小火龙',
     types: ['Fire'],
     baseStats: { hp: 39, atk: 52, def: 43, spa: 60, spd: 50, spe: 65 },
+    catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png'
   },
   squirtle: {
@@ -79,6 +82,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     speciesName: '杰尼龟',
     types: ['Water'],
     baseStats: { hp: 44, atk: 48, def: 65, spa: 50, spd: 64, spe: 43 },
+    catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png'
   },
   pidgey: {
@@ -86,6 +90,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     speciesName: '波波',
     types: ['Normal', 'Flying'],
     baseStats: { hp: 40, atk: 45, def: 40, spa: 35, spd: 35, spe: 56 },
+    catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/16.png'
   },
   rattata: {
@@ -93,6 +98,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     speciesName: '小拉达',
     types: ['Normal'],
     baseStats: { hp: 30, atk: 56, def: 35, spa: 25, spd: 35, spe: 72 },
+    catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/19.png'
   },
   pikachu: {
@@ -100,6 +106,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     speciesName: '皮卡丘',
     types: ['Electric'],
     baseStats: { hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90 },
+    catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png'
   },
   jigglypuff: {
@@ -107,6 +114,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     speciesName: '胖丁',
     types: ['Normal', 'Fairy'],
     baseStats: { hp: 115, atk: 45, def: 20, spa: 45, spd: 25, spe: 20 },
+    catchRate: 170,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/39.png'
   },
   meowth: {
@@ -114,6 +122,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     speciesName: '喵喵',
     types: ['Normal'],
     baseStats: { hp: 40, atk: 45, def: 35, spa: 40, spd: 40, spe: 90 },
+    catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/52.png'
   }
 };

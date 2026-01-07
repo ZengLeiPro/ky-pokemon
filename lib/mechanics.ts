@@ -33,12 +33,12 @@ export const calculateStats = (base: BaseStats, ivs: BaseStats, evs: BaseStats, 
 
 export const createPokemon = (speciesKey: string, level: number, moves: Move[]): Pokemon => {
     const data = SPECIES_DATA[speciesKey];
-    
+
     if (!data) throw new Error(`Species ${speciesKey} not found`);
 
     const ivs: BaseStats = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 }; // Perfect IVs for demo
     const evs: BaseStats = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-    
+
     const { stats, maxHp } = calculateStats(data.baseStats!, ivs, evs, level);
 
     return {
@@ -57,6 +57,10 @@ export const createPokemon = (speciesKey: string, level: number, moves: Move[]):
         spriteUrl: data.spriteUrl,
         exp: 0,
         nextLevelExp: Math.pow(level + 1, 3), // Simplified Cubic exp curve
+        speciesData: {
+            pokedexId: data.pokedexId,
+            catchRate: data.catchRate
+        }
     };
 };
 

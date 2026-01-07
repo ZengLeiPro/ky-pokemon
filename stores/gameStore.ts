@@ -365,8 +365,8 @@ export const useGameStore = create<GameState>((set, get) => ({
                   }));
 
                   let msg = `造成了 ${result.damage} 点伤害！`;
-                  if (result.effectiveness > 1) msg = `效果拔群！${msg}`;
-                  if (result.effectiveness < 1 && result.effectiveness > 0) msg = `效果不理想...${msg}`;
+                  if (result.typeEffectiveness > 1) msg = `效果拔群！${msg}`;
+                  if (result.typeEffectiveness < 1 && result.typeEffectiveness > 0) msg = `效果不理想...${msg}`;
                   if (result.isCritical) msg = `会心一击！${msg}`;
 
                   addLog(msg, 'combat');
