@@ -1,0 +1,73 @@
+import React from 'react';
+import { useGameStore } from '../../stores/gameStore';
+import { User, Clock, Award, Star } from 'lucide-react';
+
+const ProfileView: React.FC = () => {
+  const { playerMoney, logs } = useGameStore();
+  const startTime = logs.find(l => l.id === 'init')?.timestamp || Date.now();
+  const playTimeMinutes = Math.floor((Date.now() - startTime) / 60000);
+
+  return (
+    <div className="h-full bg-slate-950 flex flex-col overflow-y-auto">
+        {/* Header */}
+        <div className="bg-gradient-to-br from-indigo-900 to-slate-900 p-6 pb-12 rounded-b-[2.5rem] shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+            
+            <div className="flex flex-col items-center mt-4">
+                <div className="w-24 h-24 bg-slate-800 rounded-full border-4 border-slate-700 flex items-center justify-center shadow-xl mb-4">
+                    <User size={48} className="text-slate-500" />
+                </div>
+                <h1 className="text-2xl font-bold text-white tracking-wide">训练家 小赤</h1>
+                <p className="text-indigo-200 text-sm mt-1">ID: 89301</p>
+            </div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="px-6 -mt-8 relative z-10 space-y-6 pb-8">
+            <div className="bg-slate-800 rounded-2xl p-6 shadow-lg border border-slate-700 space-y-6">
+                
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-slate-900/50 p-4 rounded-xl">
+                        <div className="flex items-center gap-2 text-slate-400 text-xs mb-1">
+                            <Clock size={12} /> 游戏时间
+                        </div>
+                        <div className="text-xl font-mono text-white">{playTimeMinutes} <span className="text-sm text-slate-500">分</span></div>
+                    </div>
+                    <div className="bg-slate-900/50 p-4 rounded-xl">
+                        <div className="flex items-center gap-2 text-slate-400 text-xs mb-1">
+                            <Star size={12} /> 图鉴收集
+                        </div>
+                        <div className="text-xl font-mono text-white">5 <span className="text-sm text-slate-500">只</span></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div className="flex items-center gap-2 text-slate-300 font-bold mb-3 text-sm">
+                        <Award size={16} className="text-amber-400" /> 
+                        获得徽章
+                    </div>
+                    <div className="bg-slate-900/80 rounded-xl p-4 h-24 flex items-center justify-center text-slate-600 text-xs italic border border-slate-800 border-dashed">
+                        尚未获得任何徽章
+                    </div>
+                </div>
+                
+                <div className="pt-4 border-t border-slate-700">
+                     <div className="flex justify-between items-center text-sm">
+                         <span className="text-slate-400">持有金钱</span>
+                         <span className="font-mono font-bold text-emerald-400">¥ {playerMoney}</span>
+                     </div>
+                </div>
+
+            </div>
+
+             <div className="text-center">
+                <button className="text-xs text-slate-500 hover:text-slate-300 underline">
+                    游戏设置
+                </button>
+             </div>
+        </div>
+    </div>
+  );
+};
+
+export default ProfileView;
