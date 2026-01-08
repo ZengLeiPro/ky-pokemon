@@ -1,7 +1,7 @@
 // 自动生成的代码 - 请勿手动编辑
 // 运行 npx tsx scripts/generate-constants.ts 重新生成
 
-import { LocationData, Move, Pokemon, PokemonType, Evolution, LearnsetMove } from './types';
+import { LocationData, Move, Pokemon, PokemonType, Evolution, LearnsetMove } from '../../src/types';
 
 export const TYPE_COLORS: Record<PokemonType, string> = {
   Normal: '#A8A77A',
@@ -467,7 +467,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/28.png',
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'sandAttack', level: 1 }, { moveId: 'defenseCurl', level: 1 }, { moveId: 'slash', level: 17 }],
   },
-  'nidoran-f': {
+  nidoran-f: {
     pokedexId: 29,
     speciesName: '尼多兰',
     types: ['Poison'],
@@ -496,7 +496,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/31.png',
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'bodySlam', level: 1 }, { moveId: 'tailWhip', level: 1 }],
   },
-  'nidoran-m': {
+  nidoran-m: {
     pokedexId: 32,
     speciesName: '尼多朗',
     types: ['Poison'],
@@ -1347,7 +1347,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/121.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'recover', level: 1 }, { moveId: 'harden', level: 1 }],
   },
-  'mr-mime': {
+  mr-mime: {
     pokedexId: 122,
     speciesName: '魔墙人偶',
     types: ['Psychic', 'Fairy'],
@@ -1623,71 +1623,4 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png',
     learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'transform', level: 10 }, { moveId: 'megaPunch', level: 20 }, { moveId: 'metronome', level: 30 }],
   },
-};
-
-
-export const WORLD_MAP: Record<string, LocationData> = {
-  'pallet-town': {
-    id: 'pallet-town',
-    name: '真新镇',
-    description: '纯白色的开始之镇。这里是你冒险开始的地方。',
-    region: '关都',
-    connections: ['route-1'],
-    encounters: [],
-    bgGradient: 'from-slate-700 via-slate-800 to-slate-900'
-  },
-  'route-1': {
-    id: 'route-1',
-    name: '1号道路',
-    description: '连接真新镇与常磐市的乡村小路。草丛中隐藏着宝可梦。',
-    region: '关都',
-    connections: ['pallet-town', 'viridian-city'],
-    encounters: ['pidgey', 'rattata'],
-    bgGradient: 'from-emerald-900 via-slate-900 to-black'
-  },
-  'viridian-city': {
-    id: 'viridian-city',
-    name: '常磐市',
-    description: '常青色的永恒之市。拥有道馆的繁华城市。',
-    region: '关都',
-    connections: ['route-1', 'route-22', 'route-2'],
-    encounters: [],
-    bgGradient: 'from-emerald-800 via-slate-800 to-slate-900'
-  },
-  'route-22': {
-    id: 'route-22',
-    name: '22号道路',
-    description: '通往宝可梦联盟大门的必经之路。',
-    region: '关都',
-    connections: ['viridian-city'],
-    encounters: ['rattata', 'mankey', 'spearow'],
-    bgGradient: 'from-slate-800 via-slate-900 to-black'
-  },
-  'route-2': {
-    id: 'route-2',
-    name: '2号道路',
-    description: '通往常磐森林的道路。',
-    region: '关都',
-    connections: ['viridian-city', 'viridian-forest'],
-    encounters: ['pidgey', 'rattata', 'caterpie', 'weedle'],
-    bgGradient: 'from-emerald-900 via-slate-900 to-black'
-  },
-  'viridian-forest': {
-    id: 'viridian-forest',
-    name: '常磐森林',
-    description: '树木茂密，光线昏暗的天然迷宫。充满了虫属性宝可梦。',
-    region: '关都',
-    connections: ['route-2', 'pewter-city'],
-    encounters: ['caterpie', 'weedle', 'pikachu'],
-    bgGradient: 'from-green-950 via-green-900 to-black'
-  },
-  'pewter-city': {
-    id: 'pewter-city',
-    name: '深灰市',
-    description: '坐落在岩石山脚下的灰色城市。',
-    region: '关都',
-    connections: ['viridian-forest'],
-    encounters: [],
-    bgGradient: 'from-stone-800 via-stone-900 to-black'
-  }
 };
