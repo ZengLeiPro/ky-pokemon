@@ -92,6 +92,7 @@ export interface LearnsetMove {
   level: number;
 }
 
+export interface LocationData {
   id: string;
   name: string;
   description: string;

@@ -248,32 +248,35 @@ export const gainExperience = (
     }
 
     // Check Evolution Logic
-    let evolutionCandidate: { targetSpeciesId: string } | undefined;
-    if (leveledUp) {
-         let speciesKey = '';
-         for (const [key, data] of Object.entries(SPECIES_DATA)) {
-             if (data.pokedexId === newPokemon.speciesData.pokedexId) {
-                 speciesKey = key;
-                 break;
-             }
-         }
-
-         if (speciesKey && SPECIES_DATA[speciesKey].evolutions) {
-             const evolutions = SPECIES_DATA[speciesKey].evolutions!;
-             // Find first matching evolution
-             const evo = evolutions.find(e => {
-                 if (e.level && newPokemon.level >= e.level) return true;
-                 return false;
-             });
-
-             if (evo) {
-                 evolutionCandidate = { targetSpeciesId: evo.targetSpeciesId };
-             }
-         }
-    }
-
+    const evolutionCandidate = checkEvolution(newPokemon, leveledUp);
 
     return { updatedPokemon: newPokemon, leveledUp, levelChanges, learnedMoves, evolutionCandidate };
+};
+
+export const checkEvolution = (pokemon: Pokemon, leveledUp: boolean = true): { targetSpeciesId: string } | undefined => {
+    if (!leveledUp) return undefined;
+
+    let speciesKey = '';
+    for (const [key, data] of Object.entries(SPECIES_DATA)) {
+        if (data.pokedexId === pokemon.speciesData.pokedexId) {
+            speciesKey = key;
+            break;
+        }
+    }
+
+    if (speciesKey && SPECIES_DATA[speciesKey].evolutions) {
+        const evolutions = SPECIES_DATA[speciesKey].evolutions!;
+        // Find first matching evolution
+        const evo = evolutions.find(e => {
+            if (e.level && pokemon.level >= e.level) return true;
+            return false;
+        });
+
+        if (evo) {
+            return { targetSpeciesId: evo.targetSpeciesId };
+        }
+    }
+    return undefined;
 };
 
 export const evolvePokemon = (pokemon: Pokemon, targetSpeciesKey: string): Pokemon => {
