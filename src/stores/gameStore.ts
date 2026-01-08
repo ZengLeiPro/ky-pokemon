@@ -47,7 +47,9 @@ interface GameState {
   throwPokeball: () => Promise<void>;
   buyItem: (itemId: string, price: number, quantity?: number) => boolean;
   healParty: () => void;
-  moveTo: (locationId: string) => void; // New Action
+  manualSave: () => void;
+  switchPokemon: (pokemonId: string) => void;
+  moveTo: (locationId: string) => void;
 }
 
 export const useGameStore = create<GameState>()(persist((set, get) => ({
@@ -326,7 +328,30 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
       if (!target) return;
 
       const item = state.inventory[itemIndex];
-      if (item.effect) {
+
+      if (item.id === 'potion') {
+          const healAmount = 20;
+          const oldHp = target.currentHp;
+          target.currentHp = Math.min(target.maxHp, target.currentHp + healAmount);
+          const actualHeal = target.currentHp - oldHp;
+
+          if (actualHeal > 0) {
+              state.inventory[itemIndex].quantity--;
+              state.logs.push({
+                  id: crypto.randomUUID(),
+                  message: `对 ${target.speciesName} 使用了 ${item.name}，恢复了 ${actualHeal} 点HP！`,
+                  timestamp: Date.now(),
+                  type: 'info'
+              });
+          } else {
+              state.logs.push({
+                  id: crypto.randomUUID(),
+                  message: `${target.speciesName} 的HP已经满了！`,
+                  timestamp: Date.now(),
+                  type: 'info'
+              });
+          }
+      } else if (item.effect) {
           item.effect(target);
           state.inventory[itemIndex].quantity--;
           state.logs.push({
@@ -501,12 +526,54 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
           timestamp: Date.now(),
           type: 'info'
       });
+  })),
+
+  manualSave: () => {
+      get().addLog('游戏已自动存档！', 'urgent');
+  },
+
+  switchPokemon: (pokemonId: string) => set(produce((state: GameState) => {
+      const currentIndex = state.battle.playerActiveIndex;
+      const targetIndex = state.playerParty.findIndex(p => p.id === pokemonId);
+
+      if (targetIndex === -1 || targetIndex === currentIndex) return;
+
+      const currentPokemon = state.playerParty[currentIndex];
+      const targetPokemon = state.playerParty[targetIndex];
+
+      if (targetPokemon.currentHp <= 0) {
+          state.logs.push({
+              id: crypto.randomUUID(),
+              message: `${targetPokemon.speciesName} 已倒下，无法出场！`,
+              timestamp: Date.now(),
+              type: 'urgent'
+          });
+          return;
+      }
+
+      state.playerParty[currentIndex] = targetPokemon;
+      state.playerParty[targetIndex] = currentPokemon;
+      state.battle.playerActiveIndex = targetIndex;
+
+      state.logs.push({
+          id: crypto.randomUUID(),
+          message: `去吧！${targetPokemon.speciesName}！`,
+          timestamp: Date.now(),
+          type: 'combat'
+      });
   }))
 
 }), {
     name: 'ky-pokemon-save',
-    partialize: (state) => ({ 
-        ...state, 
+    partialize: (state) => ({
+        view: state.view,
+        selectedPokemonId: state.selectedPokemonId,
+        logs: state.logs,
+        playerParty: state.playerParty,
+        inventory: state.inventory,
+        playerMoney: state.playerMoney,
+        playerLocationId: state.playerLocationId,
+        pokedex: state.pokedex,
         battle: { ...state.battle, active: false, enemy: null, phase: 'INPUT' }
     })
 }));
