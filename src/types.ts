@@ -81,7 +81,17 @@ export interface InventoryItem {
 export type PokedexStatus = 'CAUGHT' | 'SEEN' | 'UNKNOWN';
 
 // 新增地图系统接口
-export interface LocationData {
+export interface Evolution {
+  targetSpeciesId: string;
+  level?: number;
+  item?: string; // Placeholder for future
+}
+
+export interface LearnsetMove {
+  moveId: string;
+  level: number;
+}
+
   id: string;
   name: string;
   description: string;

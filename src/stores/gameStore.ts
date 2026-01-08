@@ -1,8 +1,9 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { produce } from 'immer';
-import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus } from '../types';
-import { MOVES, SPECIES_DATA, WORLD_MAP } from '../constants';
-import { createPokemon, calculateDamage } from '../lib/mechanics';
+import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus } from '@/types';
+import { MOVES, SPECIES_DATA, WORLD_MAP } from '@/constants';
+import { createPokemon, calculateDamage, gainExperience, evolvePokemon } from '@/lib/mechanics';
 
 // Initial State Setup
 const starter = createPokemon('charmander', 5, [MOVES.scratch, MOVES.ember]);
@@ -49,7 +50,7 @@ interface GameState {
   moveTo: (locationId: string) => void; // New Action
 }
 
-export const useGameStore = create<GameState>((set, get) => ({
+export const useGameStore = create<GameState>()(persist((set, get) => ({
   view: 'ROAM',
   selectedPokemonId: null,
   logs: [{ id: 'init', message: '欢迎来到关都传说。', timestamp: Date.now() }],
@@ -233,8 +234,67 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     if (currentEnemy && currentEnemy.currentHp <= 0) {
         addLog(`敌方的 ${currentEnemy.speciesName} 倒下了！`);
-        addLog(`获得了 50 点经验值。`);
+        
+        // Simple formula: (Base Exp Yield * Level) / 7. Using Base HP+Atk as proxy for Base Exp Yield for now.
+        const expYield = Math.floor((currentEnemy.baseStats.hp + currentEnemy.baseStats.atk + currentEnemy.baseStats.spe) / 3); 
+        const expAmount = Math.floor(expYield * currentEnemy.level / 5) + 10;
+        
         set(produce((state: GameState) => {
+            const p = state.playerParty[state.battle.playerActiveIndex];
+            const { updatedPokemon, leveledUp, learnedMoves, evolutionCandidate } = gainExperience(p, expAmount);
+            
+            state.playerParty[state.battle.playerActiveIndex] = updatedPokemon;
+            
+            state.logs.push({
+                id: crypto.randomUUID(),
+                message: `获得了 ${expAmount} 点经验值。`,
+                timestamp: Date.now(),
+                type: 'info'
+            });
+
+            if (leveledUp) {
+                state.logs.push({
+                    id: crypto.randomUUID(),
+                    message: `${updatedPokemon.speciesName} 升到了 Lv.${updatedPokemon.level}！`,
+                    timestamp: Date.now(),
+                    type: 'urgent'
+                });
+
+                // Learned Moves Logs
+                if (learnedMoves && learnedMoves.length > 0) {
+                    learnedMoves.forEach(m => {
+                        state.logs.push({
+                            id: crypto.randomUUID(),
+                            message: `${updatedPokemon.speciesName} 学会了 ${m}！`,
+                            timestamp: Date.now(),
+                            type: 'info'
+                        });
+                    });
+                }
+
+                // Evolution Check
+                if (evolutionCandidate) {
+                     // Evolve immediately for MVP flow
+                     // In real game, this would trigger an evolution scene/state
+                     const evolvedMon = evolvePokemon(updatedPokemon, evolutionCandidate.targetSpeciesId);
+                     state.playerParty[state.battle.playerActiveIndex] = evolvedMon;
+                     
+                     state.logs.push({
+                         id: crypto.randomUUID(),
+                         message: `什么？ ${updatedPokemon.speciesName} 的样子...`,
+                         timestamp: Date.now(),
+                         type: 'urgent'
+                     });
+                     
+                     state.logs.push({
+                        id: crypto.randomUUID(),
+                        message: `恭喜！你的 ${updatedPokemon.speciesName} 进化成了 ${evolvedMon.speciesName}！`,
+                        timestamp: Date.now(),
+                        type: 'urgent'
+                    });
+                }
+            }
+
             state.battle.active = false;
             state.battle.enemy = null;
             state.playerMoney += 120; // Win money
@@ -383,7 +443,7 @@ export const useGameStore = create<GameState>((set, get) => ({
                           state.battle.phase = 'ENDED';
                           state.view = 'ROAM';
                           state.playerMoney = Math.floor(state.playerMoney / 2);
-                      }));
+                        }));
                       addLog(`失败了，损失了一半的金钱...`, 'urgent');
                       return;
                   }
@@ -443,4 +503,10 @@ export const useGameStore = create<GameState>((set, get) => ({
       });
   }))
 
+}), {
+    name: 'ky-pokemon-save',
+    partialize: (state) => ({ 
+        ...state, 
+        battle: { ...state.battle, active: false, enemy: null, phase: 'INPUT' }
+    })
 }));
