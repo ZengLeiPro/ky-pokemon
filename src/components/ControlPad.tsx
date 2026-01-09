@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../stores/gameStore';
-import { LogOut, Package, User, ArrowLeft, RefreshCw } from 'lucide-react';
+import { LogOut, Package, User, ArrowLeft } from 'lucide-react';
 import { TYPE_TRANSLATIONS, TYPE_COLORS } from '../constants';
 import HPBar from './ui/HPBar';
 
@@ -209,14 +209,9 @@ const ControlPad: React.FC = () => {
         </button>
         <button
           onClick={runAway}
-          className="bg-slate-800 hover:bg-red-900/30 border border-slate-700 text-slate-400 hover:text-red-300 text-xs font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
+          className="col-span-2 bg-slate-800 hover:bg-red-900/30 border border-slate-700 text-slate-400 hover:text-red-300 text-xs font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
         >
           <LogOut size={14} /> 逃跑
-        </button>
-        <button
-            className="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400 text-xs font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors cursor-default"
-        >
-            <RefreshCw size={14} /> 逃跑
         </button>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import TypeBadge from '../ui/TypeBadge';
-import { ArrowLeft, Activity, Sword, Shield, Zap } from 'lucide-react';
+import { ArrowLeft, Activity, Sword } from 'lucide-react';
 import { TYPE_TRANSLATIONS } from '../../constants';
 
 const SummaryView: React.FC = () => {

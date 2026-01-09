@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
-import { Compass, Moon, MessageCircle, Navigation, ShoppingBag } from 'lucide-react';
+import { Compass, Moon, Navigation, ShoppingBag } from 'lucide-react';
 import { WORLD_MAP, SPECIES_DATA } from '../../constants';
 
 const RoamStage: React.FC = () => {

@@ -114,6 +114,5 @@ export interface UserCredentials {
   password: string;
 }
 
-export interface RegisterData extends UserCredentials {
-  // 注册和登录使用相同的字段
-}
+// RegisterData uses the same fields as UserCredentials
+export type RegisterData = UserCredentials;

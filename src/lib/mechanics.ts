@@ -1,6 +1,16 @@
 import { BaseStats, Move, Pokemon, PokemonType } from '../types';
 import { MOVES, SPECIES_DATA } from '../constants';
 
+// Helper function to find species key by Pokedex ID
+function findSpeciesKeyByPokedexId(pokedexId: number): string {
+    for (const [key, data] of Object.entries(SPECIES_DATA)) {
+        if (data.pokedexId === pokedexId) {
+            return key;
+        }
+    }
+    return '';
+}
+
 // Standard Gen 3+ Formula for stats
 export const calculateStats = (base: BaseStats, ivs: BaseStats, evs: BaseStats, level: number): { stats: BaseStats, maxHp: number } => {
   const calcStat = (statName: keyof BaseStats, isHp: boolean) => {
@@ -204,19 +214,7 @@ export const gainExperience = (
         };
 
         // Check for Move Learning (Iterate from startLevel + 1 to finalLevel)
-        // This ensures if we gain multiple levels, we don't miss moves
-        const speciesData = SPECIES_DATA[Object.keys(SPECIES_DATA).find(k => SPECIES_DATA[k].pokedexId === newPokemon.speciesData.pokedexId) || '']; // Reverse lookup species key by ID... inefficient but works for now since we don't store key in Pokemon object. 
-        // Wait, we don't store the 'key' (e.g. 'charmander') in the Pokemon object, only speciesName ('小火龙').
-        // We should probably rely on Pokedex ID or store the key.
-        // For now, let's look up by pokedexId from SPECIES_DATA
-        
-        let speciesKey = '';
-        for (const [key, data] of Object.entries(SPECIES_DATA)) {
-            if (data.pokedexId === newPokemon.speciesData.pokedexId) {
-                speciesKey = key;
-                break;
-            }
-        }
+        const speciesKey = findSpeciesKeyByPokedexId(newPokemon.speciesData.pokedexId);
 
         if (speciesKey && SPECIES_DATA[speciesKey].learnset) {
              const learnset = SPECIES_DATA[speciesKey].learnset!;
@@ -253,31 +251,21 @@ export const gainExperience = (
     return { updatedPokemon: newPokemon, leveledUp, levelChanges, learnedMoves, evolutionCandidate };
 };
 
-export const checkEvolution = (pokemon: Pokemon, leveledUp: boolean = true): { targetSpeciesId: string } | undefined => {
+export function checkEvolution(pokemon: Pokemon, leveledUp: boolean = true): { targetSpeciesId: string } | undefined {
     if (!leveledUp) return undefined;
 
-    let speciesKey = '';
-    for (const [key, data] of Object.entries(SPECIES_DATA)) {
-        if (data.pokedexId === pokemon.speciesData.pokedexId) {
-            speciesKey = key;
-            break;
-        }
-    }
+    const speciesKey = findSpeciesKeyByPokedexId(pokemon.speciesData.pokedexId);
 
     if (speciesKey && SPECIES_DATA[speciesKey].evolutions) {
         const evolutions = SPECIES_DATA[speciesKey].evolutions!;
-        // Find first matching evolution
-        const evo = evolutions.find(e => {
-            if (e.level && pokemon.level >= e.level) return true;
-            return false;
-        });
+        const evo = evolutions.find(e => e.level && pokemon.level >= e.level);
 
         if (evo) {
             return { targetSpeciesId: evo.targetSpeciesId };
         }
     }
     return undefined;
-};
+}
 
 export const evolvePokemon = (pokemon: Pokemon, targetSpeciesKey: string): Pokemon => {
     const data = SPECIES_DATA[targetSpeciesKey];

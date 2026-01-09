@@ -5,6 +5,16 @@ import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus } from '@/ty
 import { MOVES, SPECIES_DATA, WORLD_MAP } from '@/constants';
 import { createPokemon, calculateDamage, gainExperience, evolvePokemon } from '@/lib/mechanics';
 
+// Helper function to create log entries
+function createLogEntry(message: string, type: LogEntry['type'] = 'info'): LogEntry {
+  return {
+    id: crypto.randomUUID(),
+    message,
+    timestamp: Date.now(),
+    type
+  };
+}
+
 // Initial State Setup
 const starter = createPokemon('charmander', 5, [MOVES.scratch, MOVES.ember]);
 
@@ -96,12 +106,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
   setSelectedPokemon: (id) => set({ selectedPokemonId: id }),
 
   addLog: (message, type: LogEntry['type'] = 'info') => set(produce((state: GameState) => {
-    state.logs.push({
-      id: crypto.randomUUID(),
-      message,
-      timestamp: Date.now(),
-      type
-    });
+    state.logs.push(createLogEntry(message, type));
     if (state.logs.length > 50) state.logs.shift();
   })),
 
@@ -111,12 +116,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
 
       set(produce((state: GameState) => {
           state.playerLocationId = locationId;
-          state.logs.push({
-              id: crypto.randomUUID(),
-              message: `抵达了 ${target.name}。`,
-              timestamp: Date.now(),
-              type: 'info'
-          });
+          state.logs.push(createLogEntry(`抵达了 ${target.name}。`));
       }));
   },
 
@@ -125,20 +125,15 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
     if (!enemyData) return;
 
     const enemy = createPokemon(speciesKey, 3 + Math.floor(Math.random() * 3), [MOVES.tackle, MOVES.growl]);
-    
+
     set(produce((state: GameState) => {
       state.battle.active = true;
       state.battle.enemy = enemy;
       state.battle.turnCount = 1;
       state.battle.phase = 'INPUT';
       state.view = 'BATTLE';
-      state.logs.push({
-        id: crypto.randomUUID(),
-        message: `野生的 ${enemy.speciesName} 出现了！`,
-        timestamp: Date.now(),
-        type: 'urgent'
-      });
-      
+      state.logs.push(createLogEntry(`野生的 ${enemy.speciesName} 出现了！`, 'urgent'));
+
       // Update Pokedex Status to SEEN if currently UNKNOWN
       const dexId = enemyData.pokedexId!;
       if (state.pokedex[dexId] === 'UNKNOWN') {
@@ -152,11 +147,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
       state.battle.active = false;
       state.battle.enemy = null;
       state.view = 'ROAM';
-      state.logs.push({
-         id: crypto.randomUUID(),
-         message: '成功逃跑了！',
-         timestamp: Date.now()
-      });
+      state.logs.push(createLogEntry('成功逃跑了！'));
     }));
   },
 
@@ -244,62 +235,32 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
         set(produce((state: GameState) => {
             const p = state.playerParty[state.battle.playerActiveIndex];
             const { updatedPokemon, leveledUp, learnedMoves, evolutionCandidate } = gainExperience(p, expAmount);
-            
+
             state.playerParty[state.battle.playerActiveIndex] = updatedPokemon;
-            
-            state.logs.push({
-                id: crypto.randomUUID(),
-                message: `获得了 ${expAmount} 点经验值。`,
-                timestamp: Date.now(),
-                type: 'info'
-            });
+            state.logs.push(createLogEntry(`获得了 ${expAmount} 点经验值。`));
 
             if (leveledUp) {
-                state.logs.push({
-                    id: crypto.randomUUID(),
-                    message: `${updatedPokemon.speciesName} 升到了 Lv.${updatedPokemon.level}！`,
-                    timestamp: Date.now(),
-                    type: 'urgent'
-                });
+                state.logs.push(createLogEntry(`${updatedPokemon.speciesName} 升到了 Lv.${updatedPokemon.level}！`, 'urgent'));
 
                 // Learned Moves Logs
                 if (learnedMoves && learnedMoves.length > 0) {
                     learnedMoves.forEach(m => {
-                        state.logs.push({
-                            id: crypto.randomUUID(),
-                            message: `${updatedPokemon.speciesName} 学会了 ${m}！`,
-                            timestamp: Date.now(),
-                            type: 'info'
-                        });
+                        state.logs.push(createLogEntry(`${updatedPokemon.speciesName} 学会了 ${m}！`));
                     });
                 }
 
                 // Evolution Check
                 if (evolutionCandidate) {
-                     // Evolve immediately for MVP flow
-                     // In real game, this would trigger an evolution scene/state
                      const evolvedMon = evolvePokemon(updatedPokemon, evolutionCandidate.targetSpeciesId);
                      state.playerParty[state.battle.playerActiveIndex] = evolvedMon;
-                     
-                     state.logs.push({
-                         id: crypto.randomUUID(),
-                         message: `什么？ ${updatedPokemon.speciesName} 的样子...`,
-                         timestamp: Date.now(),
-                         type: 'urgent'
-                     });
-                     
-                     state.logs.push({
-                        id: crypto.randomUUID(),
-                        message: `恭喜！你的 ${updatedPokemon.speciesName} 进化成了 ${evolvedMon.speciesName}！`,
-                        timestamp: Date.now(),
-                        type: 'urgent'
-                    });
+                     state.logs.push(createLogEntry(`什么？ ${updatedPokemon.speciesName} 的样子...`, 'urgent'));
+                     state.logs.push(createLogEntry(`恭喜！你的 ${updatedPokemon.speciesName} 进化成了 ${evolvedMon.speciesName}！`, 'urgent'));
                 }
             }
 
             state.battle.active = false;
             state.battle.enemy = null;
-            state.playerMoney += 120; // Win money
+            state.playerMoney += 120;
             state.view = 'ROAM';
         }));
     } else if (currentPlayer.currentHp <= 0) {
@@ -337,28 +298,14 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
 
           if (actualHeal > 0) {
               state.inventory[itemIndex].quantity--;
-              state.logs.push({
-                  id: crypto.randomUUID(),
-                  message: `对 ${target.speciesName} 使用了 ${item.name}，恢复了 ${actualHeal} 点HP！`,
-                  timestamp: Date.now(),
-                  type: 'info'
-              });
+              state.logs.push(createLogEntry(`对 ${target.speciesName} 使用了 ${item.name}，恢复了 ${actualHeal} 点HP！`));
           } else {
-              state.logs.push({
-                  id: crypto.randomUUID(),
-                  message: `${target.speciesName} 的HP已经满了！`,
-                  timestamp: Date.now(),
-                  type: 'info'
-              });
+              state.logs.push(createLogEntry(`${target.speciesName} 的HP已经满了！`));
           }
       } else if (item.effect) {
           item.effect(target);
           state.inventory[itemIndex].quantity--;
-          state.logs.push({
-              id: crypto.randomUUID(),
-              message: `对 ${target.speciesName} 使用了 ${item.name}。`,
-              timestamp: Date.now()
-          });
+          state.logs.push(createLogEntry(`对 ${target.speciesName} 使用了 ${item.name}。`));
       }
   })),
 
@@ -367,14 +314,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
       if (existingItem) {
           existingItem.quantity += quantity;
       }
-      // If item doesn't exist in inventory, we could add it here
-      // But for now, we only increment existing items
-      state.logs.push({
-          id: crypto.randomUUID(),
-          message: `获得了 ${existingItem?.name || '物品'} x${quantity}！`,
-          timestamp: Date.now(),
-          type: 'info'
-      });
+      state.logs.push(createLogEntry(`获得了 ${existingItem?.name || '物品'} x${quantity}！`));
   })),
 
   throwPokeball: async () => {
@@ -489,12 +429,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
 
       if (state.playerMoney < totalCost) {
           set(produce((draft: GameState) => {
-              draft.logs.push({
-                  id: crypto.randomUUID(),
-                  message: '金钱不足！',
-                  timestamp: Date.now(),
-                  type: 'urgent'
-              });
+              draft.logs.push(createLogEntry('金钱不足！', 'urgent'));
           }));
           return false;
       }
@@ -505,12 +440,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
           if (existingItem) {
               existingItem.quantity += quantity;
           }
-          draft.logs.push({
-              id: crypto.randomUUID(),
-              message: `购买了 ${existingItem?.name || '物品'} x${quantity}，花费 ¥${totalCost}`,
-              timestamp: Date.now(),
-              type: 'info'
-          });
+          draft.logs.push(createLogEntry(`购买了 ${existingItem?.name || '物品'} x${quantity}，花费 ¥${totalCost}`));
       }));
       return true;
   },
@@ -520,12 +450,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
           p.currentHp = p.maxHp;
           p.moves.forEach(m => m.ppCurrent = m.move.ppMax);
       });
-      state.logs.push({
-          id: crypto.randomUUID(),
-          message: '你的队伍已恢复健康。',
-          timestamp: Date.now(),
-          type: 'info'
-      });
+      state.logs.push(createLogEntry('你的队伍已恢复健康。'));
   })),
 
   manualSave: () => {
@@ -538,29 +463,20 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
 
       if (targetIndex === -1 || targetIndex === currentIndex) return;
 
-      const currentPokemon = state.playerParty[currentIndex];
       const targetPokemon = state.playerParty[targetIndex];
 
       if (targetPokemon.currentHp <= 0) {
-          state.logs.push({
-              id: crypto.randomUUID(),
-              message: `${targetPokemon.speciesName} 已倒下，无法出场！`,
-              timestamp: Date.now(),
-              type: 'urgent'
-          });
+          state.logs.push(createLogEntry(`${targetPokemon.speciesName} 已倒下，无法出场！`, 'urgent'));
           return;
       }
 
+      // Swap the pokemon positions
+      const temp = state.playerParty[currentIndex];
       state.playerParty[currentIndex] = targetPokemon;
-      state.playerParty[targetIndex] = currentPokemon;
-      state.battle.playerActiveIndex = targetIndex;
+      state.playerParty[targetIndex] = temp;
 
-      state.logs.push({
-          id: crypto.randomUUID(),
-          message: `去吧！${targetPokemon.speciesName}！`,
-          timestamp: Date.now(),
-          type: 'combat'
-      });
+      // Active index stays at current position since we swapped the pokemon there
+      state.logs.push(createLogEntry(`去吧！${targetPokemon.speciesName}！`, 'combat'));
   }))
 
 }), {
