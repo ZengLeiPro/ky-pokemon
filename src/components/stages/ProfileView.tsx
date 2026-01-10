@@ -1,38 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import { useAuthStore } from '../../stores/authStore';
-import { User, Clock, Award, Star, LogOut, Save, Check } from 'lucide-react';
+import { User, Clock, Award, Star, LogOut } from 'lucide-react';
 
 const ProfileView: React.FC = () => {
-  const { playerMoney, logs, setView, manualSave } = useGameStore();
+  const { playerMoney, logs, setView } = useGameStore();
   const { currentUser, logout } = useAuthStore();
-  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
-  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startTime = logs.find(l => l.id === 'init')?.timestamp || Date.now();
   const playTimeMinutes = Math.floor((Date.now() - startTime) / 60000);
-
-  useEffect(() => {
-    return () => {
-      if (saveTimerRef.current) {
-        clearTimeout(saveTimerRef.current);
-      }
-    };
-  }, []);
-
-  const handleSave = () => {
-    if (saveStatus !== 'idle') return;
-
-    setSaveStatus('saving');
-
-    manualSave();
-
-    saveTimerRef.current = setTimeout(() => {
-      setSaveStatus('saved');
-      saveTimerRef.current = setTimeout(() => {
-        setSaveStatus('idle');
-      }, 1500);
-    }, 300);
-  };
 
   return (
     <div className="h-full bg-slate-950 flex flex-col overflow-y-auto">
@@ -88,24 +63,6 @@ const ProfileView: React.FC = () => {
             </div>
 
               <div className="text-center space-y-3">
-                  <button
-                      onClick={handleSave}
-                      disabled={saveStatus !== 'idle'}
-                      className={`flex items-center gap-2 mx-auto px-4 py-2 border rounded-lg text-sm font-medium transition-all ${
-                        saveStatus === 'saved'
-                          ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300'
-                          : saveStatus === 'saving'
-                          ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 opacity-50'
-                          : 'bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/30 text-emerald-400 hover:text-emerald-300'
-                      }`}
-                  >
-                      {saveStatus === 'saved' ? (
-                          <Check size={16} className="animate-pulse" />
-                      ) : (
-                          <Save size={16} className={saveStatus === 'saving' ? "animate-pulse" : ""} />
-                      )}
-                      {saveStatus === 'saved' ? '已保存' : saveStatus === 'saving' ? '保存中...' : '保存存档'}
-                  </button>
                   <button className="text-xs text-slate-500 hover:text-slate-300 underline">
                       游戏设置
                   </button>
