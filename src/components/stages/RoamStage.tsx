@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
-import { Compass, Moon, Navigation, ShoppingBag } from 'lucide-react';
+import { Compass, HardDrive, Moon, Navigation, ShoppingBag } from 'lucide-react';
 import { WORLD_MAP, SPECIES_DATA } from '../../constants';
 
 const RoamStage: React.FC = () => {
-  const { startBattle, healParty, addLog, addItem, playerLocationId, moveTo, buyItem, playerMoney } = useGameStore();
+  const { startBattle, healParty, addLog, addItem, playerLocationId, moveTo, buyItem, playerMoney, setView } = useGameStore();
   const [showShop, setShowShop] = useState(false);
   
   const location = WORLD_MAP[playerLocationId];
@@ -105,21 +105,29 @@ const RoamStage: React.FC = () => {
             </div>
 
             {/* Secondary Actions Grid */}
-            <div className="grid grid-cols-2 gap-4 w-full max-w-xs shrink-0">
+            <div className="grid grid-cols-3 gap-3 w-full max-w-xs shrink-0">
                  <button 
                     onClick={healParty}
-                    className="bg-indigo-600/90 hover:bg-indigo-600 active:bg-indigo-700 text-white p-4 rounded-2xl shadow-lg border-b-4 border-indigo-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
+                    className="bg-indigo-600/90 hover:bg-indigo-600 active:bg-indigo-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-indigo-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
                 >
-                    <Moon size={20} className="group-hover:scale-110 transition-transform" />
-                    <span className="text-xs font-bold">原地休息</span>
+                    <Moon size={18} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold">休息</span>
+                </button>
+
+                <button
+                    onClick={() => setView('PC')}
+                    className="bg-cyan-600/90 hover:bg-cyan-600 active:bg-cyan-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-cyan-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
+                >
+                    <HardDrive size={18} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold">电脑</span>
                 </button>
 
                 <button
                     onClick={() => setShowShop(true)}
-                    className="bg-amber-600/90 hover:bg-amber-600 active:bg-amber-700 text-white p-4 rounded-2xl shadow-lg border-b-4 border-amber-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
+                    className="bg-amber-600/90 hover:bg-amber-600 active:bg-amber-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-amber-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
                 >
-                    <ShoppingBag size={20} className="group-hover:scale-110 transition-transform" />
-                    <span className="text-xs font-bold">商店</span>
+                    <ShoppingBag size={18} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold">商店</span>
                 </button>
             </div>
         </div>

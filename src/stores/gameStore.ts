@@ -100,6 +100,8 @@ interface GameState {
   playerLocationId: string;
   pokedex: Record<number, PokedexStatus>;
   
+  pcStorage: Pokemon[];
+  
   battle: {
     active: boolean;
     turnCount: number;
@@ -121,6 +123,8 @@ interface GameState {
   healParty: () => void;
   switchPokemon: (pokemonId: string) => void;
   setFirstPokemon: (pokemonId: string) => void;
+  depositPokemon: (partyIndex: number) => void;
+  withdrawPokemon: (pcIndex: number) => void;
   moveTo: (locationId: string) => void;
   manualSave: () => void;
   resetGame: () => void;
@@ -133,6 +137,7 @@ export const useGameStore = create<GameState>()(
   selectedPokemonId: null,
   logs: [{ id: 'init', message: '欢迎来到关都传说。', timestamp: Date.now() }],
   playerParty: [starter],
+  pcStorage: [],
   playerMoney: 3000,
   playerLocationId: 'pallet-town',
   pokedex: initialPokedex,
@@ -174,6 +179,7 @@ export const useGameStore = create<GameState>()(
       selectedPokemonId: null,
       logs: [{ id: 'init', message: '欢迎来到关都传说。', timestamp: Date.now() }],
       playerParty: [starter],
+      pcStorage: [],
       playerMoney: 3000,
       playerLocationId: 'pallet-town',
       pokedex: initialPokedex,
@@ -451,12 +457,23 @@ export const useGameStore = create<GameState>()(
       if (roll < catchChance) {
           set(produce((state: GameState) => {
               if (state.battle.enemy) {
-                  state.playerParty.push(state.battle.enemy);
+                  const caughtPokemon = state.battle.enemy;
+                  // Full heal on catch
+                  caughtPokemon.currentHp = caughtPokemon.maxHp;
+                  caughtPokemon.status = undefined;
+                  
+                  if (state.playerParty.length < 6) {
+                      state.playerParty.push(caughtPokemon);
+                      addLog(`成功捕获了 ${enemy.speciesName}！`, 'urgent');
+                  } else {
+                      state.pcStorage.push(caughtPokemon);
+                      addLog(`成功捕获了 ${enemy.speciesName}！已传送至电脑。`, 'urgent');
+                  }
+                  
                   state.pokedex[state.battle.enemy.speciesData.pokedexId!] = 'CAUGHT';
               }
           }));
 
-          addLog(`成功捕获了 ${enemy.speciesName}！`, 'urgent');
           await new Promise(r => setTimeout(r, 1200));
 
           set(produce((state: GameState) => {
@@ -583,6 +600,28 @@ export const useGameStore = create<GameState>()(
       
       state.logs.push(createLogEntry(`${targetPokemon.speciesName} 被设置为了首发宝可梦。`));
   })),
+
+  depositPokemon: (partyIndex: number) => set(produce((state: GameState) => {
+      if (state.playerParty.length <= 1) {
+          state.logs.push(createLogEntry("你至少需要携带一只宝可梦！", 'urgent'));
+          return;
+      }
+      const p = state.playerParty[partyIndex];
+      state.playerParty.splice(partyIndex, 1);
+      state.pcStorage.push(p);
+      state.logs.push(createLogEntry(`将 ${p.speciesName} 存入了电脑。`));
+  })),
+
+  withdrawPokemon: (pcIndex: number) => set(produce((state: GameState) => {
+      if (state.playerParty.length >= 6) {
+          state.logs.push(createLogEntry("队伍已满！无法取出更多宝可梦。", 'urgent'));
+          return;
+      }
+      const p = state.pcStorage[pcIndex];
+      state.pcStorage.splice(pcIndex, 1);
+      state.playerParty.push(p);
+      state.logs.push(createLogEntry(`从电脑中取出了 ${p.speciesName}。`));
+  })),
 }),
     {
       name: 'ky-pokemon-save',
@@ -592,6 +631,7 @@ export const useGameStore = create<GameState>()(
         selectedPokemonId: state.selectedPokemonId,
         logs: state.logs,
         playerParty: state.playerParty,
+        pcStorage: state.pcStorage,
         inventory: state.inventory,
         playerMoney: state.playerMoney,
         playerLocationId: state.playerLocationId,
