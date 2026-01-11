@@ -1,11 +1,77 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { produce } from 'immer';
 import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus } from '@/types';
 import { MOVES, SPECIES_DATA, WORLD_MAP } from '@/constants';
 import { createPokemon, calculateDamage, gainExperience, evolvePokemon } from '@/lib/mechanics';
+import { openDB, DBSchema, IDBPDatabase } from 'idb';
 
-// Helper function to create log entries
+interface PokemonUser {
+  id: string;
+  username: string;
+  passwordHash: string;
+  party: any[];
+  inventory: any[];
+  money: number;
+  pokedex: Record<number, string>;
+  locationId: string;
+  timestamp: number;
+}
+
+interface KyPokemonDB extends DBSchema {
+  users: { key: string; value: PokemonUser; };
+  gameState: { key: string; value: any; };
+}
+
+let dbPromise: Promise<IDBPDatabase<KyPokemonDB>> | null = null;
+
+async function getDB() {
+  if (!dbPromise) {
+    dbPromise = openDB<KyPokemonDB>('ky-pokemon-db', 4, {
+      upgrade(database, oldVersion, newVersion, transaction) {
+        if (!database.objectStoreNames.contains('users')) {
+          database.createObjectStore('users', { keyPath: 'id' });
+        }
+
+        if (database.objectStoreNames.contains('gameState')) {
+          database.deleteObjectStore('gameState');
+        }
+        database.createObjectStore('gameState');
+      },
+    });
+  }
+  return dbPromise;
+}
+
+const idbStorage = {
+  getItem: async (name: string): Promise<string | null> => {
+    try {
+      const db = await getDB();
+      const result = await db.get('gameState', name);
+      return result ? JSON.stringify(result) : null;
+    } catch (e) {
+      console.error('Failed to load game state:', e);
+      return null;
+    }
+  },
+  setItem: async (name: string, value: string): Promise<void> => {
+    try {
+      const db = await getDB();
+      await db.put('gameState', JSON.parse(value), name);
+    } catch (e) {
+      console.error('Failed to save game state:', e);
+    }
+  },
+  removeItem: async (name: string): Promise<void> => {
+    try {
+      const db = await getDB();
+      await db.delete('gameState', name);
+    } catch (e) {
+      console.error('Failed to remove game state:', e);
+    }
+  },
+};
+
 function createLogEntry(message: string, type: LogEntry['type'] = 'info'): LogEntry {
   return {
     id: crypto.randomUUID(),
@@ -15,10 +81,8 @@ function createLogEntry(message: string, type: LogEntry['type'] = 'info'): LogEn
   };
 }
 
-// Initial State Setup
 const starter = createPokemon('charmander', 5, [MOVES.scratch, MOVES.ember]);
 
-// Initialize Pokedex
 const initialPokedex: Record<number, PokedexStatus> = {};
 Object.values(SPECIES_DATA).forEach(s => {
     initialPokedex[s.pokedexId!] = 'UNKNOWN';
@@ -33,10 +97,9 @@ interface GameState {
   playerParty: Pokemon[];
   inventory: InventoryItem[];
   playerMoney: number;
-  playerLocationId: string; // Changed from playerLocation string name to ID
+  playerLocationId: string;
   pokedex: Record<number, PokedexStatus>;
   
-  // Battle State
   battle: {
     active: boolean;
     turnCount: number;
@@ -45,7 +108,6 @@ interface GameState {
     phase: 'INPUT' | 'PROCESSING' | 'ENDED';
   };
 
-  // Actions
   setView: (view: ViewState) => void;
   setSelectedPokemon: (id: string | null) => void;
   addLog: (message: string, type?: LogEntry['type']) => void;
@@ -57,18 +119,22 @@ interface GameState {
   throwPokeball: () => Promise<void>;
   buyItem: (itemId: string, price: number, quantity?: number) => boolean;
   healParty: () => void;
-  manualSave: () => void;
   switchPokemon: (pokemonId: string) => void;
+  setFirstPokemon: (pokemonId: string) => void;
   moveTo: (locationId: string) => void;
+  manualSave: () => void;
+  resetGame: () => void;
 }
 
-export const useGameStore = create<GameState>()(persist((set, get) => ({
+export const useGameStore = create<GameState>()(
+  persist(
+    (set, get) => ({
   view: 'ROAM',
   selectedPokemonId: null,
   logs: [{ id: 'init', message: '欢迎来到关都传说。', timestamp: Date.now() }],
   playerParty: [starter],
   playerMoney: 3000,
-  playerLocationId: 'pallet-town', // Start at Pallet Town ID
+  playerLocationId: 'pallet-town',
   pokedex: initialPokedex,
   inventory: [
     { 
@@ -77,7 +143,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
         description: '喷雾式伤药，能恢复宝可梦20点HP。', 
         category: 'MEDICINE',
         quantity: 5, 
-        effect: (p) => { p.currentHp = Math.min(p.maxHp, p.currentHp + 20); } 
+        effect: (p: Pokemon) => { p.currentHp = Math.min(p.maxHp, p.currentHp + 20); } 
     },
     { 
         id: 'pokeball', 
@@ -100,6 +166,49 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
     enemy: null,
     playerActiveIndex: 0,
     phase: 'INPUT',
+  },
+
+  resetGame: () => {
+    set({
+      view: 'ROAM',
+      selectedPokemonId: null,
+      logs: [{ id: 'init', message: '欢迎来到关都传说。', timestamp: Date.now() }],
+      playerParty: [starter],
+      playerMoney: 3000,
+      playerLocationId: 'pallet-town',
+      pokedex: initialPokedex,
+      inventory: [
+        { 
+            id: 'potion', 
+            name: '伤药', 
+            description: '喷雾式伤药，能恢复宝可梦20点HP。', 
+            category: 'MEDICINE',
+            quantity: 5, 
+            effect: (p: Pokemon) => { p.currentHp = Math.min(p.maxHp, p.currentHp + 20); } 
+        },
+        { 
+            id: 'pokeball', 
+            name: '精灵球', 
+            description: '用于投向野生宝可梦并将其捕捉的球。', 
+            category: 'POKEBALLS',
+            quantity: 10
+        },
+        { 
+            id: 'map', 
+            name: '城镇地图', 
+            description: '方便确认当前位置的高科技地图。', 
+            category: 'KEY_ITEMS',
+            quantity: 1
+        }
+      ],
+      battle: {
+        active: false,
+        turnCount: 0,
+        enemy: null,
+        playerActiveIndex: 0,
+        phase: 'INPUT',
+      }
+    });
   },
 
   setView: (view) => set({ view }),
@@ -134,7 +243,6 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
       state.view = 'BATTLE';
       state.logs.push(createLogEntry(`野生的 ${enemy.speciesName} 出现了！`, 'urgent'));
 
-      // Update Pokedex Status to SEEN if currently UNKNOWN
       const dexId = enemyData.pokedexId!;
       if (state.pokedex[dexId] === 'UNKNOWN') {
           state.pokedex[dexId] = 'SEEN';
@@ -166,7 +274,6 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
         return;
     }
 
-    // 1. Determine Turn Order (Speed check)
     const enemyMon = battle.enemy;
     const enemyMoveData = enemyMon.moves[Math.floor(Math.random() * enemyMon.moves.length)];
     
@@ -198,9 +305,9 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
                 }));
             } else {
                  set(produce((state: GameState) => {
-                    const p = state.playerParty[state.battle.playerActiveIndex];
-                    p.currentHp = Math.max(0, p.currentHp - result.damage);
-                }));
+                     const p = state.playerParty[state.battle.playerActiveIndex];
+                     p.currentHp = Math.max(0, p.currentHp - result.damage);
+                 }));
             }
 
             if (result.isCritical) addLog("击中要害！", 'urgent');
@@ -228,7 +335,6 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
     if (currentEnemy && currentEnemy.currentHp <= 0) {
         addLog(`敌方的 ${currentEnemy.speciesName} 倒下了！`);
         
-        // Simple formula: (Base Exp Yield * Level) / 7. Using Base HP+Atk as proxy for Base Exp Yield for now.
         const expYield = Math.floor((currentEnemy.baseStats.hp + currentEnemy.baseStats.atk + currentEnemy.baseStats.spe) / 3); 
         const expAmount = Math.floor(expYield * currentEnemy.level / 5) + 10;
         
@@ -242,14 +348,12 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
             if (leveledUp) {
                 state.logs.push(createLogEntry(`${updatedPokemon.speciesName} 升到了 Lv.${updatedPokemon.level}！`, 'urgent'));
 
-                // Learned Moves Logs
                 if (learnedMoves && learnedMoves.length > 0) {
                     learnedMoves.forEach(m => {
                         state.logs.push(createLogEntry(`${updatedPokemon.speciesName} 学会了 ${m}！`));
                     });
                 }
 
-                // Evolution Check
                 if (evolutionCandidate) {
                      const evolvedMon = evolvePokemon(updatedPokemon, evolutionCandidate.targetSpeciesId);
                      state.playerParty[state.battle.playerActiveIndex] = evolvedMon;
@@ -271,7 +375,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
              state.battle.enemy = null;
              state.view = 'ROAM';
              state.playerParty.forEach(p => p.currentHp = p.maxHp); 
-             state.playerMoney = Math.floor(state.playerMoney / 2); // Lose money
+             state.playerMoney = Math.floor(state.playerMoney / 2);
         }));
     } else {
         set(produce((state: GameState) => {
@@ -327,10 +431,8 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
           return;
       }
 
-      // Set to processing
       set(produce((state: GameState) => { state.battle.phase = 'PROCESSING'; }));
 
-      // Use pokeball
       set(produce((state: GameState) => {
           const item = state.inventory.find(i => i.id === 'pokeball');
           if (item) item.quantity--;
@@ -340,7 +442,6 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
       const catchRate = enemy.speciesData.catchRate || 45;
       const hpRatio = enemy.currentHp / enemy.maxHp;
 
-      // Catch formula: higher chance when HP is lower
       const catchChance = (catchRate / 255) * (1 - hpRatio * 0.5);
       const roll = Math.random();
 
@@ -348,7 +449,6 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
       await new Promise(r => setTimeout(r, 800));
 
       if (roll < catchChance) {
-          // Successful catch
           set(produce((state: GameState) => {
               if (state.battle.enemy) {
                   state.playerParty.push(state.battle.enemy);
@@ -359,7 +459,6 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
           addLog(`成功捕获了 ${enemy.speciesName}！`, 'urgent');
           await new Promise(r => setTimeout(r, 1200));
 
-          // End battle
           set(produce((state: GameState) => {
               state.battle.active = false;
               state.battle.enemy = null;
@@ -367,11 +466,9 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
               state.view = 'ROAM';
           }));
       } else {
-          // Failed catch
           addLog(`${enemy.speciesName} 挣脱了精灵球！`, 'combat');
           await new Promise(r => setTimeout(r, 800));
 
-          // Enemy counter-attack
           const playerMon = playerParty[battle.playerActiveIndex];
           if (enemy.currentHp > 0 && playerMon.currentHp > 0) {
               const enemyMoveData = enemy.moves[Math.floor(Math.random() * enemy.moves.length)];
@@ -397,7 +494,6 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
                   addLog(msg, 'combat');
                   await new Promise(r => setTimeout(r, 600));
 
-                  // Check if player fainted
                   if (newHp === 0) {
                       addLog(`${playerMon.speciesName} 失去了战斗能力！`, 'urgent');
                       await new Promise(r => setTimeout(r, 1000));
@@ -415,7 +511,6 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
               }
           }
 
-          // Back to input phase
           set(produce((state: GameState) => {
               state.battle.turnCount++;
               state.battle.phase = 'INPUT';
@@ -454,7 +549,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
   })),
 
   manualSave: () => {
-      get().addLog('游戏已自动存档！', 'urgent');
+      get().addLog('游戏已实时存档！', 'urgent');
   },
 
   switchPokemon: (pokemonId: string) => set(produce((state: GameState) => {
@@ -470,18 +565,29 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
           return;
       }
 
-      // Swap the pokemon positions
       const temp = state.playerParty[currentIndex];
       state.playerParty[currentIndex] = targetPokemon;
       state.playerParty[targetIndex] = temp;
 
-      // Active index stays at current position since we swapped the pokemon there
       state.logs.push(createLogEntry(`去吧！${targetPokemon.speciesName}！`, 'combat'));
-  }))
+  })),
 
-}), {
-    name: 'ky-pokemon-save',
-    partialize: (state) => ({
+  setFirstPokemon: (pokemonId: string) => set(produce((state: GameState) => {
+      const targetIndex = state.playerParty.findIndex(p => p.id === pokemonId);
+      if (targetIndex <= 0) return;
+
+      const targetPokemon = state.playerParty[targetIndex];
+      
+      state.playerParty.splice(targetIndex, 1);
+      state.playerParty.unshift(targetPokemon);
+      
+      state.logs.push(createLogEntry(`${targetPokemon.speciesName} 被设置为了首发宝可梦。`));
+  })),
+}),
+    {
+      name: 'ky-pokemon-save',
+      storage: createJSONStorage(() => idbStorage),
+      partialize: (state) => ({
         view: state.view,
         selectedPokemonId: state.selectedPokemonId,
         logs: state.logs,
@@ -491,5 +597,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
         playerLocationId: state.playerLocationId,
         pokedex: state.pokedex,
         battle: { ...state.battle, active: false, enemy: null, phase: 'INPUT' }
-    })
-}));
+      })
+    }
+  )
+);
