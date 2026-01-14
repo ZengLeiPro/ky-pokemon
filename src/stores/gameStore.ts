@@ -90,6 +90,8 @@ Object.values(SPECIES_DATA).forEach(s => {
 initialPokedex[4] = 'CAUGHT'; 
 initialPokedex[19] = 'SEEN';
 
+import { GymData } from '@/types';
+
 interface GameState {
   view: ViewState;
   selectedPokemonId: string | null;
@@ -99,11 +101,16 @@ interface GameState {
   playerMoney: number;
   playerLocationId: string;
   pokedex: Record<number, PokedexStatus>;
+  badges: string[];
   
   battle: {
     active: boolean;
     turnCount: number;
     enemy: Pokemon | null;
+    enemyParty: Pokemon[];
+    trainerName?: string;
+    gymBadgeReward?: string;
+    gymBadgeName?: string;
     playerActiveIndex: number;
     phase: 'INPUT' | 'PROCESSING' | 'ENDED';
   };
@@ -112,6 +119,7 @@ interface GameState {
   setSelectedPokemon: (id: string | null) => void;
   addLog: (message: string, type?: LogEntry['type']) => void;
   startBattle: (enemyId: string) => void;
+  startGymBattle: (gym: GymData) => void;
   runAway: () => void;
   executeMove: (moveIndex: number) => Promise<void>;
   useItem: (itemId: string, targetId: string) => void;
@@ -136,6 +144,7 @@ export const useGameStore = create<GameState>()(
   playerMoney: 3000,
   playerLocationId: 'pallet-town',
   pokedex: initialPokedex,
+  badges: [],
   inventory: [
     { 
         id: 'potion', 
@@ -164,6 +173,7 @@ export const useGameStore = create<GameState>()(
     active: false,
     turnCount: 0,
     enemy: null,
+    enemyParty: [],
     playerActiveIndex: 0,
     phase: 'INPUT',
   },
@@ -177,6 +187,7 @@ export const useGameStore = create<GameState>()(
       playerMoney: 3000,
       playerLocationId: 'pallet-town',
       pokedex: initialPokedex,
+      badges: [],
       inventory: [
         { 
             id: 'potion', 
@@ -201,10 +212,11 @@ export const useGameStore = create<GameState>()(
             quantity: 1
         }
       ],
-      battle: {
+        battle: {
         active: false,
         turnCount: 0,
         enemy: null,
+        enemyParty: [],
         playerActiveIndex: 0,
         phase: 'INPUT',
       }
@@ -238,8 +250,11 @@ export const useGameStore = create<GameState>()(
     set(produce((state: GameState) => {
       state.battle.active = true;
       state.battle.enemy = enemy;
+      state.battle.enemyParty = [];
       state.battle.turnCount = 1;
       state.battle.phase = 'INPUT';
+      state.battle.gymBadgeReward = undefined;
+      state.battle.trainerName = undefined;
       state.view = 'BATTLE';
       state.logs.push(createLogEntry(`野生的 ${enemy.speciesName} 出现了！`, 'urgent'));
 
@@ -248,6 +263,32 @@ export const useGameStore = create<GameState>()(
           state.pokedex[dexId] = 'SEEN';
       }
     }));
+  },
+
+  startGymBattle: (gym) => {
+      const enemyParty = gym.pokemon.map(id => createPokemon(id, gym.level, []));
+      const firstEnemy = enemyParty.shift();
+      if (!firstEnemy) return;
+
+      set(produce((state: GameState) => {
+          state.battle.active = true;
+          state.battle.enemy = firstEnemy;
+          state.battle.enemyParty = enemyParty;
+          state.battle.turnCount = 1;
+          state.battle.phase = 'INPUT';
+          state.battle.trainerName = `${gym.leaderName}`;
+          state.battle.gymBadgeReward = gym.badgeId;
+          state.battle.gymBadgeName = gym.badgeName;
+          state.view = 'BATTLE';
+          
+          state.logs.push(createLogEntry(`${gym.leaderName} 发起了挑战！`, 'urgent'));
+          state.logs.push(createLogEntry(`${gym.leaderName} 派出了 ${firstEnemy.speciesName}！`, 'urgent'));
+
+          const dexId = firstEnemy.speciesData.pokedexId;
+           if (state.pokedex[dexId] === 'UNKNOWN') {
+              state.pokedex[dexId] = 'SEEN';
+          }
+      }));
   },
 
   runAway: () => {
@@ -362,8 +403,35 @@ export const useGameStore = create<GameState>()(
                 }
             }
 
+            if (state.battle.enemyParty.length > 0) {
+                const nextEnemy = state.battle.enemyParty.shift();
+                if (nextEnemy) {
+                    state.battle.enemy = nextEnemy;
+                    state.battle.turnCount = 1;
+                    state.battle.phase = 'INPUT';
+                    state.logs.push(createLogEntry(`${state.battle.trainerName} 派出了 ${nextEnemy.speciesName}！`, 'urgent'));
+                    
+                    const dexId = nextEnemy.speciesData.pokedexId;
+                    if (state.pokedex[dexId] === 'UNKNOWN') {
+                        state.pokedex[dexId] = 'SEEN';
+                    }
+                    return;
+                }
+            }
+            
+            if (state.battle.gymBadgeReward && state.battle.gymBadgeName) {
+                if (!state.badges.includes(state.battle.gymBadgeReward)) {
+                    state.badges.push(state.battle.gymBadgeReward);
+                    state.logs.push(createLogEntry(`恭喜！你战胜了 ${state.battle.trainerName}！`, 'urgent'));
+                    state.logs.push(createLogEntry(`获得了 ${state.battle.gymBadgeName}！`, 'urgent'));
+                }
+            }
+
             state.battle.active = false;
             state.battle.enemy = null;
+            state.battle.enemyParty = [];
+            state.battle.gymBadgeReward = undefined;
+            state.battle.trainerName = undefined;
             state.playerMoney += 120;
             state.view = 'ROAM';
         }));

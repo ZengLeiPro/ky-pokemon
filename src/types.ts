@@ -92,6 +92,15 @@ export interface LearnsetMove {
   level: number;
 }
 
+export interface GymData {
+  leaderName: string;
+  badgeName: string;
+  badgeId: string;
+  description: string;
+  pokemon: string[];
+  level: number;
+}
+
 export interface LocationData {
   id: string;
   name: string;
@@ -100,6 +109,7 @@ export interface LocationData {
   connections: string[]; // IDs of other locations
   encounters?: string[]; // Potential wild pokemon IDs
   bgGradient?: string; // CSS gradient class
+  gym?: GymData;
 }
 
 // 用户认证相关类型
