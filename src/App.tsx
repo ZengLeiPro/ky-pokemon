@@ -14,7 +14,7 @@ import BagView from './components/stages/BagView';
 import ProfileView from './components/stages/ProfileView';
 import SummaryView from './components/stages/SummaryView';
 import DexView from './components/stages/DexView';
-import PCView from './components/stages/PCView';
+import PCBoxView from './components/stages/PCBoxView';
 
 // Auth Views
 import LoginView from './components/auth/LoginView';
@@ -52,8 +52,8 @@ const App: React.FC = () => {
         return <SummaryView />;
       case 'DEX':
         return <DexView />;
-      case 'PC':
-        return <PCView />;
+      case 'PC_BOX':
+        return <PCBoxView />;
       case 'ROAM':
       default:
         return <RoamStage />;

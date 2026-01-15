@@ -2,7 +2,7 @@ import React from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import HPBar from '../ui/HPBar';
 import TypeBadge from '../ui/TypeBadge';
-import { ChevronRight, Star } from 'lucide-react';
+import { ChevronRight, Star, HardDrive } from 'lucide-react';
 
 const TeamGrid: React.FC = () => {
   const { playerParty, setView, setSelectedPokemon, battle, setFirstPokemon } = useGameStore();
@@ -19,8 +19,15 @@ const TeamGrid: React.FC = () => {
 
   return (
     <div className="h-full bg-slate-950 p-4 flex flex-col">
-       <div className="flex items-center gap-4 mb-6">
+       <div className="flex items-center justify-between mb-6">
            <h2 className="text-xl font-bold text-white tracking-wider">队伍宝可梦</h2>
+           
+           <button 
+             onClick={() => setView('PC_BOX')}
+             className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 text-xs font-bold transition-colors"
+           >
+               <HardDrive size={14} /> 盒子
+           </button>
        </div>
 
         <div className="grid grid-cols-1 gap-4 overflow-y-auto pb-4">

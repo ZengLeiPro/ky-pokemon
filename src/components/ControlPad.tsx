@@ -19,6 +19,8 @@ const ControlPad: React.FC = () => {
   const usableItems = inventory.filter(item => item.category === 'MEDICINE' && item.quantity > 0);
   const pokeballs = inventory.filter(item => item.category === 'POKEBALLS' && item.quantity > 0);
 
+  const isForcedSwitch = battle.phase === 'FORCED_SWITCH';
+
   const handleUseItemInBattle = (itemId: string) => {
     useItem(itemId, activeMon.id);
     setShowBag(false);
@@ -35,17 +37,21 @@ const ControlPad: React.FC = () => {
   };
 
   // Show Pokemon selection interface
-  if (showPokemon) {
+  if (showPokemon || isForcedSwitch) {
       return (
         <div className="bg-slate-900 p-3 border-t border-slate-800 shadow-2xl z-30 relative h-56 flex flex-col">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-bold text-slate-200">选择要换上的宝可梦</h3>
-            <button
-              onClick={() => setShowPokemon(false)}
-              className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-200 px-2 py-1 bg-slate-800 rounded"
-            >
-              <ArrowLeft size={12} /> 返回
-            </button>
+            <h3 className="text-sm font-bold text-slate-200">
+                {isForcedSwitch ? '宝可梦倒下，请更换！' : '选择要换上的宝可梦'}
+            </h3>
+            {!isForcedSwitch && (
+                <button
+                onClick={() => setShowPokemon(false)}
+                className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-200 px-2 py-1 bg-slate-800 rounded"
+                >
+                <ArrowLeft size={12} /> 返回
+                </button>
+            )}
           </div>
           <div className="flex-1 overflow-y-auto space-y-2">
             {playerParty.map((pokemon, idx) => (

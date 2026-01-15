@@ -16,6 +16,7 @@ interface PokemonUser {
   pokedex: Record<number, string>;
   locationId: string;
   timestamp: number;
+  storage?: any[];
 }
 
 interface KyPokemonDB extends DBSchema {
@@ -97,14 +98,13 @@ interface GameState {
   selectedPokemonId: string | null;
   logs: LogEntry[];
   playerParty: Pokemon[];
+  playerStorage: Pokemon[];
   inventory: InventoryItem[];
   playerMoney: number;
   playerLocationId: string;
   pokedex: Record<number, PokedexStatus>;
   badges: string[];
-  
-  pcStorage: Pokemon[];
-  
+
   battle: {
     active: boolean;
     turnCount: number;
@@ -114,7 +114,7 @@ interface GameState {
     gymBadgeReward?: string;
     gymBadgeName?: string;
     playerActiveIndex: number;
-    phase: 'INPUT' | 'PROCESSING' | 'ENDED';
+    phase: 'INPUT' | 'PROCESSING' | 'ENDED' | 'FORCED_SWITCH';
   };
 
   setView: (view: ViewState) => void;
@@ -131,8 +131,9 @@ interface GameState {
   healParty: () => void;
   switchPokemon: (pokemonId: string) => void;
   setFirstPokemon: (pokemonId: string) => void;
-  depositPokemon: (partyIndex: number) => void;
-  withdrawPokemon: (pcIndex: number) => void;
+  depositPokemon: (pokemonId: string) => boolean;
+  withdrawPokemon: (pokemonId: string) => boolean;
+  releasePokemon: (pokemonId: string) => boolean;
   moveTo: (locationId: string) => void;
   manualSave: () => void;
   resetGame: () => void;
@@ -144,9 +145,9 @@ export const useGameStore = create<GameState>()(
   view: 'ROAM',
   selectedPokemonId: null,
   logs: [{ id: 'init', message: '欢迎来到关都传说。', timestamp: Date.now() }],
-  playerParty: [starter],
-  pcStorage: [],
-  playerMoney: 3000,
+   playerParty: [starter],
+   playerStorage: [],
+   playerMoney: 3000,
   playerLocationId: 'pallet-town',
   pokedex: initialPokedex,
   badges: [],
@@ -184,12 +185,12 @@ export const useGameStore = create<GameState>()(
   },
 
   resetGame: () => {
-    set({
+     set({
       view: 'ROAM',
       selectedPokemonId: null,
       logs: [{ id: 'init', message: '欢迎来到关都传说。', timestamp: Date.now() }],
       playerParty: [starter],
-      pcStorage: [],
+      playerStorage: [],
       playerMoney: 3000,
       playerLocationId: 'pallet-town',
       pokedex: initialPokedex,
@@ -251,7 +252,7 @@ export const useGameStore = create<GameState>()(
     const enemyData = SPECIES_DATA[speciesKey];
     if (!enemyData) return;
 
-    const enemy = createPokemon(speciesKey, 3 + Math.floor(Math.random() * 3), [MOVES.tackle, MOVES.growl]);
+    const enemy = createPokemon(speciesKey, 3 + Math.floor(Math.random() * 3), []);
 
     set(produce((state: GameState) => {
       state.battle.active = true;
@@ -443,14 +444,24 @@ export const useGameStore = create<GameState>()(
         }));
     } else if (currentPlayer.currentHp <= 0) {
         addLog(`${currentPlayer.speciesName} 倒下了！`);
-        addLog(`你眼前一黑...`);
-        set(produce((state: GameState) => {
-             state.battle.active = false;
-             state.battle.enemy = null;
-             state.view = 'ROAM';
-             state.playerParty.forEach(p => p.currentHp = p.maxHp); 
-             state.playerMoney = Math.floor(state.playerMoney / 2);
-        }));
+
+        const hasAlivePokemon = finalState.playerParty.some(p => p.currentHp > 0);
+
+        if (hasAlivePokemon) {
+             addLog(`请选择下一个出场的宝可梦！`, 'urgent');
+             set(produce((state: GameState) => {
+                 state.battle.phase = 'FORCED_SWITCH';
+             }));
+        } else {
+            addLog(`你眼前一黑...`);
+            set(produce((state: GameState) => {
+                 state.battle.active = false;
+                 state.battle.enemy = null;
+                 state.view = 'ROAM';
+                 state.playerParty.forEach(p => p.currentHp = p.maxHp); 
+                 state.playerMoney = Math.floor(state.playerMoney / 2);
+            }));
+        }
     } else {
         set(produce((state: GameState) => {
             state.battle.phase = 'INPUT';
@@ -524,22 +535,21 @@ export const useGameStore = create<GameState>()(
 
       if (roll < catchChance) {
           set(produce((state: GameState) => {
-              if (state.battle.enemy) {
-                  const caughtPokemon = state.battle.enemy;
-                  // Full heal on catch
-                  caughtPokemon.currentHp = caughtPokemon.maxHp;
-                  caughtPokemon.status = undefined;
-                  
-                  if (state.playerParty.length < 6) {
-                      state.playerParty.push(caughtPokemon);
-                      addLog(`成功捕获了 ${enemy.speciesName}！`, 'urgent');
-                  } else {
-                      state.pcStorage.push(caughtPokemon);
-                      addLog(`成功捕获了 ${enemy.speciesName}！已传送至电脑。`, 'urgent');
-                  }
-                  
-                  state.pokedex[state.battle.enemy.speciesData.pokedexId!] = 'CAUGHT';
-              }
+               if (state.battle.enemy) {
+                   const caughtPokemon = state.battle.enemy;
+                   // Full heal on catch
+                   caughtPokemon.currentHp = caughtPokemon.maxHp;
+                   caughtPokemon.status = undefined;
+
+                   state.pokedex[state.battle.enemy.speciesData.pokedexId!] = 'CAUGHT';
+
+                   if (state.playerParty.length < 6) {
+                       state.playerParty.push(caughtPokemon);
+                   } else {
+                       state.playerStorage.push(caughtPokemon);
+                       state.logs.push(createLogEntry(`${caughtPokemon.speciesName} 已被传送至宝可梦盒子。`));
+                   }
+               }
           }));
 
           await new Promise(r => setTimeout(r, 1200));
@@ -583,14 +593,24 @@ export const useGameStore = create<GameState>()(
                       addLog(`${playerMon.speciesName} 失去了战斗能力！`, 'urgent');
                       await new Promise(r => setTimeout(r, 1000));
 
-                      set(produce((state: GameState) => {
-                          state.battle.active = false;
-                          state.battle.enemy = null;
-                          state.battle.phase = 'ENDED';
-                          state.view = 'ROAM';
-                          state.playerMoney = Math.floor(state.playerMoney / 2);
-                        }));
-                      addLog(`失败了，损失了一半的金钱...`, 'urgent');
+                      const currentState = get();
+                      const hasAlivePokemon = currentState.playerParty.some(p => p.currentHp > 0);
+
+                      if (hasAlivePokemon) {
+                          addLog(`请选择下一个出场的宝可梦！`, 'urgent');
+                          set(produce((state: GameState) => {
+                              state.battle.phase = 'FORCED_SWITCH';
+                          }));
+                      } else {
+                          set(produce((state: GameState) => {
+                              state.battle.active = false;
+                              state.battle.enemy = null;
+                              state.battle.phase = 'ENDED';
+                              state.view = 'ROAM';
+                              state.playerMoney = Math.floor(state.playerMoney / 2);
+                          }));
+                          addLog(`失败了，损失了一半的金钱...`, 'urgent');
+                      }
                       return;
                   }
               }
@@ -655,6 +675,10 @@ export const useGameStore = create<GameState>()(
       state.playerParty[targetIndex] = temp;
 
       state.logs.push(createLogEntry(`去吧！${targetPokemon.speciesName}！`, 'combat'));
+
+      if (state.battle.phase === 'FORCED_SWITCH') {
+          state.battle.phase = 'INPUT';
+      }
   })),
 
   setFirstPokemon: (pokemonId: string) => set(produce((state: GameState) => {
@@ -669,27 +693,69 @@ export const useGameStore = create<GameState>()(
       state.logs.push(createLogEntry(`${targetPokemon.speciesName} 被设置为了首发宝可梦。`));
   })),
 
-  depositPokemon: (partyIndex: number) => set(produce((state: GameState) => {
+  depositPokemon: (pokemonId: string) => {
+      const state = get();
       if (state.playerParty.length <= 1) {
-          state.logs.push(createLogEntry("你至少需要携带一只宝可梦！", 'urgent'));
-          return;
+          state.addLog("不能存入最后一只宝可梦！", 'urgent');
+          return false;
       }
-      const p = state.playerParty[partyIndex];
-      state.playerParty.splice(partyIndex, 1);
-      state.pcStorage.push(p);
-      state.logs.push(createLogEntry(`将 ${p.speciesName} 存入了电脑。`));
-  })),
+      const index = state.playerParty.findIndex(p => p.id === pokemonId);
+      if (index === -1) return false;
 
-  withdrawPokemon: (pcIndex: number) => set(produce((state: GameState) => {
+      const pokemon = state.playerParty[index];
+
+      set(produce((state: GameState) => {
+          state.playerParty.splice(index, 1);
+          state.playerStorage.push(pokemon);
+          if (state.selectedPokemonId === pokemonId) {
+             state.selectedPokemonId = null;
+          }
+          state.logs.push(createLogEntry(`${pokemon.speciesName} 被存入了宝可梦盒子。`));
+      }));
+      return true;
+  },
+
+  withdrawPokemon: (pokemonId: string) => {
+      const state = get();
       if (state.playerParty.length >= 6) {
-          state.logs.push(createLogEntry("队伍已满！无法取出更多宝可梦。", 'urgent'));
-          return;
+          state.addLog("队伍已经满了！", 'urgent');
+          return false;
       }
-      const p = state.pcStorage[pcIndex];
-      state.pcStorage.splice(pcIndex, 1);
-      state.playerParty.push(p);
-      state.logs.push(createLogEntry(`从电脑中取出了 ${p.speciesName}。`));
-  })),
+
+      const index = state.playerStorage.findIndex(p => p.id === pokemonId);
+      if (index === -1) return false;
+
+      const pokemon = state.playerStorage[index];
+
+      set(produce((state: GameState) => {
+          state.playerStorage.splice(index, 1);
+          state.playerParty.push(pokemon);
+          state.logs.push(createLogEntry(`从盒子中取出了 ${pokemon.speciesName}。`));
+      }));
+      return true;
+  },
+
+  releasePokemon: (pokemonId: string) => {
+      const state = get();
+      if (state.playerParty.length <= 1) {
+          state.addLog("不能放逐最后一只宝可梦！", 'urgent');
+          return false;
+      }
+
+      const pokemonIndex = state.playerParty.findIndex(p => p.id === pokemonId);
+      if (pokemonIndex === -1) return false;
+
+      const pokemon = state.playerParty[pokemonIndex];
+
+      set(produce((state: GameState) => {
+          state.playerParty.splice(pokemonIndex, 1);
+          if (state.selectedPokemonId === pokemonId) {
+              state.selectedPokemonId = null;
+          }
+          state.logs.push(createLogEntry(`再见了，${pokemon.speciesName}！希望你一切安好。`));
+      }));
+      return true;
+  },
 }),
     {
       name: 'ky-pokemon-save',
@@ -699,7 +765,7 @@ export const useGameStore = create<GameState>()(
         selectedPokemonId: state.selectedPokemonId,
         logs: state.logs,
         playerParty: state.playerParty,
-        pcStorage: state.pcStorage,
+        playerStorage: state.playerStorage,
         inventory: state.inventory,
         playerMoney: state.playerMoney,
         playerLocationId: state.playerLocationId,

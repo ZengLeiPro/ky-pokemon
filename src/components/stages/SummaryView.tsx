@@ -1,16 +1,40 @@
 import React from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import TypeBadge from '../ui/TypeBadge';
-import { ArrowLeft, Activity, Sword } from 'lucide-react';
+import { ArrowLeft, Activity, Sword, Trash2, HardDrive } from 'lucide-react';
 import { TYPE_TRANSLATIONS } from '../../constants';
 
 const SummaryView: React.FC = () => {
-  const { playerParty, selectedPokemonId, setView, setSelectedPokemon } = useGameStore();
-  const pokemon = playerParty.find(p => p.id === selectedPokemonId) || playerParty[0];
+  const { playerParty, playerStorage, selectedPokemonId, setView, setSelectedPokemon, releasePokemon, depositPokemon } = useGameStore();
+  
+  const inParty = playerParty.find(p => p.id === selectedPokemonId);
+  const inStorage = playerStorage?.find(p => p.id === selectedPokemonId);
+  const pokemon = inParty || inStorage || playerParty[0];
+  
+  const isStored = !!inStorage;
 
   const handleBack = () => {
       setSelectedPokemon(null);
-      setView('TEAM');
+      if (isStored) {
+          setView('PC_BOX');
+      } else {
+          setView('TEAM');
+      }
+  };
+
+  const handleDeposit = () => {
+      if (depositPokemon(pokemon.id)) {
+          handleBack();
+      }
+  };
+
+  const handleRelease = () => {
+      if (confirm(`确定要放逐 ${pokemon.speciesName} 吗？\n放逐后将永远无法找回！`)) {
+          const success = releasePokemon(pokemon.id);
+          if (success) {
+              handleBack();
+          }
+      }
   };
 
   const StatRow = ({ label, value, max = 100, color = "bg-blue-500" }: { label: string, value: number, max?: number, color?: string }) => (
@@ -99,6 +123,30 @@ const SummaryView: React.FC = () => {
                     ))}
                 </div>
             </div>
+
+            <div className="pt-4 border-t border-slate-800 flex gap-3">
+                {!isStored && (
+                    <button 
+                        onClick={handleDeposit}
+                        className="flex-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 py-3 rounded-xl flex items-center justify-center gap-2 transition-colors text-sm font-bold"
+                    >
+                        <HardDrive size={16} />
+                        存入盒子
+                    </button>
+                )}
+
+                <button 
+                    onClick={handleRelease}
+                    className="flex-1 bg-red-900/30 hover:bg-red-900/50 border border-red-900/50 text-red-400 py-3 rounded-xl flex items-center justify-center gap-2 transition-colors text-sm font-bold"
+                >
+                    <Trash2 size={16} />
+                    放逐
+                </button>
+            </div>
+            
+            <p className="text-[10px] text-slate-600 text-center mt-2 pb-4">
+                注意：放逐后无法找回。
+            </p>
         </div>
     </div>
   );

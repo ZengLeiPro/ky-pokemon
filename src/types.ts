@@ -58,7 +58,7 @@ export interface Pokemon {
 }
 
 // 增加新的视图状态
-export type ViewState = 'ROAM' | 'BATTLE' | 'TEAM' | 'BAG' | 'PROFILE' | 'DEX' | 'SUMMARY' | 'LOGIN' | 'REGISTER' | 'PC';
+export type ViewState = 'ROAM' | 'BATTLE' | 'TEAM' | 'BAG' | 'PROFILE' | 'DEX' | 'SUMMARY' | 'LOGIN' | 'REGISTER' | 'PC_BOX';
 
 export interface LogEntry {
   id: string;
