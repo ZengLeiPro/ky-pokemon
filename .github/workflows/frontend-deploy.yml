@@ -1,0 +1,88 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  ci:
+    name: CI - Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 类型检查
+        run: npx tsc --noEmit
+
+      - name: 构建前端
+        run: npm run build
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: dist/
+          retention-days: 1
+
+  deploy:
+    name: CD - Deploy to OSS
+    needs: ci
+    runs-on: ubuntu-latest
+    # 仅在 main 分支且 ENABLE_DEPLOY=true 时部署
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && vars.ENABLE_DEPLOY == 'true'
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 下载构建产物
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: dist/
+
+      - name: 安装阿里云 CLI
+        run: |
+          wget https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz
+          tar -xzf aliyun-cli-linux-latest-amd64.tgz
+          sudo mv aliyun /usr/local/bin/
+          aliyun version
+
+      - name: 配置阿里云 CLI
+        run: |
+          aliyun configure set \
+            --profile default \
+            --mode AK \
+            --region ${{ secrets.REGION }} \
+            --access-key-id ${{ secrets.ALIYUN_ACCESS_KEY_ID }} \
+            --access-key-secret ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+
+      - name: 部署到 OSS
+        run: |
+          aliyun oss sync dist/ oss://${{ secrets.OSS_BUCKET }}/ \
+            --endpoint oss-${{ secrets.REGION }}.aliyuncs.com \
+            --delete \
+            --force
+          echo "✅ 前端已部署到 OSS Bucket: ${{ secrets.OSS_BUCKET }}"
+
+      - name: 输出访问地址
+        run: |
+          echo "🌐 OSS 静态网站地址："
+          echo "  http://${{ secrets.OSS_BUCKET }}.oss-${{ secrets.REGION }}.aliyuncs.com"
+          echo "  或通过自定义域名访问（如已配置）"
