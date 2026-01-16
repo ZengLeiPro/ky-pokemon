@@ -53,152 +53,152 @@ interface SpeciesData extends Partial<Pokemon> {
 }
 
 export const MOVES: Record<string, Move> = {
-  tackle: { id: 'tackle', name: '撞击', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 35, description: '用整个身体 撞向对手进行攻击。' },
-  growl: { id: 'growl', name: '叫声', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '让对手听可爱的叫声， 引开注意力使其疏忽， 从而降低对手的攻击。' },
-  leechSeed: { id: 'leechSeed', name: '寄生种子', type: 'Grass', category: 'Status', power: 0, accuracy: 90, ppMax: 10, description: '植入寄生种子后，将在每回合 一点一点吸取对手的ＨＰ， 从而用来回复自己的ＨＰ。' },
-  vineWhip: { id: 'vineWhip', name: '藤鞭', type: 'Grass', category: 'Physical', power: 45, accuracy: 100, ppMax: 25, description: '用如同鞭子般弯曲而细长的藤蔓 摔打对手进行攻击。' },
-  scratch: { id: 'scratch', name: '抓', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 35, description: '用坚硬且无比锋利的爪子 抓对手进行攻击。' },
-  ember: { id: 'ember', name: '火花', type: 'Fire', category: 'Special', power: 40, accuracy: 100, ppMax: 25, description: '向对手发射 小型火焰进行攻击。 有时会让对手陷入灼伤状态。' },
-  metalClaw: { id: 'metalClaw', name: '金属爪', type: 'Steel', category: 'Physical', power: 50, accuracy: 95, ppMax: 35, description: '用钢铁之爪 劈开对手进行攻击。 有时会提高自己的攻击。' },
-  leer: { id: 'leer', name: '瞪眼', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '用犀利的眼神使其害怕， 从而降低对手的防御。' },
-  tailWhip: { id: 'tailWhip', name: '摇尾巴', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '可爱地左右摇晃尾巴， 诱使对手疏忽大意。 会降低对手的防御。' },
-  bubble: { id: 'bubble', name: '泡沫', type: 'Water', category: 'Special', power: 40, accuracy: 100, ppMax: 30, description: '向对手用力吹起无数泡泡进行攻击。 有时会降低对手的速度。' },
-  waterGun: { id: 'waterGun', name: '水枪', type: 'Water', category: 'Special', power: 40, accuracy: 100, ppMax: 25, description: '向对手猛烈地喷射 水流进行攻击。' },
-  stringShot: { id: 'stringShot', name: '吐丝', type: 'Bug', category: 'Status', power: 0, accuracy: 95, ppMax: 40, description: '用口中吐出的丝缠绕对手， 从而大幅降低对手的速度。' },
-  harden: { id: 'harden', name: '变硬', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '全身使劲，让身体变硬， 从而提高自己的防御。' },
-  confusion: { id: 'confusion', name: '念力', type: 'Psychic', category: 'Special', power: 50, accuracy: 100, ppMax: 25, description: '向对手发送 微弱的念力进行攻击。 有时会使对手混乱。' },
-  poisonPowder: { id: 'poisonPowder', name: '毒粉', type: 'Poison', category: 'Status', power: 0, accuracy: 75, ppMax: 35, description: '撒出毒粉， 从而让对手陷入中毒状态。' },
-  stunSpore: { id: 'stunSpore', name: '麻痹粉', type: 'Grass', category: 'Status', power: 0, accuracy: 75, ppMax: 30, description: '撒出麻痹粉， 从而让对手陷入麻痹状态。' },
-  sleepPowder: { id: 'sleepPowder', name: '催眠粉', type: 'Grass', category: 'Status', power: 0, accuracy: 75, ppMax: 15, description: '撒出催眠粉， 从而让对手陷入睡眠状态。' },
-  poisonSting: { id: 'poisonSting', name: '毒针', type: 'Poison', category: 'Physical', power: 15, accuracy: 100, ppMax: 35, description: '将有毒的针 刺入对手进行攻击。 有时会让对手陷入中毒状态。' },
-  furyAttack: { id: 'furyAttack', name: '乱击', type: 'Normal', category: 'Physical', power: 15, accuracy: 85, ppMax: 20, description: '用角或喙 刺向对手进行攻击。 连续攻击２～５次。' },
-  focusEnergy: { id: 'focusEnergy', name: '聚气', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '深深地吸口气，集中精神。 自己的攻击 会变得容易击中要害。' },
-  twineedle: { id: 'twineedle', name: '双针', type: 'Bug', category: 'Physical', power: 25, accuracy: 100, ppMax: 20, description: '将２根针刺入对手， 连续２次给予伤害。 有时会让对手陷入中毒状态。' },
-  rage: { id: 'rage', name: '愤怒', type: 'Normal', category: 'Physical', power: 20, accuracy: 100, ppMax: 20, description: '如果在使出招式后 受到攻击的话， 会因愤怒的力量而提高攻击。' },
-  gust: { id: 'gust', name: '起风', type: 'Flying', category: 'Special', power: 40, accuracy: 100, ppMax: 35, description: '用翅膀将刮起的狂风 袭向对手进行攻击。' },
-  sandAttack: { id: 'sandAttack', name: '泼沙', type: 'Ground', category: 'Status', power: 0, accuracy: 100, ppMax: 15, description: '向对手脸上泼沙子， 从而降低命中率。' },
-  quickAttack: { id: 'quickAttack', name: '电光一闪', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 30, description: '以迅雷不及掩耳之势扑向对手。 必定能够先制攻击。' },
-  hyperFang: { id: 'hyperFang', name: '必杀门牙', type: 'Normal', category: 'Physical', power: 80, accuracy: 90, ppMax: 15, description: '用锋利的门牙 牢牢地咬住对手进行攻击。 有时会使对手畏缩。' },
-  peck: { id: 'peck', name: '啄', type: 'Flying', category: 'Physical', power: 35, accuracy: 100, ppMax: 35, description: '用尖锐的喙或角 刺向对手进行攻击。' },
-  wrap: { id: 'wrap', name: '紧束', type: 'Normal', category: 'Physical', power: 15, accuracy: 90, ppMax: 20, description: '使用长长的身体或藤蔓等， 在４～５回合内 紧束对手进行攻击。' },
-  bite: { id: 'bite', name: '咬住', type: 'Dark', category: 'Physical', power: 60, accuracy: 100, ppMax: 25, description: '用尖锐的牙 咬住对手进行攻击。 有时会使对手畏缩。' },
-  thunderShock: { id: 'thunderShock', name: '电击', type: 'Electric', category: 'Special', power: 40, accuracy: 100, ppMax: 30, description: '发出电流刺激对手进行攻击。 有时会让对手陷入麻痹状态。' },
-  thunderWave: { id: 'thunderWave', name: '电磁波', type: 'Electric', category: 'Status', power: 0, accuracy: 90, ppMax: 20, description: '向对手发出 微弱的电击， 从而让对手陷入麻痹状态。' },
-  thunderbolt: { id: 'thunderbolt', name: '十万伏特', type: 'Electric', category: 'Special', power: 90, accuracy: 100, ppMax: 15, description: '向对手发出 强力电击进行攻击。 有时会让对手陷入麻痹状态。' },
-  defenseCurl: { id: 'defenseCurl', name: '变圆', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '将身体蜷曲变圆， 从而提高自己的防御。' },
-  slash: { id: 'slash', name: '劈开', type: 'Normal', category: 'Physical', power: 70, accuracy: 100, ppMax: 20, description: '用爪子或镰刀等 劈开对手进行攻击。 容易击中要害。' },
-  bodySlam: { id: 'bodySlam', name: '泰山压顶', type: 'Normal', category: 'Physical', power: 85, accuracy: 100, ppMax: 15, description: '用整个身体 压住对手进行攻击。 有时会让对手陷入麻痹状态。' },
-  hornAttack: { id: 'hornAttack', name: '角撞', type: 'Normal', category: 'Physical', power: 65, accuracy: 100, ppMax: 25, description: '用尖锐的角攻击对手。' },
-  thrash: { id: 'thrash', name: '大闹一番', type: 'Normal', category: 'Physical', power: 120, accuracy: 100, ppMax: 10, description: '在２～３回合内， 乱打一气地攻击对手。 大闹一番后自己会陷入混乱。' },
-  pound: { id: 'pound', name: '拍击', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 35, description: '使用长长的尾巴或手等 拍打对手进行攻击。' },
-  encore: { id: 'encore', name: '再来一次', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 5, description: '让对手接受再来一次， 连续３次使出最后使用的招式。' },
-  sing: { id: 'sing', name: '唱歌', type: 'Normal', category: 'Status', power: 0, accuracy: 55, ppMax: 15, description: '让对手听舒适、 美妙的歌声， 从而陷入睡眠状态。' },
-  doubleSlap: { id: 'doubleSlap', name: '连环巴掌', type: 'Normal', category: 'Physical', power: 15, accuracy: 85, ppMax: 10, description: '用连环巴掌 拍打对手进行攻击。 连续攻击２～５次。' },
-  minimize: { id: 'minimize', name: '变小', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '蜷缩身体显得很小， 从而大幅提高 自己的闪避率。' },
-  metronome: { id: 'metronome', name: '挥指', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '挥动手指刺激自己的大脑， 从所有的招式中 任意使出１个。' },
-  willOWisp: { id: 'willOWisp', name: '鬼火', type: 'Fire', category: 'Status', power: 0, accuracy: 85, ppMax: 15, description: '放出怪异的火焰， 从而让对手陷入灼伤状态。' },
-  roar: { id: 'roar', name: '吼叫', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '放走对手，强制拉后备宝可梦上场。 如果对手为野生宝可梦， 战斗将直接结束。' },
-  disable: { id: 'disable', name: '定身法', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '阻碍对手行动， 之前使出的招式 将在４回合内无法使用。' },
-  leechLife: { id: 'leechLife', name: '吸血', type: 'Bug', category: 'Physical', power: 80, accuracy: 100, ppMax: 10, description: '吸取血液攻击对手。 可以回复给予对手 伤害的一半ＨＰ。' },
-  astonish: { id: 'astonish', name: '惊吓', type: 'Ghost', category: 'Physical', power: 30, accuracy: 100, ppMax: 15, description: '用尖叫声等 突然惊吓对手进行攻击。 有时会使对手畏缩。' },
-  supersonic: { id: 'supersonic', name: '超音波', type: 'Normal', category: 'Status', power: 0, accuracy: 55, ppMax: 20, description: '从身体发出 特殊的音波， 从而使对手混乱。' },
-  screech: { id: 'screech', name: '刺耳声', type: 'Normal', category: 'Status', power: 0, accuracy: 85, ppMax: 40, description: '发出不由自主想要 捂起耳朵的刺耳声， 从而大幅降低对手的防御。' },
-  absorb: { id: 'absorb', name: '吸取', type: 'Grass', category: 'Special', power: 20, accuracy: 100, ppMax: 25, description: '吸取对手的养分进行攻击。 可以回复给予对手 伤害的一半ＨＰ。' },
-  sweetScent: { id: 'sweetScent', name: '甜甜香气', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '用香气大幅降低对手的闪避率。' },
-  acid: { id: 'acid', name: '溶解液', type: 'Poison', category: 'Special', power: 40, accuracy: 100, ppMax: 30, description: '将强酸泼向对手进行攻击。 有时会降低对手的特防。' },
-  megaDrain: { id: 'megaDrain', name: '超级吸取', type: 'Grass', category: 'Special', power: 40, accuracy: 100, ppMax: 15, description: '吸取对手的养分进行攻击。 可以回复给予对手 伤害的一半ＨＰ。' },
-  foresight: { id: 'foresight', name: '识破', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '对幽灵属性宝可梦没有效果的招式 以及闪避率高的对手， 使用后变得能够打中。' },
-  magnitude: { id: 'magnitude', name: '震级', type: 'Ground', category: 'Physical', power: 0, accuracy: 100, ppMax: 30, description: '晃动地面，攻击自己 周围所有的宝可梦。 招式的威力会有各种变化。' },
-  dig: { id: 'dig', name: '挖洞', type: 'Ground', category: 'Physical', power: 80, accuracy: 100, ppMax: 10, description: '第１回合钻入， 第２回合攻击对手。' },
-  triAttack: { id: 'triAttack', name: '三重攻击', type: 'Normal', category: 'Special', power: 80, accuracy: 100, ppMax: 10, description: '用３种光线进行攻击。 有时会让对手陷入 麻痹、灼伤或冰冻的状态。' },
-  payDay: { id: 'payDay', name: '聚宝功', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 20, description: '向对手的身体 投掷小金币进行攻击。 战斗后可以拿到钱。' },
-  waterSport: { id: 'waterSport', name: '玩水', type: 'Water', category: 'Status', power: 0, accuracy: 100, ppMax: 15, description: '用水湿透周围。 在５回合内 减弱火属性的招式。' },
-  lowKick: { id: 'lowKick', name: '踢倒', type: 'Fighting', category: 'Physical', power: 0, accuracy: 100, ppMax: 20, description: '用力踢对手的脚， 使其摔倒进行攻击。 对手越重，威力越大。' },
-  karateChop: { id: 'karateChop', name: '空手劈', type: 'Fighting', category: 'Physical', power: 50, accuracy: 100, ppMax: 25, description: '用锋利的手刀 劈向对手进行攻击。 容易击中要害。' },
-  odorSleuth: { id: 'odorSleuth', name: '气味侦测', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '对幽灵属性宝可梦没有效果的招式 以及闪避率高的对手， 使用后变得能够打中。' },
-  takeDown: { id: 'takeDown', name: '猛撞', type: 'Normal', category: 'Physical', power: 90, accuracy: 85, ppMax: 20, description: '以惊人的气势 撞向对手进行攻击。 自己也会受到少许伤害。' },
-  hypnosis: { id: 'hypnosis', name: '催眠术', type: 'Psychic', category: 'Status', power: 0, accuracy: 60, ppMax: 20, description: '施以诱导睡意的暗示， 让对手陷入睡眠状态。' },
-  submission: { id: 'submission', name: '地狱翻滚', type: 'Fighting', category: 'Physical', power: 80, accuracy: 80, ppMax: 20, description: '将对手连同自己一起 摔向地面进行攻击。 自己也会受到少许伤害。' },
-  teleport: { id: 'teleport', name: '瞬间移动', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '停止和野生宝可梦战斗并逃走。' },
-  kinesis: { id: 'kinesis', name: '折弯汤匙', type: 'Psychic', category: 'Status', power: 0, accuracy: 80, ppMax: 15, description: '折弯汤匙引开注意， 从而降低对手的命中率。' },
-  growth: { id: 'growth', name: '生长', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '让身体一下子长大， 从而提高攻击和特攻。' },
-  razorLeaf: { id: 'razorLeaf', name: '飞叶快刀', type: 'Grass', category: 'Physical', power: 55, accuracy: 95, ppMax: 25, description: '飞出叶片， 切斩对手进行攻击。 容易击中要害。' },
-  mudSport: { id: 'mudSport', name: '玩泥巴', type: 'Ground', category: 'Status', power: 0, accuracy: 100, ppMax: 15, description: '一旦使用此招式， 周围就会弄得到处是泥。 在５回合内减弱电属性的招式。' },
-  rockThrow: { id: 'rockThrow', name: '落石', type: 'Rock', category: 'Physical', power: 50, accuracy: 90, ppMax: 15, description: '拿起小岩石， 投掷对手进行攻击。' },
-  stomp: { id: 'stomp', name: '踩踏', type: 'Normal', category: 'Physical', power: 65, accuracy: 100, ppMax: 20, description: '用大脚踩踏对手进行攻击。 有时会使对手畏缩。' },
-  curse: { id: 'curse', name: '诅咒', type: 'Ghost', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '使用该招式的宝可梦， 其属性是幽灵属性或其他属性时， 效果会不一样。' },
-  yawn: { id: 'yawn', name: '哈欠', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '打个大哈欠引起睡意。 在下一回合让对手陷入睡眠状态。' },
-  headbutt: { id: 'headbutt', name: '头锤', type: 'Normal', category: 'Physical', power: 70, accuracy: 100, ppMax: 15, description: '将头伸出， 笔直地扑向对手进行攻击。 有时会使对手畏缩。' },
-  metalSound: { id: 'metalSound', name: '金属音', type: 'Steel', category: 'Status', power: 0, accuracy: 85, ppMax: 40, description: '让对手听摩擦金属般 讨厌的声音。 大幅降低对手的特防。' },
-  sonicBoom: { id: 'sonicBoom', name: '音爆', type: 'Normal', category: 'Special', power: 0, accuracy: 90, ppMax: 20, description: '将冲击波 撞向对手进行攻击。 必定会给予２０的伤害。' },
-  pursuit: { id: 'pursuit', name: '追打', type: 'Dark', category: 'Physical', power: 40, accuracy: 100, ppMax: 20, description: '当对手替换宝可梦上场时 使出此招式的话， 能够以２倍的威力进行攻击。' },
-  icyWind: { id: 'icyWind', name: '冰冻之风', type: 'Ice', category: 'Special', power: 55, accuracy: 95, ppMax: 15, description: '将结冰的冷气 吹向对手进行攻击。 会降低对手的速度。' },
-  auroraBeam: { id: 'auroraBeam', name: '极光束', type: 'Ice', category: 'Special', power: 65, accuracy: 100, ppMax: 20, description: '向对手发射 虹色光束进行攻击。 有时会降低对手的攻击。' },
-  poisonGas: { id: 'poisonGas', name: '毒瓦斯', type: 'Poison', category: 'Status', power: 0, accuracy: 90, ppMax: 40, description: '将毒瓦斯吹到对手的脸上， 从而让对手陷入中毒状态。' },
-  withdraw: { id: 'withdraw', name: '缩入壳中', type: 'Water', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '缩入壳里保护身体， 从而提高自己的防御。' },
-  icicleSpear: { id: 'icicleSpear', name: '冰锥', type: 'Ice', category: 'Physical', power: 25, accuracy: 100, ppMax: 30, description: '向对手发射 锋利的冰柱进行攻击。 连续攻击２～５次。' },
-  clamp: { id: 'clamp', name: '贝壳夹击', type: 'Water', category: 'Physical', power: 35, accuracy: 85, ppMax: 15, description: '用非常坚固且厚实的贝壳， 在４～５回合内 夹住对手进行攻击。' },
-  nightShade: { id: 'nightShade', name: '黑夜魔影', type: 'Ghost', category: 'Special', power: 0, accuracy: 100, ppMax: 15, description: '显示恐怖幻影， 只给予对手 和自己等级相同的伤害。' },
-  confuseRay: { id: 'confuseRay', name: '奇异之光', type: 'Ghost', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '显示奇怪的光， 扰乱对手。 使对手混乱。' },
-  lick: { id: 'lick', name: '舌舔', type: 'Ghost', category: 'Physical', power: 30, accuracy: 100, ppMax: 30, description: '用长长的舌头， 舔遍对手进行攻击。 有时会让对手陷入麻痹状态。' },
-  spite: { id: 'spite', name: '怨恨', type: 'Ghost', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '对对手最后使用的招式 怀有怨恨， 减少４ＰＰ该招式。' },
-  bind: { id: 'bind', name: '绑紧', type: 'Normal', category: 'Physical', power: 15, accuracy: 85, ppMax: 20, description: '使用长长的身体或藤蔓等， 在４～５回合内 绑紧对手进行攻击。' },
-  viceGrip: { id: 'viceGrip', name: '夹住', type: 'Normal', category: 'Physical', power: 55, accuracy: 100, ppMax: 30, description: '将对手从两侧夹住， 给予伤害。' },
-  mudShot: { id: 'mudShot', name: '泥巴射击', type: 'Ground', category: 'Special', power: 55, accuracy: 95, ppMax: 15, description: '向对手投掷 泥块进行攻击。 同时降低对手的速度。' },
-  charge: { id: 'charge', name: '充电', type: 'Electric', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '提高下一回合使出的 电属性的招式威力。 自己的特防也会提高。' },
-  barrage: { id: 'barrage', name: '投球', type: 'Normal', category: 'Physical', power: 15, accuracy: 85, ppMax: 20, description: '向对手投掷 圆形物体进行攻击。 连续攻击２～５次。' },
-  uproar: { id: 'uproar', name: '吵闹', type: 'Normal', category: 'Special', power: 90, accuracy: 100, ppMax: 10, description: '在３回合内 用骚乱攻击对手。 在此期间谁都不能入眠。' },
-  boneClub: { id: 'boneClub', name: '骨棒', type: 'Ground', category: 'Physical', power: 65, accuracy: 85, ppMax: 20, description: '用手中的骨头 殴打对手进行攻击。 有时会使对手畏缩。' },
-  doubleKick: { id: 'doubleKick', name: '二连踢', type: 'Fighting', category: 'Physical', power: 30, accuracy: 100, ppMax: 30, description: '用２只脚踢飞对手进行攻击。 连续２次给予伤害。' },
-  meditate: { id: 'meditate', name: '瑜伽姿势', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '唤醒身体深处 沉睡的力量， 从而提高自己的攻击。' },
-  revenge: { id: 'revenge', name: '报复', type: 'Fighting', category: 'Physical', power: 60, accuracy: 100, ppMax: 10, description: '如果受到对手的招式攻击， 就能给予对手２倍的伤害。' },
-  brickBreak: { id: 'brickBreak', name: '劈瓦', type: 'Fighting', category: 'Physical', power: 75, accuracy: 100, ppMax: 15, description: '将手刀猛烈地挥下攻击对手。 还可以破坏光墙和反射壁等。' },
-  cometPunch: { id: 'cometPunch', name: '连续拳', type: 'Normal', category: 'Physical', power: 18, accuracy: 85, ppMax: 15, description: '用拳头怒涛般的 殴打对手进行攻击。 连续攻击２～５次。' },
-  agility: { id: 'agility', name: '高速移动', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '让身体放松变得轻盈， 以便高速移动。 大幅提高自己的速度。' },
-  smog: { id: 'smog', name: '浊雾', type: 'Poison', category: 'Special', power: 30, accuracy: 70, ppMax: 20, description: '将肮脏的浓雾 吹向对手进行攻击。 有时会让对手陷入中毒状态。' },
-  sludge: { id: 'sludge', name: '污泥攻击', type: 'Poison', category: 'Special', power: 65, accuracy: 100, ppMax: 20, description: '用污泥投掷对手进行攻击。 有时会让对手陷入中毒状态。' },
-  scaryFace: { id: 'scaryFace', name: '鬼面', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '用恐怖的脸瞪着对手， 使其害怕， 从而大幅降低对手的速度。' },
-  rockBlast: { id: 'rockBlast', name: '岩石爆击', type: 'Rock', category: 'Physical', power: 25, accuracy: 90, ppMax: 10, description: '向对手发射 坚硬的岩石进行攻击。 连续攻击２～５次。' },
-  refresh: { id: 'refresh', name: '焕然一新', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '让身体休息， 治愈自己身上所中的 毒、麻痹、灼伤的异常状态。' },
-  constrict: { id: 'constrict', name: '缠绕', type: 'Normal', category: 'Physical', power: 10, accuracy: 100, ppMax: 35, description: '用触手或青藤等缠绕进行攻击。 有时会降低对手的速度。' },
-  ingrain: { id: 'ingrain', name: '扎根', type: 'Grass', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '在大地上扎根， 每回合回复自己的ＨＰ。 因为扎根了，所以不能替换宝可梦。' },
-  fakeOut: { id: 'fakeOut', name: '击掌奇袭', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 10, description: '进行先制攻击，使对手畏缩。 要在出场后立刻使出才能成功。' },
-  smokescreen: { id: 'smokescreen', name: '烟幕', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '向对手喷出烟或墨汁等， 从而降低对手的命中率。' },
-  twister: { id: 'twister', name: '龙卷风', type: 'Dragon', category: 'Special', power: 40, accuracy: 100, ppMax: 20, description: '兴起龙卷风， 将对手卷入进行攻击。 有时会使对手畏缩。' },
-  rapidSpin: { id: 'rapidSpin', name: '高速旋转', type: 'Normal', category: 'Physical', power: 50, accuracy: 100, ppMax: 40, description: '通过旋转来攻击对手。 还可以摆脱绑紧、紧束、 寄生种子和撒菱等招式。' },
-  camouflage: { id: 'camouflage', name: '保护色', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '根据所在场所不同， 如水边、草丛和洞窟等， 可以改变自己的属性。' },
-  recover: { id: 'recover', name: '自我再生', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 5, description: '让细胞再生， 从而回复自己 最大ＨＰ的一半。' },
-  barrier: { id: 'barrier', name: '屏障', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '制造坚固的壁障， 从而大幅提高自己的防御。' },
-  reflect: { id: 'reflect', name: '反射壁', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '在５回合内使用神奇的墙， 减弱从对手那受到的 物理攻击的伤害。' },
-  magicalLeaf: { id: 'magicalLeaf', name: '魔法叶', type: 'Grass', category: 'Special', power: 60, accuracy: 100, ppMax: 20, description: '散落可以追踪 对手的神奇叶片。 攻击必定会命中。' },
-  falseSwipe: { id: 'falseSwipe', name: '点到为止', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 40, description: '对手的ＨＰ 至少会留下１ＨＰ， 如此般手下留情地攻击。' },
-  lovelyKiss: { id: 'lovelyKiss', name: '恶魔之吻', type: 'Normal', category: 'Status', power: 0, accuracy: 75, ppMax: 10, description: '用恐怖的脸强吻对手。 让对手陷入睡眠状态。' },
-  powderSnow: { id: 'powderSnow', name: '细雪', type: 'Ice', category: 'Special', power: 40, accuracy: 100, ppMax: 25, description: '将冰冷的细雪 吹向对手进行攻击。 有时会让对手陷入冰冻状态。' },
-  swift: { id: 'swift', name: '高速星星', type: 'Normal', category: 'Special', power: 60, accuracy: 100, ppMax: 20, description: '发射星形的光攻击对手。 攻击必定会命中。' },
-  sunnyDay: { id: 'sunnyDay', name: '大晴天', type: 'Fire', category: 'Status', power: 0, accuracy: 100, ppMax: 5, description: '在５回合内阳光变得强烈， 从而提高火属性的招式威力。 水属性的招式威力则降低。' },
-  seismicToss: { id: 'seismicToss', name: '地球上投', type: 'Fighting', category: 'Physical', power: 0, accuracy: 100, ppMax: 20, description: '利用引力将对手甩飞出去。 给予对手和自己等级相同的伤害。' },
-  splash: { id: 'splash', name: '跃起', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '也不攻击只是一蹦一蹦地跳， 什么都不会发生……' },
-  flail: { id: 'flail', name: '抓狂', type: 'Normal', category: 'Physical', power: 0, accuracy: 100, ppMax: 15, description: '抓狂般乱打进行攻击。 自己的ＨＰ越少， 招式的威力越大。' },
-  mist: { id: 'mist', name: '白雾', type: 'Ice', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '用白雾覆盖身体。 在５回合内不会让对手 降低自己的能力。' },
-  transform: { id: 'transform', name: '变身', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '变身成对手宝可梦的样子， 能够使用和对手 完全相同的招式。' },
-  helpingHand: { id: 'helpingHand', name: '帮助', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '帮助伙伴。 被帮助的宝可梦， 其招式威力变得比平时大。' },
-  sharpen: { id: 'sharpen', name: '棱角化', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '增加身体的角， 变得棱棱角角， 从而提高自己的攻击。' },
-  conversion: { id: 'conversion', name: '纹理', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '将自己的属性转换成 和已学会的招式中 第一个招式相同的属性。' },
-  conversion2: { id: 'conversion2', name: '纹理２', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '为了可以抵抗对手 最后使用的招式， 从而使自己的属性发生变化。' },
-  furyCutter: { id: 'furyCutter', name: '连斩', type: 'Bug', category: 'Physical', power: 40, accuracy: 95, ppMax: 20, description: '用镰刀或爪子等 切斩对手进行攻击。 连续击中，威力就会提高。' },
-  wingAttack: { id: 'wingAttack', name: '翅膀攻击', type: 'Flying', category: 'Physical', power: 60, accuracy: 100, ppMax: 35, description: '大大地展开美丽的翅膀， 将其撞向对手进行攻击。' },
-  ancientPower: { id: 'ancientPower', name: '原始之力', type: 'Rock', category: 'Special', power: 60, accuracy: 100, ppMax: 5, description: '用原始之力进行攻击。 有时会提高 自己所有的能力。' },
-  amnesia: { id: 'amnesia', name: '瞬间失忆', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '将头脑清空， 瞬间忘记某事， 从而大幅提高自己的特防。' },
-  rest: { id: 'rest', name: '睡觉', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 5, description: '连续睡上２回合。 回复自己的全部ＨＰ 以及治愈所有异常状态。' },
-  iceBeam: { id: 'iceBeam', name: '冰冻光束', type: 'Ice', category: 'Special', power: 90, accuracy: 100, ppMax: 10, description: '向对手发射 冰冻光束进行攻击。 有时会让对手陷入冰冻状态。' },
-  drillPeck: { id: 'drillPeck', name: '啄钻', type: 'Flying', category: 'Physical', power: 80, accuracy: 100, ppMax: 20, description: '一边旋转，一边将尖喙 刺入对手进行攻击。' },
-  fireSpin: { id: 'fireSpin', name: '火焰旋涡', type: 'Fire', category: 'Special', power: 35, accuracy: 85, ppMax: 15, description: '将对手困在 激烈的火焰旋涡中， 在４～５回合内进行攻击。' },
-  psychic: { id: 'psychic', name: '精神强念', type: 'Psychic', category: 'Special', power: 90, accuracy: 100, ppMax: 10, description: '向对手发送 强大的念力进行攻击。 有时会降低对手的特防。' },
-  megaPunch: { id: 'megaPunch', name: '百万吨重拳', type: 'Normal', category: 'Physical', power: 80, accuracy: 85, ppMax: 20, description: '用充满力量的拳头攻击对手。' },
+  'tackle': { id: 'tackle', name: '撞击', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 35, description: '用整个身体 撞向对手进行攻击。' },
+  'growl': { id: 'growl', name: '叫声', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '让对手听可爱的叫声， 引开注意力使其疏忽， 从而降低对手的攻击。' },
+  'leechSeed': { id: 'leechSeed', name: '寄生种子', type: 'Grass', category: 'Status', power: 0, accuracy: 90, ppMax: 10, description: '植入寄生种子后，将在每回合 一点一点吸取对手的ＨＰ， 从而用来回复自己的ＨＰ。' },
+  'vineWhip': { id: 'vineWhip', name: '藤鞭', type: 'Grass', category: 'Physical', power: 45, accuracy: 100, ppMax: 25, description: '用如同鞭子般弯曲而细长的藤蔓 摔打对手进行攻击。' },
+  'scratch': { id: 'scratch', name: '抓', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 35, description: '用坚硬且无比锋利的爪子 抓对手进行攻击。' },
+  'ember': { id: 'ember', name: '火花', type: 'Fire', category: 'Special', power: 40, accuracy: 100, ppMax: 25, description: '向对手发射 小型火焰进行攻击。 有时会让对手陷入灼伤状态。' },
+  'metalClaw': { id: 'metalClaw', name: '金属爪', type: 'Steel', category: 'Physical', power: 50, accuracy: 95, ppMax: 35, description: '用钢铁之爪 劈开对手进行攻击。 有时会提高自己的攻击。' },
+  'leer': { id: 'leer', name: '瞪眼', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '用犀利的眼神使其害怕， 从而降低对手的防御。' },
+  'tailWhip': { id: 'tailWhip', name: '摇尾巴', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '可爱地左右摇晃尾巴， 诱使对手疏忽大意。 会降低对手的防御。' },
+  'bubble': { id: 'bubble', name: '泡沫', type: 'Water', category: 'Special', power: 40, accuracy: 100, ppMax: 30, description: '向对手用力吹起无数泡泡进行攻击。 有时会降低对手的速度。' },
+  'waterGun': { id: 'waterGun', name: '水枪', type: 'Water', category: 'Special', power: 40, accuracy: 100, ppMax: 25, description: '向对手猛烈地喷射 水流进行攻击。' },
+  'stringShot': { id: 'stringShot', name: '吐丝', type: 'Bug', category: 'Status', power: 0, accuracy: 95, ppMax: 40, description: '用口中吐出的丝缠绕对手， 从而大幅降低对手的速度。' },
+  'harden': { id: 'harden', name: '变硬', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '全身使劲，让身体变硬， 从而提高自己的防御。' },
+  'confusion': { id: 'confusion', name: '念力', type: 'Psychic', category: 'Special', power: 50, accuracy: 100, ppMax: 25, description: '向对手发送 微弱的念力进行攻击。 有时会使对手混乱。' },
+  'poisonPowder': { id: 'poisonPowder', name: '毒粉', type: 'Poison', category: 'Status', power: 0, accuracy: 75, ppMax: 35, description: '撒出毒粉， 从而让对手陷入中毒状态。' },
+  'stunSpore': { id: 'stunSpore', name: '麻痹粉', type: 'Grass', category: 'Status', power: 0, accuracy: 75, ppMax: 30, description: '撒出麻痹粉， 从而让对手陷入麻痹状态。' },
+  'sleepPowder': { id: 'sleepPowder', name: '催眠粉', type: 'Grass', category: 'Status', power: 0, accuracy: 75, ppMax: 15, description: '撒出催眠粉， 从而让对手陷入睡眠状态。' },
+  'poisonSting': { id: 'poisonSting', name: '毒针', type: 'Poison', category: 'Physical', power: 15, accuracy: 100, ppMax: 35, description: '将有毒的针 刺入对手进行攻击。 有时会让对手陷入中毒状态。' },
+  'furyAttack': { id: 'furyAttack', name: '乱击', type: 'Normal', category: 'Physical', power: 15, accuracy: 85, ppMax: 20, description: '用角或喙 刺向对手进行攻击。 连续攻击２～５次。' },
+  'focusEnergy': { id: 'focusEnergy', name: '聚气', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '深深地吸口气，集中精神。 自己的攻击 会变得容易击中要害。' },
+  'twineedle': { id: 'twineedle', name: '双针', type: 'Bug', category: 'Physical', power: 25, accuracy: 100, ppMax: 20, description: '将２根针刺入对手， 连续２次给予伤害。 有时会让对手陷入中毒状态。' },
+  'rage': { id: 'rage', name: '愤怒', type: 'Normal', category: 'Physical', power: 20, accuracy: 100, ppMax: 20, description: '如果在使出招式后 受到攻击的话， 会因愤怒的力量而提高攻击。' },
+  'gust': { id: 'gust', name: '起风', type: 'Flying', category: 'Special', power: 40, accuracy: 100, ppMax: 35, description: '用翅膀将刮起的狂风 袭向对手进行攻击。' },
+  'sandAttack': { id: 'sandAttack', name: '泼沙', type: 'Ground', category: 'Status', power: 0, accuracy: 100, ppMax: 15, description: '向对手脸上泼沙子， 从而降低命中率。' },
+  'quickAttack': { id: 'quickAttack', name: '电光一闪', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 30, description: '以迅雷不及掩耳之势扑向对手。 必定能够先制攻击。' },
+  'hyperFang': { id: 'hyperFang', name: '必杀门牙', type: 'Normal', category: 'Physical', power: 80, accuracy: 90, ppMax: 15, description: '用锋利的门牙 牢牢地咬住对手进行攻击。 有时会使对手畏缩。' },
+  'peck': { id: 'peck', name: '啄', type: 'Flying', category: 'Physical', power: 35, accuracy: 100, ppMax: 35, description: '用尖锐的喙或角 刺向对手进行攻击。' },
+  'wrap': { id: 'wrap', name: '紧束', type: 'Normal', category: 'Physical', power: 15, accuracy: 90, ppMax: 20, description: '使用长长的身体或藤蔓等， 在４～５回合内 紧束对手进行攻击。' },
+  'bite': { id: 'bite', name: '咬住', type: 'Dark', category: 'Physical', power: 60, accuracy: 100, ppMax: 25, description: '用尖锐的牙 咬住对手进行攻击。 有时会使对手畏缩。' },
+  'thunderShock': { id: 'thunderShock', name: '电击', type: 'Electric', category: 'Special', power: 40, accuracy: 100, ppMax: 30, description: '发出电流刺激对手进行攻击。 有时会让对手陷入麻痹状态。' },
+  'thunderWave': { id: 'thunderWave', name: '电磁波', type: 'Electric', category: 'Status', power: 0, accuracy: 90, ppMax: 20, description: '向对手发出 微弱的电击， 从而让对手陷入麻痹状态。' },
+  'thunderbolt': { id: 'thunderbolt', name: '十万伏特', type: 'Electric', category: 'Special', power: 90, accuracy: 100, ppMax: 15, description: '向对手发出 强力电击进行攻击。 有时会让对手陷入麻痹状态。' },
+  'defenseCurl': { id: 'defenseCurl', name: '变圆', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '将身体蜷曲变圆， 从而提高自己的防御。' },
+  'slash': { id: 'slash', name: '劈开', type: 'Normal', category: 'Physical', power: 70, accuracy: 100, ppMax: 20, description: '用爪子或镰刀等 劈开对手进行攻击。 容易击中要害。' },
+  'bodySlam': { id: 'bodySlam', name: '泰山压顶', type: 'Normal', category: 'Physical', power: 85, accuracy: 100, ppMax: 15, description: '用整个身体 压住对手进行攻击。 有时会让对手陷入麻痹状态。' },
+  'hornAttack': { id: 'hornAttack', name: '角撞', type: 'Normal', category: 'Physical', power: 65, accuracy: 100, ppMax: 25, description: '用尖锐的角攻击对手。' },
+  'thrash': { id: 'thrash', name: '大闹一番', type: 'Normal', category: 'Physical', power: 120, accuracy: 100, ppMax: 10, description: '在２～３回合内， 乱打一气地攻击对手。 大闹一番后自己会陷入混乱。' },
+  'pound': { id: 'pound', name: '拍击', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 35, description: '使用长长的尾巴或手等 拍打对手进行攻击。' },
+  'encore': { id: 'encore', name: '再来一次', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 5, description: '让对手接受再来一次， 连续３次使出最后使用的招式。' },
+  'sing': { id: 'sing', name: '唱歌', type: 'Normal', category: 'Status', power: 0, accuracy: 55, ppMax: 15, description: '让对手听舒适、 美妙的歌声， 从而陷入睡眠状态。' },
+  'doubleSlap': { id: 'doubleSlap', name: '连环巴掌', type: 'Normal', category: 'Physical', power: 15, accuracy: 85, ppMax: 10, description: '用连环巴掌 拍打对手进行攻击。 连续攻击２～５次。' },
+  'minimize': { id: 'minimize', name: '变小', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '蜷缩身体显得很小， 从而大幅提高 自己的闪避率。' },
+  'metronome': { id: 'metronome', name: '挥指', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '挥动手指刺激自己的大脑， 从所有的招式中 任意使出１个。' },
+  'willOWisp': { id: 'willOWisp', name: '鬼火', type: 'Fire', category: 'Status', power: 0, accuracy: 85, ppMax: 15, description: '放出怪异的火焰， 从而让对手陷入灼伤状态。' },
+  'roar': { id: 'roar', name: '吼叫', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '放走对手，强制拉后备宝可梦上场。 如果对手为野生宝可梦， 战斗将直接结束。' },
+  'disable': { id: 'disable', name: '定身法', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '阻碍对手行动， 之前使出的招式 将在４回合内无法使用。' },
+  'leechLife': { id: 'leechLife', name: '吸血', type: 'Bug', category: 'Physical', power: 80, accuracy: 100, ppMax: 10, description: '吸取血液攻击对手。 可以回复给予对手 伤害的一半ＨＰ。' },
+  'astonish': { id: 'astonish', name: '惊吓', type: 'Ghost', category: 'Physical', power: 30, accuracy: 100, ppMax: 15, description: '用尖叫声等 突然惊吓对手进行攻击。 有时会使对手畏缩。' },
+  'supersonic': { id: 'supersonic', name: '超音波', type: 'Normal', category: 'Status', power: 0, accuracy: 55, ppMax: 20, description: '从身体发出 特殊的音波， 从而使对手混乱。' },
+  'screech': { id: 'screech', name: '刺耳声', type: 'Normal', category: 'Status', power: 0, accuracy: 85, ppMax: 40, description: '发出不由自主想要 捂起耳朵的刺耳声， 从而大幅降低对手的防御。' },
+  'absorb': { id: 'absorb', name: '吸取', type: 'Grass', category: 'Special', power: 20, accuracy: 100, ppMax: 25, description: '吸取对手的养分进行攻击。 可以回复给予对手 伤害的一半ＨＰ。' },
+  'sweetScent': { id: 'sweetScent', name: '甜甜香气', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '用香气大幅降低对手的闪避率。' },
+  'acid': { id: 'acid', name: '溶解液', type: 'Poison', category: 'Special', power: 40, accuracy: 100, ppMax: 30, description: '将强酸泼向对手进行攻击。 有时会降低对手的特防。' },
+  'megaDrain': { id: 'megaDrain', name: '超级吸取', type: 'Grass', category: 'Special', power: 40, accuracy: 100, ppMax: 15, description: '吸取对手的养分进行攻击。 可以回复给予对手 伤害的一半ＨＰ。' },
+  'foresight': { id: 'foresight', name: '识破', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '对幽灵属性宝可梦没有效果的招式 以及闪避率高的对手， 使用后变得能够打中。' },
+  'magnitude': { id: 'magnitude', name: '震级', type: 'Ground', category: 'Physical', power: 0, accuracy: 100, ppMax: 30, description: '晃动地面，攻击自己 周围所有的宝可梦。 招式的威力会有各种变化。' },
+  'dig': { id: 'dig', name: '挖洞', type: 'Ground', category: 'Physical', power: 80, accuracy: 100, ppMax: 10, description: '第１回合钻入， 第２回合攻击对手。' },
+  'triAttack': { id: 'triAttack', name: '三重攻击', type: 'Normal', category: 'Special', power: 80, accuracy: 100, ppMax: 10, description: '用３种光线进行攻击。 有时会让对手陷入 麻痹、灼伤或冰冻的状态。' },
+  'payDay': { id: 'payDay', name: '聚宝功', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 20, description: '向对手的身体 投掷小金币进行攻击。 战斗后可以拿到钱。' },
+  'waterSport': { id: 'waterSport', name: '玩水', type: 'Water', category: 'Status', power: 0, accuracy: 100, ppMax: 15, description: '用水湿透周围。 在５回合内 减弱火属性的招式。' },
+  'lowKick': { id: 'lowKick', name: '踢倒', type: 'Fighting', category: 'Physical', power: 0, accuracy: 100, ppMax: 20, description: '用力踢对手的脚， 使其摔倒进行攻击。 对手越重，威力越大。' },
+  'karateChop': { id: 'karateChop', name: '空手劈', type: 'Fighting', category: 'Physical', power: 50, accuracy: 100, ppMax: 25, description: '用锋利的手刀 劈向对手进行攻击。 容易击中要害。' },
+  'odorSleuth': { id: 'odorSleuth', name: '气味侦测', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '对幽灵属性宝可梦没有效果的招式 以及闪避率高的对手， 使用后变得能够打中。' },
+  'takeDown': { id: 'takeDown', name: '猛撞', type: 'Normal', category: 'Physical', power: 90, accuracy: 85, ppMax: 20, description: '以惊人的气势 撞向对手进行攻击。 自己也会受到少许伤害。' },
+  'hypnosis': { id: 'hypnosis', name: '催眠术', type: 'Psychic', category: 'Status', power: 0, accuracy: 60, ppMax: 20, description: '施以诱导睡意的暗示， 让对手陷入睡眠状态。' },
+  'submission': { id: 'submission', name: '地狱翻滚', type: 'Fighting', category: 'Physical', power: 80, accuracy: 80, ppMax: 20, description: '将对手连同自己一起 摔向地面进行攻击。 自己也会受到少许伤害。' },
+  'teleport': { id: 'teleport', name: '瞬间移动', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '停止和野生宝可梦战斗并逃走。' },
+  'kinesis': { id: 'kinesis', name: '折弯汤匙', type: 'Psychic', category: 'Status', power: 0, accuracy: 80, ppMax: 15, description: '折弯汤匙引开注意， 从而降低对手的命中率。' },
+  'growth': { id: 'growth', name: '生长', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '让身体一下子长大， 从而提高攻击和特攻。' },
+  'razorLeaf': { id: 'razorLeaf', name: '飞叶快刀', type: 'Grass', category: 'Physical', power: 55, accuracy: 95, ppMax: 25, description: '飞出叶片， 切斩对手进行攻击。 容易击中要害。' },
+  'mudSport': { id: 'mudSport', name: '玩泥巴', type: 'Ground', category: 'Status', power: 0, accuracy: 100, ppMax: 15, description: '一旦使用此招式， 周围就会弄得到处是泥。 在５回合内减弱电属性的招式。' },
+  'rockThrow': { id: 'rockThrow', name: '落石', type: 'Rock', category: 'Physical', power: 50, accuracy: 90, ppMax: 15, description: '拿起小岩石， 投掷对手进行攻击。' },
+  'stomp': { id: 'stomp', name: '踩踏', type: 'Normal', category: 'Physical', power: 65, accuracy: 100, ppMax: 20, description: '用大脚踩踏对手进行攻击。 有时会使对手畏缩。' },
+  'curse': { id: 'curse', name: '诅咒', type: 'Ghost', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '使用该招式的宝可梦， 其属性是幽灵属性或其他属性时， 效果会不一样。' },
+  'yawn': { id: 'yawn', name: '哈欠', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '打个大哈欠引起睡意。 在下一回合让对手陷入睡眠状态。' },
+  'headbutt': { id: 'headbutt', name: '头锤', type: 'Normal', category: 'Physical', power: 70, accuracy: 100, ppMax: 15, description: '将头伸出， 笔直地扑向对手进行攻击。 有时会使对手畏缩。' },
+  'metalSound': { id: 'metalSound', name: '金属音', type: 'Steel', category: 'Status', power: 0, accuracy: 85, ppMax: 40, description: '让对手听摩擦金属般 讨厌的声音。 大幅降低对手的特防。' },
+  'sonicBoom': { id: 'sonicBoom', name: '音爆', type: 'Normal', category: 'Special', power: 0, accuracy: 90, ppMax: 20, description: '将冲击波 撞向对手进行攻击。 必定会给予２０的伤害。' },
+  'pursuit': { id: 'pursuit', name: '追打', type: 'Dark', category: 'Physical', power: 40, accuracy: 100, ppMax: 20, description: '当对手替换宝可梦上场时 使出此招式的话， 能够以２倍的威力进行攻击。' },
+  'icyWind': { id: 'icyWind', name: '冰冻之风', type: 'Ice', category: 'Special', power: 55, accuracy: 95, ppMax: 15, description: '将结冰的冷气 吹向对手进行攻击。 会降低对手的速度。' },
+  'auroraBeam': { id: 'auroraBeam', name: '极光束', type: 'Ice', category: 'Special', power: 65, accuracy: 100, ppMax: 20, description: '向对手发射 虹色光束进行攻击。 有时会降低对手的攻击。' },
+  'poisonGas': { id: 'poisonGas', name: '毒瓦斯', type: 'Poison', category: 'Status', power: 0, accuracy: 90, ppMax: 40, description: '将毒瓦斯吹到对手的脸上， 从而让对手陷入中毒状态。' },
+  'withdraw': { id: 'withdraw', name: '缩入壳中', type: 'Water', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '缩入壳里保护身体， 从而提高自己的防御。' },
+  'icicleSpear': { id: 'icicleSpear', name: '冰锥', type: 'Ice', category: 'Physical', power: 25, accuracy: 100, ppMax: 30, description: '向对手发射 锋利的冰柱进行攻击。 连续攻击２～５次。' },
+  'clamp': { id: 'clamp', name: '贝壳夹击', type: 'Water', category: 'Physical', power: 35, accuracy: 85, ppMax: 15, description: '用非常坚固且厚实的贝壳， 在４～５回合内 夹住对手进行攻击。' },
+  'nightShade': { id: 'nightShade', name: '黑夜魔影', type: 'Ghost', category: 'Special', power: 0, accuracy: 100, ppMax: 15, description: '显示恐怖幻影， 只给予对手 和自己等级相同的伤害。' },
+  'confuseRay': { id: 'confuseRay', name: '奇异之光', type: 'Ghost', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '显示奇怪的光， 扰乱对手。 使对手混乱。' },
+  'lick': { id: 'lick', name: '舌舔', type: 'Ghost', category: 'Physical', power: 30, accuracy: 100, ppMax: 30, description: '用长长的舌头， 舔遍对手进行攻击。 有时会让对手陷入麻痹状态。' },
+  'spite': { id: 'spite', name: '怨恨', type: 'Ghost', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '对对手最后使用的招式 怀有怨恨， 减少４ＰＰ该招式。' },
+  'bind': { id: 'bind', name: '绑紧', type: 'Normal', category: 'Physical', power: 15, accuracy: 85, ppMax: 20, description: '使用长长的身体或藤蔓等， 在４～５回合内 绑紧对手进行攻击。' },
+  'viceGrip': { id: 'viceGrip', name: '夹住', type: 'Normal', category: 'Physical', power: 55, accuracy: 100, ppMax: 30, description: '将对手从两侧夹住， 给予伤害。' },
+  'mudShot': { id: 'mudShot', name: '泥巴射击', type: 'Ground', category: 'Special', power: 55, accuracy: 95, ppMax: 15, description: '向对手投掷 泥块进行攻击。 同时降低对手的速度。' },
+  'charge': { id: 'charge', name: '充电', type: 'Electric', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '提高下一回合使出的 电属性的招式威力。 自己的特防也会提高。' },
+  'barrage': { id: 'barrage', name: '投球', type: 'Normal', category: 'Physical', power: 15, accuracy: 85, ppMax: 20, description: '向对手投掷 圆形物体进行攻击。 连续攻击２～５次。' },
+  'uproar': { id: 'uproar', name: '吵闹', type: 'Normal', category: 'Special', power: 90, accuracy: 100, ppMax: 10, description: '在３回合内 用骚乱攻击对手。 在此期间谁都不能入眠。' },
+  'boneClub': { id: 'boneClub', name: '骨棒', type: 'Ground', category: 'Physical', power: 65, accuracy: 85, ppMax: 20, description: '用手中的骨头 殴打对手进行攻击。 有时会使对手畏缩。' },
+  'doubleKick': { id: 'doubleKick', name: '二连踢', type: 'Fighting', category: 'Physical', power: 30, accuracy: 100, ppMax: 30, description: '用２只脚踢飞对手进行攻击。 连续２次给予伤害。' },
+  'meditate': { id: 'meditate', name: '瑜伽姿势', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '唤醒身体深处 沉睡的力量， 从而提高自己的攻击。' },
+  'revenge': { id: 'revenge', name: '报复', type: 'Fighting', category: 'Physical', power: 60, accuracy: 100, ppMax: 10, description: '如果受到对手的招式攻击， 就能给予对手２倍的伤害。' },
+  'brickBreak': { id: 'brickBreak', name: '劈瓦', type: 'Fighting', category: 'Physical', power: 75, accuracy: 100, ppMax: 15, description: '将手刀猛烈地挥下攻击对手。 还可以破坏光墙和反射壁等。' },
+  'cometPunch': { id: 'cometPunch', name: '连续拳', type: 'Normal', category: 'Physical', power: 18, accuracy: 85, ppMax: 15, description: '用拳头怒涛般的 殴打对手进行攻击。 连续攻击２～５次。' },
+  'agility': { id: 'agility', name: '高速移动', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '让身体放松变得轻盈， 以便高速移动。 大幅提高自己的速度。' },
+  'smog': { id: 'smog', name: '浊雾', type: 'Poison', category: 'Special', power: 30, accuracy: 70, ppMax: 20, description: '将肮脏的浓雾 吹向对手进行攻击。 有时会让对手陷入中毒状态。' },
+  'sludge': { id: 'sludge', name: '污泥攻击', type: 'Poison', category: 'Special', power: 65, accuracy: 100, ppMax: 20, description: '用污泥投掷对手进行攻击。 有时会让对手陷入中毒状态。' },
+  'scaryFace': { id: 'scaryFace', name: '鬼面', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '用恐怖的脸瞪着对手， 使其害怕， 从而大幅降低对手的速度。' },
+  'rockBlast': { id: 'rockBlast', name: '岩石爆击', type: 'Rock', category: 'Physical', power: 25, accuracy: 90, ppMax: 10, description: '向对手发射 坚硬的岩石进行攻击。 连续攻击２～５次。' },
+  'refresh': { id: 'refresh', name: '焕然一新', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '让身体休息， 治愈自己身上所中的 毒、麻痹、灼伤的异常状态。' },
+  'constrict': { id: 'constrict', name: '缠绕', type: 'Normal', category: 'Physical', power: 10, accuracy: 100, ppMax: 35, description: '用触手或青藤等缠绕进行攻击。 有时会降低对手的速度。' },
+  'ingrain': { id: 'ingrain', name: '扎根', type: 'Grass', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '在大地上扎根， 每回合回复自己的ＨＰ。 因为扎根了，所以不能替换宝可梦。' },
+  'fakeOut': { id: 'fakeOut', name: '击掌奇袭', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 10, description: '进行先制攻击，使对手畏缩。 要在出场后立刻使出才能成功。' },
+  'smokescreen': { id: 'smokescreen', name: '烟幕', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '向对手喷出烟或墨汁等， 从而降低对手的命中率。' },
+  'twister': { id: 'twister', name: '龙卷风', type: 'Dragon', category: 'Special', power: 40, accuracy: 100, ppMax: 20, description: '兴起龙卷风， 将对手卷入进行攻击。 有时会使对手畏缩。' },
+  'rapidSpin': { id: 'rapidSpin', name: '高速旋转', type: 'Normal', category: 'Physical', power: 50, accuracy: 100, ppMax: 40, description: '通过旋转来攻击对手。 还可以摆脱绑紧、紧束、 寄生种子和撒菱等招式。' },
+  'camouflage': { id: 'camouflage', name: '保护色', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '根据所在场所不同， 如水边、草丛和洞窟等， 可以改变自己的属性。' },
+  'recover': { id: 'recover', name: '自我再生', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 5, description: '让细胞再生， 从而回复自己 最大ＨＰ的一半。' },
+  'barrier': { id: 'barrier', name: '屏障', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '制造坚固的壁障， 从而大幅提高自己的防御。' },
+  'reflect': { id: 'reflect', name: '反射壁', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '在５回合内使用神奇的墙， 减弱从对手那受到的 物理攻击的伤害。' },
+  'magicalLeaf': { id: 'magicalLeaf', name: '魔法叶', type: 'Grass', category: 'Special', power: 60, accuracy: 100, ppMax: 20, description: '散落可以追踪 对手的神奇叶片。 攻击必定会命中。' },
+  'falseSwipe': { id: 'falseSwipe', name: '点到为止', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 40, description: '对手的ＨＰ 至少会留下１ＨＰ， 如此般手下留情地攻击。' },
+  'lovelyKiss': { id: 'lovelyKiss', name: '恶魔之吻', type: 'Normal', category: 'Status', power: 0, accuracy: 75, ppMax: 10, description: '用恐怖的脸强吻对手。 让对手陷入睡眠状态。' },
+  'powderSnow': { id: 'powderSnow', name: '细雪', type: 'Ice', category: 'Special', power: 40, accuracy: 100, ppMax: 25, description: '将冰冷的细雪 吹向对手进行攻击。 有时会让对手陷入冰冻状态。' },
+  'swift': { id: 'swift', name: '高速星星', type: 'Normal', category: 'Special', power: 60, accuracy: 100, ppMax: 20, description: '发射星形的光攻击对手。 攻击必定会命中。' },
+  'sunnyDay': { id: 'sunnyDay', name: '大晴天', type: 'Fire', category: 'Status', power: 0, accuracy: 100, ppMax: 5, description: '在５回合内阳光变得强烈， 从而提高火属性的招式威力。 水属性的招式威力则降低。' },
+  'seismicToss': { id: 'seismicToss', name: '地球上投', type: 'Fighting', category: 'Physical', power: 0, accuracy: 100, ppMax: 20, description: '利用引力将对手甩飞出去。 给予对手和自己等级相同的伤害。' },
+  'splash': { id: 'splash', name: '跃起', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '也不攻击只是一蹦一蹦地跳， 什么都不会发生……' },
+  'flail': { id: 'flail', name: '抓狂', type: 'Normal', category: 'Physical', power: 0, accuracy: 100, ppMax: 15, description: '抓狂般乱打进行攻击。 自己的ＨＰ越少， 招式的威力越大。' },
+  'mist': { id: 'mist', name: '白雾', type: 'Ice', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '用白雾覆盖身体。 在５回合内不会让对手 降低自己的能力。' },
+  'transform': { id: 'transform', name: '变身', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '变身成对手宝可梦的样子， 能够使用和对手 完全相同的招式。' },
+  'helpingHand': { id: 'helpingHand', name: '帮助', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '帮助伙伴。 被帮助的宝可梦， 其招式威力变得比平时大。' },
+  'sharpen': { id: 'sharpen', name: '棱角化', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '增加身体的角， 变得棱棱角角， 从而提高自己的攻击。' },
+  'conversion': { id: 'conversion', name: '纹理', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '将自己的属性转换成 和已学会的招式中 第一个招式相同的属性。' },
+  'conversion2': { id: 'conversion2', name: '纹理２', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '为了可以抵抗对手 最后使用的招式， 从而使自己的属性发生变化。' },
+  'furyCutter': { id: 'furyCutter', name: '连斩', type: 'Bug', category: 'Physical', power: 40, accuracy: 95, ppMax: 20, description: '用镰刀或爪子等 切斩对手进行攻击。 连续击中，威力就会提高。' },
+  'wingAttack': { id: 'wingAttack', name: '翅膀攻击', type: 'Flying', category: 'Physical', power: 60, accuracy: 100, ppMax: 35, description: '大大地展开美丽的翅膀， 将其撞向对手进行攻击。' },
+  'ancientPower': { id: 'ancientPower', name: '原始之力', type: 'Rock', category: 'Special', power: 60, accuracy: 100, ppMax: 5, description: '用原始之力进行攻击。 有时会提高 自己所有的能力。' },
+  'amnesia': { id: 'amnesia', name: '瞬间失忆', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '将头脑清空， 瞬间忘记某事， 从而大幅提高自己的特防。' },
+  'rest': { id: 'rest', name: '睡觉', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 5, description: '连续睡上２回合。 回复自己的全部ＨＰ 以及治愈所有异常状态。' },
+  'iceBeam': { id: 'iceBeam', name: '冰冻光束', type: 'Ice', category: 'Special', power: 90, accuracy: 100, ppMax: 10, description: '向对手发射 冰冻光束进行攻击。 有时会让对手陷入冰冻状态。' },
+  'drillPeck': { id: 'drillPeck', name: '啄钻', type: 'Flying', category: 'Physical', power: 80, accuracy: 100, ppMax: 20, description: '一边旋转，一边将尖喙 刺入对手进行攻击。' },
+  'fireSpin': { id: 'fireSpin', name: '火焰旋涡', type: 'Fire', category: 'Special', power: 35, accuracy: 85, ppMax: 15, description: '将对手困在 激烈的火焰旋涡中， 在４～５回合内进行攻击。' },
+  'psychic': { id: 'psychic', name: '精神强念', type: 'Psychic', category: 'Special', power: 90, accuracy: 100, ppMax: 10, description: '向对手发送 强大的念力进行攻击。 有时会降低对手的特防。' },
+  'megaPunch': { id: 'megaPunch', name: '百万吨重拳', type: 'Normal', category: 'Physical', power: 80, accuracy: 85, ppMax: 20, description: '用充满力量的拳头攻击对手。' },
 };
 
 export const SPECIES_DATA: Record<string, SpeciesData> = {
-  bulbasaur: {
+  'bulbasaur': {
     pokedexId: 1,
     speciesName: '妙蛙种子',
     types: ['Grass', 'Poison'],
@@ -208,7 +208,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'leechSeed', level: 7 }, { moveId: 'vineWhip', level: 13 }],
     evolutions: [{ targetSpeciesId: 'ivysaur', level: 16 }],
   },
-  ivysaur: {
+  'ivysaur': {
     pokedexId: 2,
     speciesName: '妙蛙草',
     types: ['Grass', 'Poison'],
@@ -218,7 +218,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'leechSeed', level: 1 }, { moveId: 'vineWhip', level: 13 }],
     evolutions: [{ targetSpeciesId: 'venusaur', level: 32 }],
   },
-  venusaur: {
+  'venusaur': {
     pokedexId: 3,
     speciesName: '妙蛙花',
     types: ['Grass', 'Poison'],
@@ -227,7 +227,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png',
     learnset: [{ moveId: 'vineWhip', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'leechSeed', level: 1 }],
   },
-  charmander: {
+  'charmander': {
     pokedexId: 4,
     speciesName: '小火龙',
     types: ['Fire'],
@@ -237,7 +237,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'ember', level: 9 }, { moveId: 'metalClaw', level: 13 }],
     evolutions: [{ targetSpeciesId: 'charmeleon', level: 16 }],
   },
-  charmeleon: {
+  'charmeleon': {
     pokedexId: 5,
     speciesName: '火恐龙',
     types: ['Fire'],
@@ -247,7 +247,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'metalClaw', level: 13 }],
     evolutions: [{ targetSpeciesId: 'charizard', level: 36 }],
   },
-  charizard: {
+  'charizard': {
     pokedexId: 6,
     speciesName: '喷火龙',
     types: ['Fire', 'Flying'],
@@ -256,7 +256,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png',
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'ember', level: 1 }],
   },
-  squirtle: {
+  'squirtle': {
     pokedexId: 7,
     speciesName: '杰尼龟',
     types: ['Water'],
@@ -266,7 +266,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'bubble', level: 8 }, { moveId: 'waterGun', level: 15 }],
     evolutions: [{ targetSpeciesId: 'wartortle', level: 16 }],
   },
-  wartortle: {
+  'wartortle': {
     pokedexId: 8,
     speciesName: '卡咪龟',
     types: ['Water'],
@@ -276,7 +276,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'waterGun', level: 15 }],
     evolutions: [{ targetSpeciesId: 'blastoise', level: 36 }],
   },
-  blastoise: {
+  'blastoise': {
     pokedexId: 9,
     speciesName: '水箭龟',
     types: ['Water'],
@@ -285,7 +285,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'bubble', level: 1 }],
   },
-  caterpie: {
+  'caterpie': {
     pokedexId: 10,
     speciesName: '绿毛虫',
     types: ['Bug'],
@@ -295,7 +295,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'stringShot', level: 1 }],
     evolutions: [{ targetSpeciesId: 'metapod', level: 7 }],
   },
-  metapod: {
+  'metapod': {
     pokedexId: 11,
     speciesName: '铁甲蛹',
     types: ['Bug'],
@@ -305,7 +305,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'harden', level: 1 }],
     evolutions: [{ targetSpeciesId: 'butterfree', level: 10 }],
   },
-  butterfree: {
+  'butterfree': {
     pokedexId: 12,
     speciesName: '巴大蝶',
     types: ['Bug', 'Flying'],
@@ -314,7 +314,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/12.png',
     learnset: [{ moveId: 'confusion', level: 1 }, { moveId: 'poisonPowder', level: 15 }, { moveId: 'stunSpore', level: 16 }, { moveId: 'sleepPowder', level: 17 }],
   },
-  weedle: {
+  'weedle': {
     pokedexId: 13,
     speciesName: '独角虫',
     types: ['Bug', 'Poison'],
@@ -324,7 +324,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'poisonSting', level: 1 }, { moveId: 'stringShot', level: 1 }],
     evolutions: [{ targetSpeciesId: 'kakuna', level: 7 }],
   },
-  kakuna: {
+  'kakuna': {
     pokedexId: 14,
     speciesName: '铁壳蛹',
     types: ['Bug', 'Poison'],
@@ -334,7 +334,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'harden', level: 1 }],
     evolutions: [{ targetSpeciesId: 'beedrill', level: 10 }],
   },
-  beedrill: {
+  'beedrill': {
     pokedexId: 15,
     speciesName: '大针蜂',
     types: ['Bug', 'Poison'],
@@ -343,7 +343,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/15.png',
     learnset: [{ moveId: 'furyAttack', level: 1 }, { moveId: 'focusEnergy', level: 16 }, { moveId: 'twineedle', level: 20 }, { moveId: 'rage', level: 25 }],
   },
-  pidgey: {
+  'pidgey': {
     pokedexId: 16,
     speciesName: '波波',
     types: ['Normal', 'Flying'],
@@ -353,7 +353,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'gust', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'sandAttack', level: 5 }, { moveId: 'quickAttack', level: 12 }],
     evolutions: [{ targetSpeciesId: 'pidgeotto', level: 18 }],
   },
-  pidgeotto: {
+  'pidgeotto': {
     pokedexId: 17,
     speciesName: '比比鸟',
     types: ['Normal', 'Flying'],
@@ -363,7 +363,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'gust', level: 1 }, { moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'quickAttack', level: 12 }],
     evolutions: [{ targetSpeciesId: 'pidgeot', level: 36 }],
   },
-  pidgeot: {
+  'pidgeot': {
     pokedexId: 18,
     speciesName: '大比鸟',
     types: ['Normal', 'Flying'],
@@ -372,7 +372,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/18.png',
     learnset: [{ moveId: 'gust', level: 1 }, { moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'quickAttack', level: 1 }],
   },
-  rattata: {
+  'rattata': {
     pokedexId: 19,
     speciesName: '小拉达',
     types: ['Normal'],
@@ -382,7 +382,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'quickAttack', level: 7 }, { moveId: 'hyperFang', level: 14 }],
     evolutions: [{ targetSpeciesId: 'raticate', level: 20 }],
   },
-  raticate: {
+  'raticate': {
     pokedexId: 20,
     speciesName: '拉达',
     types: ['Normal'],
@@ -391,7 +391,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/20.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'hyperFang', level: 14 }],
   },
-  spearow: {
+  'spearow': {
     pokedexId: 21,
     speciesName: '烈雀',
     types: ['Normal', 'Flying'],
@@ -401,7 +401,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'growl', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'leer', level: 9 }, { moveId: 'furyAttack', level: 15 }],
     evolutions: [{ targetSpeciesId: 'fearow', level: 20 }],
   },
-  fearow: {
+  'fearow': {
     pokedexId: 22,
     speciesName: '大嘴雀',
     types: ['Normal', 'Flying'],
@@ -410,7 +410,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/22.png',
     learnset: [{ moveId: 'leer', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'furyAttack', level: 15 }],
   },
-  ekans: {
+  'ekans': {
     pokedexId: 23,
     speciesName: '阿柏蛇',
     types: ['Poison'],
@@ -420,7 +420,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'poisonSting', level: 10 }, { moveId: 'bite', level: 17 }],
     evolutions: [{ targetSpeciesId: 'arbok', level: 22 }],
   },
-  arbok: {
+  'arbok': {
     pokedexId: 24,
     speciesName: '阿柏怪',
     types: ['Poison'],
@@ -429,7 +429,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/24.png',
     learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'poisonSting', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'bite', level: 17 }],
   },
-  pikachu: {
+  'pikachu': {
     pokedexId: 25,
     speciesName: '皮卡丘',
     types: ['Electric'],
@@ -439,7 +439,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'growl', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'tailWhip', level: 6 }, { moveId: 'thunderWave', level: 9 }],
     evolutions: [{ targetSpeciesId: 'raichu', item: 'thunder-stone' }],
   },
-  raichu: {
+  'raichu': {
     pokedexId: 26,
     speciesName: '雷丘',
     types: ['Electric'],
@@ -448,7 +448,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/26.png',
     learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'thunderbolt', level: 1 }],
   },
-  sandshrew: {
+  'sandshrew': {
     pokedexId: 27,
     speciesName: '穿山鼠',
     types: ['Ground'],
@@ -458,7 +458,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'defenseCurl', level: 6 }, { moveId: 'sandAttack', level: 10 }, { moveId: 'slash', level: 17 }],
     evolutions: [{ targetSpeciesId: 'sandslash', level: 22 }],
   },
-  sandslash: {
+  'sandslash': {
     pokedexId: 28,
     speciesName: '穿山王',
     types: ['Ground'],
@@ -467,7 +467,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/28.png',
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'sandAttack', level: 1 }, { moveId: 'defenseCurl', level: 1 }, { moveId: 'slash', level: 17 }],
   },
-  nidoran-f: {
+  'nidoran-f': {
     pokedexId: 29,
     speciesName: '尼多兰',
     types: ['Poison'],
@@ -477,7 +477,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'scratch', level: 8 }, { moveId: 'poisonSting', level: 14 }],
     evolutions: [{ targetSpeciesId: 'nidorina', level: 16 }],
   },
-  nidorina: {
+  'nidorina': {
     pokedexId: 30,
     speciesName: '尼多娜',
     types: ['Poison'],
@@ -487,7 +487,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'poisonSting', level: 14 }],
     evolutions: [{ targetSpeciesId: 'nidoqueen', item: 'moon-stone' }],
   },
-  nidoqueen: {
+  'nidoqueen': {
     pokedexId: 31,
     speciesName: '尼多后',
     types: ['Poison', 'Ground'],
@@ -496,7 +496,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/31.png',
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'bodySlam', level: 1 }, { moveId: 'tailWhip', level: 1 }],
   },
-  nidoran-m: {
+  'nidoran-m': {
     pokedexId: 32,
     speciesName: '尼多朗',
     types: ['Poison'],
@@ -506,7 +506,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'hornAttack', level: 8 }],
     evolutions: [{ targetSpeciesId: 'nidorino', level: 16 }],
   },
-  nidorino: {
+  'nidorino': {
     pokedexId: 33,
     speciesName: '尼多力诺',
     types: ['Poison'],
@@ -516,7 +516,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'hornAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'peck', level: 1 }],
     evolutions: [{ targetSpeciesId: 'nidoking', item: 'moon-stone' }],
   },
-  nidoking: {
+  'nidoking': {
     pokedexId: 34,
     speciesName: '尼多王',
     types: ['Poison', 'Ground'],
@@ -525,7 +525,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/34.png',
     learnset: [{ moveId: 'hornAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'thrash', level: 1 }, { moveId: 'poisonSting', level: 1 }],
   },
-  clefairy: {
+  'clefairy': {
     pokedexId: 35,
     speciesName: '皮皮',
     types: ['Fairy'],
@@ -535,7 +535,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'encore', level: 5 }, { moveId: 'sing', level: 13 }],
     evolutions: [{ targetSpeciesId: 'clefable', item: 'moon-stone' }],
   },
-  clefable: {
+  'clefable': {
     pokedexId: 36,
     speciesName: '皮可西',
     types: ['Fairy'],
@@ -544,7 +544,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/36.png',
     learnset: [{ moveId: 'doubleSlap', level: 1 }, { moveId: 'sing', level: 1 }, { moveId: 'minimize', level: 1 }, { moveId: 'metronome', level: 1 }],
   },
-  vulpix: {
+  'vulpix': {
     pokedexId: 37,
     speciesName: '六尾',
     types: ['Fire'],
@@ -554,7 +554,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'quickAttack', level: 16 }, { moveId: 'willOWisp', level: 17 }],
     evolutions: [{ targetSpeciesId: 'ninetales', item: 'fire-stone' }],
   },
-  ninetales: {
+  'ninetales': {
     pokedexId: 38,
     speciesName: '九尾',
     types: ['Fire'],
@@ -563,7 +563,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/38.png',
     learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'roar', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'quickAttack', level: 1 }],
   },
-  jigglypuff: {
+  'jigglypuff': {
     pokedexId: 39,
     speciesName: '胖丁',
     types: ['Normal', 'Fairy'],
@@ -573,7 +573,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'sing', level: 1 }, { moveId: 'pound', level: 9 }, { moveId: 'disable', level: 14 }, { moveId: 'defenseCurl', level: 19 }],
     evolutions: [{ targetSpeciesId: 'wigglytuff', item: 'moon-stone' }],
   },
-  wigglytuff: {
+  'wigglytuff': {
     pokedexId: 40,
     speciesName: '胖可丁',
     types: ['Normal', 'Fairy'],
@@ -582,7 +582,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/40.png',
     learnset: [{ moveId: 'doubleSlap', level: 1 }, { moveId: 'sing', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'defenseCurl', level: 1 }],
   },
-  zubat: {
+  'zubat': {
     pokedexId: 41,
     speciesName: '超音蝠',
     types: ['Poison', 'Flying'],
@@ -592,7 +592,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'leechLife', level: 1 }, { moveId: 'astonish', level: 6 }, { moveId: 'supersonic', level: 10 }, { moveId: 'bite', level: 15 }],
     evolutions: [{ targetSpeciesId: 'golbat', level: 22 }],
   },
-  golbat: {
+  'golbat': {
     pokedexId: 42,
     speciesName: '大嘴蝠',
     types: ['Poison', 'Flying'],
@@ -601,7 +601,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/42.png',
     learnset: [{ moveId: 'bite', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'leechLife', level: 1 }, { moveId: 'astonish', level: 1 }],
   },
-  oddish: {
+  'oddish': {
     pokedexId: 43,
     speciesName: '走路草',
     types: ['Grass', 'Poison'],
@@ -611,7 +611,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'absorb', level: 1 }, { moveId: 'sweetScent', level: 7 }, { moveId: 'poisonPowder', level: 15 }, { moveId: 'stunSpore', level: 17 }],
     evolutions: [{ targetSpeciesId: 'gloom', level: 21 }],
   },
-  gloom: {
+  'gloom': {
     pokedexId: 44,
     speciesName: '臭臭花',
     types: ['Grass', 'Poison'],
@@ -621,7 +621,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'absorb', level: 1 }, { moveId: 'poisonPowder', level: 1 }, { moveId: 'stunSpore', level: 1 }, { moveId: 'sweetScent', level: 1 }],
     evolutions: [{ targetSpeciesId: 'vileplume', item: 'leaf-stone' }],
   },
-  vileplume: {
+  'vileplume': {
     pokedexId: 45,
     speciesName: '霸王花',
     types: ['Grass', 'Poison'],
@@ -630,7 +630,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/45.png',
     learnset: [{ moveId: 'acid', level: 1 }, { moveId: 'absorb', level: 1 }, { moveId: 'megaDrain', level: 1 }, { moveId: 'stunSpore', level: 1 }],
   },
-  paras: {
+  'paras': {
     pokedexId: 46,
     speciesName: '派拉斯',
     types: ['Bug', 'Grass'],
@@ -640,7 +640,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'poisonPowder', level: 13 }, { moveId: 'stunSpore', level: 13 }, { moveId: 'leechLife', level: 20 }],
     evolutions: [{ targetSpeciesId: 'parasect', level: 24 }],
   },
-  parasect: {
+  'parasect': {
     pokedexId: 47,
     speciesName: '派拉斯特',
     types: ['Bug', 'Grass'],
@@ -649,7 +649,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/47.png',
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'poisonPowder', level: 1 }, { moveId: 'stunSpore', level: 1 }, { moveId: 'leechLife', level: 1 }],
   },
-  venonat: {
+  'venonat': {
     pokedexId: 48,
     speciesName: '毛球',
     types: ['Bug', 'Poison'],
@@ -659,7 +659,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'foresight', level: 1 }, { moveId: 'supersonic', level: 11 }],
     evolutions: [{ targetSpeciesId: 'venomoth', level: 31 }],
   },
-  venomoth: {
+  'venomoth': {
     pokedexId: 49,
     speciesName: '摩鲁蛾',
     types: ['Bug', 'Poison'],
@@ -668,7 +668,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/49.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'supersonic', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'poisonPowder', level: 1 }],
   },
-  diglett: {
+  'diglett': {
     pokedexId: 50,
     speciesName: '地鼠',
     types: ['Ground'],
@@ -678,7 +678,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'magnitude', level: 9 }, { moveId: 'growl', level: 15 }, { moveId: 'dig', level: 19 }],
     evolutions: [{ targetSpeciesId: 'dugtrio', level: 26 }],
   },
-  dugtrio: {
+  'dugtrio': {
     pokedexId: 51,
     speciesName: '三地鼠',
     types: ['Ground'],
@@ -687,7 +687,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/51.png',
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'dig', level: 1 }, { moveId: 'triAttack', level: 1 }],
   },
-  meowth: {
+  'meowth': {
     pokedexId: 52,
     speciesName: '喵喵',
     types: ['Normal'],
@@ -697,7 +697,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'bite', level: 12 }, { moveId: 'payDay', level: 17 }],
     evolutions: [{ targetSpeciesId: 'persian', level: 28 }],
   },
-  persian: {
+  'persian': {
     pokedexId: 53,
     speciesName: '猫老大',
     types: ['Normal'],
@@ -706,7 +706,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/53.png',
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'bite', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'screech', level: 1 }],
   },
-  psyduck: {
+  'psyduck': {
     pokedexId: 54,
     speciesName: '可达鸭',
     types: ['Water'],
@@ -716,7 +716,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'waterSport', level: 1 }, { moveId: 'screech', level: 23 }, { moveId: 'tailWhip', level: 28 }],
     evolutions: [{ targetSpeciesId: 'golduck', level: 33 }],
   },
-  golduck: {
+  'golduck': {
     pokedexId: 55,
     speciesName: '哥达鸭',
     types: ['Water'],
@@ -725,7 +725,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/55.png',
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'waterSport', level: 1 }],
   },
-  mankey: {
+  'mankey': {
     pokedexId: 56,
     speciesName: '猴怪',
     types: ['Fighting'],
@@ -735,7 +735,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'lowKick', level: 9 }, { moveId: 'karateChop', level: 15 }],
     evolutions: [{ targetSpeciesId: 'primeape', level: 28 }],
   },
-  primeape: {
+  'primeape': {
     pokedexId: 57,
     speciesName: '火暴猴',
     types: ['Fighting'],
@@ -744,7 +744,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/57.png',
     learnset: [{ moveId: 'karateChop', level: 1 }, { moveId: 'scratch', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'lowKick', level: 1 }],
   },
-  growlithe: {
+  'growlithe': {
     pokedexId: 58,
     speciesName: '卡蒂狗',
     types: ['Fire'],
@@ -754,7 +754,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'bite', level: 1 }, { moveId: 'roar', level: 1 }, { moveId: 'ember', level: 18 }, { moveId: 'odorSleuth', level: 19 }],
     evolutions: [{ targetSpeciesId: 'arcanine', item: 'fire-stone' }],
   },
-  arcanine: {
+  'arcanine': {
     pokedexId: 59,
     speciesName: '风速狗',
     types: ['Fire'],
@@ -763,7 +763,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/59.png',
     learnset: [{ moveId: 'takeDown', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'bite', level: 1 }, { moveId: 'roar', level: 1 }],
   },
-  poliwag: {
+  'poliwag': {
     pokedexId: 60,
     speciesName: '蚊香蝌蚪',
     types: ['Water'],
@@ -773,7 +773,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'bubble', level: 1 }, { moveId: 'hypnosis', level: 16 }, { moveId: 'waterGun', level: 19 }, { moveId: 'doubleSlap', level: 25 }],
     evolutions: [{ targetSpeciesId: 'poliwhirl', level: 25 }],
   },
-  poliwhirl: {
+  'poliwhirl': {
     pokedexId: 61,
     speciesName: '蚊香君',
     types: ['Water'],
@@ -783,7 +783,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'waterGun', level: 1 }, { moveId: 'hypnosis', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'doubleSlap', level: 26 }],
     evolutions: [{ targetSpeciesId: 'poliwrath', item: 'water-stone' }],
   },
-  poliwrath: {
+  'poliwrath': {
     pokedexId: 62,
     speciesName: '蚊香泳士',
     types: ['Water', 'Fighting'],
@@ -792,7 +792,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/62.png',
     learnset: [{ moveId: 'doubleSlap', level: 1 }, { moveId: 'bodySlam', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'submission', level: 1 }],
   },
-  abra: {
+  'abra': {
     pokedexId: 63,
     speciesName: '凯西',
     types: ['Psychic'],
@@ -802,7 +802,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'teleport', level: 1 }],
     evolutions: [{ targetSpeciesId: 'kadabra', level: 16 }],
   },
-  kadabra: {
+  'kadabra': {
     pokedexId: 64,
     speciesName: '勇基拉',
     types: ['Psychic'],
@@ -811,7 +811,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/64.png',
     learnset: [{ moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'teleport', level: 1 }, { moveId: 'kinesis', level: 1 }],
   },
-  alakazam: {
+  'alakazam': {
     pokedexId: 65,
     speciesName: '胡地',
     types: ['Psychic'],
@@ -820,7 +820,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png',
     learnset: [{ moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'teleport', level: 1 }, { moveId: 'kinesis', level: 1 }],
   },
-  machop: {
+  'machop': {
     pokedexId: 66,
     speciesName: '腕力',
     types: ['Fighting'],
@@ -830,7 +830,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'karateChop', level: 1 }, { moveId: 'lowKick', level: 20 }, { moveId: 'foresight', level: 22 }, { moveId: 'leer', level: 25 }],
     evolutions: [{ targetSpeciesId: 'machoke', level: 28 }],
   },
-  machoke: {
+  'machoke': {
     pokedexId: 67,
     speciesName: '豪力',
     types: ['Fighting'],
@@ -839,7 +839,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/67.png',
     learnset: [{ moveId: 'karateChop', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'lowKick', level: 1 }, { moveId: 'foresight', level: 22 }],
   },
-  machamp: {
+  'machamp': {
     pokedexId: 68,
     speciesName: '怪力',
     types: ['Fighting'],
@@ -848,7 +848,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/68.png',
     learnset: [{ moveId: 'karateChop', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'lowKick', level: 1 }, { moveId: 'foresight', level: 22 }],
   },
-  bellsprout: {
+  'bellsprout': {
     pokedexId: 69,
     speciesName: '喇叭芽',
     types: ['Grass', 'Poison'],
@@ -858,7 +858,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'vineWhip', level: 1 }, { moveId: 'growth', level: 1 }, { moveId: 'wrap', level: 13 }, { moveId: 'poisonPowder', level: 15 }],
     evolutions: [{ targetSpeciesId: 'weepinbell', level: 21 }],
   },
-  weepinbell: {
+  'weepinbell': {
     pokedexId: 70,
     speciesName: '口呆花',
     types: ['Grass', 'Poison'],
@@ -868,7 +868,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'vineWhip', level: 1 }, { moveId: 'wrap', level: 1 }, { moveId: 'growth', level: 1 }, { moveId: 'poisonPowder', level: 15 }],
     evolutions: [{ targetSpeciesId: 'victreebel', item: 'leaf-stone' }],
   },
-  victreebel: {
+  'victreebel': {
     pokedexId: 71,
     speciesName: '大食花',
     types: ['Grass', 'Poison'],
@@ -877,7 +877,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/71.png',
     learnset: [{ moveId: 'vineWhip', level: 1 }, { moveId: 'acid', level: 1 }, { moveId: 'razorLeaf', level: 1 }, { moveId: 'stunSpore', level: 1 }],
   },
-  tentacool: {
+  'tentacool': {
     pokedexId: 72,
     speciesName: '玛瑙水母',
     types: ['Water', 'Poison'],
@@ -887,7 +887,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'acid', level: 1 }, { moveId: 'supersonic', level: 7 }, { moveId: 'wrap', level: 13 }, { moveId: 'poisonSting', level: 18 }],
     evolutions: [{ targetSpeciesId: 'tentacruel', level: 30 }],
   },
-  tentacruel: {
+  'tentacruel': {
     pokedexId: 73,
     speciesName: '毒刺水母',
     types: ['Water', 'Poison'],
@@ -896,7 +896,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/73.png',
     learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'supersonic', level: 1 }, { moveId: 'acid', level: 1 }, { moveId: 'poisonSting', level: 18 }],
   },
-  geodude: {
+  'geodude': {
     pokedexId: 74,
     speciesName: '小拳石',
     types: ['Rock', 'Ground'],
@@ -906,7 +906,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'mudSport', level: 6 }, { moveId: 'defenseCurl', level: 11 }, { moveId: 'rockThrow', level: 16 }],
     evolutions: [{ targetSpeciesId: 'graveler', level: 25 }],
   },
-  graveler: {
+  'graveler': {
     pokedexId: 75,
     speciesName: '隆隆石',
     types: ['Rock', 'Ground'],
@@ -915,7 +915,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/75.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'defenseCurl', level: 1 }, { moveId: 'mudSport', level: 1 }, { moveId: 'rockThrow', level: 16 }],
   },
-  golem: {
+  'golem': {
     pokedexId: 76,
     speciesName: '隆隆岩',
     types: ['Rock', 'Ground'],
@@ -924,7 +924,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/76.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'defenseCurl', level: 1 }, { moveId: 'mudSport', level: 1 }, { moveId: 'rockThrow', level: 16 }],
   },
-  ponyta: {
+  'ponyta': {
     pokedexId: 77,
     speciesName: '小火马',
     types: ['Fire'],
@@ -934,7 +934,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'ember', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'tailWhip', level: 30 }, { moveId: 'stomp', level: 32 }],
     evolutions: [{ targetSpeciesId: 'rapidash', level: 40 }],
   },
-  rapidash: {
+  'rapidash': {
     pokedexId: 78,
     speciesName: '烈焰马',
     types: ['Fire'],
@@ -943,7 +943,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/78.png',
     learnset: [{ moveId: 'stomp', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'ember', level: 1 }],
   },
-  slowpoke: {
+  'slowpoke': {
     pokedexId: 79,
     speciesName: '呆呆兽',
     types: ['Water', 'Psychic'],
@@ -953,7 +953,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'curse', level: 1 }, { moveId: 'yawn', level: 1 }],
     evolutions: [{ targetSpeciesId: 'slowbro', level: 37 }],
   },
-  slowbro: {
+  'slowbro': {
     pokedexId: 80,
     speciesName: '呆壳兽',
     types: ['Water', 'Psychic'],
@@ -962,7 +962,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/80.png',
     learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }],
   },
-  magnemite: {
+  'magnemite': {
     pokedexId: 81,
     speciesName: '小磁怪',
     types: ['Electric', 'Steel'],
@@ -972,7 +972,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'metalSound', level: 1 }, { moveId: 'sonicBoom', level: 21 }, { moveId: 'thunderShock', level: 25 }],
     evolutions: [{ targetSpeciesId: 'magneton', level: 30 }],
   },
-  magneton: {
+  'magneton': {
     pokedexId: 82,
     speciesName: '三合一磁怪',
     types: ['Electric', 'Steel'],
@@ -981,7 +981,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/82.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'sonicBoom', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'metalSound', level: 1 }],
   },
-  farfetchd: {
+  'farfetchd': {
     pokedexId: 83,
     speciesName: '大葱鸭',
     types: ['Normal', 'Flying'],
@@ -990,7 +990,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/83.png',
     learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'leer', level: 7 }, { moveId: 'furyAttack', level: 15 }],
   },
-  doduo: {
+  'doduo': {
     pokedexId: 84,
     speciesName: '嘟嘟',
     types: ['Normal', 'Flying'],
@@ -1000,7 +1000,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'peck', level: 1 }, { moveId: 'pursuit', level: 9 }, { moveId: 'growl', level: 20 }, { moveId: 'furyAttack', level: 24 }],
     evolutions: [{ targetSpeciesId: 'dodrio', level: 31 }],
   },
-  dodrio: {
+  'dodrio': {
     pokedexId: 85,
     speciesName: '嘟嘟利',
     types: ['Normal', 'Flying'],
@@ -1009,7 +1009,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/85.png',
     learnset: [{ moveId: 'furyAttack', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'pursuit', level: 1 }],
   },
-  seel: {
+  'seel': {
     pokedexId: 86,
     speciesName: '小海狮',
     types: ['Water'],
@@ -1019,7 +1019,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'icyWind', level: 17 }, { moveId: 'growl', level: 30 }, { moveId: 'auroraBeam', level: 35 }],
     evolutions: [{ targetSpeciesId: 'dewgong', level: 34 }],
   },
-  dewgong: {
+  'dewgong': {
     pokedexId: 87,
     speciesName: '白海狮',
     types: ['Water', 'Ice'],
@@ -1028,7 +1028,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/87.png',
     learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'auroraBeam', level: 1 }, { moveId: 'icyWind', level: 1 }],
   },
-  grimer: {
+  'grimer': {
     pokedexId: 88,
     speciesName: '臭泥',
     types: ['Poison'],
@@ -1038,7 +1038,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'poisonGas', level: 30 }, { moveId: 'minimize', level: 33 }],
     evolutions: [{ targetSpeciesId: 'muk', level: 38 }],
   },
-  muk: {
+  'muk': {
     pokedexId: 89,
     speciesName: '臭臭泥',
     types: ['Poison'],
@@ -1047,7 +1047,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/89.png',
     learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'poisonGas', level: 1 }, { moveId: 'minimize', level: 33 }],
   },
-  shellder: {
+  'shellder': {
     pokedexId: 90,
     speciesName: '大舌贝',
     types: ['Water'],
@@ -1057,7 +1057,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'withdraw', level: 1 }, { moveId: 'icicleSpear', level: 8 }, { moveId: 'supersonic', level: 18 }],
     evolutions: [{ targetSpeciesId: 'cloyster', item: 'water-stone' }],
   },
-  cloyster: {
+  'cloyster': {
     pokedexId: 91,
     speciesName: '刺甲贝',
     types: ['Water', 'Ice'],
@@ -1066,7 +1066,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/91.png',
     learnset: [{ moveId: 'supersonic', level: 1 }, { moveId: 'auroraBeam', level: 1 }, { moveId: 'withdraw', level: 1 }, { moveId: 'clamp', level: 1 }],
   },
-  gastly: {
+  'gastly': {
     pokedexId: 92,
     speciesName: '鬼斯',
     types: ['Ghost', 'Poison'],
@@ -1076,7 +1076,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'nightShade', level: 1 }, { moveId: 'confuseRay', level: 1 }, { moveId: 'lick', level: 1 }, { moveId: 'spite', level: 8 }],
     evolutions: [{ targetSpeciesId: 'haunter', level: 25 }],
   },
-  haunter: {
+  'haunter': {
     pokedexId: 93,
     speciesName: '鬼斯通',
     types: ['Ghost', 'Poison'],
@@ -1085,7 +1085,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/93.png',
     learnset: [{ moveId: 'nightShade', level: 1 }, { moveId: 'confuseRay', level: 1 }, { moveId: 'lick', level: 1 }, { moveId: 'spite', level: 1 }],
   },
-  gengar: {
+  'gengar': {
     pokedexId: 94,
     speciesName: '耿鬼',
     types: ['Ghost', 'Poison'],
@@ -1094,7 +1094,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png',
     learnset: [{ moveId: 'nightShade', level: 1 }, { moveId: 'confuseRay', level: 1 }, { moveId: 'lick', level: 1 }, { moveId: 'spite', level: 1 }],
   },
-  onix: {
+  'onix': {
     pokedexId: 95,
     speciesName: '大岩蛇',
     types: ['Rock', 'Ground'],
@@ -1103,7 +1103,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/95.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'bind', level: 15 }, { moveId: 'rockThrow', level: 19 }],
   },
-  drowzee: {
+  'drowzee': {
     pokedexId: 96,
     speciesName: '催眠貘',
     types: ['Psychic'],
@@ -1113,7 +1113,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'hypnosis', level: 1 }, { moveId: 'disable', level: 12 }, { moveId: 'confusion', level: 17 }],
     evolutions: [{ targetSpeciesId: 'hypno', level: 26 }],
   },
-  hypno: {
+  'hypno': {
     pokedexId: 97,
     speciesName: '引梦貘人',
     types: ['Psychic'],
@@ -1122,7 +1122,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/97.png',
     learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'hypnosis', level: 1 }],
   },
-  krabby: {
+  'krabby': {
     pokedexId: 98,
     speciesName: '大钳蟹',
     types: ['Water'],
@@ -1132,7 +1132,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'leer', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'viceGrip', level: 20 }, { moveId: 'mudShot', level: 23 }],
     evolutions: [{ targetSpeciesId: 'kingler', level: 28 }],
   },
-  kingler: {
+  'kingler': {
     pokedexId: 99,
     speciesName: '巨钳蟹',
     types: ['Water'],
@@ -1141,7 +1141,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/99.png',
     learnset: [{ moveId: 'viceGrip', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'metalClaw', level: 1 }],
   },
-  voltorb: {
+  'voltorb': {
     pokedexId: 100,
     speciesName: '霹雳电球',
     types: ['Electric'],
@@ -1151,7 +1151,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'charge', level: 1 }, { moveId: 'sonicBoom', level: 17 }],
     evolutions: [{ targetSpeciesId: 'electrode', level: 30 }],
   },
-  electrode: {
+  'electrode': {
     pokedexId: 101,
     speciesName: '顽皮雷弹',
     types: ['Electric'],
@@ -1160,7 +1160,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/101.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'sonicBoom', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'charge', level: 1 }],
   },
-  exeggcute: {
+  'exeggcute': {
     pokedexId: 102,
     speciesName: '蛋蛋',
     types: ['Grass', 'Psychic'],
@@ -1170,7 +1170,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'hypnosis', level: 1 }, { moveId: 'barrage', level: 1 }, { moveId: 'uproar', level: 1 }, { moveId: 'confusion', level: 19 }],
     evolutions: [{ targetSpeciesId: 'exeggutor', item: 'leaf-stone' }],
   },
-  exeggutor: {
+  'exeggutor': {
     pokedexId: 103,
     speciesName: '椰蛋树',
     types: ['Grass', 'Psychic'],
@@ -1179,7 +1179,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/103.png',
     learnset: [{ moveId: 'confusion', level: 1 }, { moveId: 'hypnosis', level: 1 }, { moveId: 'barrage', level: 1 }, { moveId: 'stomp', level: 28 }],
   },
-  cubone: {
+  'cubone': {
     pokedexId: 104,
     speciesName: '卡拉卡拉',
     types: ['Ground'],
@@ -1189,7 +1189,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'growl', level: 1 }, { moveId: 'boneClub', level: 1 }, { moveId: 'tailWhip', level: 13 }, { moveId: 'headbutt', level: 18 }],
     evolutions: [{ targetSpeciesId: 'marowak', level: 28 }],
   },
-  marowak: {
+  'marowak': {
     pokedexId: 105,
     speciesName: '嘎啦嘎啦',
     types: ['Ground'],
@@ -1198,7 +1198,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/105.png',
     learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'focusEnergy', level: 1 }],
   },
-  hitmonlee: {
+  'hitmonlee': {
     pokedexId: 106,
     speciesName: '飞腿郎',
     types: ['Fighting'],
@@ -1207,7 +1207,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png',
     learnset: [{ moveId: 'doubleKick', level: 1 }, { moveId: 'meditate', level: 1 }, { moveId: 'revenge', level: 1 }, { moveId: 'brickBreak', level: 20 }],
   },
-  hitmonchan: {
+  'hitmonchan': {
     pokedexId: 107,
     speciesName: '快拳郎',
     types: ['Fighting'],
@@ -1216,7 +1216,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/107.png',
     learnset: [{ moveId: 'cometPunch', level: 1 }, { moveId: 'agility', level: 1 }, { moveId: 'revenge', level: 1 }, { moveId: 'pursuit', level: 13 }],
   },
-  lickitung: {
+  'lickitung': {
     pokedexId: 108,
     speciesName: '大舌头',
     types: ['Normal'],
@@ -1225,7 +1225,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/108.png',
     learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'supersonic', level: 1 }, { moveId: 'lick', level: 1 }, { moveId: 'stomp', level: 7 }],
   },
-  koffing: {
+  'koffing': {
     pokedexId: 109,
     speciesName: '瓦斯弹',
     types: ['Poison'],
@@ -1235,7 +1235,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'smog', level: 1 }, { moveId: 'poisonGas', level: 1 }, { moveId: 'sludge', level: 32 }],
     evolutions: [{ targetSpeciesId: 'weezing', level: 35 }],
   },
-  weezing: {
+  'weezing': {
     pokedexId: 110,
     speciesName: '双弹瓦斯',
     types: ['Poison'],
@@ -1244,7 +1244,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/110.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'smog', level: 1 }, { moveId: 'sludge', level: 1 }, { moveId: 'poisonGas', level: 1 }],
   },
-  rhyhorn: {
+  'rhyhorn': {
     pokedexId: 111,
     speciesName: '独角犀牛',
     types: ['Ground', 'Rock'],
@@ -1254,7 +1254,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'hornAttack', level: 1 }, { moveId: 'scaryFace', level: 24 }, { moveId: 'rockBlast', level: 29 }, { moveId: 'stomp', level: 30 }],
     evolutions: [{ targetSpeciesId: 'rhydon', level: 42 }],
   },
-  rhydon: {
+  'rhydon': {
     pokedexId: 112,
     speciesName: '钻角犀兽',
     types: ['Ground', 'Rock'],
@@ -1263,7 +1263,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/112.png',
     learnset: [{ moveId: 'stomp', level: 1 }, { moveId: 'hornAttack', level: 1 }, { moveId: 'furyAttack', level: 1 }, { moveId: 'tailWhip', level: 1 }],
   },
-  chansey: {
+  'chansey': {
     pokedexId: 113,
     speciesName: '吉利蛋',
     types: ['Normal'],
@@ -1272,7 +1272,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/113.png',
     learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'doubleSlap', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'refresh', level: 9 }],
   },
-  tangela: {
+  'tangela': {
     pokedexId: 114,
     speciesName: '蔓藤怪',
     types: ['Grass'],
@@ -1281,7 +1281,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/114.png',
     learnset: [{ moveId: 'bind', level: 1 }, { moveId: 'constrict', level: 1 }, { moveId: 'ingrain', level: 1 }, { moveId: 'vineWhip', level: 29 }],
   },
-  kangaskhan: {
+  'kangaskhan': {
     pokedexId: 115,
     speciesName: '袋兽',
     types: ['Normal'],
@@ -1290,7 +1290,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/115.png',
     learnset: [{ moveId: 'cometPunch', level: 1 }, { moveId: 'rage', level: 1 }, { moveId: 'fakeOut', level: 19 }, { moveId: 'bite', level: 26 }],
   },
-  horsea: {
+  'horsea': {
     pokedexId: 116,
     speciesName: '墨海马',
     types: ['Water'],
@@ -1300,7 +1300,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'bubble', level: 1 }, { moveId: 'smokescreen', level: 19 }, { moveId: 'leer', level: 24 }, { moveId: 'twister', level: 29 }],
     evolutions: [{ targetSpeciesId: 'seadra', level: 32 }],
   },
-  seadra: {
+  'seadra': {
     pokedexId: 117,
     speciesName: '海刺龙',
     types: ['Water'],
@@ -1309,7 +1309,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/117.png',
     learnset: [{ moveId: 'smokescreen', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'leer', level: 24 }, { moveId: 'twister', level: 29 }],
   },
-  goldeen: {
+  'goldeen': {
     pokedexId: 118,
     speciesName: '角金鱼',
     types: ['Water'],
@@ -1319,7 +1319,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'waterSport', level: 1 }, { moveId: 'supersonic', level: 19 }],
     evolutions: [{ targetSpeciesId: 'seaking', level: 33 }],
   },
-  seaking: {
+  'seaking': {
     pokedexId: 119,
     speciesName: '金鱼王',
     types: ['Water'],
@@ -1328,7 +1328,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/119.png',
     learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'supersonic', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'waterSport', level: 1 }],
   },
-  staryu: {
+  'staryu': {
     pokedexId: 120,
     speciesName: '海星星',
     types: ['Water'],
@@ -1338,7 +1338,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'rapidSpin', level: 10 }, { moveId: 'waterGun', level: 17 }, { moveId: 'camouflage', level: 19 }],
     evolutions: [{ targetSpeciesId: 'starmie', item: 'water-stone' }],
   },
-  starmie: {
+  'starmie': {
     pokedexId: 121,
     speciesName: '宝石海星',
     types: ['Water', 'Psychic'],
@@ -1347,7 +1347,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/121.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'recover', level: 1 }, { moveId: 'harden', level: 1 }],
   },
-  mr-mime: {
+  'mr-mime': {
     pokedexId: 122,
     speciesName: '魔墙人偶',
     types: ['Psychic', 'Fairy'],
@@ -1356,7 +1356,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png',
     learnset: [{ moveId: 'confusion', level: 1 }, { moveId: 'barrier', level: 1 }, { moveId: 'reflect', level: 19 }, { moveId: 'magicalLeaf', level: 22 }],
   },
-  scyther: {
+  'scyther': {
     pokedexId: 123,
     speciesName: '飞天螳螂',
     types: ['Bug', 'Flying'],
@@ -1365,7 +1365,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/123.png',
     learnset: [{ moveId: 'quickAttack', level: 1 }, { moveId: 'pursuit', level: 11 }, { moveId: 'falseSwipe', level: 16 }, { moveId: 'leer', level: 17 }],
   },
-  jynx: {
+  'jynx': {
     pokedexId: 124,
     speciesName: '迷唇姐',
     types: ['Ice', 'Psychic'],
@@ -1374,7 +1374,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/124.png',
     learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'lovelyKiss', level: 1 }, { moveId: 'powderSnow', level: 1 }, { moveId: 'lick', level: 18 }],
   },
-  electabuzz: {
+  'electabuzz': {
     pokedexId: 125,
     speciesName: '电击兽',
     types: ['Electric'],
@@ -1383,7 +1383,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/125.png',
     learnset: [{ moveId: 'leer', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'swift', level: 25 }, { moveId: 'thunderShock', level: 34 }],
   },
-  magmar: {
+  'magmar': {
     pokedexId: 126,
     speciesName: '鸭嘴火兽',
     types: ['Fire'],
@@ -1392,7 +1392,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/126.png',
     learnset: [{ moveId: 'ember', level: 1 }, { moveId: 'sunnyDay', level: 33 }, { moveId: 'leer', level: 36 }, { moveId: 'confuseRay', level: 39 }],
   },
-  pinsir: {
+  'pinsir': {
     pokedexId: 127,
     speciesName: '凯罗斯',
     types: ['Bug'],
@@ -1401,7 +1401,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/127.png',
     learnset: [{ moveId: 'viceGrip', level: 1 }, { moveId: 'bind', level: 21 }, { moveId: 'seismicToss', level: 25 }, { moveId: 'revenge', level: 25 }],
   },
-  tauros: {
+  'tauros': {
     pokedexId: 128,
     speciesName: '肯泰罗',
     types: ['Normal'],
@@ -1410,7 +1410,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/128.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'hornAttack', level: 8 }, { moveId: 'scaryFace', level: 13 }, { moveId: 'pursuit', level: 19 }],
   },
-  magikarp: {
+  'magikarp': {
     pokedexId: 129,
     speciesName: '鲤鱼王',
     types: ['Water'],
@@ -1420,7 +1420,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'splash', level: 1 }, { moveId: 'tackle', level: 15 }, { moveId: 'flail', level: 30 }],
     evolutions: [{ targetSpeciesId: 'gyarados', level: 20 }],
   },
-  gyarados: {
+  'gyarados': {
     pokedexId: 130,
     speciesName: '暴鲤龙',
     types: ['Water', 'Flying'],
@@ -1429,7 +1429,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/130.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'thrash', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'bite', level: 1 }],
   },
-  lapras: {
+  'lapras': {
     pokedexId: 131,
     speciesName: '拉普拉斯',
     types: ['Water', 'Ice'],
@@ -1438,7 +1438,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/131.png',
     learnset: [{ moveId: 'growl', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'sing', level: 16 }, { moveId: 'mist', level: 20 }],
   },
-  ditto: {
+  'ditto': {
     pokedexId: 132,
     speciesName: '百变怪',
     types: ['Normal'],
@@ -1447,7 +1447,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png',
     learnset: [{ moveId: 'transform', level: 1 }],
   },
-  eevee: {
+  'eevee': {
     pokedexId: 133,
     speciesName: '伊布',
     types: ['Normal'],
@@ -1457,7 +1457,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'helpingHand', level: 1 }, { moveId: 'growl', level: 16 }],
     evolutions: [{ targetSpeciesId: 'flareon', item: 'fire-stone' }],
   },
-  vaporeon: {
+  'vaporeon': {
     pokedexId: 134,
     speciesName: '水伊布',
     types: ['Water'],
@@ -1466,7 +1466,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/134.png',
     learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'quickAttack', level: 1 }],
   },
-  jolteon: {
+  'jolteon': {
     pokedexId: 135,
     speciesName: '雷伊布',
     types: ['Electric'],
@@ -1475,7 +1475,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/135.png',
     learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'quickAttack', level: 1 }],
   },
-  flareon: {
+  'flareon': {
     pokedexId: 136,
     speciesName: '火伊布',
     types: ['Fire'],
@@ -1484,7 +1484,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/136.png',
     learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'quickAttack', level: 1 }],
   },
-  porygon: {
+  'porygon': {
     pokedexId: 137,
     speciesName: '多边兽',
     types: ['Normal'],
@@ -1493,7 +1493,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/137.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'sharpen', level: 1 }, { moveId: 'conversion', level: 1 }, { moveId: 'conversion2', level: 1 }],
   },
-  omanyte: {
+  'omanyte': {
     pokedexId: 138,
     speciesName: '菊石兽',
     types: ['Rock', 'Water'],
@@ -1503,7 +1503,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'waterGun', level: 1 }, { moveId: 'withdraw', level: 1 }, { moveId: 'constrict', level: 1 }, { moveId: 'bite', level: 13 }],
     evolutions: [{ targetSpeciesId: 'omastar', level: 40 }],
   },
-  omastar: {
+  'omastar': {
     pokedexId: 139,
     speciesName: '多刺菊石兽',
     types: ['Rock', 'Water'],
@@ -1512,7 +1512,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/139.png',
     learnset: [{ moveId: 'hornAttack', level: 1 }, { moveId: 'bite', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'withdraw', level: 1 }],
   },
-  kabuto: {
+  'kabuto': {
     pokedexId: 140,
     speciesName: '化石盔',
     types: ['Rock', 'Water'],
@@ -1522,7 +1522,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'harden', level: 1 }, { moveId: 'mudShot', level: 25 }, { moveId: 'sandAttack', level: 31 }],
     evolutions: [{ targetSpeciesId: 'kabutops', level: 40 }],
   },
-  kabutops: {
+  'kabutops': {
     pokedexId: 141,
     speciesName: '镰刀盔',
     types: ['Rock', 'Water'],
@@ -1531,7 +1531,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/141.png',
     learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'absorb', level: 1 }, { moveId: 'harden', level: 1 }, { moveId: 'furyCutter', level: 1 }],
   },
-  aerodactyl: {
+  'aerodactyl': {
     pokedexId: 142,
     speciesName: '化石翼龙',
     types: ['Rock', 'Flying'],
@@ -1540,7 +1540,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/142.png',
     learnset: [{ moveId: 'wingAttack', level: 1 }, { moveId: 'agility', level: 1 }, { moveId: 'ancientPower', level: 29 }, { moveId: 'supersonic', level: 33 }],
   },
-  snorlax: {
+  'snorlax': {
     pokedexId: 143,
     speciesName: '卡比兽',
     types: ['Normal'],
@@ -1549,7 +1549,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/143.png',
     learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'amnesia', level: 1 }, { moveId: 'rest', level: 1 }],
   },
-  articuno: {
+  'articuno': {
     pokedexId: 144,
     speciesName: '急冻鸟',
     types: ['Ice', 'Flying'],
@@ -1558,7 +1558,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/144.png',
     learnset: [{ moveId: 'gust', level: 1 }, { moveId: 'iceBeam', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'powderSnow', level: 1 }],
   },
-  zapdos: {
+  'zapdos': {
     pokedexId: 145,
     speciesName: '闪电鸟',
     types: ['Electric', 'Flying'],
@@ -1567,7 +1567,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/145.png',
     learnset: [{ moveId: 'peck', level: 1 }, { moveId: 'drillPeck', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'thunderWave', level: 13 }],
   },
-  moltres: {
+  'moltres': {
     pokedexId: 146,
     speciesName: '火焰鸟',
     types: ['Fire', 'Flying'],
@@ -1576,7 +1576,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/146.png',
     learnset: [{ moveId: 'wingAttack', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'fireSpin', level: 1 }],
   },
-  dratini: {
+  'dratini': {
     pokedexId: 147,
     speciesName: '迷你龙',
     types: ['Dragon'],
@@ -1586,7 +1586,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'thunderWave', level: 10 }, { moveId: 'twister', level: 15 }],
     evolutions: [{ targetSpeciesId: 'dragonair', level: 30 }],
   },
-  dragonair: {
+  'dragonair': {
     pokedexId: 148,
     speciesName: '哈克龙',
     types: ['Dragon'],
@@ -1596,7 +1596,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'thunderWave', level: 1 }, { moveId: 'twister', level: 1 }],
     evolutions: [{ targetSpeciesId: 'dragonite', level: 55 }],
   },
-  dragonite: {
+  'dragonite': {
     pokedexId: 149,
     speciesName: '快龙',
     types: ['Dragon', 'Flying'],
@@ -1605,7 +1605,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/149.png',
     learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'thunderWave', level: 1 }, { moveId: 'agility', level: 1 }],
   },
-  mewtwo: {
+  'mewtwo': {
     pokedexId: 150,
     speciesName: '超梦',
     types: ['Psychic'],
@@ -1614,7 +1614,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/150.png',
     learnset: [{ moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'psychic', level: 1 }, { moveId: 'swift', level: 1 }],
   },
-  mew: {
+  'mew': {
     pokedexId: 151,
     speciesName: '梦幻',
     types: ['Psychic'],

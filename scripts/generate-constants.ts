@@ -34,7 +34,7 @@ function generateMovesCode(): string {
 
   for (const move of moves) {
     const desc = move.description.replace(/'/g, "\\'").replace(/\n/g, ' ');
-    lines.push(`  ${move.id}: { id: '${move.id}', name: '${move.nameCN}', type: '${move.type}', category: '${move.category}', power: ${move.power}, accuracy: ${move.accuracy}, ppMax: ${move.pp}, description: '${desc}' },`);
+    lines.push(`  '${move.id}': { id: '${move.id}', name: '${move.nameCN}', type: '${move.type}', category: '${move.category}', power: ${move.power}, accuracy: ${move.accuracy}, ppMax: ${move.pp}, description: '${desc}' },`);
   }
 
   lines.push('};');
@@ -49,7 +49,7 @@ function generateSpeciesCode(): string {
     const types = p.types.map((t) => `'${t}'`).join(', ');
     const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png`;
 
-    lines.push(`  ${p.name}: {`);
+    lines.push(`  '${p.name}': {`);
     lines.push(`    pokedexId: ${p.id},`);
     lines.push(`    speciesName: '${p.nameCN}',`);
     lines.push(`    types: [${types}],`);

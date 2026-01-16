@@ -20,6 +20,7 @@ interface KyPokemonDB extends DBSchema {
   saves: {
     key: string;
     value: {
+      key: string;
       data: any;
       timestamp: number;
     };
