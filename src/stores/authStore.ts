@@ -30,6 +30,8 @@ interface AuthState {
   logout: () => void;
   checkAuth: () => void;
   clearError: () => void;
+  updateUsername: (newUsername: string) => boolean;
+  updatePassword: (oldPassword: string, newPassword: string) => boolean;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -135,5 +137,61 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   clearError: () => {
     set({ error: null });
+  },
+
+  updateUsername: (newUsername: string) => {
+    try {
+      const { currentUser } = get();
+      if (!currentUser) return false;
+
+      const usersJson = localStorage.getItem('pokemon-users');
+      const users: StoredUser[] = usersJson ? JSON.parse(usersJson) : [];
+
+      if (users.some(u => u.username === newUsername && u.id !== currentUser.id)) {
+        set({ error: '用户名已存在' });
+        return false;
+      }
+
+      const userIndex = users.findIndex(u => u.id === currentUser.id);
+      if (userIndex !== -1) {
+        users[userIndex].username = newUsername;
+        localStorage.setItem('pokemon-users', JSON.stringify(users));
+        
+        const updatedUser = { ...currentUser, username: newUsername };
+        localStorage.setItem('pokemon-current-user', JSON.stringify(updatedUser));
+        set({ currentUser: updatedUser, error: null });
+        return true;
+      }
+      return false;
+    } catch (err) {
+      set({ error: '更新用户名失败' });
+      return false;
+    }
+  },
+
+  updatePassword: (oldPassword: string, newPassword: string) => {
+    try {
+      const { currentUser } = get();
+      if (!currentUser) return false;
+
+      const usersJson = localStorage.getItem('pokemon-users');
+      const users: StoredUser[] = usersJson ? JSON.parse(usersJson) : [];
+
+      const userIndex = users.findIndex(u => u.id === currentUser.id);
+      if (userIndex === -1) return false;
+
+      if (users[userIndex].passwordHash !== simpleHash(oldPassword)) {
+        set({ error: '旧密码错误' });
+        return false;
+      }
+
+      users[userIndex].passwordHash = simpleHash(newPassword);
+      localStorage.setItem('pokemon-users', JSON.stringify(users));
+      set({ error: null });
+      return true;
+    } catch (err) {
+      set({ error: '更新密码失败' });
+      return false;
+    }
   }
 }));

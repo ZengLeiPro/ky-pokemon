@@ -1,18 +1,49 @@
 import React, { useEffect } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import { useAuthStore } from '../../stores/authStore';
-import { User, Clock, Award, Star, LogOut } from 'lucide-react';
+import { User, Clock, Award, Star, LogOut, Pencil, Key } from 'lucide-react';
 import { WORLD_MAP } from '../../constants';
 
 const ProfileView: React.FC = () => {
   const { playerMoney, logs, setView, badges } = useGameStore();
-  const { currentUser, logout } = useAuthStore();
+  const { currentUser, logout, updateUsername, updatePassword } = useAuthStore();
   const startTime = logs.find(l => l.id === 'init')?.timestamp || Date.now();
   const playTimeMinutes = Math.floor((Date.now() - startTime) / 60000);
   
   const allGyms = Object.values(WORLD_MAP).filter(l => l.gym).map(l => l.gym!);
 
-  return (
+    const handleRename = () => {
+        const newName = prompt("请输入新的昵称：", currentUser?.username);
+        if (newName && newName.trim()) {
+            if (updateUsername(newName.trim())) {
+                alert("昵称修改成功！");
+            } else {
+                alert("修改失败，可能是用户名已存在。");
+            }
+        }
+    };
+
+    const handleChangePassword = () => {
+        const oldPass = prompt("请输入旧密码：");
+        if (!oldPass) return;
+        
+        const newPass = prompt("请输入新密码：");
+        if (!newPass) return;
+
+        const confirmPass = prompt("请再次输入新密码：");
+        if (newPass !== confirmPass) {
+            alert("两次输入的密码不一致！");
+            return;
+        }
+
+        if (updatePassword(oldPass, newPass)) {
+            alert("密码修改成功！");
+        } else {
+            alert("修改失败，旧密码错误。");
+        }
+    };
+
+    return (
     <div className="h-full bg-slate-950 flex flex-col overflow-y-auto">
         {/* Header */}
         <div className="bg-gradient-to-br from-indigo-900 to-slate-900 p-6 pb-12 rounded-b-[2.5rem] shadow-2xl relative overflow-hidden">
@@ -22,8 +53,16 @@ const ProfileView: React.FC = () => {
                 <div className="w-24 h-24 bg-slate-800 rounded-full border-4 border-slate-700 flex items-center justify-center shadow-xl mb-4">
                     <User size={48} className="text-slate-500" />
                 </div>
-                <h1 className="text-2xl font-bold text-white tracking-wide">训练家 {currentUser?.username || '小赤'}</h1>
-                <p className="text-indigo-200 text-sm mt-1">ID: {currentUser?.id.slice(0, 8) || '00000000'}</p>
+                <div className="flex items-center gap-2 mb-1">
+                    <h1 className="text-2xl font-bold text-white tracking-wide">训练家 {currentUser?.username || '小赤'}</h1>
+                    <button 
+                        onClick={handleRename}
+                        className="p-1.5 bg-slate-800 rounded-full hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+                    >
+                        <Pencil size={14} />
+                    </button>
+                </div>
+                <p className="text-indigo-200 text-sm">ID: {currentUser?.id.slice(0, 8) || '00000000'}</p>
             </div>
         </div>
 
@@ -85,18 +124,25 @@ const ProfileView: React.FC = () => {
                   <button className="text-xs text-slate-500 hover:text-slate-300 underline">
                       游戏设置
                   </button>
-                <div>
+                  <div className="flex justify-center gap-4">
+                     <button
+                        onClick={handleChangePassword}
+                        className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-300 text-sm font-medium transition-all"
+                    >
+                        <Key size={16} />
+                        修改密码
+                    </button>
                     <button
                         onClick={() => {
                             logout();
                             setView('LOGIN');
                         }}
-                        className="flex items-center gap-2 mx-auto px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 hover:text-red-300 text-sm font-medium transition-all"
+                        className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 hover:text-red-300 text-sm font-medium transition-all"
                     >
                         <LogOut size={16} />
                         退出登录
                     </button>
-                </div>
+                  </div>
              </div>
         </div>
     </div>

@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { produce } from 'immer';
-import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus } from '@/types';
+import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus, Weather } from '@/types';
 import { MOVES, SPECIES_DATA, WORLD_MAP } from '@/constants';
-import { createPokemon, calculateDamage, gainExperience, evolvePokemon } from '@/lib/mechanics';
+import { createPokemon, calculateDamage, gainExperience, evolvePokemon, MOVE_EFFECTS } from '@/lib/mechanics';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 
 interface PokemonUser {
@@ -104,6 +104,8 @@ interface GameState {
   playerLocationId: string;
   pokedex: Record<number, PokedexStatus>;
   badges: string[];
+  weather: Weather;
+  weatherDuration: number;
 
   battle: {
     active: boolean;
@@ -114,7 +116,8 @@ interface GameState {
     gymBadgeReward?: string;
     gymBadgeName?: string;
     playerActiveIndex: number;
-    phase: 'INPUT' | 'PROCESSING' | 'ENDED' | 'FORCED_SWITCH';
+    phase: 'INPUT' | 'PROCESSING' | 'ENDED' | 'FORCED_SWITCH' | 'NICKNAME';
+    caughtPokemonId?: string;
   };
 
   setView: (view: ViewState) => void;
@@ -137,6 +140,8 @@ interface GameState {
   moveTo: (locationId: string) => void;
   manualSave: () => void;
   resetGame: () => void;
+  renamePokemon: (id: string, name: string) => void;
+  confirmNickname: (name?: string) => void;
 }
 
 export const useGameStore = create<GameState>()(
@@ -151,6 +156,8 @@ export const useGameStore = create<GameState>()(
   playerLocationId: 'pallet-town',
   pokedex: initialPokedex,
   badges: [],
+  weather: 'None',
+  weatherDuration: 0,
   inventory: [
     { 
         id: 'potion', 
@@ -195,6 +202,8 @@ export const useGameStore = create<GameState>()(
       playerLocationId: 'pallet-town',
       pokedex: initialPokedex,
       badges: [],
+      weather: 'None',
+      weatherDuration: 0,
       inventory: [
         { 
             id: 'potion', 
@@ -245,6 +254,30 @@ export const useGameStore = create<GameState>()(
       set(produce((state: GameState) => {
           state.playerLocationId = locationId;
           state.logs.push(createLogEntry(`抵达了 ${target.name}。`));
+          
+          state.weather = 'None';
+          state.weatherDuration = 0;
+
+          if (target.weatherRates) {
+              const roll = Math.random();
+              let cumulative = 0;
+              for (const [weatherType, rate] of Object.entries(target.weatherRates)) {
+                  cumulative += rate;
+                  if (roll < cumulative) {
+                      state.weather = weatherType as Weather;
+                      state.weatherDuration = 255; 
+                      let msg = '';
+                      switch(state.weather) {
+                          case 'Rain': msg = '天空下起了雨...'; break;
+                          case 'Sunny': msg = '阳光变得有些刺眼...'; break;
+                          case 'Sandstorm': msg = '周围扬起了沙尘...'; break;
+                          case 'Hail': msg = '天空飘起了冰雹...'; break;
+                      }
+                      if (msg) state.logs.push(createLogEntry(msg));
+                      break;
+                  }
+              }
+          }
       }));
   },
 
@@ -308,7 +341,7 @@ export const useGameStore = create<GameState>()(
   },
 
   executeMove: async (moveIndex) => {
-    const { battle, playerParty, addLog } = get();
+    const { battle, playerParty, addLog, weather } = get();
     if (!battle.active || !battle.enemy || battle.phase !== 'INPUT') return;
 
     set(produce((state: GameState) => { state.battle.phase = 'PROCESSING'; }));
@@ -325,13 +358,63 @@ export const useGameStore = create<GameState>()(
     const enemyMon = battle.enemy;
     const enemyMoveData = enemyMon.moves[Math.floor(Math.random() * enemyMon.moves.length)];
     
-    const playerSpeed = playerMon.stats.spe;
-    const enemySpeed = enemyMon.stats.spe;
+    // Paralysis speed drop (1/4 speed)
+    const getSpeed = (p: Pokemon) => p.status === 'PAR' ? Math.floor(p.stats.spe * 0.25) : p.stats.spe;
+
+    const playerSpeed = getSpeed(playerMon);
+    const enemySpeed = getSpeed(enemyMon);
     
     const playerGoesFirst = playerSpeed >= enemySpeed; 
     
-    const executeTurn = async (attacker: Pokemon, defender: Pokemon, moveData: any, isPlayer: boolean) => {
+    const executeTurn = async (attackerSnapshot: Pokemon, defenderSnapshot: Pokemon, moveData: any, isPlayer: boolean) => {
+        const currentState = get();
+        const latestPlayer = currentState.playerParty[currentState.battle.playerActiveIndex];
+        const latestEnemy = currentState.battle.enemy;
+
+        if (!latestEnemy || !latestPlayer) return;
+
+        const attacker = isPlayer ? latestPlayer : latestEnemy;
+        const defender = isPlayer ? latestEnemy : latestPlayer;
+
         if (attacker.currentHp <= 0 || defender.currentHp <= 0) return;
+
+        // Status Checks Pre-Move
+        if (attacker.status === 'SLP') {
+             addLog(`${attacker.speciesName} 正在睡觉。`);
+             // Chance to wake up? Simplified: 1/3 chance
+             if (Math.random() < 0.33) {
+                 set(produce((state: GameState) => {
+                     const p = isPlayer ? state.playerParty[state.battle.playerActiveIndex] : state.battle.enemy;
+                     if (p) delete p.status;
+                 }));
+                 addLog(`${attacker.speciesName} 醒过来了！`);
+             } else {
+                 await new Promise(r => setTimeout(r, 600));
+                 return;
+             }
+        }
+
+        if (attacker.status === 'FRZ') {
+             addLog(`${attacker.speciesName} 身体冻结了！`);
+             if (Math.random() < 0.2) {
+                 set(produce((state: GameState) => {
+                     const p = isPlayer ? state.playerParty[state.battle.playerActiveIndex] : state.battle.enemy;
+                     if (p) delete p.status;
+                 }));
+                 addLog(`${attacker.speciesName} 的冰融化了！`);
+             } else {
+                 await new Promise(r => setTimeout(r, 600));
+                 return;
+             }
+        }
+
+        if (attacker.status === 'PAR') {
+            if (Math.random() < 0.25) {
+                addLog(`${attacker.speciesName} 身体麻痹动弹不得！`);
+                await new Promise(r => setTimeout(r, 600));
+                return;
+            }
+        }
 
         if (isPlayer) {
              set(produce((state: GameState) => {
@@ -340,9 +423,14 @@ export const useGameStore = create<GameState>()(
         }
 
         addLog(`${attacker.speciesName} 使用了 ${moveData.move.name}！`, 'combat');
+        
+        if (moveData.move.description) {
+            addLog(moveData.move.description, 'info');
+        }
+
         await new Promise(r => setTimeout(r, 800));
 
-        const result = calculateDamage(attacker, defender, moveData.move);
+        const result = calculateDamage(attacker, defender, moveData.move, currentState.weather);
         
         if (result.damage > 0) {
             if (isPlayer) {
@@ -363,8 +451,60 @@ export const useGameStore = create<GameState>()(
             if (result.typeEffectiveness < 1 && result.typeEffectiveness > 0) addLog("效果不理想...", 'info');
             if (result.typeEffectiveness === 0) addLog("似乎没有效果。", 'info');
         } else {
-            addLog("但是失败了！");
+            if (moveData.move.category !== 'Status') {
+                addLog("但是失败了！");
+            }
         }
+
+        // Apply Move Effects (Status / Weather)
+        const effect = MOVE_EFFECTS[moveData.move.id];
+        if (effect) {
+            const roll = Math.random();
+            if (roll < effect.chance) {
+                if (effect.type === 'status') {
+                    // Check if defender already has status
+                    const targetHasStatus = defender.status !== undefined;
+                    // Type immunities (Poison vs Steel/Poison, Burn vs Fire, etc - simplified)
+                    let immune = false;
+                    if (effect.id === 'PSN' && (defender.types.includes('Poison') || defender.types.includes('Steel'))) immune = true;
+                    if (effect.id === 'BRN' && defender.types.includes('Fire')) immune = true;
+                    if (effect.id === 'FRZ' && defender.types.includes('Ice')) immune = true;
+                    if (effect.id === 'PAR' && defender.types.includes('Electric')) immune = true;
+
+                    if (!targetHasStatus && !immune && defender.currentHp > 0) {
+                         set(produce((state: GameState) => {
+                             const target = isPlayer ? state.playerParty[state.battle.playerActiveIndex] : state.battle.enemy;
+                             if (target) {
+                                 target.status = effect.id as any;
+                                 let msg = '';
+                                 switch(effect.id) {
+                                     case 'BRN': msg = `${target.speciesName} 灼伤了！`; break;
+                                     case 'PSN': msg = `${target.speciesName} 中毒了！`; break;
+                                     case 'PAR': msg = `${target.speciesName} 麻痹了！`; break;
+                                     case 'SLP': msg = `${target.speciesName} 睡着了！`; break;
+                                     case 'FRZ': msg = `${target.speciesName} 冻结了！`; break;
+                                 }
+                                 state.logs.push(createLogEntry(msg, 'urgent'));
+                             }
+                         }));
+                    }
+                } else if (effect.type === 'weather') {
+                    set(produce((state: GameState) => {
+                        state.weather = effect.id as any;
+                        state.weatherDuration = 5;
+                        let msg = '';
+                        switch(effect.id) {
+                            case 'Sunny': msg = `阳光变得强烈了！`; break;
+                            case 'Rain': msg = `开始下雨了！`; break;
+                            case 'Sandstorm': msg = `刮起了沙暴！`; break;
+                            case 'Hail': msg = `开始下冰雹了！`; break;
+                        }
+                        state.logs.push(createLogEntry(msg, 'info'));
+                    }));
+                }
+            }
+        }
+
          await new Promise(r => setTimeout(r, 600));
     };
 
@@ -380,8 +520,57 @@ export const useGameStore = create<GameState>()(
     const currentEnemy = finalState.battle.enemy;
     const currentPlayer = finalState.playerParty[finalState.battle.playerActiveIndex];
 
-    if (currentEnemy && currentEnemy.currentHp <= 0) {
-        addLog(`敌方的 ${currentEnemy.speciesName} 倒下了！`);
+    // End of turn processing (Weather & Status Damage)
+    if (currentEnemy && currentEnemy.currentHp > 0 && currentPlayer && currentPlayer.currentHp > 0) {
+        // Weather
+        if (finalState.weather !== 'None') {
+             set(produce((state: GameState) => {
+                 state.weatherDuration--;
+                 if (state.weatherDuration <= 0) {
+                     state.weather = 'None';
+                     state.logs.push(createLogEntry('天气恢复了原状。'));
+                 } else {
+                     if (state.weather === 'Sandstorm' || state.weather === 'Hail') {
+                         // Buffeting logic (simplified)
+                         state.logs.push(createLogEntry(`${state.weather === 'Sandstorm' ? '沙暴' : '冰雹'} 正在袭击！`, 'info'));
+                     }
+                 }
+             }));
+        }
+
+        // Status Damage
+        const applyStatusDamage = async (p: Pokemon, isPlayer: boolean) => {
+            if (p.status === 'BRN' || p.status === 'PSN') {
+                const dmg = Math.floor(p.maxHp / 8);
+                if (dmg > 0) {
+                    set(produce((state: GameState) => {
+                        const target = isPlayer ? state.playerParty[state.battle.playerActiveIndex] : state.battle.enemy;
+                        if (target) {
+                            target.currentHp = Math.max(0, target.currentHp - dmg);
+                            const statusName = p.status === 'BRN' ? '灼伤' : '中毒';
+                            state.logs.push(createLogEntry(`${target.speciesName} 受到了${statusName}的伤害！`, 'urgent'));
+                        }
+                    }));
+                    await new Promise(r => setTimeout(r, 500));
+                }
+            }
+        };
+
+        await applyStatusDamage(currentPlayer, true);
+        // Check if player died from status
+        const stateAfterPlayerDmg = get();
+        if (stateAfterPlayerDmg.playerParty[stateAfterPlayerDmg.battle.playerActiveIndex].currentHp > 0) {
+             await applyStatusDamage(currentEnemy, false);
+        }
+    }
+
+    // Check Death (Re-fetch state because status dmg might have killed)
+    const checkDeathState = get();
+    const deadEnemy = checkDeathState.battle.enemy;
+    const deadPlayer = checkDeathState.playerParty[checkDeathState.battle.playerActiveIndex];
+
+    if (deadEnemy && deadEnemy.currentHp <= 0) {
+        addLog(`敌方的 ${deadEnemy.speciesName} 倒下了！`);
         
         const expYield = Math.floor((currentEnemy.baseStats.hp + currentEnemy.baseStats.atk + currentEnemy.baseStats.spe) / 3); 
         const expAmount = Math.floor(expYield * currentEnemy.level / 5) + 10;
@@ -549,16 +738,15 @@ export const useGameStore = create<GameState>()(
                        state.playerStorage.push(caughtPokemon);
                        state.logs.push(createLogEntry(`${caughtPokemon.speciesName} 已被传送至宝可梦盒子。`));
                    }
+
+                   state.battle.caughtPokemonId = caughtPokemon.id;
                }
           }));
 
           await new Promise(r => setTimeout(r, 1200));
 
           set(produce((state: GameState) => {
-              state.battle.active = false;
-              state.battle.enemy = null;
-              state.battle.phase = 'ENDED';
-              state.view = 'ROAM';
+              state.battle.phase = 'NICKNAME';
           }));
       } else {
           addLog(`${enemy.speciesName} 挣脱了精灵球！`, 'combat');
@@ -649,6 +837,7 @@ export const useGameStore = create<GameState>()(
       state.playerParty.forEach(p => {
           p.currentHp = p.maxHp;
           p.moves.forEach(m => m.ppCurrent = m.move.ppMax);
+          delete p.status;
       });
       state.logs.push(createLogEntry('你的队伍已恢复健康。'));
   })),
@@ -752,10 +941,45 @@ export const useGameStore = create<GameState>()(
           if (state.selectedPokemonId === pokemonId) {
               state.selectedPokemonId = null;
           }
-          state.logs.push(createLogEntry(`再见了，${pokemon.speciesName}！希望你一切安好。`));
+          state.logs.push(createLogEntry(`再见了，${pokemon.nickname || pokemon.speciesName}！希望你一切安好。`));
       }));
       return true;
   },
+
+  renamePokemon: (id: string, name: string) => set(produce((state: GameState) => {
+      const inParty = state.playerParty.find(p => p.id === id);
+      if (inParty) {
+          inParty.nickname = name;
+          state.logs.push(createLogEntry(`${inParty.speciesName} 的名字改成了 ${name}！`));
+          return;
+      }
+
+      const inStorage = state.playerStorage.find(p => p.id === id);
+      if (inStorage) {
+          inStorage.nickname = name;
+          state.logs.push(createLogEntry(`${inStorage.speciesName} 的名字改成了 ${name}！`));
+          return;
+      }
+  })),
+
+  confirmNickname: (name?: string) => set(produce((state: GameState) => {
+      const caughtId = state.battle.caughtPokemonId;
+      if (caughtId && name) {
+          const inParty = state.playerParty.find(p => p.id === caughtId);
+          if (inParty) inParty.nickname = name;
+          
+          const inStorage = state.playerStorage.find(p => p.id === caughtId);
+          if (inStorage) inStorage.nickname = name;
+          
+          state.logs.push(createLogEntry(`给宝可梦取名为 ${name}。`));
+      }
+
+      state.battle.active = false;
+      state.battle.enemy = null;
+      state.battle.phase = 'ENDED';
+      state.battle.caughtPokemonId = undefined;
+      state.view = 'ROAM';
+  })),
 }),
     {
       name: 'ky-pokemon-save',

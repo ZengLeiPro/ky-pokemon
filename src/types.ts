@@ -33,6 +33,7 @@ export interface PokemonMove {
 export interface Pokemon {
   id: string;
   speciesName: string;
+  nickname?: string;
   level: number;
   types: PokemonType[];
   baseStats: BaseStats;
@@ -80,6 +81,8 @@ export interface InventoryItem {
 
 export type PokedexStatus = 'CAUGHT' | 'SEEN' | 'UNKNOWN';
 
+export type Weather = 'Sunny' | 'Rain' | 'Sandstorm' | 'Hail' | 'None';
+
 // 新增地图系统接口
 export interface Evolution {
   targetSpeciesId: string;
@@ -110,6 +113,7 @@ export interface LocationData {
   encounters?: string[]; // Potential wild pokemon IDs
   bgGradient?: string; // CSS gradient class
   gym?: GymData;
+  weatherRates?: Partial<Record<Weather, number>>; 
 }
 
 // 用户认证相关类型

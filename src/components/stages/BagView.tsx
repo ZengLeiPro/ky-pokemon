@@ -97,7 +97,7 @@ const BagView: React.FC = () => {
                 className="bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed p-3 rounded-lg border border-slate-700 text-left transition-all active:scale-95"
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-bold text-slate-200">{pokemon.speciesName}</span>
+                  <span className="text-sm font-bold text-slate-200">{pokemon.nickname || pokemon.speciesName}</span>
                   <span className="text-xs text-slate-500">Lv.{pokemon.level}</span>
                 </div>
                 <div className="text-xs text-slate-400">

@@ -1,4 +1,4 @@
-import { BaseStats, Move, Pokemon, PokemonType } from '../types';
+import { BaseStats, Move, Pokemon, PokemonType, Weather } from '../types';
 import { MOVES, SPECIES_DATA } from '../constants';
 
 // Helper function to find species key by Pokedex ID
@@ -10,6 +10,34 @@ function findSpeciesKeyByPokedexId(pokedexId: number): string {
     }
     return '';
 }
+
+// Side Effect Map
+export const MOVE_EFFECTS: Record<string, { type: 'status' | 'weather' | 'heal', id: string, chance: number, value?: number }> = {
+    ember: { type: 'status', id: 'BRN', chance: 0.1 },
+    flamethrower: { type: 'status', id: 'BRN', chance: 0.1 },
+    fireBlast: { type: 'status', id: 'BRN', chance: 0.1 }, 
+    willOWisp: { type: 'status', id: 'BRN', chance: 0.85 }, 
+    poisonPowder: { type: 'status', id: 'PSN', chance: 1.0 },
+    poisonSting: { type: 'status', id: 'PSN', chance: 0.3 },
+    sludge: { type: 'status', id: 'PSN', chance: 0.3 },
+    sleepPowder: { type: 'status', id: 'SLP', chance: 1.0 },
+    hypnosis: { type: 'status', id: 'SLP', chance: 1.0 },
+    sing: { type: 'status', id: 'SLP', chance: 1.0 },
+    stunSpore: { type: 'status', id: 'PAR', chance: 1.0 },
+    thunderWave: { type: 'status', id: 'PAR', chance: 1.0 },
+    thunderShock: { type: 'status', id: 'PAR', chance: 0.1 },
+    thunderbolt: { type: 'status', id: 'PAR', chance: 0.1 },
+    bodySlam: { type: 'status', id: 'PAR', chance: 0.3 },
+    lick: { type: 'status', id: 'PAR', chance: 0.3 },
+    iceBeam: { type: 'status', id: 'FRZ', chance: 0.1 },
+    powderSnow: { type: 'status', id: 'FRZ', chance: 0.1 },
+    blizzard: { type: 'status', id: 'FRZ', chance: 0.1 },
+    
+    sunnyDay: { type: 'weather', id: 'Sunny', chance: 1.0 },
+    rainDance: { type: 'weather', id: 'Rain', chance: 1.0 },
+    sandstorm: { type: 'weather', id: 'Sandstorm', chance: 1.0 },
+    hail: { type: 'weather', id: 'Hail', chance: 1.0 },
+};
 
 // Standard Gen 3+ Formula for stats
 export const calculateStats = (base: BaseStats, ivs: BaseStats, evs: BaseStats, level: number): { stats: BaseStats, maxHp: number } => {
@@ -120,14 +148,32 @@ const getTypeEffectiveness = (moveType: PokemonType, targetTypes: PokemonType[])
     return multiplier;
 };
 
-export const calculateDamage = (attacker: Pokemon, defender: Pokemon, move: Move): { damage: number, isCritical: boolean, typeEffectiveness: number } => {
+export const calculateDamage = (
+    attacker: Pokemon, 
+    defender: Pokemon, 
+    move: Move, 
+    weather: Weather = 'None'
+): { damage: number, isCritical: boolean, typeEffectiveness: number } => {
   if (move.category === 'Status') return { damage: 0, isCritical: false, typeEffectiveness: 1 };
 
-  const a = move.category === 'Physical' ? attacker.stats.atk : attacker.stats.spa;
+  let a = move.category === 'Physical' ? attacker.stats.atk : attacker.stats.spa;
   const d = move.category === 'Physical' ? defender.stats.def : defender.stats.spd;
 
+  if (attacker.status === 'BRN' && move.category === 'Physical') {
+      a = Math.floor(a * 0.5);
+  }
+
+  let power = move.power;
+  if (weather === 'Sunny') {
+      if (move.type === 'Fire') power = Math.floor(power * 1.5);
+      if (move.type === 'Water') power = Math.floor(power * 0.5);
+  } else if (weather === 'Rain') {
+      if (move.type === 'Water') power = Math.floor(power * 1.5);
+      if (move.type === 'Fire') power = Math.floor(power * 0.5);
+  }
+
   const levelFactor = (2 * attacker.level) / 5 + 2;
-  const baseDamage = (levelFactor * move.power * (a / d)) / 50 + 2;
+  const baseDamage = (levelFactor * power * (a / d)) / 50 + 2;
 
   // Modifiers
   const isCritical = Math.random() < 0.0625; // 1/16 crit rate

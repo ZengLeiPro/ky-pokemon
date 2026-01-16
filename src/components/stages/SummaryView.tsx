@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import TypeBadge from '../ui/TypeBadge';
-import { ArrowLeft, Activity, Sword, Trash2, HardDrive } from 'lucide-react';
-import { TYPE_TRANSLATIONS } from '../../constants';
+import { ArrowLeft, Activity, Sword, Trash2, HardDrive, Pencil, Info } from 'lucide-react';
+import { TYPE_TRANSLATIONS, TYPE_COLORS } from '../../constants';
 
 const SummaryView: React.FC = () => {
-  const { playerParty, playerStorage, selectedPokemonId, setView, setSelectedPokemon, releasePokemon, depositPokemon } = useGameStore();
+  const { playerParty, playerStorage, selectedPokemonId, setView, setSelectedPokemon, releasePokemon, depositPokemon, renamePokemon } = useGameStore();
+  const [expandedMove, setExpandedMove] = useState<number | null>(null);
   
   const inParty = playerParty.find(p => p.id === selectedPokemonId);
   const inStorage = playerStorage?.find(p => p.id === selectedPokemonId);
@@ -37,6 +38,13 @@ const SummaryView: React.FC = () => {
       }
   };
 
+  const handleRename = () => {
+    const newName = prompt("请输入新的名字：", pokemon.nickname || pokemon.speciesName);
+    if (newName && newName.trim()) {
+        renamePokemon(pokemon.id, newName.trim().slice(0, 12));
+    }
+  };
+
   const StatRow = ({ label, value, max = 100, color = "bg-blue-500" }: { label: string, value: number, max?: number, color?: string }) => (
       <div className="flex items-center gap-3 text-xs mb-2">
           <span className="w-8 font-bold text-slate-400 uppercase">{label}</span>
@@ -65,8 +73,16 @@ const SummaryView: React.FC = () => {
                      <img src={pokemon.spriteUrl} alt={pokemon.speciesName} className="w-20 h-20 object-contain pixelated relative z-10" />
                  </div>
                  <div className="flex-1">
-                     <div className="text-xs text-slate-400 font-mono mb-1">No.???</div>
-                     <h2 className="text-2xl font-bold mb-2">{pokemon.speciesName}</h2>
+                     <div className="text-xs text-slate-400 font-mono mb-1">No.{String(pokemon.speciesData.pokedexId).padStart(3, '0')}</div>
+                     <div className="flex items-center gap-2 mb-2">
+                        <h2 className="text-2xl font-bold">
+                            {pokemon.nickname || pokemon.speciesName}
+                            {pokemon.nickname && <span className="text-sm text-slate-400 font-normal ml-2">({pokemon.speciesName})</span>}
+                        </h2>
+                        <button onClick={handleRename} className="p-1.5 bg-slate-800 rounded-full hover:bg-slate-700 text-slate-400 hover:text-white transition-colors">
+                            <Pencil size={14} />
+                        </button>
+                     </div>
                      <div className="flex gap-2">
                         {pokemon.types.map(t => <TypeBadge key={t} type={t} />)}
                      </div>
@@ -105,15 +121,46 @@ const SummaryView: React.FC = () => {
                 </div>
                 <div className="space-y-2">
                     {pokemon.moves.map((m, idx) => (
-                        <div key={idx} className="bg-slate-800 p-3 rounded-lg border border-slate-700 flex justify-between items-center">
-                            <div>
-                                <div className="font-bold text-sm text-slate-200">{m.move.name}</div>
-                                <div className="text-[10px] text-slate-400 mt-0.5">{TYPE_TRANSLATIONS[m.move.type]} / {m.move.category}</div>
+                        <div 
+                            key={idx} 
+                            onClick={() => setExpandedMove(expandedMove === idx ? null : idx)}
+                            className={`bg-slate-800 rounded-lg border transition-all cursor-pointer overflow-hidden ${
+                                expandedMove === idx ? 'border-slate-500 ring-1 ring-slate-500' : 'border-slate-700 hover:border-slate-600'
+                            }`}
+                        >
+                            <div className="p-3 flex justify-between items-center relative">
+                                <div className="absolute left-0 top-0 bottom-0 w-1" style={{ backgroundColor: TYPE_COLORS[m.move.type] }}></div>
+                                
+                                <div className="pl-2">
+                                    <div className="font-bold text-sm text-slate-200 flex items-center gap-2">
+                                        {m.move.name}
+                                        {expandedMove === idx && <Info size={12} className="text-slate-500" />}
+                                    </div>
+                                    <div className="text-[10px] text-slate-400 mt-0.5">{TYPE_TRANSLATIONS[m.move.type]} / {m.move.category}</div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="font-mono text-sm text-slate-300">PP {m.ppCurrent}/{m.move.ppMax}</div>
+                                    <div className="text-[10px] text-slate-500">威力 {m.move.power || '-'}</div>
+                                </div>
                             </div>
-                            <div className="text-right">
-                                <div className="font-mono text-sm text-slate-300">PP {m.ppCurrent}/{m.move.ppMax}</div>
-                                <div className="text-[10px] text-slate-500">威力 {m.move.power || '-'}</div>
-                            </div>
+                            
+                            {expandedMove === idx && (
+                                <div className="px-3 pb-3 pt-0 text-xs text-slate-400 border-t border-slate-700/50 bg-slate-800/50">
+                                    <div className="mt-2 grid grid-cols-2 gap-2 mb-2">
+                                        <div className="bg-slate-900/50 p-1.5 rounded text-center">
+                                            <span className="text-[10px] text-slate-500 block">命中</span>
+                                            <span className="font-mono text-slate-300">{m.move.accuracy || '-'}</span>
+                                        </div>
+                                        <div className="bg-slate-900/50 p-1.5 rounded text-center">
+                                            <span className="text-[10px] text-slate-500 block">优先度</span>
+                                            <span className="font-mono text-slate-300">{m.move.priority || '0'}</span>
+                                        </div>
+                                    </div>
+                                    <p className="leading-relaxed text-slate-300">
+                                        {m.move.description || "暂无描述"}
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     ))}
                     {[...Array(4 - pokemon.moves.length)].map((_, i) => (

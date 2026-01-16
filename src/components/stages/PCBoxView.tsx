@@ -54,7 +54,7 @@ const PCBoxView: React.FC = () => {
                         </div>
                         <div className="flex-1 min-w-0">
                             <div className="flex justify-between items-baseline mb-1">
-                                <span className="font-bold text-base text-slate-100 truncate">{pokemon.speciesName}</span>
+                                <span className="font-bold text-base text-slate-100 truncate">{pokemon.nickname || pokemon.speciesName}</span>
                                 <span className="text-[10px] font-mono text-cyan-400">Lv.{pokemon.level}</span>
                             </div>
                             <div className="flex gap-1 mb-1 scale-90 origin-left">

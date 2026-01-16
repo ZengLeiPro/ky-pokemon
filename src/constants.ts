@@ -176,6 +176,9 @@ export const MOVES: Record<string, Move> = {
   powderSnow: { id: 'powderSnow', name: '细雪', type: 'Ice', category: 'Special', power: 40, accuracy: 100, ppMax: 25, description: '将冰冷的细雪 吹向对手进行攻击。 有时会让对手陷入冰冻状态。' },
   swift: { id: 'swift', name: '高速星星', type: 'Normal', category: 'Special', power: 60, accuracy: 100, ppMax: 20, description: '发射星形的光攻击对手。 攻击必定会命中。' },
   sunnyDay: { id: 'sunnyDay', name: '大晴天', type: 'Fire', category: 'Status', power: 0, accuracy: 100, ppMax: 5, description: '在５回合内阳光变得强烈， 从而提高火属性的招式威力。 水属性的招式威力则降低。' },
+  rainDance: { id: 'rainDance', name: '求雨', type: 'Water', category: 'Status', power: 0, accuracy: 100, ppMax: 5, description: '在５回合内一直降雨， 从而提高水属性的招式威力。 火属性的招式威力则降低。' },
+  sandstorm: { id: 'sandstorm', name: '沙暴', type: 'Rock', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '在５回合内扬起沙暴， 除岩石、地面和钢属性以外的宝可梦， 都会受到伤害。' },
+  hail: { id: 'hail', name: '冰雹', type: 'Ice', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '在５回合内降下冰雹， 除冰属性以外的宝可梦， 都会受到伤害。' },
   seismicToss: { id: 'seismicToss', name: '地球上投', type: 'Fighting', category: 'Physical', power: 0, accuracy: 100, ppMax: 20, description: '利用引力将对手甩飞出去。 给予对手和自己等级相同的伤害。' },
   splash: { id: 'splash', name: '跃起', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '也不攻击只是一蹦一蹦地跳， 什么都不会发生……' },
   flail: { id: 'flail', name: '抓狂', type: 'Normal', category: 'Physical', power: 0, accuracy: 100, ppMax: 15, description: '抓狂般乱打进行攻击。 自己的ＨＰ越少， 招式的威力越大。' },
@@ -608,7 +611,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 45, atk: 50, def: 55, spa: 75, spd: 65, spe: 30 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/43.png',
-    learnset: [{ moveId: 'absorb', level: 1 }, { moveId: 'sweetScent', level: 7 }, { moveId: 'poisonPowder', level: 15 }, { moveId: 'stunSpore', level: 17 }],
+    learnset: [{ moveId: 'absorb', level: 1 }, { moveId: 'sweetScent', level: 7 }, { moveId: 'poisonPowder', level: 15 }, { moveId: 'stunSpore', level: 17 }, { moveId: 'sunnyDay', level: 22 }],
     evolutions: [{ targetSpeciesId: 'gloom', level: 21 }],
   },
   gloom: {
@@ -713,7 +716,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 50, atk: 52, def: 48, spa: 65, spd: 50, spe: 55 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/54.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'waterSport', level: 1 }, { moveId: 'screech', level: 23 }, { moveId: 'tailWhip', level: 28 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'waterSport', level: 1 }, { moveId: 'screech', level: 23 }, { moveId: 'tailWhip', level: 28 }, { moveId: 'rainDance', level: 32 }],
     evolutions: [{ targetSpeciesId: 'golduck', level: 33 }],
   },
   golduck: {
@@ -770,7 +773,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 50, def: 40, spa: 40, spd: 40, spe: 90 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/60.png',
-    learnset: [{ moveId: 'bubble', level: 1 }, { moveId: 'hypnosis', level: 16 }, { moveId: 'waterGun', level: 19 }, { moveId: 'doubleSlap', level: 25 }],
+    learnset: [{ moveId: 'bubble', level: 1 }, { moveId: 'hypnosis', level: 16 }, { moveId: 'waterGun', level: 19 }, { moveId: 'doubleSlap', level: 25 }, { moveId: 'rainDance', level: 28 }],
     evolutions: [{ targetSpeciesId: 'poliwhirl', level: 25 }],
   },
   poliwhirl: {
@@ -903,7 +906,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 80, def: 100, spa: 30, spd: 30, spe: 20 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/74.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'mudSport', level: 6 }, { moveId: 'defenseCurl', level: 11 }, { moveId: 'rockThrow', level: 16 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'mudSport', level: 6 }, { moveId: 'defenseCurl', level: 11 }, { moveId: 'rockThrow', level: 16 }, { moveId: 'sandstorm', level: 22 }],
     evolutions: [{ targetSpeciesId: 'graveler', level: 25 }],
   },
   graveler: {
@@ -1016,7 +1019,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 45, def: 55, spa: 45, spd: 70, spe: 45 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/86.png',
-    learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'icyWind', level: 17 }, { moveId: 'growl', level: 30 }, { moveId: 'auroraBeam', level: 35 }],
+    learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'icyWind', level: 17 }, { moveId: 'growl', level: 30 }, { moveId: 'auroraBeam', level: 35 }, { moveId: 'hail', level: 40 }],
     evolutions: [{ targetSpeciesId: 'dewgong', level: 34 }],
   },
   dewgong: {
@@ -1101,7 +1104,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 35, atk: 45, def: 160, spa: 30, spd: 45, spe: 70 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/95.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'bind', level: 15 }, { moveId: 'rockThrow', level: 19 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'bind', level: 15 }, { moveId: 'rockThrow', level: 19 }, { moveId: 'sandstorm', level: 25 }],
   },
   drowzee: {
     pokedexId: 96,
@@ -1679,7 +1682,8 @@ export const WORLD_MAP: Record<string, LocationData> = {
     region: '关都',
     connections: ['route-2', 'pewter-city'],
     encounters: ['caterpie', 'weedle', 'pikachu'],
-    bgGradient: 'from-green-950 via-green-900 to-black'
+    bgGradient: 'from-green-950 via-green-900 to-black',
+    weatherRates: { Rain: 0.2 }
   },
   'pewter-city': {
     id: 'pewter-city',
@@ -1730,7 +1734,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       name: '华蓝市',
       description: '被水包围的蓝色城市。',
       region: '关都',
-      connections: ['route-4', 'route-24', 'route-5'],
+      connections: ['route-4', 'route-24', 'route-5', 'route-9'],
       encounters: [],
       bgGradient: 'from-cyan-800 via-blue-900 to-slate-900',
       gym: {
@@ -1740,7 +1744,8 @@ export const WORLD_MAP: Record<string, LocationData> = {
           description: '俏皮的人鱼公主。',
           pokemon: ['staryu', 'starmie'],
           level: 18
-      }
+      },
+      weatherRates: { Rain: 0.4 }
   },
   'route-24': {
       id: 'route-24',
@@ -1782,8 +1787,73 @@ export const WORLD_MAP: Record<string, LocationData> = {
       name: '11号道路',
       description: '枯叶市东边的草地。',
       region: '关都',
-      connections: ['vermilion-city'],
+      connections: ['vermilion-city', 'route-12'],
       encounters: ['ekans', 'sandshrew', 'drowzee'],
       bgGradient: 'from-emerald-800 via-green-900 to-black'
+  },
+  'route-9': {
+      id: 'route-9',
+      name: '9号道路',
+      description: '崎岖的山路，连接着华蓝市与岩山隧道。',
+      region: '关都',
+      connections: ['cerulean-city', 'rock-tunnel'],
+      encounters: ['rattata', 'spearow', 'ekans', 'sandshrew'],
+      bgGradient: 'from-stone-700 via-emerald-800 to-black'
+  },
+  'rock-tunnel': {
+      id: 'rock-tunnel',
+      name: '岩山隧道',
+      description: '漆黑的隧道。需要闪光才能看清道路。',
+      region: '关都',
+      connections: ['route-9', 'lavender-town'],
+      encounters: ['zubat', 'geodude', 'machop', 'onix', 'cubone'],
+      bgGradient: 'from-gray-900 via-stone-900 to-black',
+      weatherRates: { Sandstorm: 0.3 }
+  },
+  'lavender-town': {
+      id: 'lavender-town',
+      name: '紫苑镇',
+      description: '高贵的紫色之镇。这里有着著名的宝可梦塔。',
+      region: '关都',
+      connections: ['rock-tunnel', 'route-8', 'route-12'],
+      encounters: ['gastly', 'haunter', 'cubone'],
+      bgGradient: 'from-purple-900 via-slate-900 to-black',
+      weatherRates: { Rain: 0.2 }
+  },
+  'route-8': {
+      id: 'route-8',
+      name: '8号道路',
+      description: '连接紫苑镇与彩虹市的道路。',
+      region: '关都',
+      connections: ['lavender-town', 'celadon-city'],
+      encounters: ['pidgey', 'meowth', 'ekans', 'vulpix', 'growlithe'],
+      bgGradient: 'from-emerald-800 via-stone-800 to-black'
+  },
+  'celadon-city': {
+      id: 'celadon-city',
+      name: '彩虹市',
+      description: '有着名为彩虹的颜色的城市。',
+      region: '关都',
+      connections: ['route-8'],
+      encounters: ['grimer', 'koffing'],
+      bgGradient: 'from-green-800 via-emerald-900 to-slate-900',
+      gym: {
+          leaderName: '莉佳',
+          badgeName: '彩虹徽章',
+          badgeId: 'rainbow-badge',
+          description: '热爱大自然的千金小姐。',
+          pokemon: ['victreebel', 'tangela', 'vileplume'],
+          level: 29
+      }
+  },
+  'route-12': {
+      id: 'route-12',
+      name: '12号道路',
+      description: '以垂钓者闻名的沿海道路。',
+      region: '关都',
+      connections: ['lavender-town', 'route-11'],
+      encounters: ['oddish', 'bellsprout', 'venonat', 'krabby', 'farfetchd'],
+      bgGradient: 'from-blue-900 via-cyan-900 to-black',
+      weatherRates: { Rain: 0.5, Sunny: 0.3 }
   }
 };

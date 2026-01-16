@@ -4,7 +4,7 @@ import { Compass, HardDrive, Moon, Navigation, ShoppingBag, House, Heart, Swords
 import { WORLD_MAP, SPECIES_DATA } from '../../constants';
 
 const RoamStage: React.FC = () => {
-  const { startBattle, startGymBattle, healParty, addLog, addItem, playerLocationId, moveTo, buyItem, playerMoney, setView } = useGameStore();
+  const { startBattle, startGymBattle, healParty, addLog, addItem, playerLocationId, moveTo, buyItem, playerMoney, setView, weather } = useGameStore();
   const [showShop, setShowShop] = useState(false);
   const [showPokeCenter, setShowPokeCenter] = useState(false);
   const [showGym, setShowGym] = useState(false);
@@ -14,6 +14,41 @@ const RoamStage: React.FC = () => {
 
   const isTown = location.id.includes('town') || location.id.includes('city');
   const hasGym = !!location.gym;
+
+  const getWeatherOverlay = () => {
+      switch (weather) {
+          case 'Rain':
+              return (
+                  <div className="absolute inset-0 pointer-events-none z-0 opacity-40" style={{ backgroundImage: 'linear-gradient(to bottom, rgba(200,200,255,0.2) 0%, rgba(200,200,255,0) 100%)' }}>
+                      <div className="absolute inset-0 animate-rain" style={{ 
+                          backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23a0c4ff' fill-opacity='0.4'%3E%3Cpath d='M0 0h1v10H0z' transform='rotate(15 0 0)'/%3E%3C/g%3E%3C/svg%3E")`,
+                          backgroundSize: '20px 20px'
+                      }}></div>
+                  </div>
+              );
+          case 'Sunny':
+              return (
+                  <div className="absolute inset-0 pointer-events-none z-0 mix-blend-overlay bg-gradient-to-br from-yellow-200/20 via-orange-100/10 to-transparent"></div>
+              );
+          case 'Sandstorm':
+              return (
+                  <div className="absolute inset-0 pointer-events-none z-0 bg-yellow-900/10 sepia-[.5]">
+                      <div className="absolute inset-0 animate-pulse opacity-20 bg-yellow-600/20"></div>
+                  </div>
+              );
+          case 'Hail':
+              return (
+                  <div className="absolute inset-0 pointer-events-none z-0">
+                       <div className="absolute inset-0 animate-snow opacity-50" style={{ 
+                          backgroundImage: `radial-gradient(circle, #fff 2px, transparent 2.5px)`,
+                          backgroundSize: '30px 30px'
+                      }}></div>
+                  </div>
+              );
+          default:
+              return null;
+      }
+  };
 
   const handleExplore = () => {
     const roll = Math.random();
@@ -45,6 +80,8 @@ const RoamStage: React.FC = () => {
         {/* Dynamic Atmosphere Background based on Location Data */}
         <div className={`absolute inset-0 bg-gradient-to-br ${location.bgGradient} transition-colors duration-1000`}></div>
         
+        {getWeatherOverlay()}
+
         {/* Particle effects placeholder */}
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.2) 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
 
@@ -140,7 +177,7 @@ const RoamStage: React.FC = () => {
                 </button>
 
                 <button
-                    onClick={() => setView('PC')}
+                    onClick={() => setView('PC_BOX')}
                     className="bg-cyan-600/90 hover:bg-cyan-600 active:bg-cyan-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-cyan-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
                 >
                     <HardDrive size={18} className="group-hover:scale-110 transition-transform" />

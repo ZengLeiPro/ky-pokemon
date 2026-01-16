@@ -2,13 +2,14 @@ import React from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import HPBar from '../ui/HPBar';
 import TypeBadge from '../ui/TypeBadge';
-import { ChevronRight, Star, HardDrive } from 'lucide-react';
+import { ChevronRight, Star, HardDrive, Info } from 'lucide-react';
 
 const TeamGrid: React.FC = () => {
   const { playerParty, setView, setSelectedPokemon, battle, setFirstPokemon } = useGameStore();
   const activeIndex = battle?.playerActiveIndex ?? 0;
 
-  const handleSelect = (id: string) => {
+  const handleSelect = (e: React.MouseEvent, id: string) => {
+      e.stopPropagation();
       setSelectedPokemon(id);
       setView('SUMMARY');
   };
@@ -32,18 +33,11 @@ const TeamGrid: React.FC = () => {
 
         <div className="grid grid-cols-1 gap-4 overflow-y-auto pb-4">
             {playerParty.map((pokemon, idx) => (
-                <button
+                <div
                  key={pokemon.id}
-                 onClick={(e) => {
-                     if (idx === activeIndex) {
-                         handleSelect(pokemon.id);
-                     } else {
-                         e.preventDefault();
-                         handleSetFirst(pokemon.id);
-                     }
-                 }}
-                 className={`bg-slate-900 p-4 rounded-2xl border flex gap-4 items-center text-left hover:bg-slate-800 transition-all active:scale-[0.98] shadow-lg relative ${
-                     idx === activeIndex ? 'border-emerald-500/50' : 'border-slate-800 cursor-pointer'
+                 onClick={() => handleSetFirst(pokemon.id)}
+                 className={`bg-slate-900 p-4 rounded-2xl border flex gap-4 items-center text-left hover:bg-slate-800 transition-all active:scale-[0.98] shadow-lg relative cursor-pointer group ${
+                     idx === activeIndex ? 'border-emerald-500/50' : 'border-slate-800'
                  }`}
                 >
                       {idx === activeIndex && (
@@ -51,12 +45,12 @@ const TeamGrid: React.FC = () => {
                               <Star size={10} fill="currentColor" /> 首发
                           </div>
                       )}
-                    <div className="w-16 h-16 bg-slate-950 rounded-xl flex items-center justify-center border border-slate-800/50 shadow-inner">
+                    <div className="w-16 h-16 bg-slate-950 rounded-xl flex items-center justify-center border border-slate-800/50 shadow-inner shrink-0">
                          <img src={pokemon.spriteUrl} alt={pokemon.speciesName} className="w-12 h-12 object-contain pixelated transition-transform duration-300" />
                     </div>
                     <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-baseline mb-1">
-                            <span className="font-bold text-lg text-slate-100 truncate">{pokemon.speciesName}</span>
+                            <span className="font-bold text-lg text-slate-100 truncate">{pokemon.nickname || pokemon.speciesName}</span>
                             <span className="text-xs font-mono text-cyan-400">Lv.{pokemon.level}</span>
                         </div>
                         <div className="flex gap-2 mb-2 scale-90 origin-left">
@@ -64,10 +58,15 @@ const TeamGrid: React.FC = () => {
                         </div>
                         <HPBar current={pokemon.currentHp} max={pokemon.maxHp} />
                     </div>
-                    {idx === activeIndex && (
-                        <ChevronRight size={20} className="text-slate-600" />
-                    )}
-                </button>
+                    
+                    <button
+                        onClick={(e) => handleSelect(e, pokemon.id)}
+                        className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-500 hover:text-cyan-400 border border-slate-700 transition-colors z-20"
+                        title="查看详情"
+                    >
+                        <Info size={20} />
+                    </button>
+                </div>
             ))}
            
            {/* Empty Slots */}

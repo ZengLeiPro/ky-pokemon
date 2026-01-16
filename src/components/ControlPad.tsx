@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { LogOut, Package, User, ArrowLeft } from 'lucide-react';
+import { calculateDamage } from '../lib/mechanics';
 import { TYPE_TRANSLATIONS, TYPE_COLORS } from '../constants';
 import HPBar from './ui/HPBar';
 
@@ -16,6 +17,7 @@ const ControlPad: React.FC = () => {
 
   // Battle Controls
   const activeMon = playerParty[battle.playerActiveIndex];
+  const enemyMon = battle.enemy;
   const usableItems = inventory.filter(item => item.category === 'MEDICINE' && item.quantity > 0);
   const pokeballs = inventory.filter(item => item.category === 'POKEBALLS' && item.quantity > 0);
 
@@ -72,7 +74,7 @@ const ControlPad: React.FC = () => {
                     </div>
                     <div className="flex-1 text-left">
                         <div className="flex items-center gap-2">
-                            <span className="text-sm font-bold text-slate-200">{pokemon.speciesName}</span>
+                            <span className="text-sm font-bold text-slate-200">{pokemon.nickname || pokemon.speciesName}</span>
                             <span className="text-xs text-cyan-400">Lv.{pokemon.level}</span>
                         </div>
                         <div className="w-24 mt-1">
@@ -169,28 +171,65 @@ const ControlPad: React.FC = () => {
   return (
     <div className="bg-slate-900 p-2 border-t border-slate-800 shadow-2xl z-30 relative">
       <div className="grid grid-cols-2 gap-2 h-44">
-        {activeMon.moves.map((m, idx) => (
+        {activeMon.moves.map((m, idx) => {
+           let damageInfo = null;
+           let effectivenessInfo = "";
+           
+           if (enemyMon && m.move.category !== 'Status') {
+               const { damage, typeEffectiveness } = calculateDamage(activeMon, enemyMon, m.move);
+               damageInfo = damage;
+               if (typeEffectiveness > 1) effectivenessInfo = "效果绝佳";
+               if (typeEffectiveness < 1 && typeEffectiveness > 0) effectivenessInfo = "效果微弱";
+               if (typeEffectiveness === 0) effectivenessInfo = "无效";
+           }
+
+           return (
            <button
               key={idx}
               onClick={() => executeMove(idx)}
               disabled={m.ppCurrent === 0}
-              className="relative bg-slate-800 hover:bg-slate-700 active:bg-slate-950 rounded-xl p-3 flex flex-col justify-between items-start border border-slate-700 shadow-md transition-all active:scale-[0.98] disabled:opacity-40 disabled:grayscale overflow-hidden group"
+              className="relative bg-slate-800 hover:bg-slate-700 active:bg-slate-950 rounded-xl p-2 flex flex-col justify-between items-start border border-slate-700 shadow-md transition-all active:scale-[0.98] disabled:opacity-40 disabled:grayscale overflow-hidden group"
            >
               {/* Type accent bar */}
               <div className="absolute left-0 top-0 bottom-0 w-1" style={{ backgroundColor: TYPE_COLORS[m.move.type] }}></div>
 
-              <span className="font-bold text-slate-100 text-sm pl-2">{m.move.name}</span>
+              <div className="w-full pl-2 flex justify-between items-start">
+                  <span className="font-bold text-slate-100 text-sm truncate">{m.move.name}</span>
+                  <span className={`${m.ppCurrent < 5 ? 'text-red-400' : 'text-slate-500'} text-[10px] font-mono`}>
+                      {m.ppCurrent}/{m.move.ppMax}
+                  </span>
+              </div>
 
-              <div className="w-full pl-2">
-                   <div className="flex justify-between items-center w-full text-[10px] text-slate-400 mt-1 font-mono">
-                      <span className="uppercase tracking-wider">{TYPE_TRANSLATIONS[m.move.type]}</span>
-                      <span className={`${m.ppCurrent < 5 ? 'text-red-400' : 'text-slate-400'}`}>
-                          PP {m.ppCurrent}/{m.move.ppMax}
-                      </span>
-                  </div>
+              <div className="w-full pl-2 mt-1">
+                   <div className="text-[10px] text-slate-400 leading-tight line-clamp-2 h-6">
+                       {m.move.description}
+                   </div>
+                   
+                   {damageInfo !== null && (
+                       <div className="flex justify-between items-center mt-1 pt-1 border-t border-slate-700/50">
+                           <span className="text-[10px] font-bold text-amber-500">
+                               预估: {damageInfo}
+                           </span>
+                           {effectivenessInfo && (
+                               <span className={`text-[9px] font-bold px-1 rounded ${
+                                   effectivenessInfo === '效果绝佳' ? 'bg-red-900/40 text-red-300' : 
+                                   effectivenessInfo === '无效' ? 'bg-slate-700 text-slate-400' :
+                                   'bg-blue-900/40 text-blue-300'
+                               }`}>
+                                   {effectivenessInfo}
+                               </span>
+                           )}
+                       </div>
+                   )}
+                   {m.move.category === 'Status' && (
+                       <div className="flex items-center mt-1 pt-1 border-t border-slate-700/50">
+                            <span className="text-[10px] text-slate-500 italic">变化招式</span>
+                       </div>
+                   )}
               </div>
            </button>
-        ))}
+           );
+        })}
 
         {/* Fill empty move slots */}
         {[...Array(4 - activeMon.moves.length)].map((_, i) => (
