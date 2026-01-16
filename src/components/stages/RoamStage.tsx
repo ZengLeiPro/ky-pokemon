@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
-import { Compass, HardDrive, Moon, Navigation, ShoppingBag } from 'lucide-react';
+import { Compass, HardDrive, Moon, Navigation, ShoppingBag, House, Heart, Swords } from 'lucide-react';
 import { WORLD_MAP, SPECIES_DATA } from '../../constants';
 
 const RoamStage: React.FC = () => {
-  const { startBattle, healParty, addLog, addItem, playerLocationId, moveTo, buyItem, playerMoney, setView } = useGameStore();
+  const { startBattle, startGymBattle, healParty, addLog, addItem, playerLocationId, moveTo, buyItem, playerMoney, setView } = useGameStore();
   const [showShop, setShowShop] = useState(false);
+  const [showPokeCenter, setShowPokeCenter] = useState(false);
+  const [showGym, setShowGym] = useState(false);
   
   const location = WORLD_MAP[playerLocationId];
   if (!location) return <div>Location Error</div>;
+
+  const isTown = location.id.includes('town') || location.id.includes('city');
+  const hasGym = !!location.gym;
 
   const handleExplore = () => {
     const roll = Math.random();
@@ -106,12 +111,32 @@ const RoamStage: React.FC = () => {
 
             {/* Secondary Actions Grid */}
             <div className="grid grid-cols-3 gap-3 w-full max-w-xs shrink-0">
-                 <button 
-                    onClick={healParty}
-                    className="bg-indigo-600/90 hover:bg-indigo-600 active:bg-indigo-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-indigo-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
+                <button
+                    onClick={() => {
+                        if (isTown) {
+                            setShowPokeCenter(true);
+                        } else {
+                            addLog("这里没有宝可梦中心。", "info");
+                        }
+                    }}
+                    className={`bg-indigo-600/90 hover:bg-indigo-600 active:bg-indigo-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-indigo-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group ${!isTown ? 'opacity-50 grayscale cursor-not-allowed' : ''}`}
                 >
-                    <Moon size={18} className="group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] font-bold">休息</span>
+                    <House size={18} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold">宝可梦中心</span>
+                </button>
+
+                <button
+                    onClick={() => {
+                        if (isTown) {
+                            setShowShop(true);
+                        } else {
+                            addLog("这里没有商店。", "info");
+                        }
+                    }}
+                    className={`bg-amber-600/90 hover:bg-amber-600 active:bg-amber-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-amber-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group ${!isTown ? 'opacity-50 grayscale cursor-not-allowed' : ''}`}
+                >
+                    <ShoppingBag size={18} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold">商店</span>
                 </button>
 
                 <button
@@ -123,14 +148,112 @@ const RoamStage: React.FC = () => {
                 </button>
 
                 <button
-                    onClick={() => setShowShop(true)}
-                    className="bg-amber-600/90 hover:bg-amber-600 active:bg-amber-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-amber-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
+                    onClick={() => {
+                        if (hasGym) {
+                            setShowGym(true);
+                        } else {
+                            addLog("这里没有道馆。", "info");
+                        }
+                    }}
+                    className={`col-span-3 bg-rose-600/90 hover:bg-rose-600 active:bg-rose-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-rose-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group ${!hasGym ? 'opacity-50 grayscale cursor-not-allowed' : ''}`}
                 >
-                    <ShoppingBag size={18} className="group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] font-bold">商店</span>
+                    <Swords size={18} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold">宝可梦道馆</span>
                 </button>
             </div>
         </div>
+
+        {showGym && location.gym && (
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-slate-900 border-2 border-rose-500/50 rounded-2xl p-6 max-w-sm w-full animate-fade-in-up">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                  <Swords size={24} className="text-rose-500" />
+                  {location.name}道馆
+                </h2>
+                <button
+                  onClick={() => setShowGym(false)}
+                  className="text-slate-400 hover:text-white text-sm px-3 py-1 bg-slate-800 rounded-lg"
+                >
+                  关闭
+                </button>
+              </div>
+
+              <div className="mb-6 bg-slate-800/50 p-4 rounded-xl flex items-center gap-4">
+                 <div className="w-16 h-16 bg-slate-700 rounded-full flex items-center justify-center text-2xl">
+                    🥋
+                 </div>
+                 <div>
+                     <h3 className="font-bold text-white text-lg">{location.gym.leaderName}</h3>
+                     <p className="text-rose-400 text-xs font-mono uppercase tracking-wider">GYM LEADER</p>
+                     <p className="text-slate-400 text-xs mt-1">{location.gym.description}</p>
+                 </div>
+              </div>
+
+              <div className="space-y-3">
+                <button
+                  onClick={() => {
+                    if (location.gym) {
+                        startGymBattle(location.gym);
+                        setShowGym(false);
+                    }
+                  }}
+                  className="w-full bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white py-3 px-4 rounded-xl font-bold transition-all shadow-lg shadow-rose-900/20 flex items-center justify-center gap-2"
+                >
+                  <Swords size={18} className="animate-pulse" />
+                  挑战馆主
+                </button>
+                <div className="text-center text-xs text-slate-500 mt-2">
+                    推荐等级: Lv.{location.gym.level}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Pokemon Center Modal */}
+        {showPokeCenter && (
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-slate-900 border-2 border-indigo-500/50 rounded-2xl p-6 max-w-sm w-full animate-fade-in-up">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                  <House size={24} className="text-indigo-500" />
+                  宝可梦中心
+                </h2>
+                <button
+                  onClick={() => setShowPokeCenter(false)}
+                  className="text-slate-400 hover:text-white text-sm px-3 py-1 bg-slate-800 rounded-lg"
+                >
+                  关闭
+                </button>
+              </div>
+
+              <div className="mb-6 bg-slate-800/50 p-4 rounded-xl text-slate-300 text-sm leading-relaxed">
+                欢迎来到宝可梦中心！<br/>
+                我们会回复你所有的宝可梦，让它们精神百倍。
+              </div>
+
+              <div className="space-y-3">
+                 <button
+                   onClick={() => {
+                     healParty();
+                     setShowPokeCenter(false);
+                   }}
+                   className="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white py-3 px-4 rounded-xl font-bold transition-all shadow-lg shadow-indigo-900/20 flex items-center justify-center gap-2"
+                 >
+                  <Heart size={18} className="text-pink-300 fill-pink-300 animate-pulse" />
+                  治疗宝可梦
+                </button>
+                <button
+                  onClick={() => setShowPokeCenter(false)}
+                  className="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 px-4 rounded-xl font-bold transition-colors"
+                >
+                  离开
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Shop Modal */}
         {showShop && (

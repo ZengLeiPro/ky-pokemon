@@ -2,12 +2,15 @@ import React, { useEffect } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import { useAuthStore } from '../../stores/authStore';
 import { User, Clock, Award, Star, LogOut } from 'lucide-react';
+import { WORLD_MAP } from '../../constants';
 
 const ProfileView: React.FC = () => {
-  const { playerMoney, logs, setView } = useGameStore();
+  const { playerMoney, logs, setView, badges } = useGameStore();
   const { currentUser, logout } = useAuthStore();
   const startTime = logs.find(l => l.id === 'init')?.timestamp || Date.now();
   const playTimeMinutes = Math.floor((Date.now() - startTime) / 60000);
+  
+  const allGyms = Object.values(WORLD_MAP).filter(l => l.gym).map(l => l.gym!);
 
   return (
     <div className="h-full bg-slate-950 flex flex-col overflow-y-auto">
@@ -46,11 +49,27 @@ const ProfileView: React.FC = () => {
                 <div>
                     <div className="flex items-center gap-2 text-slate-300 font-bold mb-3 text-sm">
                         <Award size={16} className="text-amber-400" /> 
-                        获得徽章
+                        获得徽章 ({badges.length})
                     </div>
-                    <div className="bg-slate-900/80 rounded-xl p-4 h-24 flex items-center justify-center text-slate-600 text-xs italic border border-slate-800 border-dashed">
-                        尚未获得任何徽章
-                    </div>
+                    {badges.length === 0 ? (
+                        <div className="bg-slate-900/80 rounded-xl p-4 h-24 flex items-center justify-center text-slate-600 text-xs italic border border-slate-800 border-dashed">
+                            尚未获得任何徽章
+                        </div>
+                    ) : (
+                        <div className="bg-slate-900/80 rounded-xl p-4 flex flex-wrap gap-2 border border-slate-800">
+                            {allGyms.map(gym => {
+                                const hasBadge = badges.includes(gym.badgeId);
+                                return (
+                                    <div key={gym.badgeId} className={`flex flex-col items-center gap-1 w-16 ${hasBadge ? 'opacity-100' : 'opacity-30 grayscale'}`}>
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 ${hasBadge ? 'border-amber-400 bg-amber-400/20 text-amber-300' : 'border-slate-700 bg-slate-800 text-slate-600'}`}>
+                                            <Award size={20} />
+                                        </div>
+                                        <span className="text-[10px] text-slate-400 text-center leading-tight">{gym.badgeName}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
                 
                 <div className="pt-4 border-t border-slate-700">
