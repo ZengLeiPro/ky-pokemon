@@ -24,7 +24,7 @@ const BagView: React.FC = () => {
   };
 
   return (
-    <div className="h-full bg-slate-950 flex flex-col">
+    <div className="h-full bg-slate-950 flex flex-col" style={{ touchAction: 'pan-y' }}>
       {/* Header - Simplified */}
       <div className="bg-slate-900 p-4 shadow-lg border-b border-slate-800">
          <h2 className="text-xl font-bold text-white tracking-wider">背包</h2>

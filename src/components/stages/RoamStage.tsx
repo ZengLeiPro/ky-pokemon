@@ -76,7 +76,7 @@ const RoamStage: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-slate-900 text-slate-200 relative overflow-hidden">
+    <div className="h-full flex flex-col bg-slate-900 text-slate-200 relative overflow-hidden" style={{ touchAction: 'pan-y' }}>
         {/* Dynamic Atmosphere Background based on Location Data */}
         <div className={`absolute inset-0 bg-gradient-to-br ${location.bgGradient} transition-colors duration-1000`}></div>
         

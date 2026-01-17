@@ -56,7 +56,7 @@ const ProfileView: React.FC = () => {
     };
 
     return (
-    <div className="h-full bg-slate-950 flex flex-col overflow-y-auto">
+    <div className="h-full bg-slate-950 flex flex-col overflow-y-auto" style={{ touchAction: 'pan-y' }}>
         {/* Header */}
         <div className="bg-gradient-to-br from-indigo-900 to-slate-900 p-6 pb-12 rounded-b-[2.5rem] shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>

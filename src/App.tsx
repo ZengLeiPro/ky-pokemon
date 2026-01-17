@@ -8,14 +8,12 @@ import NavigationDock from './components/NavigationDock';
 
 // Stages
 import BattleStage from './components/stages/BattleStage';
-import RoamStage from './components/stages/RoamStage';
-import TeamGrid from './components/stages/TeamGrid';
-import BagView from './components/stages/BagView';
-import ProfileView from './components/stages/ProfileView';
 import SummaryView from './components/stages/SummaryView';
 import DexView from './components/stages/DexView';
 import PCBoxView from './components/stages/PCBoxView';
 import StarterSelectionView from './components/stages/StarterSelectionView';
+import PCView from './components/stages/PCView';
+import MainStageSlider from './components/MainStageSlider';
 
 // Auth Views
 import LoginView from './components/auth/LoginView';
@@ -47,21 +45,20 @@ const App: React.FC = () => {
         return <RegisterView />;
       case 'BATTLE':
         return <BattleStage />;
-      case 'TEAM':
-        return <TeamGrid />;
-      case 'BAG':
-        return <BagView />;
-      case 'PROFILE':
-        return <ProfileView />;
       case 'SUMMARY':
         return <SummaryView />;
       case 'DEX':
         return <DexView />;
       case 'PC_BOX':
         return <PCBoxView />;
+      case 'PC':
+        return <PCView />;
+      case 'TEAM':
+      case 'BAG':
+      case 'PROFILE':
       case 'ROAM':
       default:
-        return <RoamStage />;
+        return <MainStageSlider />;
     }
   };
 

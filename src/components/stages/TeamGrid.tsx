@@ -19,7 +19,7 @@ const TeamGrid: React.FC = () => {
   };
 
   return (
-    <div className="h-full bg-slate-950 p-4 flex flex-col">
+    <div className="h-full bg-slate-950 p-4 flex flex-col" style={{ touchAction: 'pan-y' }}>
        <div className="flex items-center justify-between mb-6">
            <h2 className="text-xl font-bold text-white tracking-wider">队伍宝可梦</h2>
            
@@ -35,12 +35,12 @@ const TeamGrid: React.FC = () => {
             {playerParty.map((pokemon, idx) => (
                 <div
                  key={pokemon.id}
-                 onClick={() => handleSetFirst(pokemon.id)}
-                 className={`bg-slate-900 p-4 rounded-2xl border flex gap-4 items-center text-left hover:bg-slate-800 transition-all active:scale-[0.98] shadow-lg relative cursor-pointer group ${
-                     idx === activeIndex ? 'border-emerald-500/50' : 'border-slate-800'
-                 }`}
-                >
-                      {idx === activeIndex && (
+                   onClick={() => handleSetFirst(pokemon.id)}
+                   className={`bg-slate-900 p-4 rounded-2xl border flex gap-4 items-center text-left hover:bg-slate-800 transition-all active:scale-[0.98] shadow-lg relative cursor-pointer group ${
+                       idx === activeIndex ? 'border-emerald-500/50' : 'border-slate-800'
+                   }`}
+                  >
+                        {idx === activeIndex && (
                           <div className="absolute -top-2 -right-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-lg z-10">
                               <Star size={10} fill="currentColor" /> 首发
                           </div>
