@@ -12,7 +12,6 @@ import SummaryView from './components/stages/SummaryView';
 import DexView from './components/stages/DexView';
 import PCBoxView from './components/stages/PCBoxView';
 import StarterSelectionView from './components/stages/StarterSelectionView';
-import PCView from './components/stages/PCView';
 import MainStageSlider from './components/MainStageSlider';
 
 // Auth Views
@@ -51,8 +50,6 @@ const App: React.FC = () => {
         return <DexView />;
       case 'PC_BOX':
         return <PCBoxView />;
-      case 'PC':
-        return <PCView />;
       case 'TEAM':
       case 'BAG':
       case 'PROFILE':
