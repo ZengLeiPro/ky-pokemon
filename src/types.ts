@@ -1,64 +1,8 @@
-export type StatName = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
+// 重新导出 shared 类型（保持向后兼容）
+export * from '@shared/types';
+import { ItemCategory, Pokemon } from '@shared/types';
 
-export interface BaseStats {
-  hp: number;
-  atk: number;
-  def: number;
-  spa: number;
-  spd: number;
-  spe: number;
-}
-
-export type PokemonType = 'Normal' | 'Fire' | 'Water' | 'Grass' | 'Electric' | 'Ice' | 'Fighting' | 'Poison' | 'Ground' | 'Flying' | 'Psychic' | 'Bug' | 'Rock' | 'Ghost' | 'Dragon' | 'Steel' | 'Dark' | 'Fairy';
-
-export type MoveCategory = 'Physical' | 'Special' | 'Status';
-
-export interface Move {
-  id: string;
-  name: string;
-  type: PokemonType;
-  category: MoveCategory;
-  power: number;
-  accuracy: number;
-  ppMax: number;
-  priority?: number;
-  description?: string;
-}
-
-export interface PokemonMove {
-  move: Move;
-  ppCurrent: number;
-}
-
-export interface Pokemon {
-  id: string;
-  speciesName: string;
-  nickname?: string;
-  level: number;
-  types: PokemonType[];
-  baseStats: BaseStats;
-  ivs: BaseStats;
-  evs: BaseStats;
-  nature: string;
-
-  // Dynamic State
-  currentHp: number;
-  maxHp: number;
-  stats: BaseStats;
-  moves: PokemonMove[];
-  status?: 'BRN' | 'PAR' | 'SLP' | 'PSN' | 'FRZ';
-  exp: number;
-  nextLevelExp: number;
-
-  // Metadata
-  spriteUrl?: string;
-  speciesData: {
-    pokedexId: number;
-    catchRate: number;
-  };
-}
-
-// 增加新的视图状态
+// 前端特有类型
 export type ViewState = 'ROAM' | 'BATTLE' | 'TEAM' | 'BAG' | 'PROFILE' | 'DEX' | 'SUMMARY' | 'LOGIN' | 'REGISTER' | 'PC_BOX';
 
 export interface LogEntry {
@@ -68,65 +12,11 @@ export interface LogEntry {
   type?: 'info' | 'combat' | 'urgent';
 }
 
-export type ItemCategory = 'MEDICINE' | 'POKEBALLS' | 'KEY_ITEMS';
-
 export interface InventoryItem {
   id: string;
   name: string;
   description: string;
   category: ItemCategory;
   quantity: number;
-  effect?: (target: Pokemon) => void;
+  effect?: (target: Pokemon) => void; // 函数字段，不可序列化
 }
-
-export type PokedexStatus = 'CAUGHT' | 'SEEN' | 'UNKNOWN';
-
-export type Weather = 'Sunny' | 'Rain' | 'Sandstorm' | 'Hail' | 'None';
-
-// 新增地图系统接口
-export interface Evolution {
-  targetSpeciesId: string;
-  level?: number;
-  item?: string; // Placeholder for future
-}
-
-export interface LearnsetMove {
-  moveId: string;
-  level: number;
-}
-
-export interface GymData {
-  leaderName: string;
-  badgeName: string;
-  badgeId: string;
-  description: string;
-  pokemon: string[];
-  level: number;
-}
-
-export interface LocationData {
-  id: string;
-  name: string;
-  description: string;
-  region: string;
-  connections: string[]; // IDs of other locations
-  encounters?: string[]; // Potential wild pokemon IDs
-  bgGradient?: string; // CSS gradient class
-  gym?: GymData;
-  weatherRates?: Partial<Record<Weather, number>>; 
-}
-
-// 用户认证相关类型
-export interface User {
-  id: string;
-  username: string;
-  createdAt: number;
-}
-
-export interface UserCredentials {
-  username: string;
-  password: string;
-}
-
-// RegisterData uses the same fields as UserCredentials
-export type RegisterData = UserCredentials;
