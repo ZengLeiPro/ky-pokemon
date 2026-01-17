@@ -181,7 +181,7 @@ const RoamStage: React.FC = () => {
                     className="bg-cyan-600/90 hover:bg-cyan-600 active:bg-cyan-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-cyan-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
                 >
                     <HardDrive size={18} className="group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] font-bold">电脑</span>
+                    <span className="text-[10px] font-bold">盒子</span>
                 </button>
 
                 <button

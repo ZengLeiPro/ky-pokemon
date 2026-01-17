@@ -19,12 +19,31 @@ import LoginView from './components/auth/LoginView';
 import RegisterView from './components/auth/RegisterView';
 
 const App: React.FC = () => {
-  const { view, setView, hasSelectedStarter } = useGameStore();
-  const { isAuthenticated, checkAuth } = useAuthStore();
+  const { view, setView, hasSelectedStarter, isGameLoading } = useGameStore();
+  const { isAuthenticated, checkAuth, currentUser } = useAuthStore();
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  // Auto-Save Logic
+  useEffect(() => {
+    if (!currentUser) return;
+
+    let timeoutId: NodeJS.Timeout;
+
+    const unsubscribe = useGameStore.subscribe((state) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            useGameStore.getState().saveGame(currentUser.id);
+        }, 2000);
+    });
+
+    return () => {
+        unsubscribe();
+        clearTimeout(timeoutId);
+    };
+  }, [currentUser]);
 
   useEffect(() => {
     if (!isAuthenticated && view !== 'LOGIN' && view !== 'REGISTER') {
@@ -46,8 +65,6 @@ const App: React.FC = () => {
         return <BattleStage />;
       case 'SUMMARY':
         return <SummaryView />;
-      case 'DEX':
-        return <DexView />;
       case 'PC_BOX':
         return <PCBoxView />;
       case 'TEAM':
@@ -72,6 +89,15 @@ const App: React.FC = () => {
         {renderStage()}
       </div>
     );
+  }
+
+  if (isAuthenticated && isGameLoading) {
+      return (
+          <div className="h-screen w-screen bg-black flex items-center justify-center flex-col gap-4">
+              <div className="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+              <div className="text-cyan-400 font-bold tracking-widest animate-pulse">正在读取存档...</div>
+          </div>
+      );
   }
 
   return (

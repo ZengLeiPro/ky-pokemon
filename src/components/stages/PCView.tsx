@@ -16,7 +16,7 @@ const PCView: React.FC = () => {
         </button>
         <div className="flex items-center gap-2">
             <HardDrive size={20} className="text-cyan-500" />
-            <span className="font-bold text-slate-200">宝可梦电脑系统</span>
+            <span className="font-bold text-slate-200">宝可梦盒子系统</span>
         </div>
         <div className="w-10" />
       </div>
@@ -50,7 +50,7 @@ const PCView: React.FC = () => {
           <div className="flex-1 p-4 overflow-y-auto">
                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-cyan-500"></span>
-                  电脑箱子 ({playerStorage.length})
+                  盒子 ({playerStorage.length})
               </h3>
 
               {playerStorage.length === 0 ? (

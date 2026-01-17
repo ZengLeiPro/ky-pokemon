@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { User, RegisterData, UserCredentials } from '../types';
+import { useGameStore } from './gameStore';
 
 // 简单的密码哈希函数（仅用于演示，生产环境应使用后端+bcrypt）
 const simpleHash = (str: string): string => {
@@ -73,6 +74,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         error: null
       });
 
+      useGameStore.getState().loadGame(userWithoutPassword.id);
+
       return true;
     } catch (err) {
       set({ error: '注册失败，请重试' });
@@ -104,6 +107,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         error: null
       });
 
+      useGameStore.getState().loadGame(userWithoutPassword.id);
+
       return true;
     } catch (err) {
       set({ error: '登录失败，请重试' });
@@ -118,6 +123,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       isAuthenticated: false,
       error: null
     });
+    useGameStore.getState().resetGame();
   },
 
   checkAuth: () => {
@@ -129,6 +135,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           currentUser: user,
           isAuthenticated: true
         });
+        useGameStore.getState().loadGame(user.id);
       }
     } catch (err) {
       localStorage.removeItem('pokemon-current-user');

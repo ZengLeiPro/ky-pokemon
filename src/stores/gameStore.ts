@@ -22,13 +22,14 @@ interface PokemonUser {
 interface KyPokemonDB extends DBSchema {
   users: { key: string; value: PokemonUser; };
   gameState: { key: string; value: any; };
+  saves: { key: string; value: any; };
 }
 
 let dbPromise: Promise<IDBPDatabase<KyPokemonDB>> | null = null;
 
 async function getDB() {
   if (!dbPromise) {
-    dbPromise = openDB<KyPokemonDB>('ky-pokemon-db', 4, {
+    dbPromise = openDB<KyPokemonDB>('ky-pokemon-db', 5, {
       upgrade(database, oldVersion, newVersion, transaction) {
         if (!database.objectStoreNames.contains('users')) {
           database.createObjectStore('users', { keyPath: 'id' });
@@ -38,6 +39,10 @@ async function getDB() {
           database.deleteObjectStore('gameState');
         }
         database.createObjectStore('gameState');
+
+        if (!database.objectStoreNames.contains('saves')) {
+          database.createObjectStore('saves');
+        }
       },
     });
   }
@@ -107,6 +112,7 @@ interface GameState {
   hasSelectedStarter: boolean;
   weather: Weather;
   weatherDuration: number;
+  isGameLoading: boolean;
 
   battle: {
     active: boolean;
@@ -144,12 +150,13 @@ interface GameState {
   renamePokemon: (id: string, name: string) => void;
   confirmNickname: (name?: string) => void;
   manualSave: () => void;
+  loadGame: (userId: string) => Promise<void>;
+  saveGame: (userId: string) => Promise<void>;
 }
 
 export const useGameStore = create<GameState>()(
-  persist(
-    (set, get) => ({
-  view: 'ROAM',
+  (set, get) => ({
+    view: 'ROAM',
   selectedPokemonId: null,
   logs: [{ id: 'init', message: '欢迎来到关都传说。', timestamp: Date.now() }],
   playerParty: [],
@@ -161,6 +168,7 @@ export const useGameStore = create<GameState>()(
   hasSelectedStarter: false,
   weather: 'None',
   weatherDuration: 0,
+  isGameLoading: false,
   inventory: [
     { 
         id: 'potion', 
@@ -970,22 +978,53 @@ export const useGameStore = create<GameState>()(
       state.battle.caughtPokemonId = undefined;
       state.view = 'ROAM';
   })),
-}),
-    {
-      name: 'ky-pokemon-save',
-      storage: createJSONStorage(() => idbStorage),
-      partialize: (state) => ({
-        view: state.view,
-        selectedPokemonId: state.selectedPokemonId,
-        logs: state.logs,
-        playerParty: state.playerParty,
-        playerStorage: state.playerStorage,
-        inventory: state.inventory,
-        playerMoney: state.playerMoney,
-        playerLocationId: state.playerLocationId,
-        pokedex: state.pokedex,
-        battle: { ...state.battle, active: false, enemy: null, phase: 'INPUT' }
-      })
-    }
-  )
+
+  loadGame: async (userId: string) => {
+      set({ isGameLoading: true });
+      try {
+          const db = await getDB();
+          const save = await db.get('saves', userId);
+          if (save) {
+              set((state) => ({ ...state, ...save }));
+              // 强制确保视图状态安全
+              if (save.view === 'LOGIN' || save.view === 'REGISTER') {
+                  set({ view: 'ROAM' });
+              }
+              get().addLog('已加载存档。');
+          } else {
+              get().resetGame();
+          }
+      } catch (e) {
+          console.error('Load game failed', e);
+      } finally {
+          set({ isGameLoading: false });
+      }
+  },
+
+  saveGame: async (userId: string) => {
+      try {
+          const state = get();
+          const dataToSave = {
+            view: state.view,
+            selectedPokemonId: state.selectedPokemonId,
+            logs: state.logs,
+            playerParty: state.playerParty,
+            playerStorage: state.playerStorage,
+            inventory: state.inventory,
+            playerMoney: state.playerMoney,
+            playerLocationId: state.playerLocationId,
+            pokedex: state.pokedex,
+            badges: state.badges,
+            hasSelectedStarter: state.hasSelectedStarter,
+            weather: state.weather,
+            weatherDuration: state.weatherDuration,
+            battle: { ...state.battle, active: false, enemy: null, phase: 'INPUT' }
+          };
+          const db = await getDB();
+          await db.put('saves', dataToSave, userId);
+      } catch (e) {
+          console.error('Save game failed', e);
+      }
+  },
+})
 );
