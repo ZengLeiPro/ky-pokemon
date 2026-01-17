@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import { useAuthStore } from '../../stores/authStore';
-import { User, Clock, Award, Star, LogOut, Pencil, Key } from 'lucide-react';
+import { User, Clock, Award, Star, LogOut, Pencil, Key, RotateCcw } from 'lucide-react';
 import { WORLD_MAP } from '../../constants';
 
 const ProfileView: React.FC = () => {
-  const { playerMoney, logs, setView, badges } = useGameStore();
+  const { playerMoney, logs, setView, badges, resetGame } = useGameStore();
   const { currentUser, logout, updateUsername, updatePassword } = useAuthStore();
   const startTime = logs.find(l => l.id === 'init')?.timestamp || Date.now();
   const playTimeMinutes = Math.floor((Date.now() - startTime) / 60000);
@@ -37,10 +37,22 @@ const ProfileView: React.FC = () => {
         }
 
         if (updatePassword(oldPass, newPass)) {
-            alert("密码修改成功！");
+            alert("密码修改! ");
         } else {
             alert("修改失败，旧密码错误。");
         }
+    };
+
+    const handleResetGame = () => {
+        const confirm1 = window.confirm("确定要重置游戏吗？\n所有进度（等级、宝可梦、金钱、徽章）将被彻底删除！");
+        if (!confirm1) return;
+
+        const confirm2 = window.confirm("这是最后一次确认：该操作无法撤销！\n您真的要重新开始吗？");
+        if (!confirm2) return;
+
+        resetGame();
+        alert("游戏已重置。");
+        setView('ROAM');
     };
 
     return (
@@ -120,30 +132,37 @@ const ProfileView: React.FC = () => {
 
             </div>
 
-              <div className="text-center space-y-3">
-                  <button className="text-xs text-slate-500 hover:text-slate-300 underline">
-                      游戏设置
-                  </button>
-                  <div className="flex justify-center gap-4">
-                     <button
-                        onClick={handleChangePassword}
-                        className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-300 text-sm font-medium transition-all"
-                    >
-                        <Key size={16} />
-                        修改密码
-                    </button>
-                    <button
-                        onClick={() => {
-                            logout();
-                            setView('LOGIN');
-                        }}
-                        className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 hover:text-red-300 text-sm font-medium transition-all"
-                    >
-                        <LogOut size={16} />
-                        退出登录
-                    </button>
+              <div className="text-center space-y-3 pb-4">
+                  <div className="flex flex-col gap-2 px-6">
+                      <button
+                         onClick={handleResetGame}
+                         className="flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded-xl text-amber-400 hover:text-amber-300 text-sm font-bold transition-all"
+                      >
+                          <RotateCcw size={16} />
+                          重置游戏进度
+                      </button>
+                      
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                            onClick={handleChangePassword}
+                            className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-slate-300 text-xs font-medium transition-all"
+                        >
+                            <Key size={14} />
+                            修改密码
+                        </button>
+                        <button
+                            onClick={() => {
+                                logout();
+                                setView('LOGIN');
+                            }}
+                            className="flex items-center justify-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-xl text-red-400 hover:text-red-300 text-xs font-medium transition-all"
+                        >
+                            <LogOut size={14} />
+                            退出登录
+                        </button>
+                      </div>
                   </div>
-             </div>
+              </div>
         </div>
     </div>
   );

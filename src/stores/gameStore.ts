@@ -104,6 +104,7 @@ interface GameState {
   playerLocationId: string;
   pokedex: Record<number, PokedexStatus>;
   badges: string[];
+  hasSelectedStarter: boolean;
   weather: Weather;
   weatherDuration: number;
 
@@ -138,10 +139,9 @@ interface GameState {
   withdrawPokemon: (pokemonId: string) => boolean;
   releasePokemon: (pokemonId: string) => boolean;
   moveTo: (locationId: string) => void;
-  manualSave: () => void;
+  selectStarter: (speciesKey: string) => void;
   resetGame: () => void;
-  renamePokemon: (id: string, name: string) => void;
-  confirmNickname: (name?: string) => void;
+  manualSave: () => void;
 }
 
 export const useGameStore = create<GameState>()(
@@ -150,12 +150,13 @@ export const useGameStore = create<GameState>()(
   view: 'ROAM',
   selectedPokemonId: null,
   logs: [{ id: 'init', message: '欢迎来到关都传说。', timestamp: Date.now() }],
-   playerParty: [starter],
-   playerStorage: [],
-   playerMoney: 3000,
+  playerParty: [],
+  playerStorage: [],
+  playerMoney: 3000,
   playerLocationId: 'pallet-town',
   pokedex: initialPokedex,
   badges: [],
+  hasSelectedStarter: false,
   weather: 'None',
   weatherDuration: 0,
   inventory: [
@@ -192,43 +193,20 @@ export const useGameStore = create<GameState>()(
   },
 
   resetGame: () => {
-     set({
+    set({
       view: 'ROAM',
       selectedPokemonId: null,
-      logs: [{ id: 'init', message: '欢迎来到关都传说。', timestamp: Date.now() }],
-      playerParty: [starter],
+      logs: [{ id: 'init', message: '游戏已重置。欢迎来到关都传说。', timestamp: Date.now() }],
+      playerParty: [],
       playerStorage: [],
       playerMoney: 3000,
       playerLocationId: 'pallet-town',
       pokedex: initialPokedex,
       badges: [],
+      hasSelectedStarter: false,
       weather: 'None',
       weatherDuration: 0,
-      inventory: [
-        { 
-            id: 'potion', 
-            name: '伤药', 
-            description: '喷雾式伤药，能恢复宝可梦20点HP。', 
-            category: 'MEDICINE',
-            quantity: 5, 
-            effect: (p: Pokemon) => { p.currentHp = Math.min(p.maxHp, p.currentHp + 20); } 
-        },
-        { 
-            id: 'pokeball', 
-            name: '精灵球', 
-            description: '用于投向野生宝可梦并将其捕捉的球。', 
-            category: 'POKEBALLS',
-            quantity: 10
-        },
-        { 
-            id: 'map', 
-            name: '城镇地图', 
-            description: '方便确认当前位置的高科技地图。', 
-            category: 'KEY_ITEMS',
-            quantity: 1
-        }
-      ],
-        battle: {
+      battle: {
         active: false,
         turnCount: 0,
         enemy: null,
@@ -237,7 +215,17 @@ export const useGameStore = create<GameState>()(
         phase: 'INPUT',
       }
     });
+    localStorage.removeItem('ky-pokemon-save');
   },
+
+  selectStarter: (speciesKey: string) => set(produce((state: GameState) => {
+    if (state.hasSelectedStarter) return;
+    const starter = createPokemon(speciesKey, 5, []);
+    state.playerParty = [starter];
+    state.hasSelectedStarter = true;
+    state.pokedex[starter.speciesData.pokedexId] = 'CAUGHT';
+    state.logs.push(createLogEntry(`获得了 ${starter.speciesName}！开始你的冒险吧。`, 'urgent'));
+  })),
 
   setView: (view) => set({ view }),
   setSelectedPokemon: (id) => set({ selectedPokemonId: id }),

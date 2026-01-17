@@ -15,13 +15,14 @@ import ProfileView from './components/stages/ProfileView';
 import SummaryView from './components/stages/SummaryView';
 import DexView from './components/stages/DexView';
 import PCBoxView from './components/stages/PCBoxView';
+import StarterSelectionView from './components/stages/StarterSelectionView';
 
 // Auth Views
 import LoginView from './components/auth/LoginView';
 import RegisterView from './components/auth/RegisterView';
 
 const App: React.FC = () => {
-  const { view, setView } = useGameStore();
+  const { view, setView, hasSelectedStarter } = useGameStore();
   const { isAuthenticated, checkAuth } = useAuthStore();
 
   useEffect(() => {
@@ -35,6 +36,10 @@ const App: React.FC = () => {
   }, [isAuthenticated, view, setView]);
 
   const renderStage = () => {
+    if (isAuthenticated && !hasSelectedStarter) {
+      return <StarterSelectionView />;
+    }
+
     switch (view) {
       case 'LOGIN':
         return <LoginView />;
@@ -61,9 +66,10 @@ const App: React.FC = () => {
   };
 
   // Determine footer Layout
-  const showNavDock = ['ROAM', 'TEAM', 'BAG', 'PROFILE', 'DEX'].includes(view);
-  const showMessageBox = view === 'ROAM' || view === 'BATTLE';
-  const showControlPad = view === 'BATTLE';
+  const isChoosingStarter = isAuthenticated && !hasSelectedStarter;
+  const showNavDock = !isChoosingStarter && ['ROAM', 'TEAM', 'BAG', 'PROFILE', 'DEX'].includes(view);
+  const showMessageBox = !isChoosingStarter && (view === 'ROAM' || view === 'BATTLE');
+  const showControlPad = !isChoosingStarter && view === 'BATTLE';
 
   // 认证页面使用全屏布局，无需 Header 和 Footer
   if (view === 'LOGIN' || view === 'REGISTER') {
