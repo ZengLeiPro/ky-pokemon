@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  gameSave     GameSave?
+}
+
+model GameSave {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // 游戏数据 (JSON 存储，复用 shared 类型)
+  team            Json     // Pokemon[]
+  pcBox           Json     // Pokemon[]
+  currentLocation String
+  badges          String[] // badge IDs
+  pokedex         Json     // Record<string, PokedexStatus>
+  inventory       Json     // InventoryItem[] (不含 effect 函数)
+  money           Int      @default(3000)
+  playTime        Int      @default(0) // 秒
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
