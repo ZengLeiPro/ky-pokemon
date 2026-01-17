@@ -141,6 +141,8 @@ interface GameState {
   moveTo: (locationId: string) => void;
   selectStarter: (speciesKey: string) => void;
   resetGame: () => void;
+  renamePokemon: (id: string, name: string) => void;
+  confirmNickname: (name?: string) => void;
   manualSave: () => void;
 }
 

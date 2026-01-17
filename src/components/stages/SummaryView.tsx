@@ -5,7 +5,7 @@ import { ArrowLeft, Activity, Sword, Trash2, HardDrive, Pencil, Info } from 'luc
 import { TYPE_TRANSLATIONS, TYPE_COLORS } from '../../constants';
 
 const SummaryView: React.FC = () => {
-  const { playerParty, playerStorage, selectedPokemonId, setView, setSelectedPokemon, releasePokemon, depositPokemon, renamePokemon } = useGameStore();
+  const { playerParty, playerStorage, selectedPokemonId, setView, setSelectedPokemon, releasePokemon, depositPokemon } = useGameStore();
   const [expandedMove, setExpandedMove] = useState<number | null>(null);
   
   const inParty = playerParty.find(p => p.id === selectedPokemonId);
@@ -41,7 +41,7 @@ const SummaryView: React.FC = () => {
   const handleRename = () => {
     const newName = prompt("请输入新的名字：", pokemon.nickname || pokemon.speciesName);
     if (newName && newName.trim()) {
-        renamePokemon(pokemon.id, newName.trim().slice(0, 12));
+        (useGameStore.getState() as any).renamePokemon(pokemon.id, newName.trim().slice(0, 12));
     }
   };
 

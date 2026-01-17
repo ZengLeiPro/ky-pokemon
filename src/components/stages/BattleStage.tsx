@@ -4,7 +4,7 @@ import HPBar from '../ui/HPBar';
 import TypeBadge from '../ui/TypeBadge';
 
 const BattleStage: React.FC = () => {
-  const { battle, playerParty, confirmNickname } = useGameStore();
+  const { battle, playerParty, setView } = useGameStore();
   const playerMon = playerParty[battle.playerActiveIndex];
   const enemyMon = battle.enemy;
   const [nicknameInput, setNicknameInput] = useState('');
@@ -41,13 +41,13 @@ const BattleStage: React.FC = () => {
 
                     <div className="flex gap-3">
                         <button
-                            onClick={() => confirmNickname(nicknameInput.trim() || undefined)}
+                            onClick={() => (useGameStore.getState() as any).confirmNickname(nicknameInput.trim() || undefined)}
                             className="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white py-3 rounded-xl font-bold transition-colors shadow-lg active:scale-95"
                         >
                             确定
                         </button>
                         <button
-                            onClick={() => confirmNickname()}
+                            onClick={() => (useGameStore.getState() as any).confirmNickname()}
                             className="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-300 py-3 rounded-xl font-bold transition-colors shadow-lg active:scale-95"
                         >
                             不想取名
