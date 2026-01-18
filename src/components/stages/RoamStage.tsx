@@ -201,7 +201,7 @@ const RoamStage: React.FC = () => {
         </div>
 
         {showGym && location.gym && (
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
             <div className="bg-slate-900 border-2 border-rose-500/50 rounded-2xl p-6 max-w-sm w-full animate-fade-in-up">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
@@ -250,7 +250,7 @@ const RoamStage: React.FC = () => {
 
         {/* Pokemon Center Modal */}
         {showPokeCenter && (
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
             <div className="bg-slate-900 border-2 border-indigo-500/50 rounded-2xl p-6 max-w-sm w-full animate-fade-in-up">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
@@ -294,59 +294,172 @@ const RoamStage: React.FC = () => {
 
         {/* Shop Modal */}
         {showShop && (
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-slate-900 border-2 border-amber-500/50 rounded-2xl p-6 max-w-sm w-full max-h-[80vh] overflow-y-auto">
-              <div className="flex items-center justify-between mb-4">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-[9999] p-4">
+            <div 
+              className="bg-slate-900 border-2 border-amber-500/50 rounded-2xl w-full max-w-md max-h-[80vh] flex flex-col shadow-2xl animate-fade-in-up overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between p-5 border-b border-slate-800">
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   <ShoppingBag size={24} className="text-amber-500" />
                   道具商店
                 </h2>
                 <button
                   onClick={() => setShowShop(false)}
-                  className="text-slate-400 hover:text-white text-sm px-3 py-1 bg-slate-800 rounded-lg"
+                  className="text-slate-400 hover:text-white p-2 bg-slate-800 rounded-xl transition-colors"
                 >
                   关闭
                 </button>
               </div>
 
-              <div className="mb-4 bg-slate-800/50 p-3 rounded-lg">
-                <div className="text-sm text-slate-400">持有金钱</div>
-                <div className="text-2xl font-bold text-amber-400">¥{playerMoney}</div>
+              <div className="p-4 bg-slate-800/30 border-b border-slate-800">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-slate-400 font-medium">当前余额</span>
+                  <span className="text-2xl font-black text-amber-400 tracking-tight">¥{playerMoney}</span>
+                </div>
               </div>
 
-              <div className="space-y-3">
-                {/* Potion */}
-                <div className="bg-slate-800 p-4 rounded-xl border border-slate-700">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h3 className="font-bold text-white">伤药</h3>
-                      <p className="text-xs text-slate-400">恢复宝可梦20点HP</p>
-                    </div>
-                    <div className="text-lg font-bold text-amber-400">¥300</div>
+              <div className="flex-1 overflow-y-auto p-4 space-y-6 custom-scrollbar">
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="h-4 w-1 bg-amber-500 rounded-full"></div>
+                    <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">恢复类药品</h3>
                   </div>
-                  <button
-                    onClick={() => buyItem('potion', 300, 1)}
-                    className="w-full bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-white py-2 px-4 rounded-lg text-sm font-bold transition-colors"
-                  >
-                    购买
-                  </button>
+                  <div className="space-y-3">
+                    <div className="bg-slate-800/50 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/50 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <h4 className="font-bold text-white text-base">伤药</h4>
+                          <p className="text-xs text-slate-400 mt-1 leading-relaxed">恢复宝可梦 20 点 HP</p>
+                        </div>
+                        <div className="bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                          <span className="text-sm font-black text-amber-400">¥300</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => buyItem('potion', 300, 1)}
+                        className="w-full bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-white py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-amber-900/20 transition-all active:scale-[0.98]"
+                      >
+                        购买
+                      </button>
+                    </div>
+
+                    <div className="bg-slate-800/50 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/50 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <h4 className="font-bold text-white text-base">好伤药</h4>
+                          <p className="text-xs text-slate-400 mt-1 leading-relaxed">恢复宝可梦 50 点 HP</p>
+                        </div>
+                        <div className="bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                          <span className="text-sm font-black text-amber-400">¥700</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => buyItem('super-potion', 700, 1)}
+                        className="w-full bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-white py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-amber-900/20 transition-all active:scale-[0.98]"
+                      >
+                        购买
+                      </button>
+                    </div>
+
+                    <div className="bg-slate-800/50 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/50 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <h4 className="font-bold text-white text-base">超高级伤药</h4>
+                          <p className="text-xs text-slate-400 mt-1 leading-relaxed">恢复宝可梦 200 点 HP</p>
+                        </div>
+                        <div className="bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                          <span className="text-sm font-black text-amber-400">¥1200</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => buyItem('hyper-potion', 1200, 1)}
+                        className="w-full bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-white py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-amber-900/20 transition-all active:scale-[0.98]"
+                      >
+                        购买
+                      </button>
+                    </div>
+
+                    <div className="bg-slate-800/50 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/50 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <h4 className="font-bold text-white text-base">全满药</h4>
+                          <p className="text-xs text-slate-400 mt-1 leading-relaxed">完全恢复宝可梦的 HP</p>
+                        </div>
+                        <div className="bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                          <span className="text-sm font-black text-amber-400">¥2500</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => buyItem('max-potion', 2500, 1)}
+                        className="w-full bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-white py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-amber-900/20 transition-all active:scale-[0.98]"
+                      >
+                        购买
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Pokeball */}
-                <div className="bg-slate-800 p-4 rounded-xl border border-slate-700">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h3 className="font-bold text-white">精灵球</h3>
-                      <p className="text-xs text-slate-400">用于捕捉野生宝可梦</p>
-                    </div>
-                    <div className="text-lg font-bold text-amber-400">¥200</div>
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="h-4 w-1 bg-rose-500 rounded-full"></div>
+                    <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">捕获用精灵球</h3>
                   </div>
-                  <button
-                    onClick={() => buyItem('pokeball', 200, 1)}
-                    className="w-full bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-white py-2 px-4 rounded-lg text-sm font-bold transition-colors"
-                  >
-                    购买
-                  </button>
+                  <div className="space-y-3">
+                    <div className="bg-slate-800/50 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/50 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <h4 className="font-bold text-white text-base">精灵球</h4>
+                          <p className="text-xs text-slate-400 mt-1 leading-relaxed">用于捕获野生宝可梦的标准球</p>
+                        </div>
+                        <div className="bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">
+                          <span className="text-sm font-black text-rose-400">¥200</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => buyItem('pokeball', 200, 1)}
+                        className="w-full bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-rose-900/20 transition-all active:scale-[0.98]"
+                      >
+                        购买
+                      </button>
+                    </div>
+
+                    <div className="bg-slate-800/50 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/50 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <h4 className="font-bold text-white text-base">超级球</h4>
+                          <p className="text-xs text-slate-400 mt-1 leading-relaxed">比精灵球更容易捉到宝可梦</p>
+                        </div>
+                        <div className="bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">
+                          <span className="text-sm font-black text-rose-400">¥600</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => buyItem('greatball', 600, 1)}
+                        className="w-full bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-rose-900/20 transition-all active:scale-[0.98]"
+                      >
+                        购买
+                      </button>
+                    </div>
+
+                    <div className="bg-slate-800/50 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/50 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <h4 className="font-bold text-white text-base">高级球</h4>
+                          <p className="text-xs text-slate-400 mt-1 leading-relaxed">非常优秀的球，捕获率更高</p>
+                        </div>
+                        <div className="bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">
+                          <span className="text-sm font-black text-rose-400">¥1200</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => buyItem('ultraball', 1200, 1)}
+                        className="w-full bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-rose-900/20 transition-all active:scale-[0.98]"
+                      >
+                        购买
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
 import { produce } from 'immer';
 import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus, Weather } from '@/types';
 import { MOVES, SPECIES_DATA, WORLD_MAP } from '@/constants';
@@ -22,12 +21,37 @@ const starter = createPokemon('charmander', 5, [MOVES.scratch, MOVES.ember]);
 
 const initialPokedex: Record<number, PokedexStatus> = {};
 Object.values(SPECIES_DATA).forEach(s => {
-    initialPokedex[s.pokedexId!] = 'UNKNOWN';
-});
-initialPokedex[4] = 'CAUGHT'; 
-initialPokedex[19] = 'SEEN';
+      initialPokedex[s.pokedexId!] = 'UNKNOWN';
+  });
+  initialPokedex[4] = 'CAUGHT'; 
+  initialPokedex[19] = 'SEEN';
 
-import { GymData } from '@/types';
+  const initialInventory: InventoryItem[] = [
+    { 
+        id: 'potion', 
+        name: '伤药', 
+        description: '喷雾式伤药，能恢复宝可梦20点HP。', 
+        category: 'MEDICINE',
+        quantity: 5
+    },
+    { 
+        id: 'pokeball', 
+        name: '精灵球', 
+        description: '用于投向野生宝可梦并将其捕捉的球。', 
+        category: 'POKEBALLS',
+        quantity: 10
+    },
+    { 
+        id: 'map', 
+        name: '城镇地图', 
+        description: '方便确认当前位置的高科技地图。', 
+        category: 'KEY_ITEMS',
+        quantity: 1
+    }
+  ];
+
+  import { GymData } from '@/types';
+
 
 interface GameState {
   view: ViewState;
@@ -67,7 +91,7 @@ interface GameState {
   executeMove: (moveIndex: number) => Promise<void>;
   useItem: (itemId: string, targetId: string) => void;
   addItem: (itemId: string, quantity?: number) => void;
-  throwPokeball: () => Promise<void>;
+  throwPokeball: (ballId?: string) => Promise<void>;
   buyItem: (itemId: string, price: number, quantity?: number) => boolean;
   healParty: () => void;
   switchPokemon: (pokemonId: string) => void;
@@ -100,30 +124,8 @@ export const useGameStore = create<GameState>()(
   weather: 'None',
   weatherDuration: 0,
   isGameLoading: false,
-  inventory: [
-    { 
-        id: 'potion', 
-        name: '伤药', 
-        description: '喷雾式伤药，能恢复宝可梦20点HP。', 
-        category: 'MEDICINE',
-        quantity: 5, 
-        effect: (p: Pokemon) => { p.currentHp = Math.min(p.maxHp, p.currentHp + 20); } 
-    },
-    { 
-        id: 'pokeball', 
-        name: '精灵球', 
-        description: '用于投向野生宝可梦并将其捕捉的球。', 
-        category: 'POKEBALLS',
-        quantity: 10
-    },
-    { 
-        id: 'map', 
-        name: '城镇地图', 
-        description: '方便确认当前位置的高科技地图。', 
-        category: 'KEY_ITEMS',
-        quantity: 1
-    }
-  ],
+    inventory: initialInventory,
+
   battle: {
     active: false,
     turnCount: 0,
@@ -147,6 +149,7 @@ export const useGameStore = create<GameState>()(
       hasSelectedStarter: false,
       weather: 'None',
       weatherDuration: 0,
+      inventory: initialInventory,
       battle: {
         active: false,
         turnCount: 0,
@@ -608,6 +611,40 @@ export const useGameStore = create<GameState>()(
           } else {
               state.logs.push(createLogEntry(`${target.speciesName} 的HP已经满了！`));
           }
+      } else if (item.id === 'super-potion') {
+          const healAmount = 50;
+          const oldHp = target.currentHp;
+          target.currentHp = Math.min(target.maxHp, target.currentHp + healAmount);
+          const actualHeal = target.currentHp - oldHp;
+          if (actualHeal > 0) {
+              state.inventory[itemIndex].quantity--;
+              state.logs.push(createLogEntry(`对 ${target.speciesName} 使用了 ${item.name}，恢复了 ${actualHeal} 点HP！`));
+          } else {
+              state.logs.push(createLogEntry(`${target.speciesName} 的HP已经满了！`));
+          }
+      } else if (item.id === 'hyper-potion') {
+          const healAmount = 200;
+          const oldHp = target.currentHp;
+          target.currentHp = Math.min(target.maxHp, target.currentHp + healAmount);
+          const actualHeal = target.currentHp - oldHp;
+          if (actualHeal > 0) {
+              state.inventory[itemIndex].quantity--;
+              state.logs.push(createLogEntry(`对 ${target.speciesName} 使用了 ${item.name}，恢复了 ${actualHeal} 点HP！`));
+          } else {
+              state.logs.push(createLogEntry(`${target.speciesName} 的HP已经满了！`));
+          }
+      } else if (item.id === 'max-potion') {
+          const oldHp = target.currentHp;
+          target.currentHp = target.maxHp;
+          const actualHeal = target.currentHp - oldHp;
+          if (actualHeal > 0) {
+              state.inventory[itemIndex].quantity--;
+              state.logs.push(createLogEntry(`对 ${target.speciesName} 使用了 ${item.name}，HP全部恢复了！`));
+          } else {
+              state.logs.push(createLogEntry(`${target.speciesName} 的HP已经满了！`));
+          }
+      } else if (item.category === 'POKEBALLS') {
+          state.logs.push(createLogEntry(`${item.name}只能在战斗中使用！`, 'info'));
       } else if (item.effect) {
           item.effect(target);
           state.inventory[itemIndex].quantity--;
@@ -616,27 +653,47 @@ export const useGameStore = create<GameState>()(
   })),
 
   addItem: (itemId, quantity = 1) => set(produce((state: GameState) => {
-      const existingItem = state.inventory.find(i => i.id === itemId);
+      let existingItem = state.inventory.find(i => i.id === itemId);
       if (existingItem) {
           existingItem.quantity += quantity;
+      } else {
+          const newItems: Record<string, Partial<InventoryItem>> = {
+              'super-potion': { name: '好伤药', description: '喷雾式伤药，能恢复宝可梦50点HP。', category: 'MEDICINE' },
+              'hyper-potion': { name: '超高级伤药', description: '喷雾式伤药，能恢复宝可梦200点HP。', category: 'MEDICINE' },
+              'max-potion': { name: '全满药', description: '能回复宝可梦全部HP。', category: 'MEDICINE' },
+              'greatball': { name: '超级球', description: '比起精灵球更容易捉到宝可梦。', category: 'POKEBALLS' },
+              'ultraball': { name: '高级球', description: '比起超级球更容易捉到宝可梦。', category: 'POKEBALLS' },
+              'masterball': { name: '大师球', description: '必定能捉到野生宝可梦的终极球。', category: 'POKEBALLS' }
+          };
+
+          if (newItems[itemId]) {
+              state.inventory.push({
+                  id: itemId,
+                  name: newItems[itemId].name!,
+                  description: newItems[itemId].description!,
+                  category: newItems[itemId].category!,
+                  quantity: quantity
+              });
+              existingItem = state.inventory.find(i => i.id === itemId);
+          }
       }
       state.logs.push(createLogEntry(`获得了 ${existingItem?.name || '物品'} x${quantity}！`));
   })),
 
-  throwPokeball: async () => {
+  throwPokeball: async (ballId: string = 'pokeball') => {
       const { battle, playerParty, addLog } = get();
       if (!battle.active || !battle.enemy || battle.phase !== 'INPUT') return;
 
-      const pokeballItem = get().inventory.find(i => i.id === 'pokeball');
+      const pokeballItem = get().inventory.find(i => i.id === ballId);
       if (!pokeballItem || pokeballItem.quantity <= 0) {
-          addLog('没有精灵球了！', 'urgent');
+          addLog(`${pokeballItem?.name || '精灵球'}没有了！`, 'urgent');
           return;
       }
 
       set(produce((state: GameState) => { state.battle.phase = 'PROCESSING'; }));
 
       set(produce((state: GameState) => {
-          const item = state.inventory.find(i => i.id === 'pokeball');
+          const item = state.inventory.find(i => i.id === ballId);
           if (item) item.quantity--;
       }));
 
@@ -644,10 +701,15 @@ export const useGameStore = create<GameState>()(
       const catchRate = enemy.speciesData.catchRate || 45;
       const hpRatio = enemy.currentHp / enemy.maxHp;
 
-      const catchChance = (catchRate / 255) * (1 - hpRatio * 0.5);
+      let ballModifier = 1.0;
+      if (ballId === 'greatball') ballModifier = 1.5;
+      if (ballId === 'ultraball') ballModifier = 2.0;
+      if (ballId === 'masterball') ballModifier = 255;
+
+      const catchChance = (catchRate / 255) * (1 - hpRatio * 0.5) * ballModifier;
       const roll = Math.random();
 
-      addLog(`扔出了精灵球！`, 'combat');
+      addLog(`扔出了${pokeballItem.name}！`, 'combat');
       await new Promise(r => setTimeout(r, 800));
 
       if (roll < catchChance) {
@@ -752,9 +814,31 @@ export const useGameStore = create<GameState>()(
 
       set(produce((draft: GameState) => {
           draft.playerMoney -= totalCost;
-          const existingItem = draft.inventory.find(i => i.id === itemId);
+          
+          let existingItem = draft.inventory.find(i => i.id === itemId);
           if (existingItem) {
               existingItem.quantity += quantity;
+          } else {
+              const newItems: Record<string, Partial<InventoryItem>> = {
+                'super-potion': { name: '好伤药', description: '恢复 50 点 HP', category: 'MEDICINE' },
+                'hyper-potion': { name: '超高级伤药', description: '恢复 200 点 HP', category: 'MEDICINE' },
+                'max-potion': { name: '全满药', description: '完全恢复 HP', category: 'MEDICINE' },
+                'greatball': { name: '超级球', description: '更容易捉到宝可梦', category: 'POKEBALLS' },
+                'ultraball': { name: '高级球', description: '捕获率更高的球', category: 'POKEBALLS' },
+                'masterball': { name: '大师球', description: '必定能捉到的终极球', category: 'POKEBALLS' }
+              };
+              
+              const itemData = newItems[itemId];
+              if (itemData) {
+                draft.inventory.push({
+                    id: itemId,
+                    name: itemData.name!,
+                    description: itemData.description!,
+                    category: itemData.category || (itemId.includes('ball') ? 'POKEBALLS' : 'MEDICINE'),
+                    quantity: quantity
+                });
+                existingItem = draft.inventory.find(i => i.id === itemId);
+              }
           }
           draft.logs.push(createLogEntry(`购买了 ${existingItem?.name || '物品'} x${quantity}，花费 ¥${totalCost}`));
       }));
@@ -972,7 +1056,10 @@ export const useGameStore = create<GameState>()(
             currentLocationId: state.playerLocationId,
             badges: state.badges,
             pokedex: state.pokedex,
-            inventory: state.inventory,
+            inventory: state.inventory.map(item => {
+                const { effect, ...rest } = item;
+                return rest;
+            }),
             money: state.playerMoney
           })
         });

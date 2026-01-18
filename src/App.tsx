@@ -109,12 +109,12 @@ const App: React.FC = () => {
         <Header />
 
         {/* Main Viewport */}
-        <main className="flex-grow relative overflow-hidden bg-slate-900">
+        <main className="flex-grow relative overflow-hidden bg-slate-900 z-10">
           {renderStage()}
         </main>
 
         {/* Footer Area */}
-        <div className="flex-shrink-0 z-30">
+        <div className="flex-shrink-0 z-20">
           {showMessageBox && <MessageBox />}
           {showControlPad && <ControlPad />}
           {showNavDock && <NavigationDock />}

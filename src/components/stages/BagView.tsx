@@ -8,7 +8,16 @@ const BagView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ItemCategory>('MEDICINE');
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
-  const filteredItems = inventory.filter(item => item.category === activeTab);
+  const filteredItems = inventory.filter(item => {
+    const category = item.category?.toUpperCase();
+    if (activeTab === 'POKEBALLS') {
+      return category === 'POKEBALLS' || item.id.includes('ball');
+    }
+    if (activeTab === 'MEDICINE') {
+      return category === 'MEDICINE' || item.id.includes('potion');
+    }
+    return category === activeTab;
+  });
 
   const tabs = [
     { id: 'MEDICINE', label: '药品', icon: BriefcaseMedical },

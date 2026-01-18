@@ -28,9 +28,9 @@ const ControlPad: React.FC = () => {
     setShowBag(false);
   };
 
-  const handleThrowPokeball = async () => {
+  const handleThrowPokeball = async (ballId: string) => {
     setShowBag(false);
-    await throwPokeball();
+    await throwPokeball(ballId);
   };
 
   const handleSwitchPokemon = (pokemonId: string) => {
@@ -114,12 +114,16 @@ const ControlPad: React.FC = () => {
               pokeballs.map(item => (
                 <button
                   key={item.id}
-                  onClick={handleThrowPokeball}
+                  onClick={() => handleThrowPokeball(item.id)}
                   className="w-full bg-slate-800 hover:bg-slate-700 active:bg-slate-950 p-3 rounded-lg border border-slate-700 flex items-center justify-between transition-all active:scale-[0.98] mb-2"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center">
-                      <div className="w-4 h-4 rounded-full bg-red-500 border-2 border-white" style={{ borderBottomColor: '#1e293b' }}></div>
+                      <div className={`w-4 h-4 rounded-full border-2 border-white ${
+                        item.id === 'greatball' ? 'bg-blue-500' : 
+                        item.id === 'ultraball' ? 'bg-yellow-500' : 
+                        item.id === 'masterball' ? 'bg-purple-500' : 'bg-red-500'
+                      }`} style={{ borderBottomColor: '#1e293b' }}></div>
                     </div>
                     <div className="text-left">
                       <div className="text-sm font-bold text-slate-200">{item.name}</div>
