@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import { db } from '../lib/db';
-import { authMiddleware } from '../middleware/auth';
+import { db } from '../lib/db.js';
+import { authMiddleware } from '../middleware/auth.js';
 import { SaveGameRequestSchema } from '@shared/schemas';
 
 const game = new Hono<{ Variables: { user: { userId: string } } }>();
