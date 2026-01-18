@@ -50,7 +50,10 @@ jobs:
           cache: 'npm'
           cache-dependency-path: server/package.json
 
-      - name: 安装依赖
+      - name: 安装依赖 (Root)
+        run: npm install
+
+      - name: 安装依赖 (Server)
         working-directory: server
         run: npm install
 
