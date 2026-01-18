@@ -1,9 +1,9 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
-import { db } from '../lib/db';
-import { signToken } from '../lib/jwt';
-import { authMiddleware } from '../middleware/auth';
+import { db } from '../lib/db.js';
+import { signToken } from '../lib/jwt.js';
+import { authMiddleware } from '../middleware/auth.js';
 import { UserCredentialsSchema } from '@shared/schemas';
 
 const auth = new Hono<{ Variables: { user: { userId: string } } }>();

@@ -3,9 +3,9 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 
-import auth from './routes/auth';
-import game from './routes/game';
-import internal from './routes/internal';
+import auth from './routes/auth.js';
+import game from './routes/game.js';
+import internal from './routes/internal.js';
 
 const app = new Hono();
 
