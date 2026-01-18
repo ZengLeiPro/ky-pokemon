@@ -1,4 +1,4 @@
-import type { BaseStats } from '../types';
+import type { BaseStats } from '../types/index.js';
 
 /**
  * 计算宝可梦实际能力值（Gen 3+ 公式）

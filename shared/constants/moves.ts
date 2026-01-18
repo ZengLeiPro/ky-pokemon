@@ -1,4 +1,4 @@
-import type { Move } from '../types';
+import type { Move } from '../types/index.js';
 
 export const MOVES: Record<string, Move> = {
   tackle: { id: 'tackle', name: '撞击', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 35, description: '用整个身体 撞向对手进行攻击。' },

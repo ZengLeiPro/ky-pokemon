@@ -1,3 +1,3 @@
-export * from './pokemon';
-export * from './user';
-export * from './game';
+export * from './pokemon.js';
+export * from './user.js';
+export * from './game.js';

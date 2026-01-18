@@ -1,4 +1,4 @@
-import type { SpeciesData } from '../types';
+import type { SpeciesData } from '../types/index.js';
 
 export const SPECIES_DATA: Record<string, SpeciesData> = {
   bulbasaur: {

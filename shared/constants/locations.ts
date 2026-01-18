@@ -1,4 +1,4 @@
-import type { LocationData } from '../types';
+import type { LocationData } from '../types/index.js';
 
 export const WORLD_MAP: Record<string, LocationData> = {
   'pallet-town': {

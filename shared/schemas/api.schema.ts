@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { UserSchema, UserCredentialsSchema, RegisterDataSchema } from './user.schema';
-import { PokemonSchema } from './pokemon.schema';
+import { UserSchema, UserCredentialsSchema, RegisterDataSchema } from './user.schema.js';
+import { PokemonSchema } from './pokemon.schema.js';
 
 // 通用 API 响应包装
 export const ApiResponseSchema = <T extends z.ZodType>(dataSchema: T) =>

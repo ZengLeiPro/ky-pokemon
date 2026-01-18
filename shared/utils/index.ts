@@ -3,4 +3,4 @@ export * from './experience.js';
 export * from './damage.js';
 export * from './pokemon-factory.js';
 export * from './evolution.js';
-export * from './pokemon-factory';
+export * from './pokemon-factory.js';

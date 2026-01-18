@@ -1,3 +1,3 @@
-export * from './pokemon.schema';
-export * from './user.schema';
-export * from './api.schema';
+export * from './pokemon.schema.js';
+export * from './user.schema.js';
+export * from './api.schema.js';

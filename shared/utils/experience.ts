@@ -1,7 +1,7 @@
-import type { Pokemon, BaseStats } from '../types';
-import { SPECIES_DATA, MOVES, findSpeciesKeyByPokedexId } from '../constants';
-import { calculateStats } from './stats';
-import { checkEvolution } from './evolution';
+import type { Pokemon, BaseStats } from '../types/index.js';
+import { SPECIES_DATA, MOVES, findSpeciesKeyByPokedexId } from '../constants/index.js';
+import { calculateStats } from './stats.js';
+import { checkEvolution } from './evolution.js';
 
 export interface ExperienceGainResult {
   updatedPokemon: Pokemon;

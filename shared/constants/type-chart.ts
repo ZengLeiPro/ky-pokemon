@@ -1,4 +1,4 @@
-import type { PokemonType } from '../types';
+import type { PokemonType } from '../types/index.js';
 
 // 完整的 18x18 属性克制表 (Gen 3+ 官方数据)
 // 格式: TYPE_CHART[攻击属性][防御属性] = 倍率

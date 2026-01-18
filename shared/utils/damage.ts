@@ -1,5 +1,5 @@
-import type { Pokemon, Move, Weather } from '../types';
-import { getTypeEffectiveness } from '../constants/type-chart';
+import type { Pokemon, Move, Weather } from '../types/index.js';
+import { getTypeEffectiveness } from '../constants/type-chart.js';
 
 export interface DamageResult {
   damage: number;

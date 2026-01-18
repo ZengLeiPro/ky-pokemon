@@ -1,6 +1,6 @@
-import type { Pokemon, Move, BaseStats } from '../types';
-import { SPECIES_DATA, MOVES } from '../constants';
-import { calculateStats } from './stats';
+import type { Pokemon, Move, BaseStats } from '../types/index.js';
+import { SPECIES_DATA, MOVES } from '../constants/index.js';
+import { calculateStats } from './stats.js';
 
 /**
  * 创建宝可梦实例

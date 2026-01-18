@@ -1,6 +1,6 @@
-import type { Pokemon } from '../types';
-import { SPECIES_DATA, findSpeciesKeyByPokedexId } from '../constants';
-import { calculateStats } from './stats';
+import type { Pokemon } from '../types/index.js';
+import { SPECIES_DATA, findSpeciesKeyByPokedexId } from '../constants/index.js';
+import { calculateStats } from './stats.js';
 
 /**
  * 检查是否可进化

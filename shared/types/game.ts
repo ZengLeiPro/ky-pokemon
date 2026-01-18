@@ -1,4 +1,4 @@
-import type { PokemonType } from './pokemon';
+import type { PokemonType } from './pokemon.js';
 
 export type Weather = 'Sunny' | 'Rain' | 'Sandstorm' | 'Hail' | 'None';
 
