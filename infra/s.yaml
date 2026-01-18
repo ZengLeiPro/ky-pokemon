@@ -28,7 +28,7 @@ resources:
       instanceConcurrency: 10
       environmentVariables:
         NODE_ENV: production
-        PORT: 9000
+        PORT: '9000'
         DATABASE_URL: ${env('DATABASE_URL')}
         JWT_SECRET: ${env('JWT_SECRET')}
         MIGRATION_TOKEN: ${env('MIGRATION_TOKEN')}
