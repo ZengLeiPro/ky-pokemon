@@ -12,7 +12,7 @@ resources:
     props:
       region: ${vars.region}
       code: ../fc-deploy
-      functionName: ky-pokemon-backend
+      functionName: pkm
       description: 'ky-pokemon 后端 API 服务'
       runtime: custom.debian12
       customRuntimeConfig:
