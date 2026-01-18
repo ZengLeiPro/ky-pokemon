@@ -40,6 +40,8 @@ resources:
         vSwitchIds:
           - ${env('VSWITCH_ID')}
         securityGroupId: ${env('SECURITY_GROUP_ID')}
+      # 日志配置 - 使用 auto 模式自动创建/复用日志资源
+      logConfig: auto
       triggers:
         - triggerName: http-trigger
           triggerType: http
