@@ -30,7 +30,7 @@ game.post('/save', async (c) => {
     return c.json({ success: false, error: '存档数据格式错误' }, 400);
   }
 
-  const { team, pcBox, currentLocationId, badges, pokedex } = parsed.data;
+  const { team, pcBox, currentLocationId, badges, pokedex, inventory, money, playTime } = parsed.data;
 
   const save = await db.gameSave.upsert({
     where: { userId: user.userId },
@@ -41,16 +41,19 @@ game.post('/save', async (c) => {
       currentLocation: currentLocationId,
       badges,
       pokedex,
-      inventory: [],
-      money: 3000,
-      playTime: 0
+      inventory: inventory ?? [],
+      money: money ?? 3000,
+      playTime: playTime ?? 0
     },
     update: {
       team,
       pcBox,
       currentLocation: currentLocationId,
       badges,
-      pokedex
+      pokedex,
+      inventory: inventory ?? undefined,
+      money: money ?? undefined,
+      playTime: playTime ?? undefined
     }
   });
 

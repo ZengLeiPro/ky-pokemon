@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { User, RegisterData, UserCredentials } from '../types';
 import { useGameStore } from './gameStore';
+import { config } from '../config';
+import { useToast } from '../components/ui/Toast';
 
 interface AuthState {
   currentUser: User | null;
@@ -18,7 +20,7 @@ interface AuthState {
   updatePassword: (oldPassword: string, newPassword: string) => Promise<boolean>;
 }
 
-const API_URL = 'http://localhost:3001/api/auth';
+const API_URL = `${config.apiUrl}/auth`;
 
 export const useAuthStore = create<AuthState>((set, get) => ({
   currentUser: null,
@@ -56,6 +58,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       useGameStore.getState().loadGame(user.id);
       return true;
     } catch (err) {
+      useToast.getState().show('注册失败，请检查网络连接', 'error');
       set({ error: '注册失败，请检查网络连接' });
       return false;
     }
@@ -91,6 +94,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       useGameStore.getState().loadGame(user.id);
       return true;
     } catch (err) {
+      useToast.getState().show('登录失败，请检查网络连接', 'error');
       set({ error: '登录失败，请检查网络连接' });
       return false;
     }
@@ -148,12 +152,64 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   updateUsername: async (newUsername: string) => {
-    console.warn('Backend API for updateUsername not implemented yet');
-    return false;
+    const token = get().token;
+    if (!token) return false;
+
+    try {
+      const response = await fetch(`${API_URL}/username`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ newUsername })
+      });
+
+      const result = await response.json();
+
+      if (result.success && result.data?.user) {
+        const user = result.data.user;
+        localStorage.setItem('user', JSON.stringify(user));
+        set({ currentUser: user, error: null });
+        return true;
+      } else {
+        set({ error: result.error || '更新用户名失败' });
+        return false;
+      }
+    } catch {
+      useToast.getState().show('网络错误，请重试', 'error');
+      set({ error: '网络错误，请重试' });
+      return false;
+    }
   },
 
   updatePassword: async (oldPassword: string, newPassword: string) => {
-    console.warn('Backend API for updatePassword not implemented yet');
-    return false;
+    const token = get().token;
+    if (!token) return false;
+
+    try {
+      const response = await fetch(`${API_URL}/password`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ oldPassword, newPassword })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        set({ error: null });
+        return true;
+      } else {
+        set({ error: result.error || '更新密码失败' });
+        return false;
+      }
+    } catch {
+      useToast.getState().show('网络错误，请重试', 'error');
+      set({ error: '网络错误，请重试' });
+      return false;
+    }
   }
 }));

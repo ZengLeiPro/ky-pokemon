@@ -18,6 +18,8 @@ import MainStageSlider from './components/MainStageSlider';
 import LoginView from './components/auth/LoginView';
 import RegisterView from './components/auth/RegisterView';
 
+import { Toast } from './components/ui/Toast';
+
 const App: React.FC = () => {
   const { view, setView, hasSelectedStarter, isGameLoading } = useGameStore();
   const { isAuthenticated, checkAuth, currentUser } = useAuthStore();
@@ -82,41 +84,50 @@ const App: React.FC = () => {
   const showMessageBox = !isChoosingStarter && (view === 'ROAM' || view === 'BATTLE');
   const showControlPad = !isChoosingStarter && view === 'BATTLE';
 
-  // 认证页面使用全屏布局，无需 Header 和 Footer
-  if (view === 'LOGIN' || view === 'REGISTER') {
+  const renderContent = () => {
+    // 认证页面使用全屏布局，无需 Header 和 Footer
+    if (view === 'LOGIN' || view === 'REGISTER') {
+      return (
+        <div className="h-screen w-screen bg-black">
+          {renderStage()}
+        </div>
+      );
+    }
+
+    if (isAuthenticated && isGameLoading) {
+        return (
+            <div className="h-screen w-screen bg-black flex items-center justify-center flex-col gap-4">
+                <div className="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+                <div className="text-cyan-400 font-bold tracking-widest animate-pulse">正在读取存档...</div>
+            </div>
+        );
+    }
+
     return (
-      <div className="h-screen w-screen bg-black">
-        {renderStage()}
+      <div className="h-screen w-screen flex flex-col bg-black max-w-md mx-auto shadow-2xl overflow-hidden relative">
+        {/* Top Header (HUD) */}
+        <Header />
+
+        {/* Main Viewport */}
+        <main className="flex-grow relative overflow-hidden bg-slate-900">
+          {renderStage()}
+        </main>
+
+        {/* Footer Area */}
+        <div className="flex-shrink-0 z-30">
+          {showMessageBox && <MessageBox />}
+          {showControlPad && <ControlPad />}
+          {showNavDock && <NavigationDock />}
+        </div>
       </div>
     );
-  }
-
-  if (isAuthenticated && isGameLoading) {
-      return (
-          <div className="h-screen w-screen bg-black flex items-center justify-center flex-col gap-4">
-              <div className="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
-              <div className="text-cyan-400 font-bold tracking-widest animate-pulse">正在读取存档...</div>
-          </div>
-      );
-  }
+  };
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-black max-w-md mx-auto shadow-2xl overflow-hidden relative">
-      {/* Top Header (HUD) */}
-      <Header />
-
-      {/* Main Viewport */}
-      <main className="flex-grow relative overflow-hidden bg-slate-900">
-        {renderStage()}
-      </main>
-
-      {/* Footer Area */}
-      <div className="flex-shrink-0 z-30">
-        {showMessageBox && <MessageBox />}
-        {showControlPad && <ControlPad />}
-        {showNavDock && <NavigationDock />}
-      </div>
-    </div>
+    <>
+      <Toast />
+      {renderContent()}
+    </>
   );
 };
 

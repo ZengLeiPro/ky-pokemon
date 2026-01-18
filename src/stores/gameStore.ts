@@ -4,79 +4,10 @@ import { produce } from 'immer';
 import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus, Weather } from '@/types';
 import { MOVES, SPECIES_DATA, WORLD_MAP } from '@/constants';
 import { createPokemon, calculateDamage, gainExperience, evolvePokemon, MOVE_EFFECTS } from '@/lib/mechanics';
-import { openDB, DBSchema, IDBPDatabase } from 'idb';
+import { config } from '@/config';
 
-interface PokemonUser {
-  id: string;
-  username: string;
-  passwordHash: string;
-  party: any[];
-  inventory: any[];
-  money: number;
-  pokedex: Record<number, string>;
-  locationId: string;
-  timestamp: number;
-  storage?: any[];
-}
-
-interface KyPokemonDB extends DBSchema {
-  users: { key: string; value: PokemonUser; };
-  gameState: { key: string; value: any; };
-  saves: { key: string; value: any; };
-}
-
-let dbPromise: Promise<IDBPDatabase<KyPokemonDB>> | null = null;
-
-async function getDB() {
-  if (!dbPromise) {
-    dbPromise = openDB<KyPokemonDB>('ky-pokemon-db', 5, {
-      upgrade(database, oldVersion, newVersion, transaction) {
-        if (!database.objectStoreNames.contains('users')) {
-          database.createObjectStore('users', { keyPath: 'id' });
-        }
-
-        if (database.objectStoreNames.contains('gameState')) {
-          database.deleteObjectStore('gameState');
-        }
-        database.createObjectStore('gameState');
-
-        if (!database.objectStoreNames.contains('saves')) {
-          database.createObjectStore('saves');
-        }
-      },
-    });
-  }
-  return dbPromise;
-}
-
-const idbStorage = {
-  getItem: async (name: string): Promise<string | null> => {
-    try {
-      const db = await getDB();
-      const result = await db.get('gameState', name);
-      return result ? JSON.stringify(result) : null;
-    } catch (e) {
-      console.error('Failed to load game state:', e);
-      return null;
-    }
-  },
-  setItem: async (name: string, value: string): Promise<void> => {
-    try {
-      const db = await getDB();
-      await db.put('gameState', JSON.parse(value), name);
-    } catch (e) {
-      console.error('Failed to save game state:', e);
-    }
-  },
-  removeItem: async (name: string): Promise<void> => {
-    try {
-      const db = await getDB();
-      await db.delete('gameState', name);
-    } catch (e) {
-      console.error('Failed to remove game state:', e);
-    }
-  },
-};
+const API_URL = `${config.apiUrl}/game`;
+const getToken = () => localStorage.getItem('token');
 
 function createLogEntry(message: string, type: LogEntry['type'] = 'info'): LogEntry {
   return {
@@ -225,7 +156,6 @@ export const useGameStore = create<GameState>()(
         phase: 'INPUT',
       }
     });
-    localStorage.removeItem('ky-pokemon-save');
   },
 
   selectStarter: (speciesKey: string) => set(produce((state: GameState) => {
@@ -981,49 +911,79 @@ export const useGameStore = create<GameState>()(
 
   loadGame: async (userId: string) => {
       set({ isGameLoading: true });
+      
+      const token = getToken();
+      if (!token) {
+        set({ isGameLoading: false });
+        return;
+      }
+    
       try {
-          const db = await getDB();
-          const save = await db.get('saves', userId);
-          if (save) {
-              set((state) => ({ ...state, ...save }));
-              // 强制确保视图状态安全
-              if (save.view === 'LOGIN' || save.view === 'REGISTER') {
-                  set({ view: 'ROAM' });
-              }
-              get().addLog('已加载存档。');
-          } else {
-              get().resetGame();
+        const response = await fetch(`${API_URL}/save`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
           }
-      } catch (e) {
-          console.error('Load game failed', e);
-      } finally {
+        });
+    
+        const result = await response.json();
+    
+        if (result.success && result.data) {
+          const save = result.data;
+          set({
+            playerParty: save.team || [],
+            playerStorage: save.pcBox || [],
+            playerLocationId: save.currentLocation || 'pallet-town',
+            badges: save.badges || [],
+            pokedex: save.pokedex || {},
+            inventory: save.inventory || get().inventory,
+            playerMoney: save.money ?? 3000,
+            hasSelectedStarter: (save.team?.length > 0),
+            view: 'ROAM',
+            isGameLoading: false
+          });
+          get().addLog('已从云端加载存档。');
+        } else {
+          get().resetGame();
           set({ isGameLoading: false });
+        }
+      } catch (error) {
+        console.error('Failed to load game:', error);
+        set({ isGameLoading: false });
       }
   },
 
   saveGame: async (userId: string) => {
+      const token = getToken();
+      if (!token) return;
+
+      const state = get();
+      
       try {
-          const state = get();
-          const dataToSave = {
-            view: state.view,
-            selectedPokemonId: state.selectedPokemonId,
-            logs: state.logs,
-            playerParty: state.playerParty,
-            playerStorage: state.playerStorage,
-            inventory: state.inventory,
-            playerMoney: state.playerMoney,
-            playerLocationId: state.playerLocationId,
-            pokedex: state.pokedex,
+        const response = await fetch(`${API_URL}/save`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            team: state.playerParty,
+            pcBox: state.playerStorage,
+            currentLocationId: state.playerLocationId,
             badges: state.badges,
-            hasSelectedStarter: state.hasSelectedStarter,
-            weather: state.weather,
-            weatherDuration: state.weatherDuration,
-            battle: { ...state.battle, active: false, enemy: null, phase: 'INPUT' }
-          };
-          const db = await getDB();
-          await db.put('saves', dataToSave, userId);
-      } catch (e) {
-          console.error('Save game failed', e);
+            pokedex: state.pokedex,
+            inventory: state.inventory,
+            money: state.playerMoney
+          })
+        });
+    
+        const result = await response.json();
+        
+        if (!result.success) {
+          console.error('Save failed:', result.error);
+        }
+      } catch (error) {
+        console.error('Failed to save game:', error);
       }
   },
 })
