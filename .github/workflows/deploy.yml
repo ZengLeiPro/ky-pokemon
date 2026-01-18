@@ -124,40 +124,40 @@ jobs:
           rm -rf fc-deploy
           mkdir -p fc-deploy
           
-          # 复制构建产物
+          # 1. 复制构建产物和配置
           cp -r server/dist fc-deploy/
           cp server/package.json fc-deploy/
-          
-          # 安装生产依赖
-          cd fc-deploy
-          npm install --production
-          cd ..
-
-          # 复制 Prisma schema 和迁移文件
           mkdir -p fc-deploy/prisma
-          cp -r server/prisma/schema.prisma fc-deploy/prisma/
+          cp server/prisma/schema.prisma fc-deploy/prisma/
           cp -r server/prisma/migrations fc-deploy/prisma/
-
-          # 查找并复制 Prisma Client
-          # npm install 生成的 prisma client 在 node_modules/@prisma/client
-          echo "Copying Prisma Client..."
-          mkdir -p fc-deploy/node_modules/@prisma
-          cp -r server/node_modules/@prisma/client fc-deploy/node_modules/@prisma/
-
-          # 复制 engines (关键)
-          if [ -d "server/node_modules/@prisma/engines" ]; then
-             echo "Copying Prisma Engines..."
-             rm -rf fc-deploy/node_modules/@prisma/engines 2>/dev/null || true
-             cp -r server/node_modules/@prisma/engines fc-deploy/node_modules/@prisma/
-          else
-             echo "Warning: @prisma/engines not found in server/node_modules"
-          fi
-
-          # 显示部署包结构
-          echo "=== FC 部署包结构 ==="
-          ls -la fc-deploy/
-          echo "=== node_modules 结构 ==="
-          ls -la fc-deploy/node_modules/ | head -20
+          
+          # 2. 进入部署目录进行依赖安装和生成
+          cd fc-deploy
+          
+          # 安装生产依赖 (会自动包含 prisma engines 如果它是 dependency)
+          # 注意：我们需要确保 prisma CLI 也在，或者使用 npx (但 npx 需要 devDependencies)
+          # 为了稳妥，我们临时安装 prisma CLI，生成完再移除，或者直接把 prisma 放入 dependencies (虽然不推荐但对 FC 方便)
+          # 更好的方式：使用 CI 环境的 prisma CLI 来生成到当前目录
+          
+          npm install --production
+          
+          # 3. 显式生成 Prisma Client 到当前 node_modules
+          # 使用根目录安装的 prisma CLI，但指定 schema 路径
+          echo "Generating Prisma Client..."
+          ../server/node_modules/.bin/prisma generate --schema=./prisma/schema.prisma
+          
+          # 4. 验证生成结果
+          echo "=== Verifying .prisma directory ==="
+          ls -la node_modules/.prisma/client || echo "Error: .prisma/client not found!"
+          
+          # 5. 清理 (Prisma CLI 很大，尽量不打包进去，但 Engine 必须留着)
+          # 注意：prisma generate 生成的 client 依赖于 @prisma/client 和底层的 engine
+          # 我们不应该删除 node_modules/@prisma
+          
+          echo "=== Final node_modules size ==="
+          du -sh node_modules/
+          
+          cd ..
 
       - name: 安装 Serverless Devs
         run: npm install -g @serverless-devs/s
