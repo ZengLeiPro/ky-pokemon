@@ -10,7 +10,7 @@ const RegisterView: React.FC = () => {
   const { register, error, clearError } = useAuthStore();
   const { setView } = useGameStore();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     clearError();
 
@@ -29,7 +29,7 @@ const RegisterView: React.FC = () => {
       return;
     }
 
-    const success = register({ username, password });
+    const success = await register({ username, password });
     if (success) {
       setView('ROAM');
     }

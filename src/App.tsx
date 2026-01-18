@@ -13,6 +13,7 @@ import DexView from './components/stages/DexView';
 import PCBoxView from './components/stages/PCBoxView';
 import StarterSelectionView from './components/stages/StarterSelectionView';
 import MainStageSlider from './components/MainStageSlider';
+import EvolutionView from './components/stages/EvolutionView';
 
 // Auth Views
 import LoginView from './components/auth/LoginView';
@@ -21,7 +22,7 @@ import RegisterView from './components/auth/RegisterView';
 import { Toast } from './components/ui/Toast';
 
 const App: React.FC = () => {
-  const { view, setView, hasSelectedStarter, isGameLoading } = useGameStore();
+  const { view, setView, hasSelectedStarter, isGameLoading, evolution } = useGameStore();
   const { isAuthenticated, checkAuth, currentUser } = useAuthStore();
 
   useEffect(() => {
@@ -111,6 +112,7 @@ const App: React.FC = () => {
         {/* Main Viewport */}
         <main className="flex-grow relative overflow-hidden bg-slate-900 z-10">
           {renderStage()}
+          {evolution.isEvolving && <EvolutionView />}
         </main>
 
         {/* Footer Area */}

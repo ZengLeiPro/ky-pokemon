@@ -18,7 +18,18 @@ game.get('/save', async (c) => {
     return c.json({ success: true, data: null });
   }
 
-  return c.json({ success: true, data: save });
+  // Parse JSON strings
+  const data = {
+    ...save,
+    team: JSON.parse(save.team),
+    pcBox: JSON.parse(save.pcBox),
+    badges: JSON.parse(save.badges),
+    pokedex: JSON.parse(save.pokedex),
+    inventory: JSON.parse(save.inventory),
+    currentLocationId: save.currentLocation
+  };
+
+  return c.json({ success: true, data });
 });
 
 game.post('/save', async (c) => {
@@ -36,22 +47,22 @@ game.post('/save', async (c) => {
     where: { userId: user.userId },
     create: {
       userId: user.userId,
-      team,
-      pcBox,
+      team: JSON.stringify(team),
+      pcBox: JSON.stringify(pcBox),
       currentLocation: currentLocationId,
-      badges,
-      pokedex,
-      inventory: inventory ?? [],
+      badges: JSON.stringify(badges),
+      pokedex: JSON.stringify(pokedex),
+      inventory: JSON.stringify(inventory ?? []),
       money: money ?? 3000,
       playTime: playTime ?? 0
     },
     update: {
-      team,
-      pcBox,
+      team: JSON.stringify(team),
+      pcBox: JSON.stringify(pcBox),
       currentLocation: currentLocationId,
-      badges,
-      pokedex,
-      inventory: inventory ?? undefined,
+      badges: JSON.stringify(badges),
+      pokedex: JSON.stringify(pokedex),
+      inventory: inventory ? JSON.stringify(inventory) : undefined,
       money: money ?? undefined,
       playTime: playTime ?? undefined
     }

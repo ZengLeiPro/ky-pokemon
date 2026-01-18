@@ -9,7 +9,7 @@ const LoginView: React.FC = () => {
   const { login, error, clearError } = useAuthStore();
   const { setView } = useGameStore();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     clearError();
 
@@ -17,7 +17,7 @@ const LoginView: React.FC = () => {
       return;
     }
 
-    const success = login({ username, password });
+    const success = await login({ username, password });
     if (success) {
       setView('ROAM');
     }

@@ -1,3 +1,4 @@
 export const config = {
-  apiUrl: import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
+  // 强制指向本地后端，确保调试时不连接远程服务
+  apiUrl: 'http://localhost:3001/api'
 };

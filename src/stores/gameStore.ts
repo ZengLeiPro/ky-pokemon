@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { produce } from 'immer';
-import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus, Weather } from '@/types';
+import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus, Weather, EvolutionState } from '@/types';
 import { MOVES, SPECIES_DATA, WORLD_MAP } from '@/constants';
-import { createPokemon, calculateDamage, gainExperience, evolvePokemon, MOVE_EFFECTS } from '@/lib/mechanics';
+import { createPokemon, calculateDamage, gainExperience, evolvePokemon, MOVE_EFFECTS, calculateStats } from '@/lib/mechanics';
 import { config } from '@/config';
 
 const API_URL = `${config.apiUrl}/game`;
@@ -69,6 +69,8 @@ interface GameState {
   weatherDuration: number;
   isGameLoading: boolean;
 
+  evolution: EvolutionState;
+
   battle: {
     active: boolean;
     turnCount: number;
@@ -107,6 +109,10 @@ interface GameState {
   manualSave: () => void;
   loadGame: (userId: string) => Promise<void>;
   saveGame: (userId: string) => Promise<void>;
+
+  triggerEvolution: (pokemon: Pokemon, targetSpeciesId: string) => void;
+  advanceEvolutionStage: (stage: EvolutionState['stage']) => void;
+  completeEvolution: () => void;
 }
 
 export const useGameStore = create<GameState>()(
@@ -126,6 +132,13 @@ export const useGameStore = create<GameState>()(
   isGameLoading: false,
     inventory: initialInventory,
 
+  evolution: {
+    isEvolving: false,
+    pokemon: null,
+    targetSpeciesId: null,
+    stage: 'START'
+  },
+
   battle: {
     active: false,
     turnCount: 0,
@@ -135,7 +148,21 @@ export const useGameStore = create<GameState>()(
     phase: 'INPUT',
   },
 
-  resetGame: () => {
+  resetGame: async () => {
+    const token = getToken();
+    if (token) {
+        try {
+            await fetch(`${API_URL}/save`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        } catch (error) {
+            console.error('Failed to delete remote save:', error);
+        }
+    }
+
     set({
       view: 'ROAM',
       selectedPokemonId: null,
@@ -523,10 +550,14 @@ export const useGameStore = create<GameState>()(
                 }
 
                 if (evolutionCandidate) {
-                     const evolvedMon = evolvePokemon(updatedPokemon, evolutionCandidate.targetSpeciesId);
-                     state.playerParty[state.battle.playerActiveIndex] = evolvedMon;
                      state.logs.push(createLogEntry(`什么？ ${updatedPokemon.speciesName} 的样子...`, 'urgent'));
-                     state.logs.push(createLogEntry(`恭喜！你的 ${updatedPokemon.speciesName} 进化成了 ${evolvedMon.speciesName}！`, 'urgent'));
+                     
+                     state.evolution = {
+                         isEvolving: true,
+                         pokemon: updatedPokemon,
+                         targetSpeciesId: evolutionCandidate.targetSpeciesId,
+                         stage: 'START'
+                     };
                 }
             }
 
@@ -1073,5 +1104,109 @@ export const useGameStore = create<GameState>()(
         console.error('Failed to save game:', error);
       }
   },
+
+  triggerEvolution: (pokemon: Pokemon, targetSpeciesId: string) => set({
+    evolution: {
+      isEvolving: true,
+      pokemon,
+      targetSpeciesId,
+      stage: 'START'
+    }
+  }),
+
+  advanceEvolutionStage: (stage: EvolutionState['stage']) => set(produce((state: GameState) => {
+    state.evolution.stage = stage;
+  })),
+
+  completeEvolution: () => set(produce((state: GameState) => {
+    const { pokemon, targetSpeciesId } = state.evolution;
+    
+    if (!pokemon || !targetSpeciesId) {
+        state.evolution.isEvolving = false;
+        return;
+    }
+    
+    // 执行真正的进化计算
+    const evolvedMon = evolvePokemon(pokemon, targetSpeciesId);
+    
+    // 更新队伍中的宝可梦
+    const idx = state.playerParty.findIndex(p => p.id === pokemon.id);
+    if (idx !== -1) {
+        state.playerParty[idx] = evolvedMon;
+        state.logs.push(createLogEntry(`恭喜！你的 ${pokemon.speciesName} 进化成了 ${evolvedMon.speciesName}！`, 'urgent'));
+        
+        // 更新图鉴
+        const newDexId = evolvedMon.speciesData.pokedexId;
+        if (newDexId !== undefined) {
+             state.pokedex[newDexId] = 'CAUGHT';
+        }
+    }
+    
+    // 重置状态
+    state.evolution = {
+        isEvolving: false,
+        pokemon: null,
+        targetSpeciesId: null,
+        stage: 'START'
+    };
+  })),
 })
 );
+
+// --- DEBUG CHEATS ---
+// @ts-ignore
+if (typeof window !== 'undefined') {
+  // @ts-ignore
+  window.cheat_charmander = () => {
+    useGameStore.setState(produce((state) => {
+      // Find charmander (Pokedex #4) in party
+      const charmander = state.playerParty.find((p: any) => p.speciesData.pokedexId === 4);
+      
+      if (!charmander) {
+        console.log('未在队伍中找到小火龙！');
+        return;
+      }
+
+      console.log('正在修改小火龙数据...');
+      
+      // Target: Lv 15, Exp close to Lv 16
+      const targetLevel = 15;
+      const lv15BaseExp = Math.pow(15, 3); // 3375
+      const lv16BaseExp = Math.pow(16, 3); // 4096
+      
+      // Set Exp to be 10 points away from Lv 16
+      // In the game logic, 'exp' field is relative to current level base?
+      // Let's check shared/utils/experience.ts again.
+      // Yes: const totalExp = currentBaseExp + newPokemon.exp;
+      // So newPokemon.exp = (Total Exp) - (Current Level Base Exp)
+      
+      const targetTotalExp = lv16BaseExp - 10;
+      const relativeExp = targetTotalExp - lv15BaseExp; // 4096 - 10 - 3375 = 711
+      
+      charmander.level = targetLevel;
+      charmander.exp = relativeExp;
+      charmander.nextLevelExp = lv16BaseExp; // Absolute value for next level threshold
+      
+      // Recalculate stats
+      const { stats, maxHp } = calculateStats(
+        charmander.baseStats, 
+        charmander.ivs, 
+        charmander.evs, 
+        targetLevel
+      );
+      
+      charmander.stats = stats;
+      charmander.maxHp = maxHp;
+      charmander.currentHp = maxHp; // Full heal
+      
+      state.logs.push({
+        id: crypto.randomUUID(),
+        message: '作弊生效：小火龙已调整至 Lv.15 (经验值 99%)',
+        timestamp: Date.now(),
+        type: 'urgent'
+      });
+      
+      console.log('修改完成！请查看游戏日志。');
+    }));
+  };
+}

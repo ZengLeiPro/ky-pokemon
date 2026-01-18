@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -22,17 +22,17 @@ model GameSave {
   id              String   @id @default(uuid())
   userId          String   @unique
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   // 游戏数据 (JSON 存储，复用 shared 类型)
-  team            Json     // Pokemon[]
-  pcBox           Json     // Pokemon[]
+  team            String   // Pokemon[] (JSON string)
+  pcBox           String   // Pokemon[] (JSON string)
   currentLocation String
-  badges          String[] // badge IDs
-  pokedex         Json     // Record<string, PokedexStatus>
-  inventory       Json     // InventoryItem[] (不含 effect 函数)
+  badges          String   // badge IDs (JSON string)
+  pokedex         String   // Record<string, PokedexStatus> (JSON string)
+  inventory       String   // InventoryItem[] (JSON string)
   money           Int      @default(3000)
   playTime        Int      @default(0) // 秒
-  
+
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

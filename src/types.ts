@@ -20,3 +20,10 @@ export interface InventoryItem {
   quantity: number;
   effect?: (target: Pokemon) => void; // 函数字段，不可序列化
 }
+
+export interface EvolutionState {
+  isEvolving: boolean;
+  pokemon: Pokemon | null;
+  targetSpeciesId: string | null;
+  stage: 'START' | 'ANIMATION' | 'FINISHED';
+}
