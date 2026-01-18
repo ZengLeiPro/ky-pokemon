@@ -31,6 +31,8 @@ jobs:
         run: npx tsc --noEmit
 
       - name: 构建前端
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
         run: npm run build
 
       - name: 上传构建产物
