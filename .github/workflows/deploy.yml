@@ -1,0 +1,217 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'server/**'
+      - 'infra/**'
+      - '.github/workflows/deploy.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'server/**'
+      - 'infra/**'
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  ci:
+    name: CI - 代码质量检查
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ky_pokemon_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ky_pokemon_test?schema=public
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: server/package.json
+
+      - name: 安装依赖
+        working-directory: server
+        run: npm install
+
+      - name: 生成 Prisma Client
+        working-directory: server
+        run: npx prisma generate
+
+      - name: 构建后端
+        working-directory: server
+        run: npm run build
+
+      - name: 创建 Shadow 数据库
+        run: PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE DATABASE shadow_db;"
+
+      - name: 检查 Schema 与迁移同步
+        working-directory: server
+        env:
+          SHADOW_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/shadow_db?schema=public
+        run: |
+          npx prisma migrate diff \
+            --from-migrations ./prisma/migrations \
+            --to-schema-datamodel ./prisma/schema.prisma \
+            --shadow-database-url "$SHADOW_DATABASE_URL" \
+            --exit-code || {
+              echo "::error::Schema 与迁移不同步！请运行 prisma migrate dev 生成新的迁移文件。"
+              exit 1
+            }
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-dist
+          path: server/dist
+          retention-days: 1
+
+  deploy:
+    name: CD - 部署到阿里云 FC
+    needs: ci
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && vars.ENABLE_DEPLOY == 'true'
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: 下载构建产物
+        uses: actions/download-artifact@v4
+        with:
+          name: server-dist
+          path: server/dist
+
+      - name: 安装依赖 (用于获取 Prisma 引擎)
+        working-directory: server
+        run: npm install
+
+      - name: 生成 Prisma Client
+        working-directory: server
+        run: npx prisma generate
+
+      - name: 创建 FC 部署包
+        run: |
+          set -e
+          rm -rf fc-deploy
+          mkdir -p fc-deploy
+          
+          # 复制构建产物
+          cp -r server/dist fc-deploy/
+          cp server/package.json fc-deploy/
+          
+          # 安装生产依赖
+          cd fc-deploy
+          npm install --production
+          cd ..
+
+          # 复制 Prisma schema 和迁移文件
+          mkdir -p fc-deploy/prisma
+          cp -r server/prisma/schema.prisma fc-deploy/prisma/
+          cp -r server/prisma/migrations fc-deploy/prisma/
+
+          # 查找并复制 Prisma Client
+          # npm install 生成的 prisma client 在 node_modules/@prisma/client
+          echo "Copying Prisma Client..."
+          mkdir -p fc-deploy/node_modules/@prisma
+          cp -r server/node_modules/@prisma/client fc-deploy/node_modules/@prisma/
+
+          # 复制 engines (关键)
+          if [ -d "server/node_modules/@prisma/engines" ]; then
+             echo "Copying Prisma Engines..."
+             rm -rf fc-deploy/node_modules/@prisma/engines 2>/dev/null || true
+             cp -r server/node_modules/@prisma/engines fc-deploy/node_modules/@prisma/
+          else
+             echo "Warning: @prisma/engines not found in server/node_modules"
+          fi
+
+          # 显示部署包结构
+          echo "=== FC 部署包结构 ==="
+          ls -la fc-deploy/
+          echo "=== node_modules 结构 ==="
+          ls -la fc-deploy/node_modules/ | head -20
+
+      - name: 安装 Serverless Devs
+        run: npm install -g @serverless-devs/s
+
+      - name: 配置阿里云凭证
+        run: |
+          s config add \
+            --AccountID ${{ secrets.ALIYUN_ACCOUNT_ID }} \
+            --AccessKeyID ${{ secrets.ALIYUN_ACCESS_KEY_ID }} \
+            --AccessKeySecret ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }} \
+            -a default
+
+      - name: 部署到 FC
+        id: deploy
+        working-directory: infra
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          MIGRATION_TOKEN: ${{ secrets.MIGRATION_TOKEN }}
+          VPC_ID: ${{ secrets.VPC_ID }}
+          VSWITCH_ID: ${{ secrets.VSWITCH_ID }}
+          SECURITY_GROUP_ID: ${{ secrets.SECURITY_GROUP_ID }}
+        run: |
+          s deploy -t s.yaml -y --use-local
+          
+          # 获取 FC URL
+          INFO_JSON=$(s info -t s.yaml --output json 2>/dev/null)
+          FC_URL=$(echo "$INFO_JSON" | node -e "
+            const chunks = [];
+            process.stdin.on('data', c => chunks.push(c));
+            process.stdin.on('end', () => {
+              try {
+                const text = chunks.join('');
+                const start = text.indexOf('{');
+                const end = text.lastIndexOf('}');
+                if (start === -1 || end === -1) { console.log(''); process.exit(0); }
+                const json = JSON.parse(text.slice(start, end + 1));
+                const url = json?.url?.system_url || json?.system_url || '';
+                console.log(url);
+              } catch { console.log(''); }
+            });
+          ")
+          echo "FC_URL=${FC_URL}" >> $GITHUB_OUTPUT
+          echo "部署完成，函数 URL: ${FC_URL}"
+
+      - name: 执行数据库迁移
+        # 注意：这里需要确保 server 端有处理 db-migrate 的 endpoint，或者我们在 FC 上运行 migrate
+        # 如果 server 没有 endpoint，我们可以使用 prisma migrate deploy 命令直接连接数据库
+        # 但为了安全通常建议通过 FC 内部执行
+        # 这里假设 server/src/routes/internal.ts (或者类似) 存在并处理迁移
+        # 由于当前 server 代码没有 internal route，我们需要修改 server 代码增加这个功能，或者使用直接连接
+        # 考虑到 RDS 在 VPC 内，GitHub Runner 无法直接连接，除非有 VPN 或公网 IP
+        # 所以必须通过 FC 执行。
+        # 暂时先跳过迁移调用，提示用户需手动或增加 endpoint
+        env:
+          FC_URL: ${{ steps.deploy.outputs.FC_URL }}
+        run: |
+           echo "Warning: 数据库迁移 Endpoint 尚未实现。请确保 RDS 架构已同步。"
+           # 如果实现了 endpoint:
+           # curl -X POST ${FC_URL}/api/internal/db-migrate ...

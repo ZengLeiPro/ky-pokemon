@@ -1,0 +1,52 @@
+# FC3 生产环境配置
+edition: 3.0.0
+name: ky-pokemon-backend
+access: default
+
+vars:
+  region: cn-shenzhen
+
+resources:
+  api-server:
+    component: fc3
+    props:
+      region: ${vars.region}
+      code: ../fc-deploy
+      functionName: ky-pokemon-backend
+      description: 'ky-pokemon 后端 API 服务'
+      runtime: custom.debian12
+      customRuntimeConfig:
+        command:
+          - /var/fc/lang/nodejs22/bin/node
+        args:
+          - dist/server/src/index.js
+        port: 9000
+      cpu: 0.25
+      memorySize: 256
+      diskSize: 512
+      timeout: 60
+      instanceConcurrency: 10
+      environmentVariables:
+        NODE_ENV: production
+        PORT: 9000
+        DATABASE_URL: ${env('DATABASE_URL')}
+        JWT_SECRET: ${env('JWT_SECRET')}
+        MIGRATION_TOKEN: ${env('MIGRATION_TOKEN')}
+      vpcConfig:
+        vpcId: ${env('VPC_ID')}
+        vSwitchIds:
+          - ${env('VSWITCH_ID')}
+        securityGroupId: ${env('SECURITY_GROUP_ID')}
+      triggers:
+        - triggerName: http-trigger
+          triggerType: http
+          triggerConfig:
+            authType: anonymous
+            methods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - HEAD
