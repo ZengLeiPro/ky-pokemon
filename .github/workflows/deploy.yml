@@ -212,18 +212,48 @@ jobs:
           echo "尝试自动更新 VITE_API_URL 为: ${FC_URL}/api"
           gh variable set VITE_API_URL --body "${FC_URL}/api" || echo "Warning: 无法自动更新 VITE_API_URL，请手动设置。"
 
+      - name: 等待服务就绪
+        run: sleep 10
+
       - name: 执行数据库迁移
-        # 注意：这里需要确保 server 端有处理 db-migrate 的 endpoint，或者我们在 FC 上运行 migrate
-        # 如果 server 没有 endpoint，我们可以使用 prisma migrate deploy 命令直接连接数据库
-        # 但为了安全通常建议通过 FC 内部执行
-        # 这里假设 server/src/routes/internal.ts (或者类似) 存在并处理迁移
-        # 由于当前 server 代码没有 internal route，我们需要修改 server 代码增加这个功能，或者使用直接连接
-        # 考虑到 RDS 在 VPC 内，GitHub Runner 无法直接连接，除非有 VPN 或公网 IP
-        # 所以必须通过 FC 执行。
-        # 暂时先跳过迁移调用，提示用户需手动或增加 endpoint
         env:
           FC_URL: ${{ steps.deploy.outputs.FC_URL }}
+          MIGRATION_TOKEN: ${{ secrets.MIGRATION_TOKEN }}
         run: |
-           echo "Warning: 数据库迁移 Endpoint 尚未实现。请确保 RDS 架构已同步。"
-           # 如果实现了 endpoint:
-           # curl -X POST ${FC_URL}/api/internal/db-migrate ...
+           echo "Triggering database migration on ${FC_URL}..."
+           
+           RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "${FC_URL}/api/internal/db-migrate" \
+             -H "x-migration-token: ${MIGRATION_TOKEN}" \
+             -H "Content-Type: application/json" \
+             --max-time 60)
+           
+           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+           BODY=$(echo "$RESPONSE" | sed '$d')
+           
+           echo "Response: $BODY"
+           
+           if [ "$HTTP_CODE" != "200" ]; then
+             echo "::error::Migration failed with status $HTTP_CODE"
+             exit 1
+           fi
+
+      - name: 执行数据库种子 (Seed)
+        env:
+          FC_URL: ${{ steps.deploy.outputs.FC_URL }}
+          MIGRATION_TOKEN: ${{ secrets.MIGRATION_TOKEN }}
+        run: |
+           echo "Triggering database seeding..."
+           
+           RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "${FC_URL}/api/internal/db-seed" \
+             -H "x-migration-token: ${MIGRATION_TOKEN}" \
+             -H "Content-Type: application/json" \
+             --max-time 60)
+           
+           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+           BODY=$(echo "$RESPONSE" | sed '$d')
+           
+           echo "Response: $BODY"
+           
+           if [ "$HTTP_CODE" != "200" ]; then
+             echo "::warning::Seeding failed with status $HTTP_CODE. Continuing as it might be non-critical."
+           fi
