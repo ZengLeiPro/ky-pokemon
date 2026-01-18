@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import { db } from '../lib/db.js';
 import { signToken } from '../lib/jwt.js';
 import { authMiddleware } from '../middleware/auth.js';
-import { UserCredentialsSchema } from '@shared/schemas';
+import { UserCredentialsSchema } from '../../../shared/schemas/index.js';
 
 const auth = new Hono<{ Variables: { user: { userId: string } } }>();
 
