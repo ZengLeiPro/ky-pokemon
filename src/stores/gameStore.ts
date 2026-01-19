@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { produce } from 'immer';
-import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus, Weather, EvolutionState } from '@/types';
+import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus, Weather, EvolutionState, GymData } from '@/types';
 import { MOVES, SPECIES_DATA, WORLD_MAP } from '@/constants';
 import { createPokemon, calculateDamage, gainExperience, evolvePokemon, MOVE_EFFECTS, calculateStats } from '@/lib/mechanics';
 import { config } from '@/config';
@@ -49,9 +49,6 @@ Object.values(SPECIES_DATA).forEach(s => {
         quantity: 1
     }
   ];
-
-  import { GymData } from '@/types';
-
 
 interface GameState {
   view: ViewState;
@@ -1153,65 +1150,8 @@ export const useGameStore = create<GameState>()(
 })
 );
 
-// --- DEBUG CHEATS ---
-// @ts-ignore
 if (typeof window !== 'undefined') {
-  // @ts-ignore
-  window.cheat_charmander = () => {
-    useGameStore.setState(produce((state) => {
-      // Find charmander (Pokedex #4) in party
-      const charmander = state.playerParty.find((p: any) => p.speciesData.pokedexId === 4);
-      
-      if (!charmander) {
-        console.log('未在队伍中找到小火龙！');
-        return;
-      }
-
-      console.log('正在修改小火龙数据...');
-      
-      // Target: Lv 15, Exp close to Lv 16
-      const targetLevel = 15;
-      const lv15BaseExp = Math.pow(15, 3); // 3375
-      const lv16BaseExp = Math.pow(16, 3); // 4096
-      
-      // Set Exp to be 10 points away from Lv 16
-      // In the game logic, 'exp' field is relative to current level base?
-      // Let's check shared/utils/experience.ts again.
-      // Yes: const totalExp = currentBaseExp + newPokemon.exp;
-      // So newPokemon.exp = (Total Exp) - (Current Level Base Exp)
-      
-      const targetTotalExp = lv16BaseExp - 10;
-      const relativeExp = targetTotalExp - lv15BaseExp; // 4096 - 10 - 3375 = 711
-      
-      charmander.level = targetLevel;
-      charmander.exp = relativeExp;
-      charmander.nextLevelExp = lv16BaseExp; // Absolute value for next level threshold
-      
-      // Recalculate stats
-      const { stats, maxHp } = calculateStats(
-        charmander.baseStats, 
-        charmander.ivs, 
-        charmander.evs, 
-        targetLevel
-      );
-      
-      charmander.stats = stats;
-      charmander.maxHp = maxHp;
-      charmander.currentHp = maxHp; // Full heal
-      
-      state.logs.push({
-        id: crypto.randomUUID(),
-        message: '作弊生效：小火龙已调整至 Lv.15 (经验值 99%)',
-        timestamp: Date.now(),
-        type: 'urgent'
-      });
-      
-      console.log('修改完成！请查看游戏日志。');
-    }));
-  };
-
-  // @ts-ignore
-  window.cheat_charmander_lv35 = () => {
+  (window as any).cheat_charmander_lv35 = () => {
     useGameStore.setState(produce((state) => {
       // @ts-ignore
       const index = state.playerParty.findIndex((p: any) => p.speciesData.pokedexId === 4);
@@ -1222,7 +1162,7 @@ if (typeof window !== 'undefined') {
       }
 
       const charmander = state.playerParty[index];
-      console.log('正在为小火龙注入大量经验...');
+      console.log('正在为小火龙注入大量经验 (Target: Lv.35)...');
 
       const lv36BaseExp = Math.pow(36, 3);
       const targetTotalExp = lv36BaseExp - 10;
@@ -1259,4 +1199,5 @@ if (typeof window !== 'undefined') {
       console.log('修改完成！Lv.35 达成，技能已更新。');
     }));
   };
+  console.log("CHEAT LOADED: window.cheat_charmander_lv35()");
 }
