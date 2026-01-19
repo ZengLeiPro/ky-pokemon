@@ -15,6 +15,7 @@ app.use('*', cors({
     'http://localhost:5173', 
     'http://localhost:3000',
     'https://pkm.kaiyan.net',
+    'http://pkm.kaiyan.net',
     'https://ky-pokemon.vercel.app'
   ],
   credentials: true
