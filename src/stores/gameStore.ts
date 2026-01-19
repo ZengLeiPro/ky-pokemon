@@ -1209,4 +1209,54 @@ if (typeof window !== 'undefined') {
       console.log('修改完成！请查看游戏日志。');
     }));
   };
+
+  // @ts-ignore
+  window.cheat_charmander_lv35 = () => {
+    useGameStore.setState(produce((state) => {
+      // @ts-ignore
+      const index = state.playerParty.findIndex((p: any) => p.speciesData.pokedexId === 4);
+      
+      if (index === -1) {
+        console.log('未在队伍中找到小火龙！');
+        return;
+      }
+
+      const charmander = state.playerParty[index];
+      console.log('正在为小火龙注入大量经验...');
+
+      const lv36BaseExp = Math.pow(36, 3);
+      const targetTotalExp = lv36BaseExp - 10;
+      const currentTotalExp = Math.pow(charmander.level, 3) + charmander.exp;
+      const expNeeded = targetTotalExp - currentTotalExp;
+      
+      if (expNeeded <= 0) {
+        console.log('小火龙等级过高，无需调整。');
+        return;
+      }
+
+      const result = gainExperience(charmander, expNeeded);
+      
+      state.playerParty[index] = result.updatedPokemon;
+      state.playerParty[index].currentHp = state.playerParty[index].maxHp;
+      state.playerParty[index].moves.forEach((m: any) => m.ppCurrent = m.move.ppMax);
+
+      state.logs.push({
+        id: crypto.randomUUID(),
+        message: `作弊生效：小火龙已升至 Lv.${result.updatedPokemon.level} (Exp 99%)`,
+        timestamp: Date.now(),
+        type: 'urgent'
+      });
+
+      if (result.learnedMoves.length > 0) {
+        state.logs.push({
+          id: crypto.randomUUID(),
+          message: `习得新技能：${result.learnedMoves.join(', ')}`,
+          timestamp: Date.now(),
+          type: 'urgent'
+        });
+      }
+      
+      console.log('修改完成！Lv.35 达成，技能已更新。');
+    }));
+  };
 }
