@@ -9,9 +9,15 @@ game.use('/*', authMiddleware);
 
 game.get('/save', async (c) => {
   const user = c.get('user');
+  const mode = c.req.query('mode') || 'NORMAL';
   
   const save = await db.gameSave.findUnique({
-    where: { userId: user.userId }
+    where: { 
+      userId_mode: {
+        userId: user.userId,
+        mode: mode
+      }
+    }
   });
 
   if (!save) {
@@ -41,12 +47,19 @@ game.post('/save', async (c) => {
     return c.json({ success: false, error: '存档数据格式错误' }, 400);
   }
 
-  const { team, pcBox, currentLocationId, badges, pokedex, inventory, money, playTime } = parsed.data;
+  const { team, pcBox, currentLocationId, badges, pokedex, inventory, money, playTime, mode } = parsed.data;
+  const saveMode = mode || 'NORMAL';
 
   const save = await db.gameSave.upsert({
-    where: { userId: user.userId },
+    where: { 
+      userId_mode: {
+        userId: user.userId,
+        mode: saveMode
+      }
+    },
     create: {
       userId: user.userId,
+      mode: saveMode,
       team: JSON.stringify(team),
       pcBox: JSON.stringify(pcBox),
       currentLocation: currentLocationId,
@@ -73,9 +86,15 @@ game.post('/save', async (c) => {
 
 game.delete('/save', async (c) => {
   const user = c.get('user');
+  const mode = c.req.query('mode') || 'NORMAL';
   
   await db.gameSave.delete({
-    where: { userId: user.userId }
+    where: { 
+      userId_mode: {
+        userId: user.userId,
+        mode: mode
+      }
+    }
   }).catch(() => null);
 
   return c.json({ success: true });

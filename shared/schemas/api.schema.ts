@@ -40,6 +40,7 @@ export const SaveGameRequestSchema = z.object({
   inventory: z.array(InventoryItemSchema).optional(),
   money: z.number().int().min(0).optional(),
   playTime: z.number().int().min(0).optional(),
+  mode: z.enum(['NORMAL', 'CHEAT']).optional().default('NORMAL')
 });
 
 // 类型推导

@@ -81,6 +81,9 @@ interface GameState {
     caughtPokemonId?: string;
   };
 
+  gameMode: 'NORMAL' | 'CHEAT';
+  setGameMode: (mode: 'NORMAL' | 'CHEAT') => void;
+
   setView: (view: ViewState) => void;
   setSelectedPokemon: (id: string | null) => void;
   addLog: (message: string, type?: LogEntry['type']) => void;
@@ -128,6 +131,9 @@ export const useGameStore = create<GameState>()(
   weatherDuration: 0,
   isGameLoading: false,
     inventory: initialInventory,
+    gameMode: 'NORMAL',
+
+    setGameMode: (mode) => set({ gameMode: mode }),
 
   evolution: {
     isEvolving: false,
@@ -1031,7 +1037,8 @@ export const useGameStore = create<GameState>()(
       }
     
       try {
-        const response = await fetch(`${API_URL}/save`, {
+        const mode = get().gameMode;
+        const response = await fetch(`${API_URL}/save?mode=${mode}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -1079,6 +1086,7 @@ export const useGameStore = create<GameState>()(
             'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({
+            mode: state.gameMode,
             team: state.playerParty,
             pcBox: state.playerStorage,
             currentLocationId: state.playerLocationId,
@@ -1152,6 +1160,12 @@ export const useGameStore = create<GameState>()(
 
 if (typeof window !== 'undefined') {
   (window as any).cheat_charmander_lv35 = () => {
+    const currentState = useGameStore.getState();
+    if (currentState.gameMode !== 'CHEAT') {
+      console.warn("作弊指令仅在 CHEAT 模式下可用。请在登录界面切换模式。");
+      return;
+    }
+
     useGameStore.setState(produce((state) => {
       // @ts-ignore
       const index = state.playerParty.findIndex((p: any) => p.speciesData.pokedexId === 4);
@@ -1194,6 +1208,16 @@ if (typeof window !== 'undefined') {
           timestamp: Date.now(),
           type: 'urgent'
         });
+      }
+
+      if (result.evolutionCandidate) {
+        state.logs.push(createLogEntry(`什么？ ${result.updatedPokemon.speciesName} 的样子...`, 'urgent'));
+        state.evolution = {
+          isEvolving: true,
+          pokemon: result.updatedPokemon,
+          targetSpeciesId: result.evolutionCandidate.targetSpeciesId,
+          stage: 'START'
+        };
       }
       
       console.log('修改完成！Lv.35 达成，技能已更新。');

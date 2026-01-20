@@ -7,7 +7,7 @@ const LoginView: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { login, error, clearError } = useAuthStore();
-  const { setView } = useGameStore();
+  const { setView, gameMode, setGameMode } = useGameStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,9 +42,36 @@ const LoginView: React.FC = () => {
 
         {/* Login Form */}
         <div className="bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 p-8">
-          <div className="flex items-center gap-3 mb-6">
-            <LogIn className="text-cyan-400" size={24} />
-            <h2 className="text-2xl font-bold text-white">登录</h2>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <LogIn className="text-cyan-400" size={24} />
+              <h2 className="text-2xl font-bold text-white">登录</h2>
+            </div>
+            
+            <div className="flex bg-slate-900 rounded-lg p-1 border border-slate-700">
+              <button
+                type="button"
+                onClick={() => setGameMode('NORMAL')}
+                className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
+                  gameMode === 'NORMAL' 
+                    ? 'bg-cyan-500 text-white shadow-lg' 
+                    : 'text-slate-500 hover:text-slate-300'
+                }`}
+              >
+                正常
+              </button>
+              <button
+                type="button"
+                onClick={() => setGameMode('CHEAT')}
+                className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
+                  gameMode === 'CHEAT' 
+                    ? 'bg-purple-500 text-white shadow-lg' 
+                    : 'text-slate-500 hover:text-slate-300'
+                }`}
+              >
+                作弊
+              </button>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
