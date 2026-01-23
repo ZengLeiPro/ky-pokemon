@@ -54,7 +54,7 @@ auth.put('/username', authMiddleware, async (c) => {
 
   const existing = await db.user.findUnique({ where: { username: newUsername } });
   if (existing && existing.id !== payload.userId) {
-    return c.json({ success: false, error: '用户名已存在' }, 409);
+    return c.json({ success: false, error: '用户已存在' }, 409);
   }
 
   const user = await db.user.update({
@@ -117,7 +117,7 @@ auth.post('/register', async (c) => {
 
   const existing = await db.user.findUnique({ where: { username } });
   if (existing) {
-    return c.json({ success: false, error: '用户名已存在' }, 409);
+    return c.json({ success: false, error: '用户已存在' }, 409);
   }
 
   const passwordHash = await bcrypt.hash(password, 10);

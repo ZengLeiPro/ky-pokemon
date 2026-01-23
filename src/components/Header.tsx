@@ -10,7 +10,7 @@ const Header: React.FC = () => {
 
   const handleReset = () => {
     if (window.confirm("确定要重置游戏吗？所有进度（等级、宝可梦、金钱、徽章）将被彻底删除！")) {
-      if (window.confirm("最后一次确认：该操作无法撤销！\n您真的要重新开始吗？")) {
+      if (window.confirm("最后一次确认：该操作无法撤销！\n你真的要重新开始吗？")) {
         resetGame();
         setView('ROAM');
         window.location.reload();
