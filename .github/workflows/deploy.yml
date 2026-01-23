@@ -201,15 +201,6 @@ jobs:
           echo "FC_URL=${FC_URL}" >> $GITHUB_OUTPUT
           echo "部署完成，函数 URL: ${FC_URL}"
 
-      - name: 更新 GitHub Variable (VITE_API_URL)
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-          FC_URL: ${{ steps.deploy.outputs.FC_URL }}
-        run: |
-          # 尝试更新 repository variable (需要权限)
-          echo "尝试自动更新 VITE_API_URL 为: ${FC_URL}/api"
-          gh variable set VITE_API_URL --body "${FC_URL}/api" || echo "Warning: 无法自动更新 VITE_API_URL，请手动设置。"
-
       - name: 等待服务就绪
         run: sleep 10
 
