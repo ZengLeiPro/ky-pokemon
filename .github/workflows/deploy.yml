@@ -65,17 +65,16 @@ jobs:
         working-directory: server
         run: npm run build
 
-      # - name: 创建 Shadow 数据库
-      #   run: PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE DATABASE shadow_db;"
+      - name: 创建 Shadow 数据库
+        run: PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE DATABASE shadow_db;"
 
       - name: 检查 Schema 与迁移同步
         working-directory: server
-        # env:
-        #   SHADOW_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/shadow_db?schema=public
         run: |
           npx prisma migrate diff \
             --from-migrations ./prisma/migrations \
             --to-schema-datamodel ./prisma/schema.prisma \
+            --shadow-database-url "postgresql://postgres:postgres@localhost:5432/shadow_db" \
             --exit-code || {
               echo "::error::Schema 与迁移不同步！请运行 prisma migrate dev 生成新的迁移文件。"
               exit 1
