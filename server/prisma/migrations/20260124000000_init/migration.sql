@@ -13,6 +13,7 @@ CREATE TABLE "User" (
 CREATE TABLE "GameSave" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "mode" TEXT NOT NULL DEFAULT 'NORMAL',
     "team" TEXT NOT NULL,
     "pcBox" TEXT NOT NULL,
     "currentLocation" TEXT NOT NULL,
@@ -31,7 +32,7 @@ CREATE TABLE "GameSave" (
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "GameSave_userId_key" ON "GameSave"("userId");
+CREATE UNIQUE INDEX "GameSave_userId_mode_key" ON "GameSave"("userId", "mode");
 
 -- AddForeignKey
 ALTER TABLE "GameSave" ADD CONSTRAINT "GameSave_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
