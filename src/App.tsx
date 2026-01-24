@@ -20,6 +20,7 @@ import LoginView from './components/auth/LoginView';
 import RegisterView from './components/auth/RegisterView';
 
 import { Toast } from './components/ui/Toast';
+import CheatConsole from './components/CheatConsole';
 
 const App: React.FC = () => {
   const { view, setView, hasSelectedStarter, isGameLoading, evolution } = useGameStore();
@@ -128,6 +129,7 @@ const App: React.FC = () => {
   return (
     <>
       <Toast />
+      <CheatConsole />
       {renderContent()}
     </>
   );
