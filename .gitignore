@@ -15,6 +15,11 @@ server/dist
 .env
 *.tsbuildinfo
 
+# Database files
+*.db
+*.db-journal
+server/prisma/dev.db*
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

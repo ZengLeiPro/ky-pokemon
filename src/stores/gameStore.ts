@@ -1077,7 +1077,23 @@ export const useGameStore = create<GameState>()(
       if (!token) return;
 
       const state = get();
-      
+
+      const saveData = {
+        mode: state.gameMode,
+        team: state.playerParty,
+        pcBox: state.playerStorage,
+        currentLocationId: state.playerLocationId,
+        badges: state.badges,
+        pokedex: state.pokedex,
+        inventory: state.inventory.map(item => {
+            const { effect, ...rest } = item;
+            return rest;
+        }),
+        money: state.playerMoney
+      };
+
+      console.log('Saving game data:', saveData);
+
       try {
         const response = await fetch(`${API_URL}/save`, {
           method: 'POST',
@@ -1085,25 +1101,16 @@ export const useGameStore = create<GameState>()(
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify({
-            mode: state.gameMode,
-            team: state.playerParty,
-            pcBox: state.playerStorage,
-            currentLocationId: state.playerLocationId,
-            badges: state.badges,
-            pokedex: state.pokedex,
-            inventory: state.inventory.map(item => {
-                const { effect, ...rest } = item;
-                return rest;
-            }),
-            money: state.playerMoney
-          })
+          body: JSON.stringify(saveData)
         });
-    
+
         const result = await response.json();
-        
+
         if (!result.success) {
           console.error('Save failed:', result.error);
+          if (result.details) {
+            console.error('Validation errors:', result.details);
+          }
         }
       } catch (error) {
         console.error('Failed to save game:', error);

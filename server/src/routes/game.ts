@@ -41,10 +41,11 @@ game.get('/save', async (c) => {
 game.post('/save', async (c) => {
   const user = c.get('user');
   const body = await c.req.json();
-  
+
   const parsed = SaveGameRequestSchema.safeParse(body);
   if (!parsed.success) {
-    return c.json({ success: false, error: '存档数据格式错误' }, 400);
+    console.error('Save validation failed:', JSON.stringify(parsed.error.format(), null, 2));
+    return c.json({ success: false, error: '存档数据格式错误', details: parsed.error.format() }, 400);
   }
 
   const { team, pcBox, currentLocationId, badges, pokedex, inventory, money, playTime, mode } = parsed.data;

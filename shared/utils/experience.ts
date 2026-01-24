@@ -39,6 +39,15 @@ export const gainExperience = (
     // Next Level Threshold = (Level+1)^3 (absolute total exp)
     
     while (true) {
+        // 检查是否已达到最大等级
+        if (newPokemon.level >= 100) {
+            newPokemon.level = 100;
+            newPokemon.exp = 0;
+            newPokemon.nextLevelExp = Math.pow(101, 3) - Math.pow(100, 3);
+            finalLevel = 100;
+            break;
+        }
+
         const currentBaseExp = Math.pow(newPokemon.level, 3);
         const totalExp = currentBaseExp + newPokemon.exp; // Absolute total exp
         const nextLevelThreshold = Math.pow(newPokemon.level + 1, 3);
@@ -47,7 +56,7 @@ export const gainExperience = (
             newPokemon.level++;
             // Calculate overflow relative to NEW level base
             const newBaseExp = Math.pow(newPokemon.level, 3);
-            newPokemon.exp = totalExp - newBaseExp; 
+            newPokemon.exp = totalExp - newBaseExp;
             newPokemon.nextLevelExp = Math.pow(newPokemon.level + 1, 3);
             leveledUp = true;
         } else {
