@@ -1,5 +1,5 @@
-import type { Pokemon, Move } from '../../../shared/types/pokemon';
-import type { BattleState, BattleAction, TurnResult, TurnEvent, PokemonBattleState } from '../../../shared/types/social';
+import type { Pokemon, Move } from '../../../shared/types/pokemon.js';
+import type { BattleState, BattleAction, TurnResult, TurnEvent, PokemonBattleState } from '../../../shared/types/social.js';
 
 // 从 shared/utils/damage.ts 复用的伤害计算逻辑
 export interface DamageResult {
@@ -129,16 +129,14 @@ export function processTurn(
 ): ProcessTurnResult {
   const events: TurnEvent[] = [];
   let winnerId: string | null = null;
-  let challengerAlive: boolean;
-  let opponentAlive: boolean;
 
   // 获取当前出战的宝可梦
   const challengerPokemon = challengerTeam[state.challengerActive];
   const opponentPokemon = opponentTeam[state.opponentActive];
 
   // 检查是否有人已经输了
-  const challengerAlive = state.challengerTeamState[state.challengerActive].currentHp > 0;
-  const opponentAlive = state.opponentTeamState[state.opponentActive].currentHp > 0;
+  let challengerAlive = state.challengerTeamState[state.challengerActive].currentHp > 0;
+  let opponentAlive = state.opponentTeamState[state.opponentActive].currentHp > 0;
 
   if (!challengerAlive || !opponentAlive) {
     // 处理已经分出胜负的情况
@@ -361,8 +359,8 @@ export function processTurn(
   }
 
   // 检查胜负
-  challengerAlive = newState.challengerTeamState.some((s) => s.currentHp > 0);
-  opponentAlive = newState.opponentTeamState.some((s) => s.currentHp > 0);
+  challengerAlive = newState.challengerTeamState.some((s: PokemonBattleState) => s.currentHp > 0);
+  opponentAlive = newState.opponentTeamState.some((s: PokemonBattleState) => s.currentHp > 0);
 
   if (!challengerAlive && !opponentAlive) {
     events.push({ type: 'faint', message: '平局！' });
