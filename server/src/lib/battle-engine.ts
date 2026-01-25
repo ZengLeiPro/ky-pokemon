@@ -218,7 +218,7 @@ export function processTurn(
       case 'switch': {
         const newIndex = action.action.switchToIndex!;
         const targetTeam = action.team === 'challenger' ? challengerTeam : opponentTeam;
-        const targetState = action.team === 'challenger' ? newState.challengerTeamState : newState.opponentState;
+        const targetState = action.team === 'challenger' ? newState.challengerTeamState : newState.opponentTeamState;
 
         // 检查目标宝可梦是否可用
         if (newIndex >= targetTeam.length || newState[action.team === 'challenger' ? 'challengerTeamState' : 'opponentTeamState'][newIndex].currentHp <= 0) {
