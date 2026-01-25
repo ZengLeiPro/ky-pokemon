@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
-import { Compass, HardDrive, Moon, Navigation, ShoppingBag, House, Heart, Swords } from 'lucide-react';
+import { Compass, HardDrive, Moon, Navigation, ShoppingBag, House, Heart, Swords, Users, ArrowLeftRight } from 'lucide-react';
 import { WORLD_MAP, SPECIES_DATA } from '../../constants';
 
 const RoamStage: React.FC = () => {
@@ -185,6 +185,14 @@ const RoamStage: React.FC = () => {
                 </button>
 
                 <button
+                    onClick={() => setView('FRIENDS')}
+                    className="bg-purple-600/90 hover:bg-purple-600 active:bg-purple-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-purple-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
+                >
+                    <Users size={18} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold">好友</span>
+                </button>
+
+                <button
                     onClick={() => {
                         if (hasGym) {
                             setShowGym(true);
@@ -280,6 +288,16 @@ const RoamStage: React.FC = () => {
                  >
                   <Heart size={18} className="text-pink-300 fill-pink-300 animate-pulse" />
                   治疗宝可梦
+                </button>
+                <button
+                  onClick={() => {
+                    setShowPokeCenter(false);
+                    setView('TRADE');
+                  }}
+                  className="w-full bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white py-3 px-4 rounded-xl font-bold transition-all shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2"
+                >
+                  <ArrowLeftRight size={18} className="text-emerald-300" />
+                  交换柜台
                 </button>
                 <button
                   onClick={() => setShowPokeCenter(false)}

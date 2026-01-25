@@ -3,7 +3,22 @@ export * from '@shared/types';
 import { ItemCategory, Pokemon } from '@shared/types';
 
 // 前端特有类型
-export type ViewState = 'ROAM' | 'BATTLE' | 'TEAM' | 'BAG' | 'PROFILE' | 'DEX' | 'SUMMARY' | 'LOGIN' | 'REGISTER' | 'PC_BOX';
+export type ViewState =
+  | 'ROAM'
+  | 'BATTLE'
+  | 'TEAM'
+  | 'BAG'
+  | 'PROFILE'
+  | 'DEX'
+  | 'SUMMARY'
+  | 'LOGIN'
+  | 'REGISTER'
+  | 'PC_BOX'
+  // 社交视图
+  | 'FRIENDS'      // 好友列表
+  | 'CHAT'         // 聊天界面
+  | 'PVP_BATTLE'   // PvP 对战
+  | 'TRADE';       // 交换界面
 
 export interface LogEntry {
   id: string;

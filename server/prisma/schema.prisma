@@ -14,8 +14,24 @@ model User {
   passwordHash String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  
+
   gameSaves    GameSave[]
+
+  // 好友关系
+  friends     Friendship[] @relation("UserFriends")
+  friendOf    Friendship[] @relation("FriendOf")
+
+  // 消息
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+
+  // 交换
+  initiatedTrades TradeRequest[] @relation("InitiatedTrades")
+  receivedTrades  TradeRequest[] @relation("ReceivedTrades")
+
+  // 对战
+  challengerBattles Battle[] @relation("ChallengerBattles")
+  opponentBattles   Battle[] @relation("OpponentBattles")
 }
 
 model GameSave {
@@ -38,4 +54,120 @@ model GameSave {
   updatedAt       DateTime @updatedAt
 
   @@unique([userId, mode])
+}
+
+// ========== 好友关系 ==========
+model Friendship {
+  id         String   @id @default(uuid())
+  userId     String
+  friendId   String
+  user       User     @relation("UserFriends", fields: [userId], references: [id], onDelete: Cascade)
+  friend     User     @relation("FriendOf", fields: [friendId], references: [id], onDelete: Cascade)
+  status     String   @default("pending")  // pending | accepted | rejected
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, friendId])
+  @@index([userId])
+  @@index([friendId])
+  @@index([status])
+}
+
+// ========== 私信消息 ==========
+model Message {
+  id         String    @id @default(uuid())
+  senderId   String
+  receiverId String
+  sender     User      @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User      @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  content    String
+  readAt     DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([createdAt])
+}
+
+// ========== 宝可梦交换请求 ==========
+model TradeRequest {
+  id              String   @id @default(uuid())
+  initiatorId     String
+  receiverId      String
+  initiator       User     @relation("InitiatedTrades", fields: [initiatorId], references: [id], onDelete: Cascade)
+  receiver        User     @relation("ReceivedTrades", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  // 发起者提供的宝可梦（存储宝可梦快照）
+  offeredPokemon  String   // { pokemonId: string, snapshot: Pokemon } JSON
+
+  // 请求的宝可梦类型/名称（可选，用于公开交换）
+  requestedType   String?
+
+  // 状态
+  status          String   @default("pending")  // pending | accepted | completed | rejected | cancelled
+
+  // 接收者选择的宝可梦（接受时填写）
+  receiverPokemon String?  // { pokemonId: string, snapshot: Pokemon } JSON
+
+  // 附言
+  message         String?
+
+  // 是否公开（宝可梦中心可见）
+  isPublic        Boolean  @default(false)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([initiatorId])
+  @@index([receiverId])
+  @@index([status])
+  @@index([isPublic])
+}
+
+// ========== PvP 对战 ==========
+model Battle {
+  id              String   @id @default(uuid())
+  challengerId    String
+  opponentId      String
+  challenger      User     @relation("ChallengerBattles", fields: [challengerId], references: [id], onDelete: Cascade)
+  opponent        User     @relation("OpponentBattles", fields: [opponentId], references: [id], onDelete: Cascade)
+
+  // 状态
+  status          String   @default("pending")  // pending | active | finished | cancelled
+
+  // 对战快照（开始时复制双方队伍）
+  challengerTeam  String   // Pokemon[] JSON
+  opponentTeam    String?  // Pokemon[] JSON（接受后填写）
+
+  // 当前对战状态
+  currentState    String?  // BattleState JSON
+  currentTurn     Int      @default(0)
+
+  // 双方本回合提交的行动
+  challengerAction String?  // BattleAction JSON
+  opponentAction   String?  // BattleAction JSON
+
+  // 结果
+  winnerId        String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  turnLogs        BattleTurnLog[]
+
+  @@index([challengerId])
+  @@index([opponentId])
+  @@index([status])
+}
+
+// 对战回合日志
+model BattleTurnLog {
+  id        String   @id @default(uuid())
+  battleId  String
+  battle    Battle   @relation(fields: [battleId], references: [id], onDelete: Cascade)
+  turn      Int
+  log       String   // TurnResult JSON
+  createdAt DateTime @default(now())
+
+  @@index([battleId])
 }

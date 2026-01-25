@@ -5,6 +5,10 @@ import { logger } from 'hono/logger';
 
 import auth from './routes/auth.js';
 import game from './routes/game.js';
+import friend from './routes/friend.js';
+import chat from './routes/chat.js';
+import trade from './routes/trade.js';
+import battle from './routes/battle.js';
 import internal from './routes/internal.js';
 
 const app = new Hono();
@@ -23,6 +27,10 @@ app.use('*', cors({
 
 app.route('/api/auth', auth);
 app.route('/api/game', game);
+app.route('/api/friend', friend);
+app.route('/api/chat', chat);
+app.route('/api/trade', trade);
+app.route('/api/battle', battle);
 app.route('/api/internal', internal);
 
 app.get('/health', (c) => c.json({ status: 'ok' }));

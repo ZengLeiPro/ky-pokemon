@@ -19,6 +19,12 @@ import EvolutionView from './components/stages/EvolutionView';
 import LoginView from './components/auth/LoginView';
 import RegisterView from './components/auth/RegisterView';
 
+// Social Views
+import FriendsView from './components/social/FriendsView';
+import ChatView from './components/social/ChatView';
+import TradeView from './components/social/TradeView';
+import { PvPBattleView } from './components/social/PvPBattleView';
+
 import { Toast } from './components/ui/Toast';
 import CheatConsole from './components/CheatConsole';
 
@@ -71,6 +77,21 @@ const App: React.FC = () => {
         return <SummaryView />;
       case 'PC_BOX':
         return <PCBoxView />;
+      case 'FRIENDS':
+        return <FriendsView />;
+      case 'CHAT':
+        return <ChatView />;
+      case 'TRADE':
+        return <TradeView />;
+      case 'PVP_BATTLE': {
+        // 从 localStorage 获取当前对战 ID
+        const battleId = localStorage.getItem('currentBattleId');
+        if (battleId) {
+          localStorage.removeItem('currentBattleId');
+          return <PvPBattleView battleId={battleId} />;
+        }
+        return <FriendsView />;
+      }
       case 'TEAM':
       case 'BAG':
       case 'PROFILE':
@@ -85,6 +106,7 @@ const App: React.FC = () => {
   const showNavDock = !isChoosingStarter && ['ROAM', 'TEAM', 'BAG', 'PROFILE', 'DEX'].includes(view);
   const showMessageBox = !isChoosingStarter && (view === 'ROAM' || view === 'BATTLE');
   const showControlPad = !isChoosingStarter && view === 'BATTLE';
+  const showHeader = !isChoosingStarter && !['FRIENDS', 'CHAT', 'PVP_BATTLE', 'TRADE'].includes(view);
 
   const renderContent = () => {
     // 认证页面使用全屏布局，无需 Header 和 Footer
@@ -108,7 +130,7 @@ const App: React.FC = () => {
     return (
       <div className="h-screen w-screen flex flex-col bg-black max-w-md mx-auto shadow-2xl overflow-hidden relative">
         {/* Top Header (HUD) */}
-        <Header />
+        {showHeader && <Header />}
 
         {/* Main Viewport */}
         <main className="flex-grow relative overflow-hidden bg-slate-900 z-10">
