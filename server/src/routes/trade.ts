@@ -1,10 +1,10 @@
 import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
-import { db } from '../lib/db';
-import { authMiddleware } from '../middleware/auth';
-import { createTradeRequestSchema, acceptTradeSchema } from '../../../shared/schemas/social.schema';
+import { db } from '../lib/db.js';
+import { authMiddleware } from '../middleware/auth.js';
+import { createTradeRequestSchema, acceptTradeSchema } from '../../../shared/schemas/social.schema.js';
 
-const trade = new Hono();
+const trade = new Hono<{ Variables: { user: { userId: string } } }>();
 
 trade.use('/*', authMiddleware);
 

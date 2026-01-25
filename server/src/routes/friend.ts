@@ -8,7 +8,7 @@ import {
   handleFriendRequestSchema
 } from '../../../shared/schemas/social.schema.js';
 
-const friend = new Hono();
+const friend = new Hono<{ Variables: { user: { userId: string } } }>();
 
 // 所有路由都需要认证
 friend.use('/*', authMiddleware);

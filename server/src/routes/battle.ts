@@ -1,11 +1,11 @@
 import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
-import { db } from '../lib/db';
-import { authMiddleware } from '../middleware/auth';
-import { challengeBattleSchema, submitActionSchema } from '../../../shared/schemas/social.schema';
-import { processTurn } from '../lib/battle-engine';
+import { db } from '../lib/db.js';
+import { authMiddleware } from '../middleware/auth.js';
+import { challengeBattleSchema, submitActionSchema } from '../../../shared/schemas/social.schema.js';
+import { processTurn } from '../lib/battle-engine.js';
 
-const battle = new Hono();
+const battle = new Hono<{ Variables: { user: { userId: string } } }>();
 
 battle.use('/*', authMiddleware);
 

@@ -1,10 +1,10 @@
 import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
-import { db } from '../lib/db';
-import { authMiddleware } from '../middleware/auth';
-import { sendMessageSchema, getMessagesSchema } from '../../../shared/schemas/social.schema';
+import { db } from '../lib/db.js';
+import { authMiddleware } from '../middleware/auth.js';
+import { sendMessageSchema, getMessagesSchema } from '../../../shared/schemas/social.schema.js';
 
-const chat = new Hono();
+const chat = new Hono<{ Variables: { user: { userId: string } } }>();
 
 chat.use('/*', authMiddleware);
 

@@ -1,4 +1,4 @@
-import type { Pokemon } from './pokemon';
+import type { Pokemon } from './pokemon.js';
 
 // ========== 好友系统类型 ==========
 
