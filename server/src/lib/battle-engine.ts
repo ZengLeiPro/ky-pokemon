@@ -129,6 +129,8 @@ export function processTurn(
 ): ProcessTurnResult {
   const events: TurnEvent[] = [];
   let winnerId: string | null = null;
+  let challengerAlive: boolean;
+  let opponentAlive: boolean;
 
   // 获取当前出战的宝可梦
   const challengerPokemon = challengerTeam[state.challengerActive];
@@ -359,8 +361,8 @@ export function processTurn(
   }
 
   // 检查胜负
-  const challengerAlive = newState.challengerTeamState.some(s => s.currentHp > 0);
-  const opponentAlive = newState.opponentTeamState.some(s => s.currentHp > 0);
+  challengerAlive = newState.challengerTeamState.some((s) => s.currentHp > 0);
+  opponentAlive = newState.opponentTeamState.some((s) => s.currentHp > 0);
 
   if (!challengerAlive && !opponentAlive) {
     events.push({ type: 'faint', message: '平局！' });
