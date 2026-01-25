@@ -118,7 +118,7 @@ friend.get('/pending', async (c) => {
 
   const result = requests.map(r => ({
     id: r.id,
-    fromUserId: r.user.userId,
+    fromUserId: r.user.id,
     fromUsername: r.user.username,
     createdAt: r.createdAt.toISOString()
   }));
