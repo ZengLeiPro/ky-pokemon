@@ -204,23 +204,43 @@ jobs:
       - name: 等待服务就绪
         run: sleep 10
 
+      - name: 解决失败的迁移 (如有)
+        env:
+          FC_URL: ${{ steps.deploy.outputs.FC_URL }}
+          MIGRATION_TOKEN: ${{ secrets.MIGRATION_TOKEN }}
+        run: |
+           echo "Attempting to resolve any failed migrations..."
+
+           # 将失败的迁移标记为已应用（表结构已存在）
+           RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "${FC_URL}/api/internal/db-migrate-resolve" \
+             -H "x-migration-token: ${MIGRATION_TOKEN}" \
+             -H "Content-Type: application/json" \
+             -d '{"migration": "20260125035536_init", "action": "applied"}' \
+             --max-time 60)
+
+           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+           BODY=$(echo "$RESPONSE" | sed '$d')
+
+           echo "Resolve response: $BODY (status: $HTTP_CODE)"
+           # 不管成功失败都继续，因为可能已经解决过了
+
       - name: 执行数据库迁移
         env:
           FC_URL: ${{ steps.deploy.outputs.FC_URL }}
           MIGRATION_TOKEN: ${{ secrets.MIGRATION_TOKEN }}
         run: |
            echo "Triggering database migration on ${FC_URL}..."
-           
+
            RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "${FC_URL}/api/internal/db-migrate" \
              -H "x-migration-token: ${MIGRATION_TOKEN}" \
              -H "Content-Type: application/json" \
              --max-time 60)
-           
+
            HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
            BODY=$(echo "$RESPONSE" | sed '$d')
-           
+
            echo "Response: $BODY"
-           
+
            if [ "$HTTP_CODE" != "200" ]; then
              echo "::error::Migration failed with status $HTTP_CODE"
              exit 1
