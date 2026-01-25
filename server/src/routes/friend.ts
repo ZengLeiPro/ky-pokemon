@@ -22,7 +22,7 @@ friend.get('/search', zValidator('query', searchUserSchema), async (c) => {
   const users = await db.user.findMany({
     where: {
       username: { contains: query, mode: 'insensitive' },
-      id: { not: user.id }
+      id: { not: user.userId }
     },
     select: { id: true, username: true },
     take: 20
@@ -32,8 +32,8 @@ friend.get('/search', zValidator('query', searchUserSchema), async (c) => {
   const friendships = await db.friendship.findMany({
     where: {
       OR: [
-        { userId: user.id },
-        { friendId: user.id }
+        { userId: user.userId },
+        { friendId: user.userId }
       ]
     }
   });
@@ -60,7 +60,7 @@ friend.post('/request', zValidator('json', sendFriendRequestSchema), async (c) =
   const { targetUserId } = c.req.valid('json');
 
   // 不能添加自己
-  if (targetUserId === user.id) {
+  if (targetUserId === user.userId) {
     return c.json({ success: false, error: '不能添加自己为好友' }, 400);
   }
 
@@ -74,8 +74,8 @@ friend.post('/request', zValidator('json', sendFriendRequestSchema), async (c) =
   const existing = await db.friendship.findFirst({
     where: {
       OR: [
-        { userId: user.id, friendId: targetUserId },
-        { userId: targetUserId, friendId: user.id }
+        { userId: user.userId, friendId: targetUserId },
+        { userId: targetUserId, friendId: user.userId }
       ]
     }
   });
@@ -92,7 +92,7 @@ friend.post('/request', zValidator('json', sendFriendRequestSchema), async (c) =
   // 创建好友请求
   const friendship = await db.friendship.create({
     data: {
-      userId: user.id,
+      userId: user.userId,
       friendId: targetUserId,
       status: 'pending'
     }
@@ -107,7 +107,7 @@ friend.get('/pending', async (c) => {
 
   const requests = await db.friendship.findMany({
     where: {
-      friendId: user.id,
+      friendId: user.userId,
       status: 'pending'
     },
     include: {
@@ -118,7 +118,7 @@ friend.get('/pending', async (c) => {
 
   const result = requests.map(r => ({
     id: r.id,
-    fromUserId: r.user.id,
+    fromUserId: r.user.userId,
     fromUsername: r.user.username,
     createdAt: r.createdAt.toISOString()
   }));
@@ -134,7 +134,7 @@ friend.post('/request/:id/accept', async (c) => {
   const friendship = await db.friendship.findFirst({
     where: {
       id: requestId,
-      friendId: user.id,
+      friendId: user.userId,
       status: 'pending'
     }
   });
@@ -159,7 +159,7 @@ friend.post('/request/:id/reject', async (c) => {
   const friendship = await db.friendship.findFirst({
     where: {
       id: requestId,
-      friendId: user.id,
+      friendId: user.userId,
       status: 'pending'
     }
   });
@@ -183,8 +183,8 @@ friend.get('/list', async (c) => {
   const friendships = await db.friendship.findMany({
     where: {
       OR: [
-        { userId: user.id, status: 'accepted' },
-        { friendId: user.id, status: 'accepted' }
+        { userId: user.userId, status: 'accepted' },
+        { friendId: user.userId, status: 'accepted' }
       ]
     },
     include: {
@@ -195,7 +195,7 @@ friend.get('/list', async (c) => {
   });
 
   const friends = friendships.map(f => {
-    const friendUser = f.userId === user.id ? f.friend : f.user;
+    const friendUser = f.userId === user.userId ? f.friend : f.user;
     return {
       id: f.id,
       odId: friendUser.id,
@@ -217,8 +217,8 @@ friend.delete('/:friendshipId', async (c) => {
     where: {
       id: friendshipId,
       OR: [
-        { userId: user.id },
-        { friendId: user.id }
+        { userId: user.userId },
+        { friendId: user.userId }
       ],
       status: 'accepted'
     }

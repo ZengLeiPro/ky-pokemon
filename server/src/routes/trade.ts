@@ -86,7 +86,7 @@ trade.post('/request', zValidator('json', createTradeRequestSchema), async (c) =
   const { receiverId, pokemonId, requestedType, message, isPublic } = c.req.valid('json');
 
   // 不能和自己交换
-  if (receiverId === user.id) {
+  if (receiverId === user.userId) {
     return c.json({ success: false, error: '不能和自己交换' }, 400);
   }
 
@@ -101,8 +101,8 @@ trade.post('/request', zValidator('json', createTradeRequestSchema), async (c) =
     const friendship = await db.friendship.findFirst({
       where: {
         OR: [
-          { userId: user.id, friendId: receiverId, status: 'accepted' },
-          { userId: receiverId, friendId: user.id, status: 'accepted' }
+          { userId: user.userId, friendId: receiverId, status: 'accepted' },
+          { userId: receiverId, friendId: user.userId, status: 'accepted' }
         ]
       }
     });
@@ -112,7 +112,7 @@ trade.post('/request', zValidator('json', createTradeRequestSchema), async (c) =
   }
 
   // 获取要交换的宝可梦
-  const pokemon = await getPokemonFromSave(user.id, pokemonId);
+  const pokemon = await getPokemonFromSave(user.userId, pokemonId);
   if (!pokemon) {
     return c.json({ success: false, error: '宝可梦不存在' }, 404);
   }
@@ -120,7 +120,7 @@ trade.post('/request', zValidator('json', createTradeRequestSchema), async (c) =
   // 创建交换请求
   const tradeRequest = await db.tradeRequest.create({
     data: {
-      initiatorId: user.id,
+      initiatorId: user.userId,
       receiverId,
       offeredPokemon: JSON.stringify({ pokemonId, snapshot: pokemon }),
       requestedType,
@@ -158,7 +158,7 @@ trade.get('/pending', async (c) => {
 
   const requests = await db.tradeRequest.findMany({
     where: {
-      receiverId: user.id,
+      receiverId: user.userId,
       status: 'pending'
     },
     include: {
@@ -192,7 +192,7 @@ trade.get('/sent', async (c) => {
 
   const requests = await db.tradeRequest.findMany({
     where: {
-      initiatorId: user.id,
+      initiatorId: user.userId,
       status: { in: ['pending', 'accepted'] }
     },
     include: {
@@ -228,7 +228,7 @@ trade.get('/public', async (c) => {
     where: {
       isPublic: true,
       status: 'pending',
-      initiatorId: { not: user.id }  // 排除自己发起的
+      initiatorId: { not: user.userId }  // 排除自己发起的
     },
     include: {
       initiator: { select: { username: true } },
@@ -265,7 +265,7 @@ trade.post('/:id/accept', zValidator('json', acceptTradeSchema), async (c) => {
   const tradeRequest = await db.tradeRequest.findFirst({
     where: {
       id: tradeId,
-      receiverId: user.id,
+      receiverId: user.userId,
       status: 'pending'
     }
   });
@@ -275,7 +275,7 @@ trade.post('/:id/accept', zValidator('json', acceptTradeSchema), async (c) => {
   }
 
   // 获取接收者要交换的宝可梦
-  const pokemon = await getPokemonFromSave(user.id, pokemonId);
+  const pokemon = await getPokemonFromSave(user.userId, pokemonId);
   if (!pokemon) {
     return c.json({ success: false, error: '宝可梦不存在' }, 404);
   }
@@ -299,7 +299,7 @@ trade.post('/:id/confirm', async (c) => {
   const tradeRequest = await db.tradeRequest.findFirst({
     where: {
       id: tradeId,
-      initiatorId: user.id,
+      initiatorId: user.userId,
       status: 'accepted'
     }
   });
@@ -349,7 +349,7 @@ trade.post('/:id/reject', async (c) => {
   const tradeRequest = await db.tradeRequest.findFirst({
     where: {
       id: tradeId,
-      receiverId: user.id,
+      receiverId: user.userId,
       status: 'pending'
     }
   });
@@ -374,7 +374,7 @@ trade.post('/:id/cancel', async (c) => {
   const tradeRequest = await db.tradeRequest.findFirst({
     where: {
       id: tradeId,
-      initiatorId: user.id,
+      initiatorId: user.userId,
       status: { in: ['pending', 'accepted'] }
     }
   });

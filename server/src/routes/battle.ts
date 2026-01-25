@@ -26,7 +26,7 @@ battle.post('/challenge', zValidator('json', challengeBattleSchema), async (c) =
   const { opponentId } = c.req.valid('json');
 
   // 不能和自己对战
-  if (opponentId === user.id) {
+  if (opponentId === user.userId) {
     return c.json({ success: false, error: '不能和自己对战' }, 400);
   }
 
@@ -34,8 +34,8 @@ battle.post('/challenge', zValidator('json', challengeBattleSchema), async (c) =
   const friendship = await db.friendship.findFirst({
     where: {
       OR: [
-        { userId: user.id, friendId: opponentId, status: 'accepted' },
-        { userId: opponentId, friendId: user.id, status: 'accepted' }
+        { userId: user.userId, friendId: opponentId, status: 'accepted' },
+        { userId: opponentId, friendId: user.userId, status: 'accepted' }
       ]
     }
   });
@@ -48,8 +48,8 @@ battle.post('/challenge', zValidator('json', challengeBattleSchema), async (c) =
   const activeBattle = await db.battle.findFirst({
     where: {
       OR: [
-        { challengerId: user.id },
-        { opponentId: user.id }
+        { challengerId: user.userId },
+        { opponentId: user.userId }
       ],
       status: { in: ['pending', 'active'] }
     }
@@ -60,7 +60,7 @@ battle.post('/challenge', zValidator('json', challengeBattleSchema), async (c) =
   }
 
   // 获取挑战者队伍
-  const team = await getTeamFromSave(user.id);
+  const team = await getTeamFromSave(user.userId);
   if (!team || team.length === 0) {
     return c.json({ success: false, error: '队伍中没有宝可梦' }, 400);
   }
@@ -68,7 +68,7 @@ battle.post('/challenge', zValidator('json', challengeBattleSchema), async (c) =
   // 创建对战
   const newBattle = await db.battle.create({
     data: {
-      challengerId: user.id,
+      challengerId: user.userId,
       opponentId,
       challengerTeam: JSON.stringify(team)
     },
@@ -98,7 +98,7 @@ battle.get('/pending', async (c) => {
 
   const challenges = await db.battle.findMany({
     where: {
-      opponentId: user.id,
+      opponentId: user.userId,
       status: 'pending'
     },
     include: {
@@ -129,7 +129,7 @@ battle.post('/:id/accept', async (c) => {
   const battleRecord = await db.battle.findFirst({
     where: {
       id: battleId,
-      opponentId: user.id,
+      opponentId: user.userId,
       status: 'pending'
     }
   });
@@ -140,7 +140,7 @@ battle.post('/:id/accept', async (c) => {
 
   // 获取对手队伍
   const challengerTeam = JSON.parse(battleRecord.challengerTeam);
-  const opponentTeam = await getTeamFromSave(user.id);
+  const opponentTeam = await getTeamFromSave(user.userId);
 
   if (!opponentTeam || opponentTeam.length === 0) {
     return c.json({ success: false, error: '队伍中没有宝可梦' }, 400);
@@ -190,8 +190,8 @@ battle.get('/:id/state', async (c) => {
     where: {
       id: battleId,
       OR: [
-        { challengerId: user.id },
-        { opponentId: user.id }
+        { challengerId: user.userId },
+        { opponentId: user.userId }
       ]
     },
     include: {
@@ -208,7 +208,7 @@ battle.get('/:id/state', async (c) => {
     return c.json({ success: false, error: '对战不存在' }, 404);
   }
 
-  const isChallenger = battleRecord.challengerId === user.id;
+  const isChallenger = battleRecord.challengerId === user.userId;
 
   return c.json({
     success: true,
@@ -249,8 +249,8 @@ battle.post('/:id/action', zValidator('json', submitActionSchema), async (c) => 
       id: battleId,
       status: 'active',
       OR: [
-        { challengerId: user.id },
-        { opponentId: user.id }
+        { challengerId: user.userId },
+        { opponentId: user.userId }
       ]
     }
   });
@@ -259,7 +259,7 @@ battle.post('/:id/action', zValidator('json', submitActionSchema), async (c) => 
     return c.json({ success: false, error: '对战不存在或已结束' }, 404);
   }
 
-  const isChallenger = battleRecord.challengerId === user.id;
+  const isChallenger = battleRecord.challengerId === user.userId;
 
   // 检查是否已提交行动
   if (isChallenger && battleRecord.challengerAction) {
@@ -337,8 +337,8 @@ battle.post('/:id/surrender', async (c) => {
       id: battleId,
       status: 'active',
       OR: [
-        { challengerId: user.id },
-        { opponentId: user.id }
+        { challengerId: user.userId },
+        { opponentId: user.userId }
       ]
     }
   });
@@ -347,7 +347,7 @@ battle.post('/:id/surrender', async (c) => {
     return c.json({ success: false, error: '对战不存在或已结束' }, 404);
   }
 
-  const isChallenger = battleRecord.challengerId === user.id;
+  const isChallenger = battleRecord.challengerId === user.userId;
   const winnerId = isChallenger ? battleRecord.opponentId : battleRecord.challengerId;
 
   await db.battle.update({
@@ -369,7 +369,7 @@ battle.post('/:id/reject', async (c) => {
   const battleRecord = await db.battle.findFirst({
     where: {
       id: battleId,
-      opponentId: user.id,
+      opponentId: user.userId,
       status: 'pending'
     }
   });
@@ -393,8 +393,8 @@ battle.get('/active', async (c) => {
   const activeBattle = await db.battle.findFirst({
     where: {
       OR: [
-        { challengerId: user.id },
-        { opponentId: user.id }
+        { challengerId: user.userId },
+        { opponentId: user.userId }
       ],
       status: 'active'
     },
@@ -429,7 +429,7 @@ battle.post('/:id/cancel', async (c) => {
   const battleRecord = await db.battle.findFirst({
     where: {
       id: battleId,
-      challengerId: user.id,
+      challengerId: user.userId,
       status: 'pending'
     }
   });

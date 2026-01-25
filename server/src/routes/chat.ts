@@ -18,8 +18,8 @@ chat.get('/:friendId/messages', zValidator('query', getMessagesSchema), async (c
   const friendship = await db.friendship.findFirst({
     where: {
       OR: [
-        { userId: user.id, friendId: friendId, status: 'accepted' },
-        { userId: friendId, friendId: user.id, status: 'accepted' }
+        { userId: user.userId, friendId: friendId, status: 'accepted' },
+        { userId: friendId, friendId: user.userId, status: 'accepted' }
       ]
     }
   });
@@ -31,8 +31,8 @@ chat.get('/:friendId/messages', zValidator('query', getMessagesSchema), async (c
   // 构建查询条件
   const whereCondition: any = {
     OR: [
-      { senderId: user.id, receiverId: friendId },
-      { senderId: friendId, receiverId: user.id }
+      { senderId: user.userId, receiverId: friendId },
+      { senderId: friendId, receiverId: user.userId }
     ]
   };
 
@@ -61,7 +61,7 @@ chat.get('/:friendId/messages', zValidator('query', getMessagesSchema), async (c
     content: m.content,
     readAt: m.readAt?.toISOString() || null,
     createdAt: m.createdAt.toISOString(),
-    isOwn: m.senderId === user.id
+    isOwn: m.senderId === user.userId
   }));
 
   return c.json({ success: true, data: result });
@@ -77,8 +77,8 @@ chat.post('/:friendId/send', zValidator('json', sendMessageSchema), async (c) =>
   const friendship = await db.friendship.findFirst({
     where: {
       OR: [
-        { userId: user.id, friendId: friendId, status: 'accepted' },
-        { userId: friendId, friendId: user.id, status: 'accepted' }
+        { userId: user.userId, friendId: friendId, status: 'accepted' },
+        { userId: friendId, friendId: user.userId, status: 'accepted' }
       ]
     }
   });
@@ -89,7 +89,7 @@ chat.post('/:friendId/send', zValidator('json', sendMessageSchema), async (c) =>
 
   const message = await db.message.create({
     data: {
-      senderId: user.id,
+      senderId: user.userId,
       receiverId: friendId,
       content
     },
@@ -120,7 +120,7 @@ chat.get('/unread', async (c) => {
   const unreadMessages = await db.message.groupBy({
     by: ['senderId'],
     where: {
-      receiverId: user.id,
+      receiverId: user.userId,
       readAt: null
     },
     _count: true
@@ -145,7 +145,7 @@ chat.post('/:friendId/read', async (c) => {
   await db.message.updateMany({
     where: {
       senderId: friendId,
-      receiverId: user.id,
+      receiverId: user.userId,
       readAt: null
     },
     data: {
@@ -162,7 +162,7 @@ chat.get('/poll', async (c) => {
 
   const messages = await db.message.findMany({
     where: {
-      receiverId: user.id,
+      receiverId: user.userId,
       readAt: null
     },
     include: {
@@ -193,8 +193,8 @@ chat.get('/conversations', async (c) => {
   const friendships = await db.friendship.findMany({
     where: {
       OR: [
-        { userId: user.id, status: 'accepted' },
-        { friendId: user.id, status: 'accepted' }
+        { userId: user.userId, status: 'accepted' },
+        { friendId: user.userId, status: 'accepted' }
       ]
     },
     include: {
@@ -205,14 +205,14 @@ chat.get('/conversations', async (c) => {
 
   const conversations = await Promise.all(
     friendships.map(async f => {
-      const friendUser = f.userId === user.id ? f.friend : f.user;
+      const friendUser = f.userId === user.userId ? f.friend : f.user;
 
       // 获取最后一条消息
       const lastMessage = await db.message.findFirst({
         where: {
           OR: [
-            { senderId: user.id, receiverId: friendUser.id },
-            { senderId: friendUser.id, receiverId: user.id }
+            { senderId: user.userId, receiverId: friendUser.id },
+            { senderId: friendUser.id, receiverId: user.userId }
           ]
         },
         orderBy: { createdAt: 'desc' }
@@ -222,7 +222,7 @@ chat.get('/conversations', async (c) => {
       const unreadCount = await db.message.count({
         where: {
           senderId: friendUser.id,
-          receiverId: user.id,
+          receiverId: user.userId,
           readAt: null
         }
       });
