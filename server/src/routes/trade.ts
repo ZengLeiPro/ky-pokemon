@@ -351,16 +351,29 @@ trade.post('/:id/confirm', async (c) => {
   const user = c.get('user');
   const tradeId = c.req.param('id');
 
-  const tradeRequest = await db.tradeRequest.findFirst({
-    where: {
-      id: tradeId,
-      initiatorId: user.userId,
-      status: 'accepted'
-    }
+  console.log('confirm - userId:', user.userId, 'tradeId:', tradeId);
+
+  // 先查找请求
+  const tradeRequest = await db.tradeRequest.findUnique({
+    where: { id: tradeId }
   });
 
+  console.log('找到请求:', tradeRequest ? '是' : '否');
+  if (tradeRequest) {
+    console.log('initiatorId:', tradeRequest.initiatorId);
+    console.log('status:', tradeRequest.status);
+  }
+
   if (!tradeRequest) {
-    return c.json({ success: false, error: '交换请求不存在或状态不正确' }, 404);
+    return c.json({ success: false, error: '交换请求不存在' }, 404);
+  }
+
+  if (tradeRequest.initiatorId !== user.userId) {
+    return c.json({ success: false, error: '只有发起者可以确认交换' }, 403);
+  }
+
+  if (tradeRequest.status !== 'accepted') {
+    return c.json({ success: false, error: `交换状态为 ${tradeRequest.status}，无法确认` }, 400);
   }
 
   const offeredPokemon = JSON.parse(tradeRequest.offeredPokemon);
