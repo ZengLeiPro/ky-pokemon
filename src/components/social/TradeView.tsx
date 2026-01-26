@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useSocialStore } from '@/stores/socialStore';
 import { useGameStore } from '@/stores/gameStore';
+import type { TradeRequest } from '../../../shared/types/social';
+import type { Pokemon } from '@shared/types/pokemon';
 
 export default function TradeView() {
   const {
     receivedTradeRequests,
     sentTradeRequests,
     publicTradeRequests,
-    isLoading,
     error,
     loadReceivedTradeRequests,
     loadSentTradeRequests,
@@ -19,8 +20,11 @@ export default function TradeView() {
     clearError
   } = useSocialStore();
 
-  const setView = useGameStore(s => s.setView);
+  const { playerParty: team, playerStorage: pcBox, setView } = useGameStore();
+
   const [activeTab, setActiveTab] = useState<'received' | 'sent' | 'public'>('received');
+  const [selectingForRequest, setSelectingForRequest] = useState<TradeRequest | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     loadReceivedTradeRequests();
@@ -34,6 +38,13 @@ export default function TradeView() {
       return () => clearTimeout(timer);
     }
   }, [error]);
+
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => setSuccessMessage(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
 
   const getStatusText = (status: string) => {
     switch (status) {
@@ -57,24 +68,122 @@ export default function TradeView() {
     }
   };
 
+  // 显示所有宝可梦列表
+  const allPokemon = [...team, ...pcBox];
+  const [selectedPokemonId, setSelectedPokemonId] = useState<string | null>(null);
+
+  const handleStartSelect = (request: TradeRequest) => {
+    setSelectingForRequest(request);
+    setSelectedPokemonId(null);
+  };
+
+  const handleConfirmSelect = async () => {
+    if (!selectingForRequest || !selectedPokemonId) return;
+
+    const success = await acceptTradeRequest(selectingForRequest.id, selectedPokemonId);
+    if (success) {
+      setSuccessMessage('已接受交换，等待对方确认');
+      loadReceivedTradeRequests();
+      loadSentTradeRequests();
+    }
+    setSelectingForRequest(null);
+    setSelectedPokemonId(null);
+  };
+
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">交换中心</h1>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setView('ROAM')}
-            className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
-          >
-            返回游戏
-          </button>
-        </div>
+        <button
+          onClick={() => setView('ROAM')}
+          className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          返回游戏
+        </button>
       </div>
+
+      {/* 成功提示 */}
+      {successMessage && (
+        <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">
+          {successMessage}
+        </div>
+      )}
 
       {/* 错误提示 */}
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
           {error}
+        </div>
+      )}
+
+      {/* 宝可梦选择面板 */}
+      {selectingForRequest && (
+        <div className="mb-4 p-4 bg-blue-50 border-2 border-blue-500 rounded-lg">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-bold text-lg">
+              选择要与 {selectingForRequest.offeredPokemon.snapshot.speciesName} 交换的宝可梦
+            </h3>
+            <button
+              onClick={() => setSelectingForRequest(null)}
+              className="text-gray-500 hover:text-gray-700 text-xl"
+            >
+              ×
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto">
+            {allPokemon.map(pokemon => {
+              const hpPercent = (pokemon.currentHp / pokemon.maxHp) * 100;
+              const isSelected = selectedPokemonId === pokemon.id;
+              const isExcluded = selectingForRequest.offeredPokemon.pokemonId === pokemon.id;
+
+              return (
+                <div
+                  key={pokemon.id}
+                  onClick={() => !isExcluded && setSelectedPokemonId(pokemon.id)}
+                  className={`p-2 rounded cursor-pointer border-2 ${
+                    isExcluded
+                      ? 'border-gray-300 bg-gray-100 opacity-50'
+                      : isSelected
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:bg-gray-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{pokemon.speciesName}</span>
+                    <div className="flex-1">
+                      <div className="text-sm">{pokemon.nickname || pokemon.speciesName} Lv.{pokemon.level}</div>
+                      <div className="flex items-center gap-1 mt-1">
+                        <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full ${hpPercent > 50 ? 'bg-green-500' : hpPercent > 20 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                            style={{ width: `${hpPercent}%` }}
+                          />
+                        </div>
+                        <span className="text-xs text-gray-500">{pokemon.currentHp}/{pokemon.maxHp}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={() => setSelectingForRequest(null)}
+              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            >
+              取消
+            </button>
+            <button
+              onClick={handleConfirmSelect}
+              disabled={!selectedPokemonId}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+            >
+              确认选择
+            </button>
+          </div>
         </div>
       )}
 
@@ -131,17 +240,7 @@ export default function TradeView() {
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-gray-600">你将提供:</span>
                     {req.status === 'pending' ? (
-                      <button
-                        onClick={() => {
-                          // 存储当前选择的交换请求ID，弹出选择宝可梦弹窗
-                          localStorage.setItem('pendingTradeRequestId', req.id);
-                          // 跳转到选择宝可梦界面（这里暂时用 alert）
-                          alert(`请从背包/电脑中选择一只宝可梦与 ${req.offeredPokemon.snapshot.speciesName} 交换`);
-                        }}
-                        className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
-                      >
-                        选择宝可梦
-                      </button>
+                      <span className="text-sm text-gray-400">点击下方按钮选择</span>
                     ) : (
                       <div className="px-3 py-1 bg-blue-100 rounded text-sm">
                         {req.receiverPokemon?.snapshot.speciesName || '-'}
@@ -157,13 +256,10 @@ export default function TradeView() {
                 {req.status === 'pending' && (
                   <div className="flex gap-2">
                     <button
-                      onClick={() => {
-                        localStorage.setItem('pendingTradeRequestId', req.id);
-                        alert('请从背包/电脑中选择宝可梦');
-                      }}
-                      className="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                      onClick={() => handleStartSelect(req)}
+                      className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                     >
-                      接受交换
+                      选择宝可梦接受交换
                     </button>
                     <button
                       onClick={() => rejectTradeRequest(req.id)}
@@ -283,10 +379,7 @@ export default function TradeView() {
                 )}
 
                 <button
-                  onClick={() => {
-                    localStorage.setItem('publicTradeRequestId', req.id);
-                    alert('请从背包/电脑中选择宝可梦参与交换');
-                  }}
+                  onClick={() => alert('公开交换功能开发中')}
                   className="px-4 py-1 bg-purple-500 text-white rounded hover:bg-purple-600"
                 >
                   我要交换

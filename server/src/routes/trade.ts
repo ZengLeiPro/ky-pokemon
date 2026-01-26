@@ -23,7 +23,7 @@ async function getPokemonFromSave(userId: string, pokemonId: string, gameMode: s
   return allPokemon.find((p: any) => p.id === pokemonId);
 }
 
-// 辅助函数：从存档移除宝可梦
+// 辅助函数：从存档移除宝可梦（按ID）
 async function removePokemonFromSave(userId: string, pokemonId: string, gameMode: string = 'NORMAL') {
   const save = await db.gameSave.findUnique({
     where: { userId_mode: { userId, mode: gameMode } }
@@ -55,6 +55,61 @@ async function removePokemonFromSave(userId: string, pokemonId: string, gameMode
     }
   });
 
+  return true;
+}
+
+// 辅助函数：从存档移除宝可梦（按快照信息匹配）
+async function removePokemonBySnapshot(userId: string, snapshot: any, gameMode: string = 'NORMAL') {
+  const save = await db.gameSave.findUnique({
+    where: { userId_mode: { userId, mode: gameMode } }
+  });
+
+  if (!save) {
+    console.log('找不到存档:', userId);
+    return false;
+  }
+
+  const team = JSON.parse(save.team);
+  const pcBox = JSON.parse(save.pcBox);
+
+  console.log('移除宝可梦 - 用户:', userId);
+  console.log('快照:', snapshot.speciesName, 'Lv.' + snapshot.level);
+  console.log('队伍数量:', team.length, 'PC数量:', pcBox.length);
+
+  // 按物种名称+等级+昵称匹配
+  const { speciesName, level, nickname } = snapshot;
+  let teamIndex = team.findIndex((p: any) =>
+    p.speciesName === speciesName && p.level === level && p.nickname === nickname
+  );
+  let pcIndex = pcBox.findIndex((p: any) =>
+    p.speciesName === speciesName && p.level === level && p.nickname === nickname
+  );
+
+  console.log('找到位置 - 队伍索引:', teamIndex, 'PC索引:', pcIndex);
+
+  if (teamIndex !== -1) {
+    // 队伍中至少保留1只宝可梦
+    if (team.length <= 1) {
+      console.log('队伍只剩1只，无法移除');
+      return false;
+    }
+    team.splice(teamIndex, 1);
+  } else if (pcIndex !== -1) {
+    pcBox.splice(pcIndex, 1);
+  } else {
+    console.log('未找到匹配的宝可梦');
+    return false;
+  }
+
+  await db.gameSave.update({
+    where: { userId_mode: { userId, mode: gameMode } },
+    data: {
+      team: JSON.stringify(team),
+      pcBox: JSON.stringify(pcBox)
+    }
+  });
+
+  console.log('成功移除宝可梦');
   return true;
 }
 
@@ -312,14 +367,14 @@ trade.post('/:id/confirm', async (c) => {
   const receiverPokemon = JSON.parse(tradeRequest.receiverPokemon!);
 
   // 执行交换
-  // 1. 从发起者处移除宝可梦
-  const removed1 = await removePokemonFromSave(tradeRequest.initiatorId, offeredPokemon.pokemonId);
+  // 1. 从发起者处移除宝可梦（使用快照匹配，因为ID可能已变化）
+  const removed1 = await removePokemonBySnapshot(tradeRequest.initiatorId, offeredPokemon.snapshot);
   if (!removed1) {
     return c.json({ success: false, error: '无法移除发起者的宝可梦' }, 400);
   }
 
   // 2. 从接收者处移除宝可梦
-  const removed2 = await removePokemonFromSave(tradeRequest.receiverId, receiverPokemon.pokemonId);
+  const removed2 = await removePokemonBySnapshot(tradeRequest.receiverId, receiverPokemon.snapshot);
   if (!removed2) {
     // 回滚：把发起者的宝可梦加回去
     await addPokemonToSave(tradeRequest.initiatorId, offeredPokemon.snapshot);

@@ -29,7 +29,12 @@ export function PokemonSelectModal({
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    console.log('PokemonSelectModal: isOpen is false, not rendering');
+    return null;
+  }
+  console.log('PokemonSelectModal: isOpen is true, rendering...');
+  console.log('team:', team.length, 'pcBox:', pcBox.length);
 
   const allPokemon = [
     ...team.map(p => ({ ...p, source: 'team' as const })),
@@ -50,8 +55,8 @@ export function PokemonSelectModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-4 max-w-2xl w-full mx-4 max-h-[80vh] flex flex-col">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999]" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}>
+      <div className="bg-white rounded-lg p-4 max-w-2xl w-full mx-4 max-h-[80vh] flex flex-col shadow-2xl border-2 border-blue-500">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold">{title}</h2>
           <button
@@ -99,11 +104,11 @@ export function PokemonSelectModal({
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center">
-                      <span className="text-2xl">{pokemon.speciesId}</span>
+                      <span className="text-2xl">{pokemon.speciesName}</span>
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium">{pokemon.nickname || pokemon.speciesId}</span>
+                        <span className="font-medium">{pokemon.nickname || pokemon.speciesName}</span>
                         <span className="text-xs text-gray-500">Lv.{pokemon.level}</span>
                       </div>
                       <div className="mt-1">

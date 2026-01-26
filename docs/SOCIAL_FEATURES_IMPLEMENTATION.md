@@ -2994,8 +2994,6 @@ PvP 对战需要更频繁的轮询（每 1 秒）来获取对战状态更新。
 - [ ] 3.12 更新宝可梦中心（添加交换柜台入口）
 - [ ] 3.13 更新聊天界面（添加发起交换按钮功能）
 - [x] 3.14 在 `App.tsx` 中添加交换视图渲染
-- [x] 3.12 更新宝可梦中心（添加交换柜台入口）
-- [x] 3.13 更新聊天界面（添加发起交换按钮功能）
 - [ ] 3.15 测试交换系统所有功能
 
 ### 阶段四：PvP对战系统
@@ -3093,51 +3091,34 @@ npm run build
 
 ## 当前进度总结 (2026-01-25)
 
-### 阶段一：好友系统 ✅ 代码完成
-- 数据库模型、API 路由、前端 Store 和组件均已实现
-- 待测试 (1.12)
+### 社交功能系统整体完成状态
 
-### 阶段二：聊天系统 ✅ 代码完成
-- 数据库模型、API 路由（含轮询）、前端 Store 和组件均已实现
-- 待测试 (2.11)
+| 阶段 | 状态 | 代码完成 | 待测试 |
+|------|------|----------|--------|
+| 阶段一：好友系统 | ✅ 完成 | 全部 | 1.12 |
+| 阶段二：聊天系统 | ✅ 完成 | 全部 | 2.11 |
+| 阶段三：交换系统 | ✅ 完成 | 全部 | 3.15 |
+| 阶段四：PvP 对战系统 | ✅ 完成 | 全部 | 4.14 |
 
-### 阶段三：交换系统 ✅ 代码完成
-- 数据库模型、API 路由已实现 ✅
-- 前端 Store 和组件已创建 ✅
-- 宝可梦中心入口、聊天界面集成已完成 ✅
-- 待测试 (3.15)
+### 已完成的功能模块
 
-### 阶段四：PvP 对战系统 ✅ 代码完成
-- 数据库模型、API 路由已实现 ✅
-- 对战引擎已创建 ✅
-- 前端 Store 和组件已创建 ✅
-- 好友界面、聊天界面集成已完成 ✅
-- 待测试 (4.14)
+**好友系统**
+- 用户搜索、好友请求、接受/拒绝、好友列表、删除好友
 
-### 本次完成的工作
+**聊天系统**
+- 私信发送/接收、会话列表、未读计数、消息轮询
 
-| 文件 | 操作 |
-|------|------|
-| `server/prisma/schema.prisma` | 更新，添加 Battle/BattleTurnLog 模型和 User 关系 |
-| `server/prisma/migrations/20260125115007_add_pvp_battle` | 新建，PvP 对战模型迁移 |
-| `shared/types/social.ts` | 更新，添加 BattleStatus/BattleAction/BattleState 等类型 |
-| `shared/schemas/social.schema.ts` | 更新，添加 challengeBattleSchema/submitActionSchema |
-| `server/src/lib/battle-engine.ts` | 新建，对战引擎（回合处理、伤害计算、属性克制） |
-| `server/src/routes/battle.ts` | 新建，对战后端路由（挑战/接受/行动/投降/拒绝） |
-| `server/src/index.ts` | 更新，注册对战路由 `/api/battle` |
-| `src/stores/socialStore.ts` | 更新，添加对战状态和方法、轮询功能 |
-| `src/components/social/PvPBattleView.tsx` | 新建，PvP 对战主界面组件 |
-| `src/components/social/BattleChallengeModal.tsx` | 新建，对战邀请弹窗组件 |
-| `src/components/social/FriendsView.tsx` | 更新，添加对战标签页和发起对战功能 |
-| `src/components/social/ChatView.tsx` | 更新，添加发起对战按钮功能 |
-| `src/App.tsx` | 更新，添加 PvPBattleView 渲染 |
+**交换系统**
+- 私密/公开交换请求、接受/确认/拒绝/取消、双方存档同步
+
+**PvP 对战系统**
+- 对战邀请、回合制对战、伤害计算（含属性克制/暴击/天气）、胜负判定
 
 ### 待完成
 
-- 1.12 测试好友系统所有功能
-- 2.11 测试聊天系统所有功能
-- 3.15 测试交换系统所有功能
-- 4.14 测试 PvP 对战系统所有功能
+- 系统集成测试
+- 各功能模块测试 (1.12, 2.11, 3.15, 4.14)
+- 代码优化和边界情况处理
 
 ---
 
@@ -3154,39 +3135,8 @@ npm run build
 
 1. **宝可梦中心**：添加"交换柜台"按钮，点击后跳转到交换中心
 2. **聊天界面**：点击"发起交换"按钮会弹出 TradeRequestModal，选择宝可梦后发起交换请求
-
 ---
 
-## 阶段四完成总结 (2026-01-25)
-
-PvP 对战系统代码实现已完成，构建通过。
-
-### 本次完成的工作
-
-| 文件 | 操作 |
-|------|------|
-| `server/prisma/schema.prisma` | 更新，添加 Battle/BattleTurnLog 模型和 User 关系 |
-| `server/prisma/migrations/20260125115007_add_pvp_battle` | 新建，PvP 对战模型迁移 |
-| `shared/types/social.ts` | 更新，添加 BattleStatus/BattleAction/BattleState/BattleData 等类型 |
-| `shared/schemas/social.schema.ts` | 更新，添加 challengeBattleSchema/submitActionSchema |
-| `server/src/lib/battle-engine.ts` | 新建，对战引擎（回合处理、伤害计算、属性克制） |
-| `server/src/routes/battle.ts` | 新建，对战后端路由（挑战/接受/行动/投降/拒绝） |
-| `server/src/index.ts` | 更新，注册对战路由 `/api/battle` |
-| `src/stores/socialStore.ts` | 更新，添加对战状态和方法、轮询功能 |
-| `src/components/social/PvPBattleView.tsx` | 新建，PvP 对战主界面组件 |
-| `src/components/social/BattleChallengeModal.tsx` | 新建，对战邀请弹窗组件 |
-| `src/components/social/FriendsView.tsx` | 更新，添加对战标签页和发起对战功能 |
-| `src/components/social/ChatView.tsx` | 更新，添加发起对战按钮功能 |
-| `src/App.tsx` | 更新，添加 PvPBattleView 渲染 |
-
-### 功能说明
-
-1. **发起对战**：在好友列表或聊天界面点击"对战"按钮发起挑战
-2. **接受/拒绝**：收到对战邀请后可以在好友界面对战标签页处理
-3. **回合制对战**：选择招式/换人/投降，1秒轮询获取状态更新
-4. **伤害计算**：复用游戏内伤害公式，包含属性克制、天气、暴击等
-5. **胜负判定**：当一方所有宝可梦 HP 为 0 时判定胜负
-
-### 待完成
-
-- 4.14 测试 PvP 对战系统所有功能
+*文档版本：2.0*
+*创建日期：2026-01-25*
+*最后更新：2026-01-25*
