@@ -383,7 +383,14 @@ trade.post('/:id/confirm', async (c) => {
   // 1. 从发起者处移除宝可梦（使用快照匹配，因为ID可能已变化）
   const removed1 = await removePokemonBySnapshot(tradeRequest.initiatorId, offeredPokemon.snapshot);
   if (!removed1) {
-    return c.json({ success: false, error: '无法移除发起者的宝可梦' }, 400);
+    const save = await db.gameSave.findUnique({
+      where: { userId_mode: { userId: tradeRequest.initiatorId, mode: 'NORMAL' } }
+    });
+    const team = save ? JSON.parse(save.team) : [];
+    return c.json({
+      success: false,
+      error: `无法移除发起者的宝可梦。你目前有 ${team.length} 只宝可梦。交换需要保留至少1只。`
+    }, 400);
   }
 
   // 2. 从接收者处移除宝可梦
