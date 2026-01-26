@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useSocialStore } from '@/stores/socialStore';
 import { useGameStore } from '@/stores/gameStore';
-import type { Pokemon } from '@shared/types';
 
 interface PvPBattleViewProps {
   battleId: string;
@@ -20,15 +19,67 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
   const [selectedMove, setSelectedMove] = useState<number | null>(null);
   const [showSwitchMenu, setShowSwitchMenu] = useState(false);
   const [battleLog, setBattleLog] = useState<string[]>([]);
+  const [prepareSeq, setPrepareSeq] = useState(0);
+  const [isPreparing, setIsPreparing] = useState(true);
+  const [prepareError, setPrepareError] = useState<string | null>(null);
   const logEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    loadBattleState(battleId);
+    let cancelled = false;
+    let timeoutId: number | null = null;
+
+    const maxAttempts = 15;
+    let attempts = 0;
+
+    const poll = async () => {
+      attempts += 1;
+      const result = await loadBattleState(battleId);
+      if (cancelled) return;
+
+      if (result.success === false) {
+        if (result.status && [401, 403, 404].includes(result.status)) {
+          setIsPreparing(false);
+          setPrepareError(result.error);
+          return;
+        }
+        // 其他情况（例如 400：对战尚未开始/数据准备中）继续重试
+      }
+
+      const battleData = result.success ? result.battle : null;
+      const isReady =
+        !!battleData &&
+        battleData.status !== 'pending' &&
+        !!battleData.currentState &&
+        !!battleData.opponentTeam;
+
+      if (isReady && battleData) {
+        setPrepareError(null);
+        setIsPreparing(false);
+        setActiveBattle(battleData);
+        return;
+      }
+
+      if (attempts >= maxAttempts) {
+        setIsPreparing(false);
+        setPrepareError('对战仍在准备中，请稍后重试');
+        return;
+      }
+
+      timeoutId = window.setTimeout(poll, 1000);
+    };
+
+    setIsPreparing(true);
+    setPrepareError(null);
+    poll();
 
     return () => {
+      cancelled = true;
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
       setActiveBattle(null);
     };
-  }, [battleId]);
+  }, [battleId, prepareSeq]);
 
   useEffect(() => {
     if (activeBattle?.currentState && activeBattle.status === 'active') {
@@ -41,10 +92,38 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
     logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [battleLog]);
 
-  if (!activeBattle) {
+  if (prepareError) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center bg-black gap-4">
+        <div className="text-white">{prepareError}</div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setPrepareSeq(s => s + 1)}
+            className="px-3 py-1 bg-gray-700 rounded hover:bg-gray-600"
+          >
+            重试
+          </button>
+          <button
+            onClick={() => setView('ROAM')}
+            className="px-3 py-1 bg-gray-700 rounded hover:bg-gray-600"
+          >
+            返回
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (
+    !activeBattle ||
+    isPreparing ||
+    activeBattle.status === 'pending' ||
+    !activeBattle.currentState ||
+    !activeBattle.opponentTeam
+  ) {
     return (
       <div className="h-screen flex items-center justify-center bg-black">
-        <div className="text-white">加载中...</div>
+        <div className="text-white">等待对战准备...</div>
       </div>
     );
   }

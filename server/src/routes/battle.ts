@@ -168,14 +168,16 @@ battle.post('/:id/accept', async (c) => {
     weatherTurns: 0
   };
 
-  await db.battle.update({
-    where: { id: battleId },
-    data: {
-      status: 'active',
-      opponentTeam: JSON.stringify(opponentTeam),
-      currentState: JSON.stringify(initialState),
-      currentTurn: 1
-    }
+  await db.$transaction(async (tx) => {
+    await tx.battle.update({
+      where: { id: battleId },
+      data: {
+        status: 'active',
+        opponentTeam: JSON.stringify(opponentTeam),
+        currentState: JSON.stringify(initialState),
+        currentTurn: 1
+      }
+    });
   });
 
   return c.json({ success: true, data: { message: '对战开始！' } });
@@ -206,6 +208,16 @@ battle.get('/:id/state', async (c) => {
 
   if (!battleRecord) {
     return c.json({ success: false, error: '对战不存在' }, 404);
+  }
+
+  // 对战尚未开始（等待对手接受）
+  if (battleRecord.status === 'pending') {
+    return c.json({ success: false, error: '对战尚未开始，请稍候' }, 400);
+  }
+
+  // 对战已激活但数据未就绪（防御性检查）
+  if (battleRecord.status === 'active' && (!battleRecord.opponentTeam || !battleRecord.currentState)) {
+    return c.json({ success: false, error: '对战数据正在准备中' }, 400);
   }
 
   const isChallenger = battleRecord.challengerId === user.userId;

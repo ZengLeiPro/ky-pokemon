@@ -16,6 +16,7 @@ export default function FriendsView() {
     loadFriends,
     loadPendingRequests,
     loadPendingBattleChallenges,
+    acceptBattleChallenge,
     acceptFriendRequest,
     rejectFriendRequest,
     deleteFriend,
@@ -27,6 +28,7 @@ export default function FriendsView() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'friends' | 'requests' | 'battles' | 'search'>('friends');
   const [showBattleModal, setShowBattleModal] = useState(false);
+  const [acceptingBattleId, setAcceptingBattleId] = useState<string | null>(null);
 
   useEffect(() => {
     loadFriends();
@@ -233,13 +235,21 @@ export default function FriendsView() {
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => {
-                      localStorage.setItem('currentBattleId', challenge.id);
-                      setView('PVP_BATTLE');
+                    onClick={async () => {
+                      if (acceptingBattleId) return;
+                      setAcceptingBattleId(challenge.id);
+                      const success = await acceptBattleChallenge(challenge.id);
+                      setAcceptingBattleId(null);
+
+                      if (success) {
+                        localStorage.setItem('currentBattleId', challenge.id);
+                        setView('PVP_BATTLE');
+                      }
                     }}
-                    className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600"
+                    disabled={isLoading || acceptingBattleId === challenge.id}
+                    className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 disabled:opacity-50"
                   >
-                    接受
+                    {acceptingBattleId === challenge.id ? '接受中...' : '接受'}
                   </button>
                 </div>
               </div>

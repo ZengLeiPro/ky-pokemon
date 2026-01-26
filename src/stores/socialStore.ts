@@ -15,6 +15,10 @@ import type {
 const API_URL = config.apiUrl;
 const getToken = () => localStorage.getItem('token');
 
+type LoadBattleStateResult =
+  | { success: true; battle: BattleData }
+  | { success: false; error: string; status?: number };
+
 interface SocialState {
   // 好友数据
   friends: Friend[];
@@ -82,7 +86,7 @@ interface SocialState {
   acceptBattleChallenge: (battleId: string) => Promise<boolean>;
   rejectBattleChallenge: (battleId: string) => Promise<boolean>;
   cancelBattleChallenge: (battleId: string) => Promise<boolean>;
-  loadBattleState: (battleId: string) => Promise<BattleData | null>;
+  loadBattleState: (battleId: string) => Promise<LoadBattleStateResult>;
   submitBattleAction: (battleId: string, action: {
     type: 'move' | 'switch' | 'forfeit';
     moveIndex?: number;
@@ -666,16 +670,22 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
       const res = await fetch(`${API_URL}/battle/${battleId}/state`, {
         headers: { Authorization: `Bearer ${getToken()}` }
       });
-      const data = await res.json();
-      if (data.success) {
+
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.success) {
         const battleData = data.data as BattleData;
         set({ activeBattle: battleData });
-        return battleData;
+        return { success: true, battle: battleData };
       }
-      return null;
+
+      return {
+        success: false,
+        error: data?.error || '加载对战状态失败',
+        status: res.status
+      };
     } catch (e) {
       console.error('加载对战状态失败', e);
-      return null;
+      return { success: false, error: '加载对战状态失败' };
     }
   },
 

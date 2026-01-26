@@ -140,8 +140,8 @@ export interface BattleData {
   opponentUsername: string;
   status: BattleStatus;
   challengerTeam: Pokemon[];
-  opponentTeam: Pokemon[];
-  currentState: BattleState;
+  opponentTeam: Pokemon[] | null;
+  currentState: BattleState | null;
   currentTurn: number;
   myActionSubmitted: boolean;
   opponentActionSubmitted: boolean;
