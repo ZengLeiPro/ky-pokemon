@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useGameStore } from './stores/gameStore';
 import { useAuthStore } from './stores/authStore';
+import { useSocialStore } from './stores/socialStore';
 import Header from './components/Header';
 import MessageBox from './components/MessageBox';
 import ControlPad from './components/ControlPad';
@@ -60,6 +61,16 @@ const App: React.FC = () => {
       setView('LOGIN');
     }
   }, [isAuthenticated, view, setView]);
+
+  // 心跳管理：登录后启动，登出后停止
+  useEffect(() => {
+    if (isAuthenticated) {
+      useSocialStore.getState().startHeartbeat();
+    } else {
+      useSocialStore.getState().stopHeartbeat();
+    }
+    return () => useSocialStore.getState().stopHeartbeat();
+  }, [isAuthenticated]);
 
   const renderStage = () => {
     if (isAuthenticated && !hasSelectedStarter) {

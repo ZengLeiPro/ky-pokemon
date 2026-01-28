@@ -41,6 +41,17 @@ interface SocialState {
   pendingBattleChallenges: BattleChallenge[];
   activeBattle: BattleData | null;
   battlePollingInterval: number | null;
+  stuckBattle: {
+    id: string;
+    challengerUsername: string;
+    opponentUsername: string;
+    status: string;
+    isChallenger: boolean;
+    createdAt: string;
+  } | null;
+
+  // 心跳
+  heartbeatInterval: number | null;
 
   // 加载状态
   isLoading: boolean;
@@ -96,6 +107,12 @@ interface SocialState {
   startBattlePolling: () => void;
   stopBattlePolling: () => void;
   setActiveBattle: (battle: BattleData | null) => void;
+  loadStuckBattle: () => Promise<void>;
+  cleanupStuckBattle: () => Promise<boolean>;
+
+  // 心跳
+  startHeartbeat: () => void;
+  stopHeartbeat: () => void;
 
   // Utilities
   clearSearchResults: () => void;
@@ -124,6 +141,10 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
   pendingBattleChallenges: [],
   activeBattle: null,
   battlePollingInterval: null,
+  stuckBattle: null,
+
+  // 心跳
+  heartbeatInterval: null,
 
   // 加载状态
   isLoading: false,
@@ -773,6 +794,70 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
       get().startBattlePolling();
     } else {
       get().stopBattlePolling();
+    }
+  },
+
+  loadStuckBattle: async () => {
+    try {
+      const res = await fetch(`${API_URL}/battle/my-stuck`, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        set({ stuckBattle: data.data });
+      }
+    } catch (e) {
+      console.error('加载卡住的对战失败', e);
+    }
+  },
+
+  cleanupStuckBattle: async () => {
+    try {
+      const res = await fetch(`${API_URL}/battle/cleanup-stuck`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${getToken()}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        set({ stuckBattle: null });
+        return true;
+      }
+      set({ error: data.error });
+      return false;
+    } catch (e) {
+      set({ error: '清理对战失败' });
+      return false;
+    }
+  },
+
+  // ========== 心跳相关方法 ==========
+
+  startHeartbeat: () => {
+    const { heartbeatInterval } = get();
+    if (heartbeatInterval) return;
+
+    const beat = async () => {
+      try {
+        await fetch(`${API_URL}/presence/heartbeat`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${getToken()}` }
+        });
+      } catch (e) {
+        console.error('心跳失败', e);
+      }
+    };
+
+    // 立即发一次
+    beat();
+    const interval = window.setInterval(beat, 15000); // 15秒
+    set({ heartbeatInterval: interval });
+  },
+
+  stopHeartbeat: () => {
+    const { heartbeatInterval } = get();
+    if (heartbeatInterval) {
+      clearInterval(heartbeatInterval);
+      set({ heartbeatInterval: null });
     }
   },
 

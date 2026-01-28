@@ -149,18 +149,33 @@ export function BattleChallengeModal({
                   还没有好友，快去添加吧！
                 </p>
               ) : (
-                friends.map(friendItem => (
+                [...friends]
+                  .sort((a, b) => {
+                    if (a.isOnline && !b.isOnline) return -1;
+                    if (!a.isOnline && b.isOnline) return 1;
+                    return 0;
+                  })
+                  .map(friendItem => (
                   <button
                     key={friendItem.id}
-                    onClick={() => setSelectedFriendId(friendItem.odId)}
+                    onClick={() => friendItem.isOnline && setSelectedFriendId(friendItem.odId)}
+                    disabled={!friendItem.isOnline}
                     className={`w-full p-3 rounded flex items-center justify-between ${
-                      selectedFriendId === friendItem.odId
-                        ? 'bg-blue-900 border border-blue-500'
-                        : 'bg-gray-800 hover:bg-gray-700'
+                      !friendItem.isOnline
+                        ? 'bg-gray-800 opacity-50 cursor-not-allowed'
+                        : selectedFriendId === friendItem.odId
+                          ? 'bg-blue-900 border border-blue-500'
+                          : 'bg-gray-800 hover:bg-gray-700'
                     }`}
                   >
-                    <span className="text-white">
+                    <span className="text-white flex items-center gap-2">
+                      <span className={`w-2 h-2 rounded-full ${
+                        friendItem.isOnline ? 'bg-green-500' : 'bg-gray-500'
+                      }`} />
                       {friendItem.username}
+                      {!friendItem.isOnline && (
+                        <span className="text-xs text-gray-400">离线</span>
+                      )}
                     </span>
                     {selectedFriendId === friendItem.odId && (
                       <span className="text-blue-400">✓</span>

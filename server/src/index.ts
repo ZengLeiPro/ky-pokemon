@@ -9,6 +9,7 @@ import friend from './routes/friend.js';
 import chat from './routes/chat.js';
 import trade from './routes/trade.js';
 import battle from './routes/battle.js';
+import presence from './routes/presence.js';
 import internal from './routes/internal.js';
 
 const app = new Hono();
@@ -31,6 +32,7 @@ app.route('/api/friend', friend);
 app.route('/api/chat', chat);
 app.route('/api/trade', trade);
 app.route('/api/battle', battle);
+app.route('/api/presence', presence);
 app.route('/api/internal', internal);
 
 app.get('/health', (c) => c.json({ status: 'ok' }));

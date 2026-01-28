@@ -9,11 +9,12 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  username     String   @unique
+  id           String    @id @default(uuid())
+  username     String    @unique
   passwordHash String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastSeenAt   DateTime?
 
   gameSaves    GameSave[]
 
@@ -149,6 +150,11 @@ model Battle {
 
   // 结果
   winnerId        String?
+
+  // 在线状态追踪
+  challengerLastSeen  DateTime?
+  opponentLastSeen    DateTime?
+  finishReason        String?     // 'normal' | 'surrender' | 'disconnect'
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

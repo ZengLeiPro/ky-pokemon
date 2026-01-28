@@ -7,6 +7,7 @@ import {
   sendFriendRequestSchema,
   handleFriendRequestSchema
 } from '../../../shared/schemas/social.schema.js';
+import { isUserOnline } from '../lib/online-utils.js';
 
 const friend = new Hono<{ Variables: { user: { userId: string } } }>();
 
@@ -188,8 +189,8 @@ friend.get('/list', async (c) => {
       ]
     },
     include: {
-      user: { select: { id: true, username: true } },
-      friend: { select: { id: true, username: true } }
+      user: { select: { id: true, username: true, lastSeenAt: true } },
+      friend: { select: { id: true, username: true, lastSeenAt: true } }
     },
     orderBy: { updatedAt: 'desc' }
   });
@@ -201,6 +202,7 @@ friend.get('/list', async (c) => {
       odId: friendUser.id,
       username: friendUser.username,
       status: f.status,
+      isOnline: isUserOnline(friendUser.lastSeenAt),
       createdAt: f.createdAt.toISOString()
     };
   });

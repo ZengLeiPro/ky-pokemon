@@ -4,6 +4,7 @@ import { db } from '../lib/db.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { challengeBattleSchema, submitActionSchema } from '../../../shared/schemas/social.schema.js';
 import { processTurn } from '../lib/battle-engine.js';
+import { isUserOnline } from '../lib/online-utils.js';
 
 const battle = new Hono<{ Variables: { user: { userId: string } } }>();
 
@@ -57,6 +58,16 @@ battle.post('/challenge', zValidator('json', challengeBattleSchema), async (c) =
 
   if (activeBattle) {
     return c.json({ success: false, error: '你已有进行中的对战' }, 400);
+  }
+
+  // 检查对方是否在线
+  const opponent = await db.user.findUnique({
+    where: { id: opponentId },
+    select: { lastSeenAt: true }
+  });
+
+  if (!isUserOnline(opponent?.lastSeenAt ?? null)) {
+    return c.json({ success: false, error: '对方当前不在线，无法发起对战' }, 400);
   }
 
   // 获取挑战者队伍
@@ -175,7 +186,9 @@ battle.post('/:id/accept', async (c) => {
         status: 'active',
         opponentTeam: JSON.stringify(opponentTeam),
         currentState: JSON.stringify(initialState),
-        currentTurn: 1
+        currentTurn: 1,
+        challengerLastSeen: new Date(),
+        opponentLastSeen: new Date()
       }
     });
   });
@@ -187,6 +200,7 @@ battle.post('/:id/accept', async (c) => {
 battle.get('/:id/state', async (c) => {
   const user = c.get('user');
   const battleId = c.req.param('id');
+  const now = new Date();
 
   const battleRecord = await db.battle.findFirst({
     where: {
@@ -222,6 +236,87 @@ battle.get('/:id/state', async (c) => {
 
   const isChallenger = battleRecord.challengerId === user.userId;
 
+  // 更新当前用户在对战中的最后活跃时间 + 全局 lastSeenAt
+  await db.battle.update({
+    where: { id: battleId },
+    data: isChallenger
+      ? { challengerLastSeen: now }
+      : { opponentLastSeen: now }
+  });
+  await db.user.update({
+    where: { id: user.userId },
+    data: { lastSeenAt: now }
+  });
+
+  // 掉线检测（仅当对战 active 时检查）
+  if (battleRecord.status === 'active') {
+    const DISCONNECT_TIMEOUT_MS = 60 * 1000;
+
+    const challengerLastSeen = isChallenger ? now : battleRecord.challengerLastSeen;
+    const opponentLastSeen = isChallenger ? battleRecord.opponentLastSeen : now;
+
+    const challengerOffline = !challengerLastSeen ||
+      (now.getTime() - challengerLastSeen.getTime() > DISCONNECT_TIMEOUT_MS);
+    const opponentOffline = !opponentLastSeen ||
+      (now.getTime() - opponentLastSeen.getTime() > DISCONNECT_TIMEOUT_MS);
+
+    if (challengerOffline || opponentOffline) {
+      let winnerId: string | null = null;
+
+      if (challengerOffline && opponentOffline) {
+        const cTime = challengerLastSeen?.getTime() ?? 0;
+        const oTime = opponentLastSeen?.getTime() ?? 0;
+        winnerId = cTime >= oTime ? battleRecord.challengerId : battleRecord.opponentId;
+      } else if (challengerOffline) {
+        winnerId = battleRecord.opponentId;
+      } else {
+        winnerId = battleRecord.challengerId;
+      }
+
+      await db.battle.update({
+        where: { id: battleId },
+        data: {
+          status: 'finished',
+          winnerId,
+          finishReason: 'disconnect'
+        }
+      });
+
+      const updatedRecord = await db.battle.findUnique({
+        where: { id: battleId },
+        include: {
+          challenger: { select: { username: true } },
+          opponent: { select: { username: true } },
+          turnLogs: { orderBy: { turn: 'desc' }, take: 1 }
+        }
+      });
+
+      return c.json({
+        success: true,
+        data: {
+          id: updatedRecord!.id,
+          challengerId: updatedRecord!.challengerId,
+          challengerUsername: updatedRecord!.challenger.username,
+          opponentId: updatedRecord!.opponentId,
+          opponentUsername: updatedRecord!.opponent.username,
+          status: 'finished',
+          challengerTeam: JSON.parse(updatedRecord!.challengerTeam),
+          opponentTeam: updatedRecord!.opponentTeam ? JSON.parse(updatedRecord!.opponentTeam) : null,
+          currentState: updatedRecord!.currentState ? JSON.parse(updatedRecord!.currentState) : null,
+          currentTurn: updatedRecord!.currentTurn,
+          myActionSubmitted: false,
+          opponentActionSubmitted: false,
+          winnerId: updatedRecord!.winnerId,
+          isChallenger,
+          lastTurnLog: updatedRecord!.turnLogs[0]
+            ? JSON.parse(updatedRecord!.turnLogs[0].log)
+            : null,
+          finishReason: 'disconnect'
+        }
+      });
+    }
+  }
+
   return c.json({
     success: true,
     data: {
@@ -245,7 +340,8 @@ battle.get('/:id/state', async (c) => {
       isChallenger,
       lastTurnLog: battleRecord.turnLogs[0]
         ? JSON.parse(battleRecord.turnLogs[0].log)
-        : null
+        : null,
+      finishReason: battleRecord.finishReason ?? null
     }
   });
 });
@@ -281,14 +377,19 @@ battle.post('/:id/action', zValidator('json', submitActionSchema), async (c) => 
     return c.json({ success: false, error: '你已提交本回合行动' }, 400);
   }
 
-  // 保存行动
+  // 保存行动（同时更新活跃时间）
   const actionJson = JSON.stringify({ ...action, timestamp: Date.now() });
+  const now = new Date();
 
   await db.battle.update({
     where: { id: battleId },
     data: isChallenger
-      ? { challengerAction: actionJson }
-      : { opponentAction: actionJson }
+      ? { challengerAction: actionJson, challengerLastSeen: now }
+      : { opponentAction: actionJson, opponentLastSeen: now }
+  });
+  await db.user.update({
+    where: { id: user.userId },
+    data: { lastSeenAt: now }
   });
 
   // 检查双方是否都已提交
@@ -322,7 +423,8 @@ battle.post('/:id/action', zValidator('json', submitActionSchema), async (c) => 
         status: winnerId ? 'finished' : 'active',
         winnerId: winnerId === 'challenger' ? updatedBattle.challengerId
           : winnerId === 'opponent' ? updatedBattle.opponentId
-          : null
+          : null,
+        finishReason: winnerId ? 'normal' : undefined
       }
     });
 
@@ -366,7 +468,8 @@ battle.post('/:id/surrender', async (c) => {
     where: { id: battleId },
     data: {
       status: 'finished',
-      winnerId
+      winnerId,
+      finishReason: 'surrender'
     }
   });
 
@@ -456,6 +559,71 @@ battle.post('/:id/cancel', async (c) => {
   });
 
   return c.json({ success: true, data: { message: '已取消对战' } });
+});
+
+// 获取我的卡住的对战（pending 或 active）
+battle.get('/my-stuck', async (c) => {
+  const user = c.get('user');
+
+  const stuckBattle = await db.battle.findFirst({
+    where: {
+      OR: [
+        { challengerId: user.userId },
+        { opponentId: user.userId }
+      ],
+      status: { in: ['pending', 'active'] }
+    },
+    include: {
+      challenger: { select: { username: true } },
+      opponent: { select: { username: true } }
+    }
+  });
+
+  if (!stuckBattle) {
+    return c.json({ success: true, data: null });
+  }
+
+  const isChallenger = stuckBattle.challengerId === user.userId;
+
+  return c.json({
+    success: true,
+    data: {
+      id: stuckBattle.id,
+      challengerId: stuckBattle.challengerId,
+      challengerUsername: stuckBattle.challenger.username,
+      opponentId: stuckBattle.opponentId,
+      opponentUsername: stuckBattle.opponent.username,
+      status: stuckBattle.status,
+      isChallenger,
+      createdAt: stuckBattle.createdAt.toISOString()
+    }
+  });
+});
+
+// 清理卡住的对战（强制取消任何 pending/active 对战）
+battle.post('/cleanup-stuck', async (c) => {
+  const user = c.get('user');
+
+  const stuckBattle = await db.battle.findFirst({
+    where: {
+      OR: [
+        { challengerId: user.userId },
+        { opponentId: user.userId }
+      ],
+      status: { in: ['pending', 'active'] }
+    }
+  });
+
+  if (!stuckBattle) {
+    return c.json({ success: false, error: '没有卡住的对战' }, 404);
+  }
+
+  await db.battle.update({
+    where: { id: stuckBattle.id },
+    data: { status: 'cancelled' }
+  });
+
+  return c.json({ success: true, data: { message: '已清理卡住的对战' } });
 });
 
 export default battle;

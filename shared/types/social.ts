@@ -9,6 +9,7 @@ export interface Friend {
   odId: string;       // 好友的 user ID
   username: string;
   status: FriendshipStatus;
+  isOnline: boolean;
   createdAt: string;
 }
 
@@ -147,6 +148,7 @@ export interface BattleData {
   opponentActionSubmitted: boolean;
   winnerId: string | null;
   isChallenger: boolean;  // 当前用户是否是挑战者
+  finishReason?: string | null;  // 'normal' | 'surrender' | 'disconnect'
 }
 
 export interface TurnResult {

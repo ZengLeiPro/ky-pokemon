@@ -8,6 +8,7 @@ export default function FriendsView() {
     friends,
     pendingRequests,
     pendingBattleChallenges,
+    stuckBattle,
     searchResults,
     isLoading,
     error,
@@ -16,7 +17,10 @@ export default function FriendsView() {
     loadFriends,
     loadPendingRequests,
     loadPendingBattleChallenges,
+    loadStuckBattle,
+    cleanupStuckBattle,
     acceptBattleChallenge,
+    rejectBattleChallenge,
     acceptFriendRequest,
     rejectFriendRequest,
     deleteFriend,
@@ -34,6 +38,10 @@ export default function FriendsView() {
     loadFriends();
     loadPendingRequests();
     loadPendingBattleChallenges();
+    loadStuckBattle();
+    // 定期刷新好友列表获取最新在线状态
+    const interval = setInterval(loadFriends, 15000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -103,9 +111,13 @@ export default function FriendsView() {
         </button>
         <button
           onClick={() => setActiveTab('battles')}
-          className={`px-4 py-2 ${activeTab === 'battles' ? 'border-b-2 border-red-500 font-bold' : ''}`}
+          className={`px-4 py-2 ${activeTab === 'battles' ? 'border-b-2 border-red-500 font-bold' : ''} ${stuckBattle ? 'text-orange-600' : ''}`}
         >
-          对战 {pendingBattleChallenges.length > 0 && `(${pendingBattleChallenges.length})`}
+          对战 {(pendingBattleChallenges.length > 0 || stuckBattle) && (
+            <span className={stuckBattle ? 'text-orange-600' : ''}>
+              ({pendingBattleChallenges.length}{stuckBattle ? '+1卡住' : ''})
+            </span>
+          )}
         </button>
         {searchResults.length > 0 && (
           <button
@@ -130,9 +142,23 @@ export default function FriendsView() {
           {friends.length === 0 ? (
             <p className="text-gray-500 text-center py-8">还没有好友，快去搜索添加吧！</p>
           ) : (
-            friends.map(friend => (
+            [...friends]
+              .sort((a, b) => {
+                if (a.isOnline && !b.isOnline) return -1;
+                if (!a.isOnline && b.isOnline) return 1;
+                return 0;
+              })
+              .map(friend => (
               <div key={friend.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                <span className="font-medium">{friend.username}</span>
+                <span className="font-medium flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${
+                    friend.isOnline ? 'bg-green-500' : 'bg-gray-400'
+                  }`} />
+                  {friend.username}
+                  {!friend.isOnline && (
+                    <span className="text-xs text-gray-400">离线</span>
+                  )}
+                </span>
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleStartChat(friend.odId)}
@@ -145,7 +171,13 @@ export default function FriendsView() {
                       localStorage.setItem('battleFriendId', friend.odId);
                       setShowBattleModal(true);
                     }}
-                    className="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
+                    disabled={!friend.isOnline}
+                    className={`px-3 py-1 text-white text-sm rounded ${
+                      friend.isOnline
+                        ? 'bg-red-500 hover:bg-red-600'
+                        : 'bg-gray-400 cursor-not-allowed'
+                    }`}
+                    title={!friend.isOnline ? '对方不在线' : ''}
                   >
                     对战
                   </button>
@@ -222,7 +254,39 @@ export default function FriendsView() {
       {/* 对战邀请 */}
       {activeTab === 'battles' && (
         <div className="space-y-2">
-          {pendingBattleChallenges.length === 0 ? (
+          {/* 卡住的对战 */}
+          {stuckBattle && (
+            <div className="p-3 bg-orange-100 border border-orange-300 rounded mb-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="font-medium text-orange-800">
+                    你有一场卡住的对战
+                  </div>
+                  <div className="text-sm text-orange-600 mt-1">
+                    {stuckBattle.isChallenger ? '你' : stuckBattle.challengerUsername} vs {stuckBattle.isChallenger ? stuckBattle.opponentUsername : '你'}
+                    <span className="ml-2">({stuckBattle.status === 'pending' ? '等待接受' : '进行中'})</span>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {new Date(stuckBattle.createdAt).toLocaleString()}
+                  </div>
+                </div>
+                <button
+                  onClick={async () => {
+                    const success = await cleanupStuckBattle();
+                    if (success) {
+                      loadStuckBattle();
+                    }
+                  }}
+                  className="px-3 py-1 bg-orange-500 text-white text-sm rounded hover:bg-orange-600"
+                >
+                  清理
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* 收到的对战邀请 */}
+          {pendingBattleChallenges.length === 0 && !stuckBattle ? (
             <p className="text-gray-500 text-center py-8">没有待处理的对战邀请</p>
           ) : (
             pendingBattleChallenges.map(challenge => (
@@ -250,6 +314,13 @@ export default function FriendsView() {
                     className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 disabled:opacity-50"
                   >
                     {acceptingBattleId === challenge.id ? '接受中...' : '接受'}
+                  </button>
+                  <button
+                    onClick={() => rejectBattleChallenge(challenge.id)}
+                    disabled={isLoading}
+                    className="px-3 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600 disabled:opacity-50"
+                  >
+                    拒绝
                   </button>
                 </div>
               </div>

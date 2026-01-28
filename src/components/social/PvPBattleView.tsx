@@ -224,11 +224,23 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
         <div className="flex items-center gap-2">
           <span className="text-sm">回合 {activeBattle.currentTurn}</span>
           {activeBattle.status === 'finished' && (
-            <span className="px-2 py-1 bg-yellow-500 text-black text-sm rounded font-bold">
-              {activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
-                ? '胜利！'
-                : '失败'}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 bg-yellow-500 text-black text-sm rounded font-bold">
+                {activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
+                  ? '胜利！'
+                  : '失败'}
+              </span>
+              {activeBattle.finishReason === 'disconnect' && (
+                <span className="text-xs text-gray-400">
+                  {activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
+                    ? '对方掉线'
+                    : '你已掉线'}
+                </span>
+              )}
+              {activeBattle.finishReason === 'surrender' && (
+                <span className="text-xs text-gray-400">投降</span>
+              )}
+            </div>
           )}
         </div>
       </div>
@@ -340,7 +352,14 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
       {/* 行动菜单 */}
       <div className="border-t border-gray-700">
         {activeBattle.status === 'finished' ? (
-          <div className="p-4 flex justify-center">
+          <div className="p-4 flex flex-col items-center gap-2">
+            {activeBattle.finishReason === 'disconnect' && (
+              <p className="text-sm text-gray-400">
+                {activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
+                  ? '对手因掉线超时被判定失败'
+                  : '你因掉线超时被判定失败'}
+              </p>
+            )}
             <button
               onClick={() => {
                 setActiveBattle(null);
