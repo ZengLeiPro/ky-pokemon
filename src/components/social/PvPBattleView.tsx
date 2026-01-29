@@ -55,16 +55,20 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
 
       const battleData = result.success ? result.battle : null;
 
-      // 检查对战是否被取消
-      if (battleData && battleData.status === 'cancelled') {
+      // 检查对战是否被取消或已结束
+      if (battleData && (battleData.status === 'cancelled' || battleData.status === 'finished')) {
         setIsPreparing(false);
-        setPrepareError('对战已被取消');
+        if (battleData.status === 'cancelled') {
+          setPrepareError('对战已被取消');
+        } else {
+          setPrepareError('对战已结束');
+        }
         return;
       }
 
       const isReady =
         !!battleData &&
-        battleData.status !== 'pending' &&
+        battleData.status === 'active' &&
         !!battleData.currentState &&
         !!battleData.opponentTeam;
 
@@ -130,10 +134,27 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
     );
   }
 
+  // 对战已结束或被取消
+  if (activeBattle && (activeBattle.status === 'cancelled' || activeBattle.status === 'finished')) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center bg-black gap-4">
+        <div className="text-white text-lg">
+          {activeBattle.status === 'cancelled' ? '对战已被取消' : '对战已结束'}
+        </div>
+        <button
+          onClick={() => setView('FRIENDS')}
+          className="mt-4 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
+        >
+          返回
+        </button>
+      </div>
+    );
+  }
+
   if (
     !activeBattle ||
     isPreparing ||
-    activeBattle.status === 'pending' ||
+    activeBattle.status !== 'active' ||
     !activeBattle.currentState ||
     !activeBattle.opponentTeam
   ) {
@@ -262,7 +283,7 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm">回合 {activeBattle.currentTurn}</span>
-          {activeBattle.status === 'finished' && (
+          {activeBattle.winnerId && (
             <div className="flex items-center gap-2">
               <span className="px-2 py-1 bg-yellow-500 text-black text-sm rounded font-bold">
                 {activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
@@ -390,7 +411,7 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
 
       {/* 行动菜单 */}
       <div className="border-t border-gray-700">
-        {activeBattle.status === 'finished' ? (
+        {activeBattle.winnerId ? (
           <div className="p-4 flex flex-col items-center gap-2">
             {activeBattle.finishReason === 'disconnect' && (
               <p className="text-sm text-gray-400">
