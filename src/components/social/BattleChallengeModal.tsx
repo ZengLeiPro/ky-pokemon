@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSocialStore } from '@/stores/socialStore';
+import { useGameStore } from '@/stores/gameStore';
 import type { Friend } from '@shared/types';
 
 interface BattleChallengeModalProps {
@@ -29,6 +30,8 @@ export function BattleChallengeModal({
     error
   } = useSocialStore();
 
+  const setView = useGameStore(s => s.setView);
+
   const [selectedFriendId, setSelectedFriendId] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
@@ -46,10 +49,13 @@ export function BattleChallengeModal({
 
   const handleChallenge = async () => {
     if (!selectedFriendId) return;
-    const success = await sendBattleChallenge(selectedFriendId);
-    if (success) {
+    const newBattleId = await sendBattleChallenge(selectedFriendId);
+    if (newBattleId) {
       onClose();
       setSelectedFriendId(null);
+      // 发起方也进入对战等待页面
+      localStorage.setItem('currentBattleId', newBattleId);
+      setView('PVP_BATTLE');
     }
   };
 

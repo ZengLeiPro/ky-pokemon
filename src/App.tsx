@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useGameStore } from './stores/gameStore';
 import { useAuthStore } from './stores/authStore';
 import { useSocialStore } from './stores/socialStore';
@@ -32,6 +32,9 @@ import CheatConsole from './components/CheatConsole';
 const App: React.FC = () => {
   const { view, setView, hasSelectedStarter, isGameLoading, evolution } = useGameStore();
   const { isAuthenticated, checkAuth, currentUser } = useAuthStore();
+
+  // 用于保存当前 PvP 对战 ID，防止重新渲染时丢失
+  const pvpBattleIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     checkAuth();
@@ -72,6 +75,13 @@ const App: React.FC = () => {
     return () => useSocialStore.getState().stopHeartbeat();
   }, [isAuthenticated]);
 
+  // 离开 PVP_BATTLE 视图时清除 battleId
+  useEffect(() => {
+    if (view !== 'PVP_BATTLE') {
+      pvpBattleIdRef.current = null;
+    }
+  }, [view]);
+
   const renderStage = () => {
     if (isAuthenticated && !hasSelectedStarter) {
       return <StarterSelectionView />;
@@ -95,11 +105,15 @@ const App: React.FC = () => {
       case 'TRADE':
         return <TradeView />;
       case 'PVP_BATTLE': {
-        // 从 localStorage 获取当前对战 ID
-        const battleId = localStorage.getItem('currentBattleId');
-        if (battleId) {
+        // 从 localStorage 获取当前对战 ID（仅首次）
+        const storedBattleId = localStorage.getItem('currentBattleId');
+        if (storedBattleId) {
+          pvpBattleIdRef.current = storedBattleId;
           localStorage.removeItem('currentBattleId');
-          return <PvPBattleView battleId={battleId} />;
+        }
+        // 使用 ref 中保存的 battleId
+        if (pvpBattleIdRef.current) {
+          return <PvPBattleView battleId={pvpBattleIdRef.current} />;
         }
         return <FriendsView />;
       }

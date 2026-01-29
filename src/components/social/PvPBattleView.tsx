@@ -12,7 +12,8 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
     loadBattleState,
     submitBattleAction,
     surrenderBattle,
-    setActiveBattle
+    setActiveBattle,
+    cancelBattleChallenge
   } = useSocialStore();
 
   const setView = useGameStore(s => s.setView);
@@ -28,7 +29,8 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
     let cancelled = false;
     let timeoutId: number | null = null;
 
-    const maxAttempts = 15;
+    // 对于发起方等待对手接受的情况，需要更长的等待时间
+    const maxAttempts = 120; // 最多等待2分钟（120秒）
     let attempts = 0;
 
     const poll = async () => {
@@ -37,15 +39,29 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
       if (cancelled) return;
 
       if (result.success === false) {
-        if (result.status && [401, 403, 404].includes(result.status)) {
+        if (result.status && [401, 403].includes(result.status)) {
           setIsPreparing(false);
           setPrepareError(result.error);
           return;
         }
-        // 其他情况（例如 400：对战尚未开始/数据准备中）继续重试
+        // 404 可能是对战被取消，显示特定消息
+        if (result.status === 404) {
+          setIsPreparing(false);
+          setPrepareError('对战已被取消或不存在');
+          return;
+        }
+        // 400：对战尚未开始/数据准备中，继续重试
       }
 
       const battleData = result.success ? result.battle : null;
+
+      // 检查对战是否被取消
+      if (battleData && battleData.status === 'cancelled') {
+        setIsPreparing(false);
+        setPrepareError('对战已被取消');
+        return;
+      }
+
       const isReady =
         !!battleData &&
         battleData.status !== 'pending' &&
@@ -61,7 +77,7 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
 
       if (attempts >= maxAttempts) {
         setIsPreparing(false);
-        setPrepareError('对战仍在准备中，请稍后重试');
+        setPrepareError('等待超时，对方可能没有响应');
         return;
       }
 
@@ -121,9 +137,24 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
     !activeBattle.currentState ||
     !activeBattle.opponentTeam
   ) {
+    const handleCancelChallenge = async () => {
+      const success = await cancelBattleChallenge(battleId);
+      if (success) {
+        setView('FRIENDS');
+      }
+    };
+
     return (
-      <div className="h-screen flex items-center justify-center bg-black">
-        <div className="text-white">等待对战准备...</div>
+      <div className="h-screen flex flex-col items-center justify-center bg-black gap-4">
+        <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="text-white text-lg">等待对方接受对战...</div>
+        <div className="text-gray-400 text-sm">对方有2分钟时间接受</div>
+        <button
+          onClick={handleCancelChallenge}
+          className="mt-4 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
+        >
+          取消对战
+        </button>
       </div>
     );
   }
@@ -146,6 +177,14 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
 
   const myActivePokemon = myTeam[myActiveIndex];
   const opponentActivePokemon = opponentTeam[opponentActiveIndex];
+
+  // 检查是否所有招式PP都为0
+  const allMovesEmpty = myActivePokemon?.moves.slice(0, 4).every(move => move.ppCurrent <= 0) ?? false;
+
+  // 检查是否还有其他可以换上的宝可梦
+  const hasAvailableSwitch = myTeam.some((_, index) =>
+    index !== myActiveIndex && myState[index]?.currentHp > 0
+  );
 
   const handleMove = async (moveIndex: number) => {
     if (!isMyTurn) return;
@@ -417,6 +456,8 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
             <div className="mb-2 text-sm text-center">
               {!isMyTurn ? (
                 <span className="text-yellow-400">等待对手行动...</span>
+              ) : allMovesEmpty ? (
+                <span className="text-orange-400">所有招式PP已用尽！请换人或投降</span>
               ) : (
                 <span className="text-green-400">选择你的行动！</span>
               )}
@@ -438,7 +479,9 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
                   <div className="flex justify-between items-center">
                     <span className="font-medium">{move.move.name}</span>
                     <span className={`text-xs ${
-                      move.ppCurrent < move.move.ppMax * 0.25
+                      move.ppCurrent <= 0
+                        ? 'text-red-500 font-bold'
+                        : move.ppCurrent < move.move.ppMax * 0.25
                         ? 'text-red-400'
                         : 'text-gray-400'
                     }`}>
@@ -454,14 +497,18 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
               {/* 换人按钮 */}
               <button
                 onClick={() => setShowSwitchMenu(true)}
-                disabled={!isMyTurn}
+                disabled={!isMyTurn || (!hasAvailableSwitch && !allMovesEmpty)}
                 className={`p-3 rounded text-left ${
                   !isMyTurn
                     ? 'bg-gray-800 opacity-50 cursor-not-allowed'
+                    : allMovesEmpty && hasAvailableSwitch
+                    ? 'bg-orange-700 hover:bg-orange-600 ring-2 ring-orange-400'
                     : 'bg-gray-700 hover:bg-gray-600'
                 }`}
               >
-                <div className="font-medium">换人</div>
+                <div className={`font-medium ${allMovesEmpty && hasAvailableSwitch ? 'text-orange-300' : ''}`}>
+                  {allMovesEmpty && hasAvailableSwitch ? '必须换人！' : '换人'}
+                </div>
                 <div className="text-xs text-gray-400 mt-1">
                   更换当前宝可梦
                 </div>
@@ -474,10 +521,14 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
                 className={`p-3 rounded text-left ${
                   !isMyTurn
                     ? 'bg-gray-800 opacity-50 cursor-not-allowed'
+                    : allMovesEmpty && !hasAvailableSwitch
+                    ? 'bg-red-700 hover:bg-red-600 ring-2 ring-red-400'
                     : 'bg-red-900 hover:bg-red-800'
                 }`}
               >
-                <div className="font-medium text-red-400">投降</div>
+                <div className={`font-medium ${allMovesEmpty && !hasAvailableSwitch ? 'text-red-300' : 'text-red-400'}`}>
+                  {allMovesEmpty && !hasAvailableSwitch ? '只能投降' : '投降'}
+                </div>
                 <div className="text-xs text-gray-400 mt-1">
                   放弃这场对战
                 </div>

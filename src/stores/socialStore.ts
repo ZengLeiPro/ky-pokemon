@@ -93,7 +93,7 @@ interface SocialState {
 
   // Actions - 对战
   loadPendingBattleChallenges: () => Promise<void>;
-  sendBattleChallenge: (opponentId: string) => Promise<boolean>;
+  sendBattleChallenge: (opponentId: string) => Promise<string | null>;
   acceptBattleChallenge: (battleId: string) => Promise<boolean>;
   rejectBattleChallenge: (battleId: string) => Promise<boolean>;
   cancelBattleChallenge: (battleId: string) => Promise<boolean>;
@@ -618,13 +618,14 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
       });
       const data = await res.json();
       if (data.success) {
-        return true;
+        // 返回创建的对战ID，以便发起方可以进入等待页面
+        return data.data.id as string;
       }
       set({ error: data.error });
-      return false;
+      return null;
     } catch (e) {
       set({ error: '发起对战失败' });
-      return false;
+      return null;
     } finally {
       set({ isLoading: false });
     }
