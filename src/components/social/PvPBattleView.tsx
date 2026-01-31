@@ -530,33 +530,142 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
       {/* 行动菜单 */}
       <div className="relative z-20 bg-slate-900/95 backdrop-blur-sm border-t border-slate-700/50">
         {activeBattle.winnerId ? (
-          /* 对战结束 */
-          <div className="p-6 flex flex-col items-center gap-4">
-            <div className={`text-2xl font-bold ${
-              activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
-                ? 'text-yellow-400'
-                : 'text-gray-400'
-            }`}>
-              {activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
-                ? '恭喜获胜！'
-                : '对战失败'}
-            </div>
-            {activeBattle.finishReason === 'disconnect' && (
-              <p className="text-sm text-gray-400">
-                {activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
-                  ? '对手因掉线超时被判定失败'
-                  : '你因掉线超时被判定失败'}
-              </p>
-            )}
-            <button
-              onClick={() => {
-                setActiveBattle(null);
-                setView('ROAM');
-              }}
-              className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-bold shadow-lg hover:from-cyan-400 hover:to-blue-500 transition-all active:scale-95"
-            >
-              返回游戏
-            </button>
+          /* 对战结束 - 战斗总结 */
+          <div className="p-4 max-h-[60vh] overflow-y-auto">
+            {/* 胜负结果 */}
+            {(() => {
+              const isWinner = activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId);
+              const myUsername = activeBattle.isChallenger ? activeBattle.challengerUsername : activeBattle.opponentUsername;
+              const opponentUsername = activeBattle.isChallenger ? activeBattle.opponentUsername : activeBattle.challengerUsername;
+
+              // 统计存活数量
+              const myAliveCount = myState.filter(p => p && p.currentHp > 0).length;
+              const opponentAliveCount = opponentState.filter(p => p && p.currentHp > 0).length;
+
+              return (
+                <div className="space-y-4">
+                  {/* 胜负横幅 */}
+                  <div className={`text-center py-4 rounded-xl ${
+                    isWinner
+                      ? 'bg-gradient-to-r from-yellow-500/20 via-amber-500/30 to-yellow-500/20 border border-yellow-500/50'
+                      : 'bg-gradient-to-r from-slate-700/50 via-slate-600/50 to-slate-700/50 border border-slate-600/50'
+                  }`}>
+                    <div className={`text-3xl font-black mb-1 ${isWinner ? 'text-yellow-400' : 'text-slate-400'}`}>
+                      {isWinner ? '胜利！' : '失败'}
+                    </div>
+                    <div className="text-sm text-slate-400">
+                      {activeBattle.finishReason === 'surrender' && (isWinner ? '对手投降' : '你已投降')}
+                      {activeBattle.finishReason === 'disconnect' && (isWinner ? '对手掉线超时' : '你掉线超时')}
+                      {(!activeBattle.finishReason || activeBattle.finishReason === 'normal') && '对战结束'}
+                    </div>
+                  </div>
+
+                  {/* 对战统计 */}
+                  <div className="flex justify-center gap-8 py-2">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-cyan-400">{activeBattle.currentTurn}</div>
+                      <div className="text-xs text-slate-500">总回合</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-green-400">{myAliveCount}</div>
+                      <div className="text-xs text-slate-500">己方存活</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-red-400">{opponentAliveCount}</div>
+                      <div className="text-xs text-slate-500">对方存活</div>
+                    </div>
+                  </div>
+
+                  {/* 双方队伍状态 */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {/* 我方队伍 */}
+                    <div className="bg-slate-800/50 rounded-xl p-3">
+                      <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-700/50">
+                        <div className={`w-2 h-2 rounded-full ${isWinner ? 'bg-yellow-400' : 'bg-slate-500'}`} />
+                        <span className="font-bold text-sm truncate">{myUsername}</span>
+                        {isWinner && <span className="text-xs text-yellow-400">胜</span>}
+                      </div>
+                      <div className="space-y-1.5">
+                        {myTeam.map((pokemon, index) => {
+                          const state = myState[index];
+                          const isFainted = !state || state.currentHp <= 0;
+                          const hpPercent = state ? Math.round((state.currentHp / state.maxHp) * 100) : 0;
+
+                          return (
+                            <div key={pokemon.id} className={`flex items-center gap-2 ${isFainted ? 'opacity-50' : ''}`}>
+                              <img
+                                src={pokemon.spriteUrl}
+                                alt={pokemon.speciesName}
+                                className={`w-8 h-8 object-contain pixelated ${isFainted ? 'grayscale' : ''}`}
+                                style={{ imageRendering: 'pixelated' }}
+                              />
+                              <div className="flex-1 min-w-0">
+                                <div className="text-xs truncate">{pokemon.nickname || pokemon.speciesName}</div>
+                                <div className="h-1 bg-slate-700 rounded-full overflow-hidden">
+                                  <div
+                                    className={`h-full ${hpPercent > 50 ? 'bg-green-500' : hpPercent > 20 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                                    style={{ width: `${hpPercent}%` }}
+                                  />
+                                </div>
+                              </div>
+                              {isFainted && <span className="text-[10px] text-red-400">濒死</span>}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* 对方队伍 */}
+                    <div className="bg-slate-800/50 rounded-xl p-3">
+                      <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-700/50">
+                        <div className={`w-2 h-2 rounded-full ${!isWinner ? 'bg-yellow-400' : 'bg-slate-500'}`} />
+                        <span className="font-bold text-sm truncate">{opponentUsername}</span>
+                        {!isWinner && <span className="text-xs text-yellow-400">胜</span>}
+                      </div>
+                      <div className="space-y-1.5">
+                        {opponentTeam.map((pokemon, index) => {
+                          const state = opponentState[index];
+                          const isFainted = !state || state.currentHp <= 0;
+                          const hpPercent = state ? Math.round((state.currentHp / state.maxHp) * 100) : 0;
+
+                          return (
+                            <div key={pokemon.id} className={`flex items-center gap-2 ${isFainted ? 'opacity-50' : ''}`}>
+                              <img
+                                src={pokemon.spriteUrl}
+                                alt={pokemon.speciesName}
+                                className={`w-8 h-8 object-contain pixelated ${isFainted ? 'grayscale' : ''}`}
+                                style={{ imageRendering: 'pixelated' }}
+                              />
+                              <div className="flex-1 min-w-0">
+                                <div className="text-xs truncate">{pokemon.nickname || pokemon.speciesName}</div>
+                                <div className="h-1 bg-slate-700 rounded-full overflow-hidden">
+                                  <div
+                                    className={`h-full ${hpPercent > 50 ? 'bg-green-500' : hpPercent > 20 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                                    style={{ width: `${hpPercent}%` }}
+                                  />
+                                </div>
+                              </div>
+                              {isFainted && <span className="text-[10px] text-red-400">濒死</span>}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 返回按钮 */}
+                  <button
+                    onClick={() => {
+                      setActiveBattle(null);
+                      setView('ROAM');
+                    }}
+                    className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-bold shadow-lg hover:from-cyan-400 hover:to-blue-500 transition-all active:scale-98"
+                  >
+                    返回游戏
+                  </button>
+                </div>
+              );
+            })()}
           </div>
         ) : showSwitchMenu ? (
           /* 换人菜单 */
