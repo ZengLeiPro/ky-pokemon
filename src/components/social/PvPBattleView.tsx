@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { useSocialStore } from '@/stores/socialStore';
 import { useGameStore } from '@/stores/gameStore';
+import HPBar from '@/components/ui/HPBar';
+import TypeBadge from '@/components/ui/TypeBadge';
 
 interface PvPBattleViewProps {
   battleId: string;
@@ -114,21 +116,33 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
 
   if (prepareError) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center bg-black gap-4">
-        <div className="text-white">{prepareError}</div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setPrepareSeq(s => s + 1)}
-            className="px-3 py-1 bg-gray-700 rounded hover:bg-gray-600"
-          >
-            重试
-          </button>
-          <button
-            onClick={() => setView('ROAM')}
-            className="px-3 py-1 bg-gray-700 rounded hover:bg-gray-600"
-          >
-            返回
-          </button>
+      <div className="h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 via-slate-900 to-black gap-6 relative overflow-hidden">
+        {/* 背景装饰 */}
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-red-500/30 rounded-full blur-3xl" />
+        </div>
+
+        <div className="relative z-10 flex flex-col items-center gap-4">
+          <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center">
+            <svg className="w-8 h-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
+          <div className="text-white text-lg font-medium">{prepareError}</div>
+          <div className="flex gap-3 mt-2">
+            <button
+              onClick={() => setPrepareSeq(s => s + 1)}
+              className="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 rounded-xl font-medium transition-colors"
+            >
+              重试
+            </button>
+            <button
+              onClick={() => setView('ROAM')}
+              className="px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 rounded-xl font-medium transition-colors"
+            >
+              返回
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -137,16 +151,27 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
   // 对战已结束或被取消
   if (activeBattle && (activeBattle.status === 'cancelled' || activeBattle.status === 'finished')) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center bg-black gap-4">
-        <div className="text-white text-lg">
-          {activeBattle.status === 'cancelled' ? '对战已被取消' : '对战已结束'}
+      <div className="h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 via-slate-900 to-black gap-6 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-slate-500/30 rounded-full blur-3xl" />
         </div>
-        <button
-          onClick={() => setView('FRIENDS')}
-          className="mt-4 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
-        >
-          返回
-        </button>
+
+        <div className="relative z-10 flex flex-col items-center gap-4">
+          <div className="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center">
+            <svg className="w-8 h-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div className="text-white text-xl font-bold">
+            {activeBattle.status === 'cancelled' ? '对战已被取消' : '对战已结束'}
+          </div>
+          <button
+            onClick={() => setView('FRIENDS')}
+            className="mt-2 px-6 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-medium transition-colors"
+          >
+            返回
+          </button>
+        </div>
       </div>
     );
   }
@@ -166,16 +191,45 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
     };
 
     return (
-      <div className="h-screen flex flex-col items-center justify-center bg-black gap-4">
-        <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
-        <div className="text-white text-lg">等待对方接受对战...</div>
-        <div className="text-gray-400 text-sm">对方有2分钟时间接受</div>
-        <button
-          onClick={handleCancelChallenge}
-          className="mt-4 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
-        >
-          取消对战
-        </button>
+      <div className="h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 via-slate-900 to-black gap-6 relative overflow-hidden">
+        {/* 背景装饰 */}
+        <div className="absolute inset-0 opacity-30 pointer-events-none">
+          <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        </div>
+
+        {/* VS 装饰 */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-5 pointer-events-none">
+          <span className="text-[200px] font-black text-white">VS</span>
+        </div>
+
+        <div className="relative z-10 flex flex-col items-center gap-5">
+          {/* 精灵球旋转动画 */}
+          <div className="relative w-20 h-20">
+            <div className="absolute inset-0 border-4 border-cyan-500/30 rounded-full animate-ping" />
+            <div className="absolute inset-2 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-4 h-4 rounded-full bg-cyan-400 animate-pulse" />
+            </div>
+          </div>
+
+          <div className="text-white text-xl font-bold">等待对方接受对战...</div>
+          <div className="text-slate-400 text-sm">对方有2分钟时间接受</div>
+
+          {/* 进度提示 */}
+          <div className="flex items-center gap-1 mt-2">
+            <div className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+            <div className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '150ms' }} />
+            <div className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+          </div>
+
+          <button
+            onClick={handleCancelChallenge}
+            className="mt-4 px-6 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-medium transition-colors"
+          >
+            取消对战
+          </button>
+        </div>
       </div>
     );
   }
@@ -239,53 +293,88 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
     }
   };
 
-  const getHpPercent = (currentHp: number, maxHp: number) => {
-    return Math.max(0, Math.min(100, (currentHp / maxHp) * 100));
-  };
-
-  const getHpColor = (percent: number) => {
-    if (percent > 50) return 'bg-green-500';
-    if (percent > 20) return 'bg-yellow-500';
-    return 'bg-red-500';
-  };
-
   const formatStatus = (status?: string) => {
-    if (!status) return '';
-    const statusMap: Record<string, string> = {
-      'BRN': '灼伤',
-      'PAR': '麻痹',
-      'SLP': '睡眠',
-      'PSN': '中毒',
-      'FRZ': '冰冻'
+    if (!status) return null;
+    const statusMap: Record<string, { text: string; color: string }> = {
+      'BRN': { text: '灼伤', color: 'bg-orange-500' },
+      'PAR': { text: '麻痹', color: 'bg-yellow-500' },
+      'SLP': { text: '睡眠', color: 'bg-purple-500' },
+      'PSN': { text: '中毒', color: 'bg-violet-500' },
+      'FRZ': { text: '冰冻', color: 'bg-cyan-400' }
     };
-    return statusMap[status] || status;
+    return statusMap[status] || { text: status, color: 'bg-gray-500' };
+  };
+
+  // 获取招式类型的背景色
+  const getMoveTypeColor = (type: string) => {
+    const colors: Record<string, string> = {
+      Normal: 'from-gray-400 to-gray-500',
+      Fire: 'from-orange-500 to-red-600',
+      Water: 'from-blue-400 to-blue-600',
+      Electric: 'from-yellow-400 to-yellow-500',
+      Grass: 'from-green-400 to-green-600',
+      Ice: 'from-cyan-300 to-cyan-500',
+      Fighting: 'from-red-600 to-red-800',
+      Poison: 'from-purple-500 to-purple-700',
+      Ground: 'from-amber-600 to-amber-800',
+      Flying: 'from-indigo-300 to-indigo-500',
+      Psychic: 'from-pink-400 to-pink-600',
+      Bug: 'from-lime-500 to-lime-700',
+      Rock: 'from-stone-500 to-stone-700',
+      Ghost: 'from-purple-600 to-purple-900',
+      Dragon: 'from-violet-500 to-violet-700',
+      Dark: 'from-gray-700 to-gray-900',
+      Steel: 'from-slate-400 to-slate-600',
+      Fairy: 'from-pink-300 to-pink-500',
+    };
+    return colors[type] || 'from-gray-400 to-gray-500';
   };
 
   return (
-    <div className="h-screen flex flex-col bg-black text-white">
+    <div className="h-screen flex flex-col bg-slate-900 text-white relative overflow-hidden">
+      {/* 背景装饰 */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-800 via-slate-900 to-black z-0 pointer-events-none" />
+      <div className="absolute inset-0 opacity-30 z-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl" />
+      </div>
+
+      {/* 平台效果 */}
+      <div className="absolute top-[20%] right-[-5%] w-56 h-14 bg-black/30 blur-md rounded-[100%] rotate-[-5deg] z-0" />
+      <div className="absolute bottom-[32%] left-[-5%] w-72 h-20 bg-black/40 blur-lg rounded-[100%] rotate-[5deg] z-0" />
+
       {/* 顶部导航 */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-700">
-        <div className="flex items-center gap-2">
+      <div className="relative z-20 flex items-center justify-between px-4 py-3 bg-black/40 backdrop-blur-sm border-b border-slate-700/50">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => {
               setActiveBattle(null);
               setView('ROAM');
             }}
-            className="px-3 py-1 bg-gray-700 rounded hover:bg-gray-600"
+            className="px-3 py-1.5 bg-slate-700/80 hover:bg-slate-600 rounded-lg text-sm font-medium transition-colors"
           >
             返回
           </button>
-          <span className="font-bold">
-            vs {activeBattle.isChallenger
-              ? activeBattle.opponentUsername
-              : activeBattle.challengerUsername}
-          </span>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="font-bold text-lg">
+              vs {activeBattle.isChallenger
+                ? activeBattle.opponentUsername
+                : activeBattle.challengerUsername}
+            </span>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm">回合 {activeBattle.currentTurn}</span>
+        <div className="flex items-center gap-3">
+          <div className="px-3 py-1 bg-slate-800/80 rounded-lg">
+            <span className="text-sm font-mono text-slate-300">回合 <span className="text-cyan-400 font-bold">{activeBattle.currentTurn}</span></span>
+          </div>
           {activeBattle.winnerId && (
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-1 bg-yellow-500 text-black text-sm rounded font-bold">
+            <div className="flex items-center gap-2 animate-bounce-slow">
+              <span className={`px-3 py-1.5 ${
+                activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
+                  ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black'
+                  : 'bg-gradient-to-r from-gray-600 to-gray-700 text-white'
+              } text-sm rounded-lg font-bold shadow-lg`}>
                 {activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
                   ? '胜利！'
                   : '失败'}
@@ -306,113 +395,152 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
       </div>
 
       {/* 对战区域 */}
-      <div className="flex-1 relative overflow-hidden">
-        {/* 背景 */}
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-900 to-sky-800" />
-
-        {/* 对手区域 */}
-        <div className="absolute top-4 right-4 left-4">
-          {/* 对手宝可梦信息 */}
+      <div className="flex-1 relative z-10 overflow-hidden">
+        {/* 对手区域 - 右上 */}
+        <div className="absolute top-4 right-4 left-4 flex justify-between items-start animate-fade-in-down">
+          {/* 对手宝可梦信息卡片 */}
           {opponentActivePokemon && (
-            <div className="flex justify-between items-start">
-              <div className="bg-black/50 p-3 rounded-lg min-w-[200px]">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold">{opponentActivePokemon.nickname || opponentActivePokemon.speciesName}</span>
-                  <span className="text-xs text-gray-400">Lv.{opponentActivePokemon.level}</span>
-                </div>
-                <div className="mt-1 text-xs">
-                  {opponentActivePokemon.types.join('/')}
-                </div>
-                {opponentState[opponentActiveIndex]?.status && (
-                  <span className="text-xs text-yellow-400">
-                    {formatStatus(opponentState[opponentActiveIndex].status)}
-                  </span>
-                )}
-                {/* HP 条 */}
-                <div className="mt-2 w-full h-3 bg-gray-700 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full ${getHpColor(getHpPercent(
-                      opponentState[opponentActiveIndex]?.currentHp || 0,
-                      opponentState[opponentActiveIndex]?.maxHp || 1
-                    ))}`}
-                    style={{ width: `${getHpPercent(
-                      opponentState[opponentActiveIndex]?.currentHp || 0,
-                      opponentState[opponentActiveIndex]?.maxHp || 1
-                    )}%` }}
+            <>
+              <div className="flex-1 mr-4 max-w-[220px]">
+                <div className="bg-slate-900/80 backdrop-blur-sm p-3 rounded-xl border-l-4 border-red-500 shadow-xl">
+                  <div className="flex justify-between items-center mb-1">
+                    <h2 className="text-lg font-bold text-white truncate">
+                      {opponentActivePokemon.nickname || opponentActivePokemon.speciesName}
+                    </h2>
+                    <span className="text-xs font-mono text-red-400 ml-2">Lv.{opponentActivePokemon.level}</span>
+                  </div>
+
+                  {/* 属性标签 */}
+                  <div className="flex gap-1 mb-2">
+                    {opponentActivePokemon.types.map((t: string) => (
+                      <TypeBadge key={t} type={t} />
+                    ))}
+                  </div>
+
+                  {/* 状态异常 */}
+                  {opponentState[opponentActiveIndex]?.status && (
+                    <div className="mb-2">
+                      {(() => {
+                        const status = formatStatus(opponentState[opponentActiveIndex].status);
+                        return status ? (
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${status.color} text-white font-medium`}>
+                            {status.text}
+                          </span>
+                        ) : null;
+                      })()}
+                    </div>
+                  )}
+
+                  {/* HP条 */}
+                  <HPBar
+                    current={opponentState[opponentActiveIndex]?.currentHp || 0}
+                    max={opponentState[opponentActiveIndex]?.maxHp || 1}
+                    showText={false}
                   />
-                </div>
-                <div className="text-xs text-right mt-1">
-                  {opponentState[opponentActiveIndex]?.currentHp || 0} / {opponentState[opponentActiveIndex]?.maxHp || 0}
+                  <div className="flex justify-end mt-1">
+                    <span className="text-[10px] font-mono text-slate-400">
+                      {opponentState[opponentActiveIndex]?.currentHp || 0}/{opponentState[opponentActiveIndex]?.maxHp || 0}
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              {/* 对手宝可梦图片（占位） */}
-              <div className="w-32 h-32 flex items-center justify-center">
-                <div className="w-24 h-24 bg-gray-600 rounded-lg flex items-center justify-center">
-                  <span className="text-4xl">?</span>
-                </div>
+              {/* 对手宝可梦精灵图 */}
+              <div className="w-32 h-32 flex items-center justify-center relative">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20 rounded-full blur-xl" />
+                <img
+                  src={opponentActivePokemon.spriteUrl}
+                  alt={opponentActivePokemon.speciesName}
+                  className="w-full h-full object-contain pixelated drop-shadow-2xl animate-float-slow relative z-10"
+                  style={{ imageRendering: 'pixelated' }}
+                />
               </div>
-            </div>
+            </>
           )}
         </div>
 
-        {/* 中心装饰 */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <div className="w-32 h-32 border-4 border-white/20 rounded-full" />
+        {/* 中心 VS 装饰 */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+          <div className="relative">
+            <div className="w-20 h-20 border-2 border-white/10 rounded-full flex items-center justify-center">
+              <span className="text-white/20 font-bold text-xl">VS</span>
+            </div>
+            <div className="absolute inset-0 w-20 h-20 border-2 border-white/5 rounded-full animate-ping" />
+          </div>
         </div>
 
-        {/* 我方区域 */}
-        <div className="absolute bottom-4 right-4 left-4">
-          {/* 我方宝可梦图片 */}
+        {/* 我方区域 - 左下 */}
+        <div className="absolute bottom-4 right-4 left-4 flex justify-between items-end animate-fade-in-up">
+          {/* 我方宝可梦精灵图 */}
           {myActivePokemon && (
-            <div className="flex justify-between items-end">
-              {/* 我方宝可梦图片（占位） */}
-              <div className="w-32 h-32 flex items-center justify-center">
-                <div className="w-28 h-28 bg-gray-600 rounded-lg flex items-center justify-center">
-                  <span className="text-5xl">?</span>
-                </div>
+            <>
+              <div className="w-36 h-36 flex items-center justify-center relative">
+                <div className="absolute inset-0 bg-gradient-to-t from-transparent to-black/10 rounded-full blur-xl" />
+                <img
+                  src={myActivePokemon.spriteUrl}
+                  alt={myActivePokemon.speciesName}
+                  className="w-full h-full object-contain pixelated scale-x-[-1] drop-shadow-2xl relative z-10"
+                  style={{ imageRendering: 'pixelated' }}
+                />
               </div>
 
-              {/* 我方宝可梦信息 */}
-              <div className="bg-black/50 p-3 rounded-lg min-w-[200px]">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold">{myActivePokemon.nickname || myActivePokemon.speciesName}</span>
-                  <span className="text-xs text-gray-400">Lv.{myActivePokemon.level}</span>
-                </div>
-                <div className="mt-1 text-xs">
-                  {myActivePokemon.types.join('/')}
-                </div>
-                {myState[myActiveIndex]?.status && (
-                  <span className="text-xs text-yellow-400">
-                    {formatStatus(myState[myActiveIndex].status)}
-                  </span>
-                )}
-                {/* HP 条 */}
-                <div className="mt-2 w-full h-3 bg-gray-700 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full ${getHpColor(getHpPercent(
-                      myState[myActiveIndex]?.currentHp || 0,
-                      myState[myActiveIndex]?.maxHp || 1
-                    ))}`}
-                    style={{ width: `${getHpPercent(
-                      myState[myActiveIndex]?.currentHp || 0,
-                      myState[myActiveIndex]?.maxHp || 1
-                    )}%` }}
+              {/* 我方宝可梦信息卡片 */}
+              <div className="flex-1 ml-4 flex justify-end">
+                <div className="bg-slate-900/90 backdrop-blur-sm p-3 rounded-xl border-r-4 border-cyan-500 shadow-xl max-w-[220px] w-full">
+                  <div className="flex justify-between items-center mb-1">
+                    <h2 className="text-lg font-bold text-white truncate">
+                      {myActivePokemon.nickname || myActivePokemon.speciesName}
+                    </h2>
+                    <span className="text-xs font-mono text-cyan-400 ml-2">Lv.{myActivePokemon.level}</span>
+                  </div>
+
+                  {/* 属性标签 */}
+                  <div className="flex gap-1 mb-2">
+                    {myActivePokemon.types.map((t: string) => (
+                      <TypeBadge key={t} type={t} />
+                    ))}
+                  </div>
+
+                  {/* 状态异常 */}
+                  {myState[myActiveIndex]?.status && (
+                    <div className="mb-2">
+                      {(() => {
+                        const status = formatStatus(myState[myActiveIndex].status);
+                        return status ? (
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${status.color} text-white font-medium`}>
+                            {status.text}
+                          </span>
+                        ) : null;
+                      })()}
+                    </div>
+                  )}
+
+                  {/* HP条 */}
+                  <HPBar
+                    current={myState[myActiveIndex]?.currentHp || 0}
+                    max={myState[myActiveIndex]?.maxHp || 1}
                   />
                 </div>
-                <div className="text-xs text-right mt-1">
-                  {myState[myActiveIndex]?.currentHp || 0} / {myState[myActiveIndex]?.maxHp || 0}
-                </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       </div>
 
       {/* 行动菜单 */}
-      <div className="border-t border-gray-700">
+      <div className="relative z-20 bg-slate-900/95 backdrop-blur-sm border-t border-slate-700/50">
         {activeBattle.winnerId ? (
-          <div className="p-4 flex flex-col items-center gap-2">
+          /* 对战结束 */
+          <div className="p-6 flex flex-col items-center gap-4">
+            <div className={`text-2xl font-bold ${
+              activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
+                ? 'text-yellow-400'
+                : 'text-gray-400'
+            }`}>
+              {activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
+                ? '恭喜获胜！'
+                : '对战失败'}
+            </div>
             {activeBattle.finishReason === 'disconnect' && (
               <p className="text-sm text-gray-400">
                 {activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
@@ -425,7 +553,7 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
                 setActiveBattle(null);
                 setView('ROAM');
               }}
-              className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-bold shadow-lg hover:from-cyan-400 hover:to-blue-500 transition-all active:scale-95"
             >
               返回游戏
             </button>
@@ -433,104 +561,161 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
         ) : showSwitchMenu ? (
           /* 换人菜单 */
           <div className="p-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-bold">选择要出战的宝可梦</h3>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-bold text-lg">选择要出战的宝可梦</h3>
               <button
                 onClick={() => setShowSwitchMenu(false)}
-                className="text-gray-400 hover:text-white"
+                className="text-slate-400 hover:text-white transition-colors px-3 py-1 rounded-lg hover:bg-slate-700"
               >
                 返回
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              {myTeam.map((pokemon, index) => (
-                <button
-                  key={pokemon.id}
-                  onClick={() => handleSwitch(index)}
-                  disabled={
-                    myState[index]?.currentHp <= 0 ||
-                    index === myActiveIndex
-                  }
-                  className={`p-2 rounded text-left ${
-                    myState[index]?.currentHp <= 0
-                      ? 'bg-gray-800 opacity-50'
-                      : index === myActiveIndex
-                      ? 'bg-blue-800'
-                      : 'bg-gray-700 hover:bg-gray-600'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span>{pokemon.nickname || pokemon.speciesName}</span>
-                    <span className="text-xs text-gray-400">Lv.{pokemon.level}</span>
-                  </div>
-                  <div className="text-xs text-gray-400">
-                    HP: {myState[index]?.currentHp || 0}/{myState[index]?.maxHp || 0}
-                  </div>
-                </button>
-              ))}
+            <div className="grid grid-cols-2 gap-3">
+              {myTeam.map((pokemon, index) => {
+                const isFainted = myState[index]?.currentHp <= 0;
+                const isActive = index === myActiveIndex;
+                const hpPercent = Math.round(((myState[index]?.currentHp || 0) / (myState[index]?.maxHp || 1)) * 100);
+
+                return (
+                  <button
+                    key={pokemon.id}
+                    onClick={() => handleSwitch(index)}
+                    disabled={isFainted || isActive}
+                    className={`p-3 rounded-xl text-left transition-all ${
+                      isFainted
+                        ? 'bg-slate-800/50 opacity-50'
+                        : isActive
+                        ? 'bg-cyan-900/50 border-2 border-cyan-500'
+                        : 'bg-slate-800/80 hover:bg-slate-700/80 active:scale-98'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      {/* 宝可梦小图标 */}
+                      <div className="w-10 h-10 flex-shrink-0">
+                        <img
+                          src={pokemon.spriteUrl}
+                          alt={pokemon.speciesName}
+                          className={`w-full h-full object-contain pixelated ${isFainted ? 'grayscale opacity-50' : ''}`}
+                          style={{ imageRendering: 'pixelated' }}
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium truncate">{pokemon.nickname || pokemon.speciesName}</span>
+                          <span className="text-xs text-slate-400 ml-1">Lv.{pokemon.level}</span>
+                        </div>
+                        {/* HP 条 */}
+                        <div className="mt-1 h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full transition-all ${
+                              hpPercent > 50 ? 'bg-green-500' : hpPercent > 20 ? 'bg-yellow-500' : 'bg-red-500'
+                            }`}
+                            style={{ width: `${hpPercent}%` }}
+                          />
+                        </div>
+                        <div className="text-[10px] text-slate-500 mt-0.5">
+                          {myState[index]?.currentHp || 0}/{myState[index]?.maxHp || 0}
+                          {isActive && <span className="ml-2 text-cyan-400">出战中</span>}
+                          {isFainted && <span className="ml-2 text-red-400">濒死</span>}
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         ) : (
           /* 战斗菜单 */
           <div className="p-4">
             {/* 状态提示 */}
-            <div className="mb-2 text-sm text-center">
+            <div className="mb-3 text-center">
               {!isMyTurn ? (
-                <span className="text-yellow-400">等待对手行动...</span>
+                <div className="flex items-center justify-center gap-2 text-yellow-400">
+                  <div className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
+                  <span className="font-medium">等待对手行动...</span>
+                </div>
               ) : allMovesEmpty ? (
-                <span className="text-orange-400">所有招式PP已用尽！请换人或投降</span>
+                <div className="flex items-center justify-center gap-2 text-orange-400">
+                  <span className="font-medium">所有招式PP已用尽！请换人或投降</span>
+                </div>
               ) : (
-                <span className="text-green-400">选择你的行动！</span>
+                <div className="flex items-center justify-center gap-2 text-green-400">
+                  <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                  <span className="font-medium">选择你的行动！</span>
+                </div>
               )}
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               {/* 招式按钮 */}
-              {myActivePokemon?.moves.slice(0, 4).map((move, index) => (
-                <button
-                  key={move.move.id}
-                  onClick={() => handleMove(index)}
-                  disabled={!isMyTurn || move.ppCurrent <= 0}
-                  className={`p-3 rounded text-left ${
-                    !isMyTurn || move.ppCurrent <= 0
-                      ? 'bg-gray-800 opacity-50 cursor-not-allowed'
-                      : 'bg-gray-700 hover:bg-gray-600'
-                  }`}
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">{move.move.name}</span>
-                    <span className={`text-xs ${
-                      move.ppCurrent <= 0
-                        ? 'text-red-500 font-bold'
-                        : move.ppCurrent < move.move.ppMax * 0.25
-                        ? 'text-red-400'
-                        : 'text-gray-400'
-                    }`}>
-                      PP {move.ppCurrent}/{move.move.ppMax}
-                    </span>
-                  </div>
-                  <div className="text-xs text-gray-400 mt-1">
-                    {move.move.type} | {move.move.category}
-                  </div>
-                </button>
-              ))}
+              {myActivePokemon?.moves.slice(0, 4).map((move, index) => {
+                const ppLow = move.ppCurrent < move.move.ppMax * 0.25;
+                const ppEmpty = move.ppCurrent <= 0;
+                const disabled = !isMyTurn || ppEmpty;
+
+                return (
+                  <button
+                    key={move.move.id}
+                    onClick={() => handleMove(index)}
+                    disabled={disabled}
+                    className={`p-3 rounded-xl text-left transition-all overflow-hidden relative ${
+                      disabled
+                        ? 'bg-slate-800/50 opacity-50 cursor-not-allowed'
+                        : 'bg-gradient-to-br hover:brightness-110 active:scale-98'
+                    } ${!disabled ? getMoveTypeColor(move.move.type) : ''}`}
+                  >
+                    {/* 招式类型背景装饰 */}
+                    {!disabled && (
+                      <div className="absolute inset-0 bg-black/20" />
+                    )}
+                    <div className="relative z-10">
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold text-white drop-shadow">{move.move.name}</span>
+                        <span className={`text-xs font-mono px-1.5 py-0.5 rounded ${
+                          ppEmpty
+                            ? 'bg-red-900/80 text-red-300'
+                            : ppLow
+                            ? 'bg-orange-900/80 text-orange-300'
+                            : 'bg-black/30 text-white/80'
+                        }`}>
+                          {move.ppCurrent}/{move.move.ppMax}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1.5">
+                        <span className="text-[10px] px-1.5 py-0.5 bg-white/20 rounded text-white/90">
+                          {move.move.type}
+                        </span>
+                        <span className="text-[10px] text-white/70">
+                          {move.move.category === 'Physical' ? '物理' : move.move.category === 'Special' ? '特殊' : '变化'}
+                        </span>
+                        {move.move.power > 0 && (
+                          <span className="text-[10px] text-white/70">
+                            威力 {move.move.power}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
 
               {/* 换人按钮 */}
               <button
                 onClick={() => setShowSwitchMenu(true)}
                 disabled={!isMyTurn || (!hasAvailableSwitch && !allMovesEmpty)}
-                className={`p-3 rounded text-left ${
+                className={`p-3 rounded-xl text-left transition-all ${
                   !isMyTurn
-                    ? 'bg-gray-800 opacity-50 cursor-not-allowed'
+                    ? 'bg-slate-800/50 opacity-50 cursor-not-allowed'
                     : allMovesEmpty && hasAvailableSwitch
-                    ? 'bg-orange-700 hover:bg-orange-600 ring-2 ring-orange-400'
-                    : 'bg-gray-700 hover:bg-gray-600'
+                    ? 'bg-gradient-to-br from-orange-600 to-amber-700 ring-2 ring-orange-400 animate-pulse'
+                    : 'bg-gradient-to-br from-slate-600 to-slate-700 hover:from-slate-500 hover:to-slate-600 active:scale-98'
                 }`}
               >
-                <div className={`font-medium ${allMovesEmpty && hasAvailableSwitch ? 'text-orange-300' : ''}`}>
+                <div className={`font-bold ${allMovesEmpty && hasAvailableSwitch ? 'text-orange-200' : 'text-white'}`}>
                   {allMovesEmpty && hasAvailableSwitch ? '必须换人！' : '换人'}
                 </div>
-                <div className="text-xs text-gray-400 mt-1">
+                <div className="text-xs text-white/60 mt-1">
                   更换当前宝可梦
                 </div>
               </button>
@@ -539,18 +724,18 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
               <button
                 onClick={handleSurrender}
                 disabled={!isMyTurn}
-                className={`p-3 rounded text-left ${
+                className={`p-3 rounded-xl text-left transition-all ${
                   !isMyTurn
-                    ? 'bg-gray-800 opacity-50 cursor-not-allowed'
+                    ? 'bg-slate-800/50 opacity-50 cursor-not-allowed'
                     : allMovesEmpty && !hasAvailableSwitch
-                    ? 'bg-red-700 hover:bg-red-600 ring-2 ring-red-400'
-                    : 'bg-red-900 hover:bg-red-800'
+                    ? 'bg-gradient-to-br from-red-600 to-red-800 ring-2 ring-red-400'
+                    : 'bg-gradient-to-br from-red-900 to-red-950 hover:from-red-800 hover:to-red-900 active:scale-98'
                 }`}
               >
-                <div className={`font-medium ${allMovesEmpty && !hasAvailableSwitch ? 'text-red-300' : 'text-red-400'}`}>
+                <div className={`font-bold ${allMovesEmpty && !hasAvailableSwitch ? 'text-red-200' : 'text-red-400'}`}>
                   {allMovesEmpty && !hasAvailableSwitch ? '只能投降' : '投降'}
                 </div>
-                <div className="text-xs text-gray-400 mt-1">
+                <div className="text-xs text-white/60 mt-1">
                   放弃这场对战
                 </div>
               </button>
