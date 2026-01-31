@@ -57,14 +57,18 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
 
       const battleData = result.success ? result.battle : null;
 
-      // 检查对战是否被取消或已结束
-      if (battleData && (battleData.status === 'cancelled' || battleData.status === 'finished')) {
+      // 检查对战是否被取消
+      if (battleData && battleData.status === 'cancelled') {
         setIsPreparing(false);
-        if (battleData.status === 'cancelled') {
-          setPrepareError('对战已被取消');
-        } else {
-          setPrepareError('对战已结束');
-        }
+        setPrepareError('对战已被取消');
+        return;
+      }
+
+      // 对战已结束 - 显示战斗总结（需要有完整数据）
+      if (battleData && battleData.status === 'finished' && battleData.currentState && battleData.opponentTeam) {
+        setPrepareError(null);
+        setIsPreparing(false);
+        setActiveBattle(battleData);
         return;
       }
 
