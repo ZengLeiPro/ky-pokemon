@@ -337,8 +337,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       weatherRates: { Hail: 0.4 },
       legendaryEncounter: {
           speciesId: 'articuno',
-          level: 50,
-          minBadges: 7
+          level: 50
       }
   },
   'cinnabar-island': {
@@ -432,8 +431,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       weatherRates: { Rain: 0.5 },
       legendaryEncounter: {
           speciesId: 'zapdos',
-          level: 50,
-          minBadges: 7
+          level: 50
       }
   },
   'digletts-cave': {
@@ -464,8 +462,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       bgGradient: 'from-purple-900 via-slate-900 to-black',
       legendaryEncounter: {
           speciesId: 'moltres',
-          level: 50,
-          minBadges: 7
+          level: 50
       }
   },
   'pokemon-tower': {
@@ -487,8 +484,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       bgGradient: 'from-indigo-900 via-purple-950 to-black',
       legendaryEncounter: {
           speciesId: 'mewtwo',
-          level: 70,
-          minBadges: 8
+          level: 70
       }
   },
   'ss-anne': {
@@ -546,8 +542,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       bgGradient: 'from-gray-700 via-slate-800 to-black',
       legendaryEncounter: {
           speciesId: 'mew',
-          level: 30,
-          minBadges: 8
+          level: 30
       }
   },
   'pokemon-league': {
