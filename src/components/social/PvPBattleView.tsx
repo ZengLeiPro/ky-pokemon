@@ -82,6 +82,8 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
         setPrepareError(null);
         setIsPreparing(false);
         setActiveBattle(battleData);
+        // 对战进行中继续轮询，直到对战结束
+        timeoutId = window.setTimeout(poll, 1000);
         return;
       }
 
@@ -291,7 +293,11 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
     if (!confirm('确定要投降吗？')) return;
     const success = await surrenderBattle(activeBattle.id);
     if (success) {
-      setView('ROAM');
+      // 投降成功后重新加载状态以显示战斗总结
+      const result = await loadBattleState(activeBattle.id);
+      if (result.success && result.battle) {
+        setActiveBattle(result.battle);
+      }
     }
   };
 

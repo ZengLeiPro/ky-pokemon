@@ -741,7 +741,7 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
       });
       const data = await res.json();
       if (data.success) {
-        set({ activeBattle: null });
+        // 不清空 activeBattle，让前端可以显示战斗总结
         return true;
       }
       set({ error: data.error });
