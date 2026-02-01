@@ -4,16 +4,24 @@ import { Compass, HardDrive, Moon, Navigation, ShoppingBag, House, Heart, Swords
 import { WORLD_MAP, SPECIES_DATA } from '../../constants';
 
 const RoamStage: React.FC = () => {
-  const { startBattle, startGymBattle, healParty, addLog, addItem, playerLocationId, moveTo, buyItem, playerMoney, setView, weather } = useGameStore();
+  const { startBattle, startLegendaryBattle, startGymBattle, healParty, addLog, addItem, playerLocationId, moveTo, buyItem, playerMoney, setView, weather, legendaryProgress, badges } = useGameStore();
   const [showShop, setShowShop] = useState(false);
   const [showPokeCenter, setShowPokeCenter] = useState(false);
   const [showGym, setShowGym] = useState(false);
-  
+  const [showLegendary, setShowLegendary] = useState(false);
+
   const location = WORLD_MAP[playerLocationId];
   if (!location) return <div>Location Error</div>;
 
   const isTown = location.id.includes('town') || location.id.includes('city');
   const hasGym = !!location.gym;
+
+  // 检查传说宝可梦是否可遭遇
+  const legendaryEncounter = location.legendaryEncounter;
+  const hasLegendary = !!legendaryEncounter;
+  const legendaryStatus = legendaryEncounter ? legendaryProgress[legendaryEncounter.speciesId] : null;
+  const legendaryAvailable = hasLegendary && !legendaryStatus?.captured && !legendaryStatus?.defeated;
+  const legendaryLocked = hasLegendary && legendaryEncounter && badges.length < (legendaryEncounter.minBadges || 0);
 
   const getWeatherOverlay = () => {
       switch (weather) {
@@ -205,6 +213,29 @@ const RoamStage: React.FC = () => {
                     <Swords size={18} className="group-hover:scale-110 transition-transform" />
                     <span className="text-[10px] font-bold">宝可梦道馆</span>
                 </button>
+
+                {/* 传说宝可梦遭遇按钮 */}
+                {hasLegendary && (
+                    <button
+                        onClick={() => {
+                            if (legendaryLocked) {
+                                addLog(`需要至少 ${legendaryEncounter?.minBadges || 0} 个道馆徽章才能遭遇传说宝可梦。`, "urgent");
+                            } else if (!legendaryAvailable) {
+                                const pokemon = legendaryEncounter ? SPECIES_DATA[legendaryEncounter.speciesId] : null;
+                                addLog(`${pokemon?.speciesName || '传说宝可梦'} 已经不在这里了...`, "info");
+                            } else {
+                                setShowLegendary(true);
+                            }
+                        }}
+                        className={`col-span-3 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 hover:from-purple-500 hover:via-pink-500 hover:to-orange-500 text-white p-3 rounded-2xl shadow-lg border-b-4 border-purple-900 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group animate-pulse ${!legendaryAvailable || legendaryLocked ? 'opacity-50 grayscale cursor-not-allowed animate-none' : ''}`}
+                    >
+                        <Moon size={18} className="group-hover:scale-110 transition-transform" />
+                        <span className="text-[10px] font-bold">
+                            {legendaryLocked ? `需要 ${legendaryEncounter?.minBadges || 0} 徽章` :
+                             !legendaryAvailable ? '传说已离去' : '传说宝可梦'}
+                        </span>
+                    </button>
+                )}
             </div>
         </div>
 
@@ -251,6 +282,64 @@ const RoamStage: React.FC = () => {
                 <div className="text-center text-xs text-slate-500 mt-2">
                     推荐等级: Lv.{location.gym.level}
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Legendary Pokemon Encounter Modal */}
+        {showLegendary && legendaryEncounter && legendaryAvailable && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
+            <div className="bg-gradient-to-br from-purple-900 via-slate-900 to-pink-900 border-2 border-purple-500/50 rounded-2xl p-6 max-w-sm w-full animate-fade-in-up">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                  <Moon size={24} className="text-purple-400" />
+                  传说宝可梦
+                </h2>
+                <button
+                  onClick={() => setShowLegendary(false)}
+                  className="text-slate-400 hover:text-white text-sm px-3 py-1 bg-slate-800 rounded-lg"
+                >
+                  关闭
+                </button>
+              </div>
+
+              <div className="mb-6 bg-slate-800/50 p-4 rounded-xl flex items-center gap-4">
+                 <div className="w-20 h-20 bg-gradient-to-br from-purple-700 to-pink-700 rounded-full flex items-center justify-center overflow-hidden border-2 border-purple-400/50 shadow-lg shadow-purple-500/30">
+                    <img
+                      src={SPECIES_DATA[legendaryEncounter.speciesId]?.spriteUrl}
+                      alt={SPECIES_DATA[legendaryEncounter.speciesId]?.speciesName}
+                      className="w-16 h-16 object-contain pixelated"
+                    />
+                 </div>
+                 <div>
+                     <h3 className="font-bold text-white text-lg">{SPECIES_DATA[legendaryEncounter.speciesId]?.speciesName}</h3>
+                     <p className="text-purple-400 text-xs font-mono uppercase tracking-wider">LEGENDARY POKEMON</p>
+                     <p className="text-slate-400 text-xs mt-1">Lv.{legendaryEncounter.level}</p>
+                 </div>
+              </div>
+
+              <div className="mb-4 bg-slate-800/30 p-3 rounded-xl text-slate-300 text-sm leading-relaxed border border-purple-500/20">
+                <p className="text-center">
+                  你感受到了一股强大的气息...<br/>
+                  <span className="text-purple-300 font-bold">传说的宝可梦就在前方！</span>
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <button
+                  onClick={() => {
+                    startLegendaryBattle(legendaryEncounter.speciesId, legendaryEncounter.level);
+                    setShowLegendary(false);
+                  }}
+                  className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 hover:from-purple-500 hover:via-pink-500 hover:to-orange-500 text-white py-3 px-4 rounded-xl font-bold transition-all shadow-lg shadow-purple-900/40 flex items-center justify-center gap-2"
+                >
+                  <Moon size={18} className="animate-pulse" />
+                  与传说对决
+                </button>
+                <p className="text-center text-xs text-amber-400 mt-2">
+                  ⚠️ 击败或逃跑后，传说宝可梦将离开此地
+                </p>
               </div>
             </div>
           </div>

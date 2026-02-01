@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { produce } from 'immer';
-import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus, Weather, EvolutionState, GymData } from '@/types';
+import { LogEntry, Pokemon, ViewState, InventoryItem, PokedexStatus, Weather, EvolutionState, GymData, LegendaryProgress } from '@/types';
 import { MOVES, SPECIES_DATA, WORLD_MAP } from '@/constants';
 import { createPokemon, calculateDamage, gainExperience, evolvePokemon, MOVE_EFFECTS, calculateStats } from '@/lib/mechanics';
 import { config } from '@/config';
@@ -65,6 +65,7 @@ interface GameState {
   weather: Weather;
   weatherDuration: number;
   isGameLoading: boolean;
+  legendaryProgress: Record<string, LegendaryProgress>;  // 传说宝可梦捕获进度
 
   evolution: EvolutionState;
 
@@ -79,6 +80,8 @@ interface GameState {
     playerActiveIndex: number;
     phase: 'INPUT' | 'PROCESSING' | 'ENDED' | 'FORCED_SWITCH' | 'NICKNAME';
     caughtPokemonId?: string;
+    isLegendary?: boolean;  // 是否是传说宝可梦战斗
+    legendarySpeciesId?: string;  // 传说宝可梦的物种ID
   };
 
   gameMode: 'NORMAL' | 'CHEAT';
@@ -88,6 +91,7 @@ interface GameState {
   setSelectedPokemon: (id: string | null) => void;
   addLog: (message: string, type?: LogEntry['type']) => void;
   startBattle: (enemyId: string) => void;
+  startLegendaryBattle: (speciesId: string, level: number) => void;
   startGymBattle: (gym: GymData) => void;
   runAway: () => void;
   executeMove: (moveIndex: number) => Promise<void>;
@@ -130,6 +134,7 @@ export const useGameStore = create<GameState>()(
   weather: 'None',
   weatherDuration: 0,
   isGameLoading: false,
+  legendaryProgress: {},
     inventory: initialInventory,
     gameMode: 'NORMAL',
 
@@ -180,6 +185,7 @@ export const useGameStore = create<GameState>()(
       weather: 'None',
       weatherDuration: 0,
       inventory: initialInventory,
+      legendaryProgress: {},
       battle: {
         active: false,
         turnCount: 0,
@@ -256,8 +262,36 @@ export const useGameStore = create<GameState>()(
       state.battle.phase = 'INPUT';
       state.battle.gymBadgeReward = undefined;
       state.battle.trainerName = undefined;
+      state.battle.isLegendary = false;
+      state.battle.legendarySpeciesId = undefined;
       state.view = 'BATTLE';
       state.logs.push(createLogEntry(`野生的 ${enemy.speciesName} 出现了！`, 'urgent'));
+
+      const dexId = enemyData.pokedexId!;
+      if (state.pokedex[dexId] === 'UNKNOWN') {
+          state.pokedex[dexId] = 'SEEN';
+      }
+    }));
+  },
+
+  startLegendaryBattle: (speciesId: string, level: number) => {
+    const enemyData = SPECIES_DATA[speciesId];
+    if (!enemyData) return;
+
+    const enemy = createPokemon(speciesId, level, []);
+
+    set(produce((state: GameState) => {
+      state.battle.active = true;
+      state.battle.enemy = enemy;
+      state.battle.enemyParty = [];
+      state.battle.turnCount = 1;
+      state.battle.phase = 'INPUT';
+      state.battle.gymBadgeReward = undefined;
+      state.battle.trainerName = undefined;
+      state.battle.isLegendary = true;
+      state.battle.legendarySpeciesId = speciesId;
+      state.view = 'BATTLE';
+      state.logs.push(createLogEntry(`传说的 ${enemy.speciesName} 出现了！`, 'urgent'));
 
       const dexId = enemyData.pokedexId!;
       if (state.pokedex[dexId] === 'UNKNOWN') {
@@ -294,8 +328,19 @@ export const useGameStore = create<GameState>()(
 
   runAway: () => {
     set(produce((state: GameState) => {
+      // 如果是传说宝可梦战斗，逃跑后也会消失
+      if (state.battle.isLegendary && state.battle.legendarySpeciesId) {
+        state.legendaryProgress[state.battle.legendarySpeciesId] = {
+          captured: false,
+          defeated: true
+        };
+        state.logs.push(createLogEntry('传说的宝可梦消失在了远方...', 'urgent'));
+      }
+
       state.battle.active = false;
       state.battle.enemy = null;
+      state.battle.isLegendary = false;
+      state.battle.legendarySpeciesId = undefined;
       state.view = 'ROAM';
       state.logs.push(createLogEntry('成功逃跑了！'));
     }));
@@ -588,11 +633,22 @@ export const useGameStore = create<GameState>()(
                 }
             }
 
+            // 记录传说宝可梦击败状态
+            if (state.battle.isLegendary && state.battle.legendarySpeciesId) {
+                state.legendaryProgress[state.battle.legendarySpeciesId] = {
+                    captured: false,
+                    defeated: true
+                };
+                state.logs.push(createLogEntry(`传说的宝可梦逃走了...`, 'urgent'));
+            }
+
             state.battle.active = false;
             state.battle.enemy = null;
             state.battle.enemyParty = [];
             state.battle.gymBadgeReward = undefined;
             state.battle.trainerName = undefined;
+            state.battle.isLegendary = false;
+            state.battle.legendarySpeciesId = undefined;
             state.playerMoney += 120;
             state.view = 'ROAM';
         }));
@@ -1013,17 +1069,27 @@ export const useGameStore = create<GameState>()(
       if (caughtId && name) {
           const inParty = state.playerParty.find(p => p.id === caughtId);
           if (inParty) inParty.nickname = name;
-          
+
           const inStorage = state.playerStorage.find(p => p.id === caughtId);
           if (inStorage) inStorage.nickname = name;
-          
+
           state.logs.push(createLogEntry(`给宝可梦取名为 ${name}。`));
+      }
+
+      // 记录传说宝可梦捕获状态
+      if (state.battle.isLegendary && state.battle.legendarySpeciesId) {
+          state.legendaryProgress[state.battle.legendarySpeciesId] = {
+              captured: true,
+              defeated: false
+          };
       }
 
       state.battle.active = false;
       state.battle.enemy = null;
       state.battle.phase = 'ENDED';
       state.battle.caughtPokemonId = undefined;
+      state.battle.isLegendary = false;
+      state.battle.legendarySpeciesId = undefined;
       state.view = 'ROAM';
   })),
 
@@ -1057,6 +1123,7 @@ export const useGameStore = create<GameState>()(
             pokedex: save.pokedex || {},
             inventory: save.inventory || get().inventory,
             playerMoney: save.money ?? 3000,
+            legendaryProgress: save.legendaryProgress || {},
             hasSelectedStarter: (save.team?.length > 0),
             view: 'ROAM',
             isGameLoading: false
@@ -1089,7 +1156,8 @@ export const useGameStore = create<GameState>()(
             const { effect, ...rest } = item;
             return rest;
         }),
-        money: state.playerMoney
+        money: state.playerMoney,
+        legendaryProgress: state.legendaryProgress
       };
 
       console.log('Saving game data:', saveData);

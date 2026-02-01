@@ -31,6 +31,12 @@ const InventoryItemSchema = z.object({
   quantity: z.number().int().min(0),
 });
 
+const LegendaryProgressSchema = z.object({
+  visibleOnMap: z.boolean().optional(),
+  captured: z.boolean(),
+  defeated: z.boolean()
+});
+
 export const SaveGameRequestSchema = z.object({
   team: z.array(PokemonSchema).min(0).max(6),
   pcBox: z.array(PokemonSchema),
@@ -38,6 +44,7 @@ export const SaveGameRequestSchema = z.object({
   badges: z.array(z.string()),
   pokedex: z.record(z.string(), z.enum(['CAUGHT', 'SEEN', 'UNKNOWN'])),
   inventory: z.array(InventoryItemSchema).optional(),
+  legendaryProgress: z.record(z.string(), LegendaryProgressSchema).optional(),
   money: z.number().int().min(0).optional(),
   playTime: z.number().int().min(0).optional(),
   mode: z.enum(['NORMAL', 'CHEAT']).optional().default('NORMAL')

@@ -334,7 +334,12 @@ export const WORLD_MAP: Record<string, LocationData> = {
       connections: ['route-20'],
       encounters: ['zubat', 'golbat', 'psyduck', 'golduck', 'slowpoke', 'slowbro', 'seel', 'dewgong', 'shellder', 'cloyster', 'krabby', 'kingler', 'horsea', 'jynx', 'lapras'],
       bgGradient: 'from-cyan-900 via-blue-950 to-black',
-      weatherRates: { Hail: 0.4 }
+      weatherRates: { Hail: 0.4 },
+      legendaryEncounter: {
+          speciesId: 'articuno',
+          level: 50,
+          minBadges: 7
+      }
   },
   'cinnabar-island': {
       id: 'cinnabar-island',
@@ -419,12 +424,17 @@ export const WORLD_MAP: Record<string, LocationData> = {
   'power-plant': {
       id: 'power-plant',
       name: '无人发电厂',
-      description: '废弃的发电站。充满了电属性宝可梦。',
+      description: '废弃的发电站。充满了电属性宝可梦。据说有传说的宝可梦栖息。',
       region: '关都',
       connections: ['route-10'],
       encounters: ['voltorb', 'electrode', 'magnemite', 'magneton', 'electabuzz', 'pikachu', 'raichu'],
       bgGradient: 'from-yellow-700 via-amber-800 to-black',
-      weatherRates: { Rain: 0.5 }
+      weatherRates: { Rain: 0.5 },
+      legendaryEncounter: {
+          speciesId: 'zapdos',
+          level: 50,
+          minBadges: 7
+      }
   },
   'digletts-cave': {
       id: 'digletts-cave',
@@ -447,11 +457,16 @@ export const WORLD_MAP: Record<string, LocationData> = {
   'victory-road': {
       id: 'victory-road',
       name: '冠军之路',
-      description: '挑战四天王前的最终试炼。强大的宝可梦栖息于此。',
+      description: '挑战四天王前的最终试炼。强大的宝可梦栖息于此。据说有传说的宝可梦栖息。',
       region: '关都',
       connections: ['route-23'],
       encounters: ['zubat', 'golbat', 'geodude', 'graveler', 'onix', 'machop', 'machoke', 'marowak'],
-      bgGradient: 'from-purple-900 via-slate-900 to-black'
+      bgGradient: 'from-purple-900 via-slate-900 to-black',
+      legendaryEncounter: {
+          speciesId: 'moltres',
+          level: 50,
+          minBadges: 7
+      }
   },
   'pokemon-tower': {
       id: 'pokemon-tower',
@@ -469,7 +484,12 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['cerulean-city'],
       encounters: ['golbat', 'parasect', 'venomoth', 'kadabra', 'hypno', 'magneton', 'electrode', 'rhydon', 'chansey', 'ditto'],
-      bgGradient: 'from-indigo-900 via-purple-950 to-black'
+      bgGradient: 'from-indigo-900 via-purple-950 to-black',
+      legendaryEncounter: {
+          speciesId: 'mewtwo',
+          level: 70,
+          minBadges: 8
+      }
   },
   'ss-anne': {
       id: 'ss-anne',
@@ -519,11 +539,16 @@ export const WORLD_MAP: Record<string, LocationData> = {
   'cinnabar-lab': {
       id: 'cinnabar-lab',
       name: '红莲研究所',
-      description: '研究化石复活技术的科学实验室。',
+      description: '研究化石复活技术的科学实验室。据说实验室深处隐藏着神秘的宝可梦。',
       region: '关都',
       connections: ['cinnabar-island'],
       encounters: ['omanyte', 'omastar', 'kabuto', 'kabutops', 'aerodactyl'],
-      bgGradient: 'from-gray-700 via-slate-800 to-black'
+      bgGradient: 'from-gray-700 via-slate-800 to-black',
+      legendaryEncounter: {
+          speciesId: 'mew',
+          level: 30,
+          minBadges: 8
+      }
   },
   'pokemon-league': {
       id: 'pokemon-league',

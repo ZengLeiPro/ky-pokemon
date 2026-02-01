@@ -15,6 +15,18 @@ export interface GymData {
   level: number;
 }
 
+export interface LegendaryEncounter {
+  speciesId: string;           // 传说宝可梦 ID（如 'articuno'）
+  level: number;               // 等级
+  minBadges?: number;          // 最少需要的道馆徽章数
+}
+
+export interface LegendaryProgress {
+  visibleOnMap?: boolean;      // 是否在地图上可见（用于显示提示）
+  captured: boolean;           // 是否已捕获
+  defeated: boolean;           // 是否已击败（击败后也会消失）
+}
+
 export interface LocationData {
   id: string;
   name: string;
@@ -25,4 +37,5 @@ export interface LocationData {
   bgGradient?: string;  // 前端可选使用
   gym?: GymData;
   weatherRates?: Partial<Record<Weather, number>>;
+  legendaryEncounter?: LegendaryEncounter;  // 传说宝可梦固定遭遇
 }

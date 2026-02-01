@@ -48,6 +48,7 @@ model GameSave {
   badges          String   // badge IDs (JSON string)
   pokedex         String   // Record<string, PokedexStatus> (JSON string)
   inventory       String   // InventoryItem[] (JSON string)
+  legendaryProgress String @default("{}") // Record<string, LegendaryProgress> (JSON string)
   money           Int      @default(3000)
   playTime        Int      @default(0) // 秒
 
