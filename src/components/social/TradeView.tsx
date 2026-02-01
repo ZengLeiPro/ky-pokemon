@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSocialStore } from '@/stores/socialStore';
 import { useGameStore } from '@/stores/gameStore';
+import { useAuthStore } from '@/stores/authStore';
 import type { TradeRequest } from '../../../shared/types/social';
 import type { Pokemon } from '@shared/types/pokemon';
 import { TradeAnimation } from './TradeAnimation';
@@ -21,7 +22,8 @@ export default function TradeView() {
     clearError
   } = useSocialStore();
 
-  const { playerParty: team, playerStorage: pcBox, setView } = useGameStore();
+  const { playerParty: team, playerStorage: pcBox, setView, loadGame } = useGameStore();
+  const { currentUser } = useAuthStore();
 
   const [activeTab, setActiveTab] = useState<'received' | 'sent' | 'public'>('received');
   const [selectingForRequest, setSelectingForRequest] = useState<TradeRequest | null>(null);
@@ -40,12 +42,62 @@ export default function TradeView() {
   // 确认中状态
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
 
+  // 跟踪之前的请求状态，用于检测完成的交换
+  const prevReceivedRequestsRef = useRef<TradeRequest[]>([]);
+  // 已显示动画的请求ID集合，避免重复显示
+  const shownAnimationIdsRef = useRef<Set<string>>(new Set());
+
   useEffect(() => {
     setMounted(true);
     loadReceivedTradeRequests();
     loadSentTradeRequests();
     loadPublicTradeRequests();
+
+    // 轮询机制：每3秒刷新一次请求列表
+    const pollInterval = setInterval(() => {
+      loadReceivedTradeRequests();
+      loadSentTradeRequests();
+    }, 3000);
+
+    return () => clearInterval(pollInterval);
   }, []);
+
+  // 检测接收方的请求是否从 accepted 变为 completed
+  useEffect(() => {
+    if (showTradeAnimation) return; // 正在显示动画时不检测
+
+    const prevRequests = prevReceivedRequestsRef.current;
+
+    for (const req of receivedTradeRequests) {
+      // 找到之前状态为 accepted 的请求
+      const prevReq = prevRequests.find(p => p.id === req.id);
+
+      // 如果之前是 accepted，现在是 completed，且没有显示过动画
+      if (
+        prevReq &&
+        prevReq.status === 'accepted' &&
+        req.status === 'completed' &&
+        !shownAnimationIdsRef.current.has(req.id) &&
+        req.receiverPokemon
+      ) {
+        // 标记已显示
+        shownAnimationIdsRef.current.add(req.id);
+
+        // 接收方视角：我提供 receiverPokemon，获得 offeredPokemon
+        setTradeAnimationData({
+          myPokemon: req.receiverPokemon.snapshot,
+          theirPokemon: req.offeredPokemon.snapshot,
+          myUsername: req.receiverUsername,
+          theirUsername: req.initiatorUsername
+        });
+        setShowTradeAnimation(true);
+        break;
+      }
+    }
+
+    // 更新之前的请求状态
+    prevReceivedRequestsRef.current = receivedTradeRequests;
+  }, [receivedTradeRequests, showTradeAnimation]);
 
   useEffect(() => {
     if (error) {
@@ -133,6 +185,10 @@ export default function TradeView() {
     setSuccessMessage('交换完成！');
     loadSentTradeRequests();
     loadReceivedTradeRequests();
+    // 刷新玩家数据，更新宝可梦列表
+    if (currentUser?.id) {
+      loadGame(currentUser.id);
+    }
   };
 
   return (
