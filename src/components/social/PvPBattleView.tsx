@@ -152,8 +152,8 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
     );
   }
 
-  // 对战已结束或被取消
-  if (activeBattle && (activeBattle.status === 'cancelled' || activeBattle.status === 'finished')) {
+  // 对战已被取消（注意：finished 状态需要在主界面中显示战斗总结，不在这里处理）
+  if (activeBattle && activeBattle.status === 'cancelled') {
     return (
       <div className="h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 via-slate-900 to-black gap-6 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 pointer-events-none">
@@ -166,9 +166,7 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <div className="text-white text-xl font-bold">
-            {activeBattle.status === 'cancelled' ? '对战已被取消' : '对战已结束'}
-          </div>
+          <div className="text-white text-xl font-bold">对战已被取消</div>
           <button
             onClick={() => setView('FRIENDS')}
             className="mt-2 px-6 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-medium transition-colors"
@@ -183,7 +181,7 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
   if (
     !activeBattle ||
     isPreparing ||
-    activeBattle.status !== 'active' ||
+    (activeBattle.status !== 'active' && activeBattle.status !== 'finished') ||
     !activeBattle.currentState ||
     !activeBattle.opponentTeam
   ) {
@@ -372,27 +370,34 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
           <div className="px-3 py-1 bg-slate-800/80 rounded-lg">
             <span className="text-sm font-mono text-slate-300">回合 <span className="text-cyan-400 font-bold">{activeBattle.currentTurn}</span></span>
           </div>
-          {activeBattle.winnerId && (
+          {activeBattle.status === 'finished' && (
             <div className="flex items-center gap-2 animate-bounce-slow">
-              <span className={`px-3 py-1.5 ${
-                activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
-                  ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black'
-                  : 'bg-gradient-to-r from-gray-600 to-gray-700 text-white'
-              } text-sm rounded-lg font-bold shadow-lg`}>
-                {activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
-                  ? '胜利！'
-                  : '失败'}
-              </span>
-              {activeBattle.finishReason === 'disconnect' && (
-                <span className="text-xs text-gray-400">
-                  {activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId)
-                    ? '对方掉线'
-                    : '你已掉线'}
-                </span>
-              )}
-              {activeBattle.finishReason === 'surrender' && (
-                <span className="text-xs text-gray-400">投降</span>
-              )}
+              {(() => {
+                const myId = activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId;
+                const isWinner = activeBattle.winnerId === myId;
+                const isDraw = activeBattle.winnerId === null;
+                return (
+                  <>
+                    <span className={`px-3 py-1.5 ${
+                      isDraw
+                        ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white'
+                        : isWinner
+                        ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black'
+                        : 'bg-gradient-to-r from-gray-600 to-gray-700 text-white'
+                    } text-sm rounded-lg font-bold shadow-lg`}>
+                      {isDraw ? '平局' : isWinner ? '胜利！' : '失败'}
+                    </span>
+                    {activeBattle.finishReason === 'disconnect' && (
+                      <span className="text-xs text-gray-400">
+                        {isWinner ? '对方掉线' : '你已掉线'}
+                      </span>
+                    )}
+                    {activeBattle.finishReason === 'surrender' && (
+                      <span className="text-xs text-gray-400">投降</span>
+                    )}
+                  </>
+                );
+              })()}
             </div>
           )}
         </div>
@@ -533,12 +538,15 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
 
       {/* 行动菜单 */}
       <div className="relative z-20 bg-slate-900/95 backdrop-blur-sm border-t border-slate-700/50">
-        {activeBattle.winnerId ? (
+        {activeBattle.status === 'finished' ? (
           /* 对战结束 - 战斗总结 */
           <div className="p-4 max-h-[60vh] overflow-y-auto">
             {/* 胜负结果 */}
             {(() => {
-              const isWinner = activeBattle.winnerId === (activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId);
+              const myId = activeBattle.isChallenger ? activeBattle.challengerId : activeBattle.opponentId;
+              const opponentId = activeBattle.isChallenger ? activeBattle.opponentId : activeBattle.challengerId;
+              const isWinner = activeBattle.winnerId === myId;
+              const isDraw = activeBattle.winnerId === null;
               const myUsername = activeBattle.isChallenger ? activeBattle.challengerUsername : activeBattle.opponentUsername;
               const opponentUsername = activeBattle.isChallenger ? activeBattle.opponentUsername : activeBattle.challengerUsername;
 
@@ -550,17 +558,19 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
                 <div className="space-y-4">
                   {/* 胜负横幅 */}
                   <div className={`text-center py-4 rounded-xl ${
-                    isWinner
+                    isDraw
+                      ? 'bg-gradient-to-r from-purple-500/20 via-purple-500/30 to-purple-500/20 border border-purple-500/50'
+                      : isWinner
                       ? 'bg-gradient-to-r from-yellow-500/20 via-amber-500/30 to-yellow-500/20 border border-yellow-500/50'
                       : 'bg-gradient-to-r from-slate-700/50 via-slate-600/50 to-slate-700/50 border border-slate-600/50'
                   }`}>
-                    <div className={`text-3xl font-black mb-1 ${isWinner ? 'text-yellow-400' : 'text-slate-400'}`}>
-                      {isWinner ? '胜利！' : '失败'}
+                    <div className={`text-3xl font-black mb-1 ${isDraw ? 'text-purple-400' : isWinner ? 'text-yellow-400' : 'text-slate-400'}`}>
+                      {isDraw ? '平局' : isWinner ? '胜利！' : '失败'}
                     </div>
                     <div className="text-sm text-slate-400">
                       {activeBattle.finishReason === 'surrender' && (isWinner ? '对手投降' : '你已投降')}
                       {activeBattle.finishReason === 'disconnect' && (isWinner ? '对手掉线超时' : '你掉线超时')}
-                      {(!activeBattle.finishReason || activeBattle.finishReason === 'normal') && '对战结束'}
+                      {(!activeBattle.finishReason || activeBattle.finishReason === 'normal') && (isDraw ? '双方同归于尽' : '对战结束')}
                     </div>
                   </div>
 
@@ -585,9 +595,10 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
                     {/* 我方队伍 */}
                     <div className="bg-slate-800/50 rounded-xl p-3">
                       <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-700/50">
-                        <div className={`w-2 h-2 rounded-full ${isWinner ? 'bg-yellow-400' : 'bg-slate-500'}`} />
+                        <div className={`w-2 h-2 rounded-full ${isDraw ? 'bg-purple-400' : isWinner ? 'bg-yellow-400' : 'bg-slate-500'}`} />
                         <span className="font-bold text-sm truncate">{myUsername}</span>
                         {isWinner && <span className="text-xs text-yellow-400">胜</span>}
+                        {isDraw && <span className="text-xs text-purple-400">平</span>}
                       </div>
                       <div className="space-y-1.5">
                         {myTeam.map((pokemon, index) => {
@@ -622,9 +633,10 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
                     {/* 对方队伍 */}
                     <div className="bg-slate-800/50 rounded-xl p-3">
                       <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-700/50">
-                        <div className={`w-2 h-2 rounded-full ${!isWinner ? 'bg-yellow-400' : 'bg-slate-500'}`} />
+                        <div className={`w-2 h-2 rounded-full ${isDraw ? 'bg-purple-400' : !isWinner ? 'bg-yellow-400' : 'bg-slate-500'}`} />
                         <span className="font-bold text-sm truncate">{opponentUsername}</span>
-                        {!isWinner && <span className="text-xs text-yellow-400">胜</span>}
+                        {!isDraw && !isWinner && <span className="text-xs text-yellow-400">胜</span>}
+                        {isDraw && <span className="text-xs text-purple-400">平</span>}
                       </div>
                       <div className="space-y-1.5">
                         {opponentTeam.map((pokemon, index) => {
