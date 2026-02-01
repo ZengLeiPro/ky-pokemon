@@ -64,9 +64,12 @@ export default function TradeView() {
 
   // 检测接收方的请求是否从 accepted 变为 completed
   useEffect(() => {
-    if (showTradeAnimation) return; // 正在显示动画时不检测
-
+    // 始终更新之前的请求状态，避免动画结束后误判
     const prevRequests = prevReceivedRequestsRef.current;
+    prevReceivedRequestsRef.current = receivedTradeRequests;
+
+    // 正在显示动画时不检测新的动画
+    if (showTradeAnimation) return;
 
     for (const req of receivedTradeRequests) {
       // 找到之前状态为 accepted 的请求
@@ -94,9 +97,6 @@ export default function TradeView() {
         break;
       }
     }
-
-    // 更新之前的请求状态
-    prevReceivedRequestsRef.current = receivedTradeRequests;
   }, [receivedTradeRequests, showTradeAnimation]);
 
   useEffect(() => {
@@ -161,6 +161,9 @@ export default function TradeView() {
   const handleConfirmTrade = async (req: TradeRequest) => {
     if (!req.receiverPokemon) return;
 
+    // 先标记已显示，防止轮询检测逻辑重复触发
+    shownAnimationIdsRef.current.add(req.id);
+
     setConfirmingId(req.id);
 
     const success = await confirmTradeRequest(req.id);
@@ -174,6 +177,9 @@ export default function TradeView() {
         theirUsername: req.receiverUsername
       });
       setShowTradeAnimation(true);
+    } else {
+      // 如果失败，移除标记
+      shownAnimationIdsRef.current.delete(req.id);
     }
 
     setConfirmingId(null);
