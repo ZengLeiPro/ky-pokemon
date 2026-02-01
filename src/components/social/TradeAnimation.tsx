@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import type { Pokemon } from '@shared/types/pokemon';
 
 interface TradeAnimationProps {
@@ -19,6 +19,10 @@ export function TradeAnimation({
   theirUsername
 }: TradeAnimationProps) {
   const [phase, setPhase] = useState<'intro' | 'pokeballs' | 'exchange' | 'reveal' | 'complete'>('intro');
+
+  // 使用 ref 存储回调，避免依赖变化导致动画重启
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
     if (!isOpen) {
@@ -44,12 +48,12 @@ export function TradeAnimation({
 
     // 完成后回调
     const completeTimer = setTimeout(() => {
-      onComplete();
+      onCompleteRef.current();
     }, 8000);
     timers.push(completeTimer);
 
     return () => timers.forEach(t => clearTimeout(t));
-  }, [isOpen, onComplete]);
+  }, [isOpen]); // 只依赖 isOpen
 
   if (!isOpen) return null;
 

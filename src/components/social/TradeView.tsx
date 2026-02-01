@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useSocialStore } from '@/stores/socialStore';
 import { useGameStore } from '@/stores/gameStore';
 import { useAuthStore } from '@/stores/authStore';
@@ -185,7 +185,7 @@ export default function TradeView() {
     setConfirmingId(null);
   };
 
-  const handleAnimationComplete = () => {
+  const handleAnimationComplete = useCallback(() => {
     setShowTradeAnimation(false);
     setTradeAnimationData(null);
     setSuccessMessage('交换完成！');
@@ -195,7 +195,7 @@ export default function TradeView() {
     if (currentUser?.id) {
       loadGame(currentUser.id);
     }
-  };
+  }, [currentUser?.id, loadSentTradeRequests, loadReceivedTradeRequests, loadGame]);
 
   return (
     <>
