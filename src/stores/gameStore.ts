@@ -753,7 +753,8 @@ export const useGameStore = create<GameState>()(
               'max-potion': { name: '全满药', description: '能回复宝可梦全部HP。', category: 'MEDICINE' },
               'greatball': { name: '超级球', description: '比起精灵球更容易捉到宝可梦。', category: 'POKEBALLS' },
               'ultraball': { name: '高级球', description: '比起超级球更容易捉到宝可梦。', category: 'POKEBALLS' },
-              'masterball': { name: '大师球', description: '必定能捉到野生宝可梦的终极球。', category: 'POKEBALLS' }
+              'masterball': { name: '大师球', description: '必定能捉到野生宝可梦的终极球。', category: 'POKEBALLS' },
+              'levelball': { name: '等级球', description: '我方等级越高于对方，越容易捕捉。', category: 'POKEBALLS' }
           };
 
           if (newItems[itemId]) {
@@ -795,8 +796,18 @@ export const useGameStore = create<GameState>()(
       if (ballId === 'greatball') ballModifier = 1.5;
       if (ballId === 'ultraball') ballModifier = 2.0;
       if (ballId === 'masterball') ballModifier = 255;
+      if (ballId === 'levelball') {
+          const playerMon = playerParty[battle.playerActiveIndex];
+          const levelRatio = playerMon.level / enemy.level;
+          if (levelRatio > 4) ballModifier = 8.0;
+          else if (levelRatio > 2) ballModifier = 4.0;
+          else if (levelRatio > 1) ballModifier = 2.0;
+          else ballModifier = 1.0;
+      }
 
-      const catchChance = (catchRate / 255) * (1 - hpRatio * 0.5) * ballModifier;
+      // 全局捕捉率倍数（2.0 = 捕捉成功率翻倍）
+      const globalCatchMultiplier = 2.0;
+      const catchChance = Math.min(1, (catchRate / 255) * (1 - hpRatio * 0.5) * ballModifier * globalCatchMultiplier);
       const roll = Math.random();
 
       addLog(`扔出了${pokeballItem.name}！`, 'combat');
@@ -915,7 +926,8 @@ export const useGameStore = create<GameState>()(
                 'max-potion': { name: '全满药', description: '完全恢复 HP', category: 'MEDICINE' },
                 'greatball': { name: '超级球', description: '更容易捉到宝可梦', category: 'POKEBALLS' },
                 'ultraball': { name: '高级球', description: '捕获率更高的球', category: 'POKEBALLS' },
-                'masterball': { name: '大师球', description: '必定能捉到的终极球', category: 'POKEBALLS' }
+                'masterball': { name: '大师球', description: '必定能捉到的终极球', category: 'POKEBALLS' },
+                'levelball': { name: '等级球', description: '我方等级越高于对方，越容易捕捉', category: 'POKEBALLS' }
               };
               
               const itemData = newItems[itemId];
