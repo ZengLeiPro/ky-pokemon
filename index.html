@@ -4,83 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>关都传说：掌上对决</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              'gb-screen': '#8bac0f',
-              'gb-dark': '#0f380f',
-              'gb-light': '#9bbc0f',
-              'gb-darkest': '#051f05',
-              'slate-850': '#1e293b',
-            },
-            fontFamily: {
-              mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', "Liberation Mono", "Courier New", 'monospace'],
-            },
-            animation: {
-              'float-slow': 'float 3s ease-in-out infinite',
-              'bounce-slow': 'bounce 2s ease-in-out infinite',
-              'fade-in': 'fadeIn 0.3s ease-out',
-              'fade-in-up': 'fadeInUp 0.5s ease-out',
-              'fade-in-down': 'fadeInDown 0.5s ease-out',
-            },
-            keyframes: {
-              float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-8px)' },
-              },
-              fadeIn: {
-                '0%': { opacity: '0' },
-                '100%': { opacity: '1' },
-              },
-              fadeInUp: {
-                '0%': { opacity: '0', transform: 'translateY(20px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              },
-              fadeInDown: {
-                '0%': { opacity: '0', transform: 'translateY(-20px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              },
-            },
-          }
-        }
-      }
-    </script>
-    <style>
-      body {
-        overscroll-behavior: none;
-        user-select: none;
-        -webkit-tap-highlight-color: transparent;
-      }
-      .pixelated {
-        image-rendering: pixelated;
-        image-rendering: -moz-crisp-edges;
-        image-rendering: crisp-edges;
-      }
-      .active\:scale-98:active {
-        transform: scale(0.98);
-      }
-    </style>
-    <!-- ES Module Shims: 为不支持 Import Maps 的浏览器提供 polyfill -->
-    <script>window.esmsInitOptions = { shimMode: true };</script>
-    <script src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"></script>
-  <script type="importmap-shim">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "zustand": "https://esm.sh/zustand@^5.0.9",
-    "immer": "https://esm.sh/immer@^11.1.3",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
-  }
-}
-</script>
-</head>
+  </head>
   <body class="bg-gray-900 text-slate-100 overflow-hidden">
     <div id="root"></div>
-    <script type="module-shim" src="/src/index.tsx"></script>
+    <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
