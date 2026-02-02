@@ -125,7 +125,7 @@ export function GiftSendModal({ isOpen, onClose, friendId, friendUsername }: Gif
                       />
                       <div className="text-xs">
                         <div className="font-medium text-black">{pokemon.nickname || pokemon.speciesName}</div>
-                        <div className="text-black">Lv.{pokemon.level}</div>
+                        <div className="text-gray-500">Lv.{pokemon.level}</div>
                         {isInTeam && <div className="text-blue-500">队伍</div>}
                       </div>
                     </button>
@@ -158,14 +158,14 @@ export function GiftSendModal({ isOpen, onClose, friendId, friendUsername }: Gif
                         }`}
                       >
                         <div className="text-sm font-medium text-black">{item.name}</div>
-                        <div className="text-xs text-black">×{item.quantity}</div>
+                        <div className="text-xs text-gray-500">×{item.quantity}</div>
                       </button>
                     ))}
                   </div>
 
                   {selectedItemId && (
                     <div className="flex items-center gap-2 mt-2">
-                      <span className="text-sm">数量：</span>
+                      <span className="text-sm text-black">数量：</span>
                       <input
                         type="number"
                         min={1}
@@ -174,7 +174,7 @@ export function GiftSendModal({ isOpen, onClose, friendId, friendUsername }: Gif
                         onChange={e => setItemQuantity(Math.min(maxQuantity, Math.max(1, Number(e.target.value))))}
                         className="w-20 px-2 py-1 border rounded text-center"
                       />
-                      <span className="text-sm text-gray-500">/ {maxQuantity}</span>
+                      <span className="text-sm text-black">/ {maxQuantity}</span>
                     </div>
                   )}
                 </>
