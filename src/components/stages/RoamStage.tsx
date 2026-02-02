@@ -566,6 +566,24 @@ const RoamStage: React.FC = () => {
                         购买
                       </button>
                     </div>
+
+                    <div className="bg-slate-800/50 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/50 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <h4 className="font-bold text-white text-base">等级球</h4>
+                          <p className="text-xs text-slate-400 mt-1 leading-relaxed">我方等级越高于对方，越容易捕捉</p>
+                        </div>
+                        <div className="bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">
+                          <span className="text-sm font-black text-rose-400">¥1000</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => buyItem('levelball', 1000, 1)}
+                        className="w-full bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-rose-900/20 transition-all active:scale-[0.98]"
+                      >
+                        购买
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
