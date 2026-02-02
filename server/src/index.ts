@@ -12,6 +12,7 @@ import battle from './routes/battle.js';
 import presence from './routes/presence.js';
 import internal from './routes/internal.js';
 import gift from './routes/gift.js';
+import pokedex from './routes/pokedex.js';
 
 const app = new Hono();
 
@@ -36,6 +37,7 @@ app.route('/api/battle', battle);
 app.route('/api/presence', presence);
 app.route('/api/internal', internal);
 app.route('/api/gift', gift);
+app.route('/api/pokedex', pokedex);
 
 app.get('/health', (c) => c.json({ status: 'ok' }));
 

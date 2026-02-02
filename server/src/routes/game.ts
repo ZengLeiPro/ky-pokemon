@@ -85,6 +85,63 @@ game.post('/save', async (c) => {
     }
   });
 
+  // 同步更新 PokedexEntry 表（仅 NORMAL 模式同步）
+  if (saveMode === 'NORMAL' && pokedex) {
+    const pokedexEntries = Object.entries(pokedex as Record<string, string>)
+      .filter(([_, status]) => status !== 'UNKNOWN')
+      .map(([speciesIdStr, status]) => ({
+        speciesId: parseInt(speciesIdStr),
+        status
+      }));
+
+    // 获取用户现有的图鉴记录
+    const existingEntries = await db.pokedexEntry.findMany({
+      where: { userId: user.userId }
+    });
+    const existingMap = new Map(existingEntries.map(e => [e.speciesId, e]));
+
+    // 过滤掉不需要更新的记录（已是 CAUGHT 状态的）
+    const needsUpdate = pokedexEntries.filter(({ speciesId, status }) => {
+      const existing = existingMap.get(speciesId);
+      // 已是 CAUGHT 状态，无需任何操作
+      if (existing?.status === 'CAUGHT') return false;
+      // SEEN 状态收到 SEEN 请求，也无需更新
+      if (existing?.status === 'SEEN' && status === 'SEEN') return false;
+      return true;
+    });
+
+    // 使用事务批量处理
+    if (needsUpdate.length > 0) {
+      await db.$transaction(
+        needsUpdate.map(({ speciesId, status }) => {
+          const existing = existingMap.get(speciesId);
+
+          if (existing) {
+            // 状态升级（SEEN -> CAUGHT）
+            return db.pokedexEntry.update({
+              where: { userId_speciesId: { userId: user.userId, speciesId } },
+              data: {
+                status,
+                firstCaughtAt: status === 'CAUGHT' && !existing.firstCaughtAt ? new Date() : undefined
+              }
+            });
+          } else {
+            // 新记录
+            return db.pokedexEntry.create({
+              data: {
+                userId: user.userId,
+                speciesId,
+                status,
+                firstSeenAt: new Date(),
+                firstCaughtAt: status === 'CAUGHT' ? new Date() : null
+              }
+            });
+          }
+        })
+      );
+    }
+  }
+
   return c.json({ success: true, data: { savedAt: save.updatedAt } });
 });
 

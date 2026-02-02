@@ -37,6 +37,9 @@ model User {
   // 礼物赠送
   sentGifts     GiftRequest[] @relation("SentGifts")
   receivedGifts GiftRequest[] @relation("ReceivedGifts")
+
+  // 图鉴记录
+  pokedexEntries PokedexEntry[]
 }
 
 model GameSave {
@@ -212,5 +215,22 @@ model GiftRequest {
 
   @@index([senderId])
   @@index([receiverId])
+  @@index([status])
+}
+
+// ========== 图鉴记录 ==========
+model PokedexEntry {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  speciesId     Int       // 宝可梦图鉴编号 1-151
+  status        String    // "SEEN" | "CAUGHT"
+  firstSeenAt   DateTime  @default(now())
+  firstCaughtAt DateTime?
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([userId, speciesId])
+  @@index([userId])
+  @@index([speciesId])
   @@index([status])
 }
