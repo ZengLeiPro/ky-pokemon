@@ -11,6 +11,7 @@ import trade from './routes/trade.js';
 import battle from './routes/battle.js';
 import presence from './routes/presence.js';
 import internal from './routes/internal.js';
+import gift from './routes/gift.js';
 
 const app = new Hono();
 
@@ -34,6 +35,7 @@ app.route('/api/trade', trade);
 app.route('/api/battle', battle);
 app.route('/api/presence', presence);
 app.route('/api/internal', internal);
+app.route('/api/gift', gift);
 
 app.get('/health', (c) => c.json({ status: 'ok' }));
 

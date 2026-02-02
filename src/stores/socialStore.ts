@@ -9,7 +9,8 @@ import type {
   UnreadSummary,
   TradeRequest,
   BattleData,
-  BattleChallenge
+  BattleChallenge,
+  GiftRequest
 } from '../../shared/types/social';
 
 const API_URL = config.apiUrl;
@@ -36,6 +37,10 @@ interface SocialState {
   receivedTradeRequests: TradeRequest[];
   sentTradeRequests: TradeRequest[];
   publicTradeRequests: TradeRequest[];
+
+  // 礼物数据
+  receivedGiftRequests: GiftRequest[];
+  sentGiftRequests: GiftRequest[];
 
   // 对战数据
   pendingBattleChallenges: BattleChallenge[];
@@ -91,6 +96,15 @@ interface SocialState {
   rejectTradeRequest: (requestId: string) => Promise<boolean>;
   cancelTradeRequest: (requestId: string) => Promise<boolean>;
 
+  // Actions - 礼物
+  loadReceivedGiftRequests: () => Promise<void>;
+  loadSentGiftRequests: () => Promise<void>;
+  sendPokemonGift: (receiverId: string, pokemonId: string, message?: string) => Promise<boolean>;
+  sendItemGift: (receiverId: string, itemId: string, quantity: number, message?: string) => Promise<boolean>;
+  acceptGiftRequest: (giftId: string) => Promise<boolean>;
+  rejectGiftRequest: (giftId: string) => Promise<boolean>;
+  cancelGiftRequest: (giftId: string) => Promise<boolean>;
+
   // Actions - 对战
   loadPendingBattleChallenges: () => Promise<void>;
   sendBattleChallenge: (opponentId: string) => Promise<string | null>;
@@ -136,6 +150,10 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
   receivedTradeRequests: [],
   sentTradeRequests: [],
   publicTradeRequests: [],
+
+  // 礼物数据
+  receivedGiftRequests: [],
+  sentGiftRequests: [],
 
   // 对战数据
   pendingBattleChallenges: [],
@@ -585,6 +603,145 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
       return false;
     } catch (e) {
       set({ error: '取消交换失败' });
+      return false;
+    }
+  },
+
+  // ========== 礼物相关方法 ==========
+
+  loadReceivedGiftRequests: async () => {
+    try {
+      const res = await fetch(`${API_URL}/gift/pending`, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        set({ receivedGiftRequests: data.data });
+      }
+    } catch (e) {
+      console.error('加载收到的礼物失败', e);
+    }
+  },
+
+  loadSentGiftRequests: async () => {
+    try {
+      const res = await fetch(`${API_URL}/gift/sent`, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        set({ sentGiftRequests: data.data });
+      }
+    } catch (e) {
+      console.error('加载发出的礼物失败', e);
+    }
+  },
+
+  sendPokemonGift: async (receiverId: string, pokemonId: string, message?: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const res = await fetch(`${API_URL}/gift/send-pokemon`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getToken()}`
+        },
+        body: JSON.stringify({ receiverId, pokemonId, message })
+      });
+      const data = await res.json();
+      if (data.success) {
+        get().loadSentGiftRequests();
+        return true;
+      }
+      set({ error: data.error });
+      return false;
+    } catch (e) {
+      set({ error: '发送礼物失败' });
+      return false;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  sendItemGift: async (receiverId: string, itemId: string, quantity: number, message?: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const res = await fetch(`${API_URL}/gift/send-item`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getToken()}`
+        },
+        body: JSON.stringify({ receiverId, itemId, quantity, message })
+      });
+      const data = await res.json();
+      if (data.success) {
+        get().loadSentGiftRequests();
+        return true;
+      }
+      set({ error: data.error });
+      return false;
+    } catch (e) {
+      set({ error: '发送礼物失败' });
+      return false;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  acceptGiftRequest: async (giftId: string) => {
+    try {
+      const res = await fetch(`${API_URL}/gift/${giftId}/accept`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${getToken()}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        get().loadReceivedGiftRequests();
+        return true;
+      }
+      set({ error: data.error });
+      return false;
+    } catch (e) {
+      set({ error: '接受礼物失败' });
+      return false;
+    }
+  },
+
+  rejectGiftRequest: async (giftId: string) => {
+    try {
+      const res = await fetch(`${API_URL}/gift/${giftId}/reject`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${getToken()}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        get().loadReceivedGiftRequests();
+        return true;
+      }
+      set({ error: data.error });
+      return false;
+    } catch (e) {
+      set({ error: '拒绝礼物失败' });
+      return false;
+    }
+  },
+
+  cancelGiftRequest: async (giftId: string) => {
+    try {
+      const res = await fetch(`${API_URL}/gift/${giftId}/cancel`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${getToken()}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        get().loadSentGiftRequests();
+        return true;
+      }
+      set({ error: data.error });
+      return false;
+    } catch (e) {
+      set({ error: '取消礼物失败' });
       return false;
     }
   },

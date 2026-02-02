@@ -18,7 +18,8 @@ export type ViewState =
   | 'FRIENDS'      // 好友列表
   | 'CHAT'         // 聊天界面
   | 'PVP_BATTLE'   // PvP 对战
-  | 'TRADE';       // 交换界面
+  | 'TRADE'        // 交换界面
+  | 'GIFT';        // 礼物界面
 
 export interface LogEntry {
   id: string;

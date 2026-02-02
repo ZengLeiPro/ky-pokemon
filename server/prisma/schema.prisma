@@ -33,6 +33,10 @@ model User {
   // 对战
   challengerBattles Battle[] @relation("ChallengerBattles")
   opponentBattles   Battle[] @relation("OpponentBattles")
+
+  // 礼物赠送
+  sentGifts     GiftRequest[] @relation("SentGifts")
+  receivedGifts GiftRequest[] @relation("ReceivedGifts")
 }
 
 model GameSave {
@@ -177,4 +181,36 @@ model BattleTurnLog {
   createdAt DateTime @default(now())
 
   @@index([battleId])
+}
+
+// ========== 礼物赠送 ==========
+model GiftRequest {
+  id               String   @id @default(uuid())
+  senderId         String
+  receiverId       String
+  sender           User     @relation("SentGifts", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver         User     @relation("ReceivedGifts", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  // 礼物类型：pokemon 或 item
+  giftType         String   // "pokemon" | "item"
+
+  // 宝可梦礼物（存储快照）
+  giftPokemon      String?  // { pokemonId: string, snapshot: Pokemon } JSON
+
+  // 物品礼物
+  giftItemId       String?  // 物品ID，如 'potion', 'pokeball'
+  giftItemQuantity Int?     // 物品数量
+
+  // 状态
+  status           String   @default("pending")  // pending | accepted | rejected | cancelled
+
+  // 附言
+  message          String?
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([status])
 }

@@ -162,3 +162,42 @@ export interface TurnEvent {
   message: string;
   data?: any;
 }
+
+// ========== 礼物赠送系统类型 ==========
+
+export type GiftType = 'pokemon' | 'item';
+export type GiftStatus = 'pending' | 'accepted' | 'rejected' | 'cancelled';
+
+export interface GiftPokemonInfo {
+  pokemonId: string;
+  snapshot: Pokemon;
+}
+
+export interface GiftRequest {
+  id: string;
+  senderId: string;
+  senderUsername: string;
+  receiverId: string;
+  receiverUsername: string;
+  giftType: GiftType;
+  giftPokemon: GiftPokemonInfo | null;
+  giftItemId: string | null;
+  giftItemName: string | null;
+  giftItemQuantity: number | null;
+  status: GiftStatus;
+  message: string | null;
+  createdAt: string;
+}
+
+export interface SendPokemonGiftRequest {
+  receiverId: string;
+  pokemonId: string;
+  message?: string;
+}
+
+export interface SendItemGiftRequest {
+  receiverId: string;
+  itemId: string;
+  quantity: number;
+  message?: string;
+}

@@ -24,6 +24,7 @@ import RegisterView from './components/auth/RegisterView';
 import FriendsView from './components/social/FriendsView';
 import ChatView from './components/social/ChatView';
 import TradeView from './components/social/TradeView';
+import GiftView from './components/social/GiftView';
 import { PvPBattleView } from './components/social/PvPBattleView';
 
 import { Toast } from './components/ui/Toast';
@@ -104,6 +105,8 @@ const App: React.FC = () => {
         return <ChatView />;
       case 'TRADE':
         return <TradeView />;
+      case 'GIFT':
+        return <GiftView />;
       case 'PVP_BATTLE': {
         // 从 localStorage 获取当前对战 ID（仅首次）
         const storedBattleId = localStorage.getItem('currentBattleId');
@@ -131,7 +134,7 @@ const App: React.FC = () => {
   const showNavDock = !isChoosingStarter && ['ROAM', 'TEAM', 'BAG', 'PROFILE', 'DEX'].includes(view);
   const showMessageBox = !isChoosingStarter && (view === 'ROAM' || view === 'BATTLE');
   const showControlPad = !isChoosingStarter && view === 'BATTLE';
-  const showHeader = !isChoosingStarter && !['FRIENDS', 'CHAT', 'PVP_BATTLE', 'TRADE'].includes(view);
+  const showHeader = !isChoosingStarter && !['FRIENDS', 'CHAT', 'PVP_BATTLE', 'TRADE', 'GIFT'].includes(view);
 
   const renderContent = () => {
     // 认证页面使用全屏布局，无需 Header 和 Footer

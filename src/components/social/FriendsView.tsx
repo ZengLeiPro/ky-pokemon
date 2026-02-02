@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSocialStore } from '@/stores/socialStore';
 import { useGameStore } from '@/stores/gameStore';
 import { BattleChallengeModal } from './BattleChallengeModal';
+import { GiftSendModal } from './GiftSendModal';
 
 export default function FriendsView() {
   const {
@@ -10,6 +11,7 @@ export default function FriendsView() {
     pendingBattleChallenges,
     stuckBattle,
     searchResults,
+    receivedGiftRequests,
     isLoading,
     error,
     searchUsers,
@@ -18,6 +20,7 @@ export default function FriendsView() {
     loadPendingRequests,
     loadPendingBattleChallenges,
     loadStuckBattle,
+    loadReceivedGiftRequests,
     cleanupStuckBattle,
     acceptBattleChallenge,
     rejectBattleChallenge,
@@ -33,12 +36,15 @@ export default function FriendsView() {
   const [activeTab, setActiveTab] = useState<'friends' | 'requests' | 'battles' | 'search'>('friends');
   const [showBattleModal, setShowBattleModal] = useState(false);
   const [acceptingBattleId, setAcceptingBattleId] = useState<string | null>(null);
+  const [showGiftModal, setShowGiftModal] = useState(false);
+  const [giftTargetFriend, setGiftTargetFriend] = useState<{ id: string; username: string } | null>(null);
 
   useEffect(() => {
     loadFriends();
     loadPendingRequests();
     loadPendingBattleChallenges();
     loadStuckBattle();
+    loadReceivedGiftRequests();
     // 定期刷新好友列表获取最新在线状态
     const interval = setInterval(loadFriends, 15000);
     return () => clearInterval(interval);
@@ -68,12 +74,25 @@ export default function FriendsView() {
     <div className="p-4 max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">好友</h1>
-        <button
-          onClick={() => setView('ROAM')}
-          className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
-        >
-          返回
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setView('GIFT')}
+            className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 relative"
+          >
+            礼物
+            {receivedGiftRequests.filter(g => g.status === 'pending').length > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                {receivedGiftRequests.filter(g => g.status === 'pending').length}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setView('ROAM')}
+            className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+          >
+            返回
+          </button>
+        </div>
       </div>
 
       {/* 搜索框 */}
@@ -180,6 +199,15 @@ export default function FriendsView() {
                     title={!friend.isOnline ? '对方不在线' : ''}
                   >
                     对战
+                  </button>
+                  <button
+                    onClick={() => {
+                      setGiftTargetFriend({ id: friend.odId, username: friend.username });
+                      setShowGiftModal(true);
+                    }}
+                    className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600"
+                  >
+                    赠送
                   </button>
                   <button
                     onClick={() => deleteFriend(friend.id)}
@@ -335,6 +363,19 @@ export default function FriendsView() {
         onClose={() => setShowBattleModal(false)}
         mode="challenge"
       />
+
+      {/* 赠送弹窗 */}
+      {giftTargetFriend && (
+        <GiftSendModal
+          isOpen={showGiftModal}
+          onClose={() => {
+            setShowGiftModal(false);
+            setGiftTargetFriend(null);
+          }}
+          friendId={giftTargetFriend.id}
+          friendUsername={giftTargetFriend.username}
+        />
+      )}
     </div>
   );
 }

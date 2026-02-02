@@ -57,3 +57,20 @@ export const submitActionSchema = z.object({
   moveIndex: z.number().min(0).max(3).optional(),
   switchToIndex: z.number().min(0).max(5).optional()
 });
+
+// ========== 礼物赠送系统 Schema ==========
+
+// 发送宝可梦礼物
+export const sendPokemonGiftSchema = z.object({
+  receiverId: z.string().uuid(),
+  pokemonId: z.string().uuid(),
+  message: z.string().max(200).optional()
+});
+
+// 发送物品礼物
+export const sendItemGiftSchema = z.object({
+  receiverId: z.string().uuid(),
+  itemId: z.string().min(1),
+  quantity: z.number().min(1).max(99),
+  message: z.string().max(200).optional()
+});
