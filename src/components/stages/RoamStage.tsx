@@ -20,7 +20,7 @@ const RoamStage: React.FC = () => {
   const legendaryEncounter = location.legendaryEncounter;
   const hasLegendary = !!legendaryEncounter;
   const legendaryStatus = legendaryEncounter ? legendaryProgress[legendaryEncounter.speciesId] : null;
-  const legendaryAvailable = hasLegendary && !legendaryStatus?.captured && !legendaryStatus?.defeated;
+  const legendaryAvailable = hasLegendary && !legendaryStatus?.captured;  // 只有捕获后才消失，击败/逃跑后可再次遭遇
   const legendaryLocked = hasLegendary && legendaryEncounter && badges.length < (legendaryEncounter.minBadges || 0);
 
   const getWeatherOverlay = () => {
