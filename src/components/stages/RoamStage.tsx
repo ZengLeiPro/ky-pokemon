@@ -337,8 +337,8 @@ const RoamStage: React.FC = () => {
                   <Crown size={18} className="animate-pulse" />
                   与传说对决
                 </button>
-                <p className="text-center text-xs text-amber-400 mt-2">
-                  ⚠️ 击败或逃跑后，传说宝可梦将离开此地
+                <p className="text-center text-xs text-slate-400 mt-2">
+                  捕获前可反复挑战
                 </p>
               </div>
             </div>
