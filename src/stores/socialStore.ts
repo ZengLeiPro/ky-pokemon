@@ -107,8 +107,8 @@ interface SocialState {
 
   // Actions - 对战
   loadPendingBattleChallenges: () => Promise<void>;
-  sendBattleChallenge: (opponentId: string) => Promise<string | null>;
-  acceptBattleChallenge: (battleId: string) => Promise<boolean>;
+  sendBattleChallenge: (opponentId: string, gameMode?: 'NORMAL' | 'CHEAT') => Promise<string | null>;
+  acceptBattleChallenge: (battleId: string, gameMode?: 'NORMAL' | 'CHEAT') => Promise<boolean>;
   rejectBattleChallenge: (battleId: string) => Promise<boolean>;
   cancelBattleChallenge: (battleId: string) => Promise<boolean>;
   loadBattleState: (battleId: string) => Promise<LoadBattleStateResult>;
@@ -762,7 +762,7 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
     }
   },
 
-  sendBattleChallenge: async (opponentId: string) => {
+  sendBattleChallenge: async (opponentId: string, gameMode?: 'NORMAL' | 'CHEAT') => {
     set({ isLoading: true, error: null });
     try {
       const res = await fetch(`${API_URL}/battle/challenge`, {
@@ -771,7 +771,7 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getToken()}`
         },
-        body: JSON.stringify({ opponentId })
+        body: JSON.stringify({ opponentId, gameMode })
       });
       const data = await res.json();
       if (data.success) {
@@ -788,11 +788,15 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
     }
   },
 
-  acceptBattleChallenge: async (battleId: string) => {
+  acceptBattleChallenge: async (battleId: string, gameMode?: 'NORMAL' | 'CHEAT') => {
     try {
       const res = await fetch(`${API_URL}/battle/${battleId}/accept`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${getToken()}` }
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getToken()}`
+        },
+        body: JSON.stringify({ gameMode })
       });
       const data = await res.json();
       if (data.success) {

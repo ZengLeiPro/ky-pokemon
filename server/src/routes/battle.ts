@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
 import { db } from '../lib/db.js';
 import { authMiddleware } from '../middleware/auth.js';
-import { challengeBattleSchema, submitActionSchema } from '../../../shared/schemas/social.schema.js';
+import { challengeBattleSchema, acceptBattleSchema, submitActionSchema } from '../../../shared/schemas/social.schema.js';
 import { processTurn } from '../lib/battle-engine.js';
 import { isUserOnline } from '../lib/online-utils.js';
 
@@ -24,7 +24,12 @@ async function getTeamFromSave(userId: string, gameMode: string = 'NORMAL') {
 // 发起对战邀请
 battle.post('/challenge', zValidator('json', challengeBattleSchema), async (c) => {
   const user = c.get('user');
-  const { opponentId } = c.req.valid('json');
+  const { opponentId, gameMode } = c.req.valid('json');
+
+  // 作弊模式不能对战
+  if (gameMode === 'CHEAT') {
+    return c.json({ success: false, error: '作弊模式下无法进行好友对战' }, 403);
+  }
 
   // 不能和自己对战
   if (opponentId === user.userId) {
@@ -133,9 +138,15 @@ battle.get('/pending', async (c) => {
 });
 
 // 接受对战
-battle.post('/:id/accept', async (c) => {
+battle.post('/:id/accept', zValidator('json', acceptBattleSchema), async (c) => {
   const user = c.get('user');
   const battleId = c.req.param('id');
+  const { gameMode } = c.req.valid('json');
+
+  // 作弊模式不能对战
+  if (gameMode === 'CHEAT') {
+    return c.json({ success: false, error: '作弊模式下无法进行好友对战' }, 403);
+  }
 
   const battleRecord = await db.battle.findFirst({
     where: {

@@ -31,6 +31,8 @@ export function BattleChallengeModal({
   } = useSocialStore();
 
   const setView = useGameStore(s => s.setView);
+  const gameMode = useGameStore(s => s.gameMode);
+  const isCheatMode = gameMode === 'CHEAT';
 
   const [selectedFriendId, setSelectedFriendId] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -48,8 +50,8 @@ export function BattleChallengeModal({
   if (!isOpen) return null;
 
   const handleChallenge = async () => {
-    if (!selectedFriendId) return;
-    const newBattleId = await sendBattleChallenge(selectedFriendId);
+    if (!selectedFriendId || isCheatMode) return;
+    const newBattleId = await sendBattleChallenge(selectedFriendId, gameMode);
     if (newBattleId) {
       onClose();
       setSelectedFriendId(null);
@@ -60,8 +62,9 @@ export function BattleChallengeModal({
   };
 
   const handleAccept = async (battleId: string) => {
+    if (isCheatMode) return;
     setActionLoading(battleId);
-    const success = await acceptBattleChallenge(battleId);
+    const success = await acceptBattleChallenge(battleId, gameMode);
     setActionLoading(null);
     if (success) {
       onClose();
@@ -91,6 +94,13 @@ export function BattleChallengeModal({
             ✕
           </button>
         </div>
+
+        {/* 作弊模式提示 */}
+        {isCheatMode && (
+          <div className="mb-4 p-3 bg-yellow-900/50 text-yellow-400 rounded text-sm">
+            作弊模式下无法进行好友对战
+          </div>
+        )}
 
         {/* 错误提示 */}
         {error && (
@@ -200,10 +210,10 @@ export function BattleChallengeModal({
               </button>
               <button
                 onClick={handleChallenge}
-                disabled={!selectedFriendId || isLoading}
+                disabled={!selectedFriendId || isLoading || isCheatMode}
                 className="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500 disabled:opacity-50"
               >
-                {isLoading ? '发送中...' : '发起挑战'}
+                {isLoading ? '发送中...' : isCheatMode ? '作弊模式' : '发起挑战'}
               </button>
             </div>
           </div>

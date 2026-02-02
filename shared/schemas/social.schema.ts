@@ -48,7 +48,13 @@ export const acceptTradeSchema = z.object({
 
 // 发起对战
 export const challengeBattleSchema = z.object({
-  opponentId: z.string().uuid()
+  opponentId: z.string().uuid(),
+  gameMode: z.enum(['NORMAL', 'CHEAT']).optional()
+});
+
+// 接受对战
+export const acceptBattleSchema = z.object({
+  gameMode: z.enum(['NORMAL', 'CHEAT']).optional()
 });
 
 // 提交行动

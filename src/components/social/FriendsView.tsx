@@ -32,6 +32,8 @@ export default function FriendsView() {
   } = useSocialStore();
 
   const setView = useGameStore(s => s.setView);
+  const gameMode = useGameStore(s => s.gameMode);
+  const isCheatMode = gameMode === 'CHEAT';
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'friends' | 'requests' | 'battles' | 'search'>('friends');
   const [showBattleModal, setShowBattleModal] = useState(false);
@@ -148,6 +150,13 @@ export default function FriendsView() {
         )}
       </div>
 
+      {/* 作弊模式提示 */}
+      {isCheatMode && (
+        <div className="mb-4 p-3 bg-yellow-100 text-yellow-700 rounded">
+          作弊模式下无法进行好友对战
+        </div>
+      )}
+
       {/* 错误提示 */}
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
@@ -190,13 +199,13 @@ export default function FriendsView() {
                       localStorage.setItem('battleFriendId', friend.odId);
                       setShowBattleModal(true);
                     }}
-                    disabled={!friend.isOnline}
+                    disabled={!friend.isOnline || isCheatMode}
                     className={`px-3 py-1 text-white text-sm rounded ${
-                      friend.isOnline
+                      friend.isOnline && !isCheatMode
                         ? 'bg-red-500 hover:bg-red-600'
                         : 'bg-gray-400 cursor-not-allowed'
                     }`}
-                    title={!friend.isOnline ? '对方不在线' : ''}
+                    title={isCheatMode ? '作弊模式下无法对战' : !friend.isOnline ? '对方不在线' : ''}
                   >
                     对战
                   </button>
@@ -330,7 +339,7 @@ export default function FriendsView() {
                     onClick={async () => {
                       if (acceptingBattleId) return;
                       setAcceptingBattleId(challenge.id);
-                      const success = await acceptBattleChallenge(challenge.id);
+                      const success = await acceptBattleChallenge(challenge.id, gameMode);
                       setAcceptingBattleId(null);
 
                       if (success) {
@@ -338,10 +347,11 @@ export default function FriendsView() {
                         setView('PVP_BATTLE');
                       }
                     }}
-                    disabled={isLoading || acceptingBattleId === challenge.id}
-                    className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 disabled:opacity-50"
+                    disabled={isLoading || acceptingBattleId === challenge.id || isCheatMode}
+                    className={`px-3 py-1 text-white text-sm rounded ${isCheatMode ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600'} disabled:opacity-50`}
+                    title={isCheatMode ? '作弊模式下无法对战' : ''}
                   >
-                    {acceptingBattleId === challenge.id ? '接受中...' : '接受'}
+                    {acceptingBattleId === challenge.id ? '接受中...' : isCheatMode ? '作弊模式' : '接受'}
                   </button>
                   <button
                     onClick={() => rejectBattleChallenge(challenge.id)}
