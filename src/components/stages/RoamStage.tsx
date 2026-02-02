@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
-import { Compass, HardDrive, Moon, Navigation, ShoppingBag, House, Heart, Swords, Users, ArrowLeftRight } from 'lucide-react';
+import { Compass, HardDrive, Crown, Navigation, ShoppingBag, House, Heart, Swords, Users, ArrowLeftRight } from 'lucide-react';
 import { WORLD_MAP, SPECIES_DATA } from '../../constants';
 
 const RoamStage: React.FC = () => {
@@ -214,13 +214,6 @@ const RoamStage: React.FC = () => {
                     <span className="text-[10px] font-bold">宝可梦道馆</span>
                 </button>
 
-                {/* 调试信息 - 用于诊断传说宝可梦按钮不显示的问题 */}
-                <div className="col-span-3 bg-yellow-900/50 text-yellow-200 p-2 rounded text-[10px] font-mono">
-                    <div>位置ID: {location.id}</div>
-                    <div>hasLegendary: {String(hasLegendary)}</div>
-                    <div>legendaryEncounter: {JSON.stringify(location.legendaryEncounter)}</div>
-                </div>
-
                 {/* 传说宝可梦遭遇按钮 */}
                 {hasLegendary && (
                     <button
@@ -236,7 +229,7 @@ const RoamStage: React.FC = () => {
                         }}
                         className={`col-span-3 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 hover:from-purple-500 hover:via-pink-500 hover:to-orange-500 text-white p-3 rounded-2xl shadow-lg border-b-4 border-purple-900 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group animate-pulse ${!legendaryAvailable || legendaryLocked ? 'opacity-50 grayscale cursor-not-allowed animate-none' : ''}`}
                     >
-                        <Moon size={18} className="group-hover:scale-110 transition-transform" />
+                        <Crown size={18} className="group-hover:scale-110 transition-transform" />
                         <span className="text-[10px] font-bold">
                             {legendaryLocked ? `需要 ${legendaryEncounter?.minBadges || 0} 徽章` :
                              !legendaryAvailable ? '传说已离去' : '传说宝可梦'}
@@ -300,7 +293,7 @@ const RoamStage: React.FC = () => {
             <div className="bg-gradient-to-br from-purple-900 via-slate-900 to-pink-900 border-2 border-purple-500/50 rounded-2xl p-6 max-w-sm w-full animate-fade-in-up">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                  <Moon size={24} className="text-purple-400" />
+                  <Crown size={24} className="text-purple-400" />
                   传说宝可梦
                 </h2>
                 <button
@@ -341,7 +334,7 @@ const RoamStage: React.FC = () => {
                   }}
                   className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 hover:from-purple-500 hover:via-pink-500 hover:to-orange-500 text-white py-3 px-4 rounded-xl font-bold transition-all shadow-lg shadow-purple-900/40 flex items-center justify-center gap-2"
                 >
-                  <Moon size={18} className="animate-pulse" />
+                  <Crown size={18} className="animate-pulse" />
                   与传说对决
                 </button>
                 <p className="text-center text-xs text-amber-400 mt-2">
