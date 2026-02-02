@@ -65,7 +65,7 @@ export function GiftSendModal({ isOpen, onClose, friendId, friendUsername }: Gif
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-hidden flex flex-col">
         <div className="p-4 border-b flex justify-between items-center">
-          <h2 className="text-lg font-bold">赠送给 {friendUsername}</h2>
+          <h2 className="text-lg font-bold text-black">赠送给 {friendUsername}</h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
             ✕
           </button>
@@ -124,7 +124,7 @@ export function GiftSendModal({ isOpen, onClose, friendId, friendUsername }: Gif
                         className="w-10 h-10 pixelated"
                       />
                       <div className="text-xs">
-                        <div className="font-medium">{pokemon.nickname || pokemon.speciesName}</div>
+                        <div className="font-medium text-black">{pokemon.nickname || pokemon.speciesName}</div>
                         <div className="text-gray-500">Lv.{pokemon.level}</div>
                         {isInTeam && <div className="text-blue-500">队伍</div>}
                       </div>
@@ -157,7 +157,7 @@ export function GiftSendModal({ isOpen, onClose, friendId, friendUsername }: Gif
                             : 'border-gray-200 hover:border-amber-300'
                         }`}
                       >
-                        <div className="text-sm font-medium">{item.name}</div>
+                        <div className="text-sm font-medium text-black">{item.name}</div>
                         <div className="text-xs text-gray-500">×{item.quantity}</div>
                       </button>
                     ))}

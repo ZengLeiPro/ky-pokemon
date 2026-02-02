@@ -178,7 +178,7 @@ export default function FriendsView() {
               })
               .map(friend => (
               <div key={friend.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                <span className="font-medium flex items-center gap-2">
+                <span className="font-medium text-black flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${
                     friend.isOnline ? 'bg-green-500' : 'bg-gray-400'
                   }`} />
@@ -239,7 +239,7 @@ export default function FriendsView() {
           ) : (
             pendingRequests.map(req => (
               <div key={req.id} className="flex items-center justify-between p-3 bg-yellow-50 rounded">
-                <span className="font-medium">{req.fromUsername}</span>
+                <span className="font-medium text-black">{req.fromUsername}</span>
                 <div className="flex gap-2">
                   <button
                     onClick={() => acceptFriendRequest(req.id)}
@@ -268,7 +268,7 @@ export default function FriendsView() {
           ) : (
             searchResults.map(user => (
               <div key={user.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                <span className="font-medium">{user.username}</span>
+                <span className="font-medium text-black">{user.username}</span>
                 {user.isFriend ? (
                   <span className="text-green-600 text-sm">已是好友</span>
                 ) : user.hasPendingRequest ? (
@@ -329,7 +329,7 @@ export default function FriendsView() {
             pendingBattleChallenges.map(challenge => (
               <div key={challenge.id} className="flex items-center justify-between p-3 bg-red-50 rounded">
                 <div>
-                  <div className="font-medium">{challenge.challengerUsername} 发起对战</div>
+                  <div className="font-medium text-black">{challenge.challengerUsername} 发起对战</div>
                   <div className="text-xs text-gray-500 mt-1">
                     {new Date(challenge.createdAt).toLocaleString()}
                   </div>
