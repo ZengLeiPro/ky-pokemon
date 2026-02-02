@@ -125,7 +125,7 @@ export function GiftSendModal({ isOpen, onClose, friendId, friendUsername }: Gif
                       />
                       <div className="text-xs">
                         <div className="font-medium text-black">{pokemon.nickname || pokemon.speciesName}</div>
-                        <div className="text-gray-500">Lv.{pokemon.level}</div>
+                        <div className="text-black">Lv.{pokemon.level}</div>
                         {isInTeam && <div className="text-blue-500">队伍</div>}
                       </div>
                     </button>
@@ -158,7 +158,7 @@ export function GiftSendModal({ isOpen, onClose, friendId, friendUsername }: Gif
                         }`}
                       >
                         <div className="text-sm font-medium text-black">{item.name}</div>
-                        <div className="text-xs text-gray-500">×{item.quantity}</div>
+                        <div className="text-xs text-black">×{item.quantity}</div>
                       </button>
                     ))}
                   </div>
