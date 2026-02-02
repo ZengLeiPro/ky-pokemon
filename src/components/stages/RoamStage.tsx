@@ -214,6 +214,13 @@ const RoamStage: React.FC = () => {
                     <span className="text-[10px] font-bold">宝可梦道馆</span>
                 </button>
 
+                {/* 调试信息 - 用于诊断传说宝可梦按钮不显示的问题 */}
+                <div className="col-span-3 bg-yellow-900/50 text-yellow-200 p-2 rounded text-[10px] font-mono">
+                    <div>位置ID: {location.id}</div>
+                    <div>hasLegendary: {String(hasLegendary)}</div>
+                    <div>legendaryEncounter: {JSON.stringify(location.legendaryEncounter)}</div>
+                </div>
+
                 {/* 传说宝可梦遭遇按钮 */}
                 {hasLegendary && (
                     <button
