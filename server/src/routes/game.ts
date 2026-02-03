@@ -24,13 +24,30 @@ game.get('/save', async (c) => {
     return c.json({ success: true, data: null });
   }
 
+  // NORMAL 模式从 PokedexEntry 表读取图鉴（权威数据源）
+  let pokedexData: Record<number, string> = {};
+  if (mode === 'NORMAL') {
+    for (let i = 1; i <= 151; i++) {
+      pokedexData[i] = 'UNKNOWN';
+    }
+    const entries = await db.pokedexEntry.findMany({
+      where: { userId: user.userId }
+    });
+    entries.forEach(entry => {
+      pokedexData[entry.speciesId] = entry.status;
+    });
+  } else {
+    // CHEAT 模式仍从 JSON 字段读取
+    pokedexData = JSON.parse(save.pokedex);
+  }
+
   // Parse JSON strings
   const data = {
     ...save,
     team: JSON.parse(save.team),
     pcBox: JSON.parse(save.pcBox),
     badges: JSON.parse(save.badges),
-    pokedex: JSON.parse(save.pokedex),
+    pokedex: pokedexData,
     inventory: JSON.parse(save.inventory),
     legendaryProgress: JSON.parse(save.legendaryProgress || '{}'),
     currentLocationId: save.currentLocation
@@ -148,15 +165,22 @@ game.post('/save', async (c) => {
 game.delete('/save', async (c) => {
   const user = c.get('user');
   const mode = c.req.query('mode') || 'NORMAL';
-  
+
   await db.gameSave.delete({
-    where: { 
+    where: {
       userId_mode: {
         userId: user.userId,
         mode: mode
       }
     }
   }).catch(() => null);
+
+  // 删除 NORMAL 模式存档时，同步清理 PokedexEntry 记录
+  if (mode === 'NORMAL') {
+    await db.pokedexEntry.deleteMany({
+      where: { userId: user.userId }
+    });
+  }
 
   return c.json({ success: true });
 });
