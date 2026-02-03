@@ -6,7 +6,7 @@ import { TYPE_TRANSLATIONS, TYPE_COLORS } from '../constants';
 import HPBar from './ui/HPBar';
 
 const ControlPad: React.FC = () => {
-  const { view, battle, playerParty, inventory, executeMove, runAway, useItem, throwPokeball, switchPokemon } = useGameStore();
+  const { view, battle, playerParty, inventory, executeMove, runAway, applyItem, throwPokeball, switchPokemon } = useGameStore();
   const [showBag, setShowBag] = useState(false);
   const [showPokemon, setShowPokemon] = useState(false);
 
@@ -24,7 +24,7 @@ const ControlPad: React.FC = () => {
   const isForcedSwitch = battle.phase === 'FORCED_SWITCH';
 
   const handleUseItemInBattle = (itemId: string) => {
-    useItem(itemId, activeMon.id);
+    applyItem(itemId, activeMon.id);
     setShowBag(false);
   };
 

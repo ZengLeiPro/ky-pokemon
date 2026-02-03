@@ -117,7 +117,7 @@ export default function GiftView() {
 
                     {gift.giftType === 'item' && (
                       <div className="mt-2 p-2 bg-white rounded">
-                        <span className="font-medium">{gift.giftItemId}</span>
+                        <span className="font-medium">{gift.giftItemName || gift.giftItemId}</span>
                         <span className="text-gray-500"> ×{gift.giftItemQuantity}</span>
                       </div>
                     )}
@@ -199,7 +199,7 @@ export default function GiftView() {
 
                     {gift.giftType === 'item' && (
                       <div className="mt-2 p-2 bg-white rounded">
-                        <span className="font-medium">{gift.giftItemId}</span>
+                        <span className="font-medium">{gift.giftItemName || gift.giftItemId}</span>
                         <span className="text-gray-500"> ×{gift.giftItemQuantity}</span>
                       </div>
                     )}

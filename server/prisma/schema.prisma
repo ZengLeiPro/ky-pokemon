@@ -203,6 +203,9 @@ model GiftRequest {
   // 物品礼物
   giftItemId       String?  // 物品ID，如 'potion', 'pokeball'
   giftItemQuantity Int?     // 物品数量
+  giftItemName     String?  // 物品名称快照
+  giftItemDescription String? // 物品描述快照
+  giftItemCategory String?  // 物品分类快照（MEDICINE/POKEBALLS/KEY_ITEMS）
 
   // 状态
   status           String   @default("pending")  // pending | accepted | rejected | cancelled

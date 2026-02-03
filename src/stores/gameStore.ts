@@ -95,7 +95,7 @@ interface GameState {
   startGymBattle: (gym: GymData) => void;
   runAway: () => void;
   executeMove: (moveIndex: number) => Promise<void>;
-  useItem: (itemId: string, targetId: string) => void;
+  applyItem: (itemId: string, targetId: string) => void;
   addItem: (itemId: string, quantity?: number) => void;
   throwPokeball: (ballId?: string) => Promise<void>;
   buyItem: (itemId: string, price: number, quantity?: number) => boolean;
@@ -680,7 +680,7 @@ export const useGameStore = create<GameState>()(
     }
   },
 
-  useItem: (itemId, targetId) => set(produce((state: GameState) => {
+  applyItem: (itemId, targetId) => set(produce((state: GameState) => {
       const itemIndex = state.inventory.findIndex(i => i.id === itemId);
       if (itemIndex === -1 || state.inventory[itemIndex].quantity <= 0) return;
 
@@ -1253,13 +1253,12 @@ if (typeof window !== 'undefined') {
       return;
     }
 
-    useGameStore.setState(produce((state) => {
-      // @ts-ignore
-      const index = state.playerParty.findIndex((p: any) => p.speciesData.pokedexId === 4);
-      
-      if (index === -1) {
-        console.log('未在队伍中找到小火龙！');
-        return;
+	    useGameStore.setState(produce((state) => {
+	      const index = state.playerParty.findIndex((p: any) => p.speciesData.pokedexId === 4);
+	      
+	      if (index === -1) {
+	        console.log('未在队伍中找到小火龙！');
+	        return;
       }
 
       const charmander = state.playerParty[index];

@@ -34,10 +34,10 @@ function createPokemon(speciesId: string, level: number): Pokemon {
   };
 }
 
-describe('Evolution System', () => {
-  it('should evolve Charmander to Charmeleon at level 16', () => {
-    // 1. Create Charmander at level 15
-    let charmander = createPokemon('charmander', 15);
+	describe('Evolution System', () => {
+	  it('should evolve Charmander to Charmeleon at level 16', () => {
+	    // 1. Create Charmander at level 15
+	    const charmander = createPokemon('charmander', 15);
     
     // 2. Gain enough XP to reach level 16
     // Level 15 -> 3375 XP
@@ -56,8 +56,8 @@ describe('Evolution System', () => {
     expect(SPECIES_DATA[evolution!.targetSpeciesId].speciesName).toBe('火恐龙');
   });
 
-  it('should NOT evolve Charmander at level 15', () => {
-    let charmander = createPokemon('charmander', 14);
+	  it('should NOT evolve Charmander at level 15', () => {
+	    const charmander = createPokemon('charmander', 14);
     
     // Gain XP to reach 15 (not 16)
     const { updatedPokemon: leveledUpPokemon, leveledUp } = gainExperience(charmander, 1000); // 14->15
@@ -71,8 +71,8 @@ describe('Evolution System', () => {
     expect(evolution).toBeUndefined();
   });
 
-  it('should evolve Charmeleon to Charizard at level 36', () => {
-    let charmeleon = createPokemon('charmeleon', 35);
+	  it('should evolve Charmeleon to Charizard at level 36', () => {
+	    const charmeleon = createPokemon('charmeleon', 35);
     
     // Gain XP to reach 36
     const { updatedPokemon: leveledUpPokemon } = gainExperience(charmeleon, 5000);

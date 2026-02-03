@@ -66,9 +66,9 @@ export default function FriendsView() {
     }
   };
 
-  const handleStartChat = (odId: string) => {
+  const handleStartChat = (friendUserId: string) => {
     // 存储当前聊天对象的 ID，然后切换到聊天视图
-    localStorage.setItem('currentChatFriendId', odId);
+    localStorage.setItem('currentChatFriendId', friendUserId);
     setView('CHAT');
   };
 
@@ -189,14 +189,14 @@ export default function FriendsView() {
                 </span>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleStartChat(friend.odId)}
+                    onClick={() => handleStartChat(friend.friendUserId)}
                     className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
                   >
                     聊天
                   </button>
                   <button
                     onClick={() => {
-                      localStorage.setItem('battleFriendId', friend.odId);
+                      localStorage.setItem('battleFriendId', friend.friendUserId);
                       setShowBattleModal(true);
                     }}
                     disabled={!friend.isOnline || isCheatMode}
@@ -211,7 +211,7 @@ export default function FriendsView() {
                   </button>
                   <button
                     onClick={() => {
-                      setGiftTargetFriend({ id: friend.odId, username: friend.username });
+                      setGiftTargetFriend({ id: friend.friendUserId, username: friend.username });
                       setShowGiftModal(true);
                     }}
                     className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600"

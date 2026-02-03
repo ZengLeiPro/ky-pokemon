@@ -58,7 +58,10 @@ game.get('/save', async (c) => {
 
 game.post('/save', async (c) => {
   const user = c.get('user');
-  const body = await c.req.json();
+  const body = await c.req.json().catch(() => null);
+  if (!body) {
+    return c.json({ success: false, error: '请求体不是有效的 JSON' }, 400);
+  }
 
   const parsed = SaveGameRequestSchema.safeParse(body);
   if (!parsed.success) {

@@ -14,6 +14,18 @@ import internal from './routes/internal.js';
 import gift from './routes/gift.js';
 import pokedex from './routes/pokedex.js';
 
+function requireEnv(name: string) {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`缺少环境变量 ${name}，请检查 server/.env 或运行环境配置`);
+  }
+  return value;
+}
+
+// 基础运行必须的环境变量（避免出现“JWT_SECRET=undefined”这类隐性安全问题）
+requireEnv('DATABASE_URL');
+requireEnv('JWT_SECRET');
+
 const app = new Hono();
 
 app.use('*', logger());

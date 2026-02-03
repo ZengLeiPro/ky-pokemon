@@ -43,7 +43,10 @@ auth.get('/me', authMiddleware, async (c) => {
 
 auth.put('/username', authMiddleware, async (c) => {
   const payload = c.get('user');
-  const body = await c.req.json();
+  const body = await c.req.json().catch(() => null);
+  if (!body) {
+    return c.json({ success: false, error: '请求体不是有效的 JSON' }, 400);
+  }
   
   const parsed = UpdateUsernameSchema.safeParse(body);
   if (!parsed.success) {
@@ -57,11 +60,19 @@ auth.put('/username', authMiddleware, async (c) => {
     return c.json({ success: false, error: '用户已存在' }, 409);
   }
 
-  const user = await db.user.update({
-    where: { id: payload.userId },
-    data: { username: newUsername },
-    select: { id: true, username: true, createdAt: true }
-  });
+  let user;
+  try {
+    user = await db.user.update({
+      where: { id: payload.userId },
+      data: { username: newUsername },
+      select: { id: true, username: true, createdAt: true }
+    });
+  } catch (e: any) {
+    if (e?.code === 'P2002') {
+      return c.json({ success: false, error: '用户已存在' }, 409);
+    }
+    throw e;
+  }
 
   return c.json({
     success: true,
@@ -77,7 +88,10 @@ auth.put('/username', authMiddleware, async (c) => {
 
 auth.put('/password', authMiddleware, async (c) => {
   const payload = c.get('user');
-  const body = await c.req.json();
+  const body = await c.req.json().catch(() => null);
+  if (!body) {
+    return c.json({ success: false, error: '请求体不是有效的 JSON' }, 400);
+  }
   
   const parsed = UpdatePasswordSchema.safeParse(body);
   if (!parsed.success) {
@@ -106,7 +120,10 @@ auth.put('/password', authMiddleware, async (c) => {
 });
 
 auth.post('/register', async (c) => {
-  const body = await c.req.json();
+  const body = await c.req.json().catch(() => null);
+  if (!body) {
+    return c.json({ success: false, error: '请求体不是有效的 JSON' }, 400);
+  }
   const parsed = UserCredentialsSchema.safeParse(body);
 
   if (!parsed.success) {
@@ -121,10 +138,18 @@ auth.post('/register', async (c) => {
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
-  const user = await db.user.create({
-    data: { username, passwordHash },
-    select: { id: true, username: true, createdAt: true }
-  });
+  let user;
+  try {
+    user = await db.user.create({
+      data: { username, passwordHash },
+      select: { id: true, username: true, createdAt: true }
+    });
+  } catch (e: any) {
+    if (e?.code === 'P2002') {
+      return c.json({ success: false, error: '用户已存在' }, 409);
+    }
+    throw e;
+  }
 
   const token = await signToken({ userId: user.id, username: user.username });
 
@@ -142,7 +167,10 @@ auth.post('/register', async (c) => {
 });
 
 auth.post('/login', async (c) => {
-  const body = await c.req.json();
+  const body = await c.req.json().catch(() => null);
+  if (!body) {
+    return c.json({ success: false, error: '请求体不是有效的 JSON' }, 400);
+  }
   const parsed = UserCredentialsSchema.safeParse(body);
 
   if (!parsed.success) {

@@ -1,20 +1,34 @@
-import { describe, it, expect, beforeAll, afterAll, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 
 import { Hono } from 'hono';
-import { db } from '../src/lib/db';
 
-vi.mock('../src/lib/db', () => ({
+beforeAll(() => {
+  process.env.JWT_SECRET = 'test-jwt-secret';
+});
+
+vi.mock('../src/lib/db.js', () => ({
   db: {
     user: {
       findUnique: vi.fn(),
       create: vi.fn(),
       update: vi.fn(),
-      deleteMany: vi.fn(),
+      deleteMany: vi.fn()
     }
   }
 }));
 
-import auth from '../src/routes/auth';
+vi.mock('bcryptjs', () => ({
+  default: {
+    hash: vi.fn().mockResolvedValue('$2b$10$hashedpasswordplaceholder'),
+    compare: vi.fn().mockImplementation((plain: string, hash: string) =>
+      plain === 'password123' && hash === '$2b$10$hashedpasswordplaceholder'
+    )
+  }
+}));
+
+import { db } from '../src/lib/db.js';
+import { signToken } from '../src/lib/jwt.js';
+import auth from '../src/routes/auth.js';
 
 const app = new Hono();
 app.route('/api/auth', auth);
@@ -34,20 +48,14 @@ describe('Auth API', () => {
   };
   let token: string;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
+    token = await signToken({ userId: mockUser.id, username: mockUser.username });
   });
 
-  vi.mock('bcrypt', () => ({
-    default: {
-      hash: vi.fn().mockResolvedValue('$2b$10$hashedpasswordplaceholder'),
-      compare: vi.fn().mockImplementation((plain, hash) => plain === 'password123' && hash === '$2b$10$hashedpasswordplaceholder')
-    }
-  }));
-
   it('POST /register - 注册新用户', async () => {
-    vi.mocked(db.user.findUnique).mockResolvedValue(null);
-    vi.mocked(db.user.create).mockResolvedValue(mockUser);
+    vi.mocked(db.user.findUnique).mockResolvedValue(null as any);
+    vi.mocked(db.user.create).mockResolvedValue(mockUser as any);
 
     const res = await app.request('/api/auth/register', {
       method: 'POST',
@@ -60,11 +68,11 @@ describe('Auth API', () => {
     expect(data.success).toBe(true);
     expect(data.data.user.username).toBe(testUser.username);
     expect(typeof data.data.user.createdAt).toBe('number');
-    token = data.data.token;
+    expect(typeof data.data.token).toBe('string');
   });
 
   it('POST /register - 重复用户名应失败', async () => {
-    vi.mocked(db.user.findUnique).mockResolvedValue(mockUser);
+    vi.mocked(db.user.findUnique).mockResolvedValue(mockUser as any);
 
     const res = await app.request('/api/auth/register', {
       method: 'POST',
@@ -78,7 +86,7 @@ describe('Auth API', () => {
   });
 
   it('POST /login - 正确密码登录', async () => {
-    vi.mocked(db.user.findUnique).mockResolvedValue(mockUser);
+    vi.mocked(db.user.findUnique).mockResolvedValue(mockUser as any);
 
     const res = await app.request('/api/auth/login', {
       method: 'POST',
@@ -89,10 +97,11 @@ describe('Auth API', () => {
     expect(res.status).toBe(200);
     const data = await res.json();
     expect(data.success).toBe(true);
+    expect(typeof data.data.token).toBe('string');
   });
 
   it('POST /login - 错误密码应失败', async () => {
-    vi.mocked(db.user.findUnique).mockResolvedValue(mockUser);
+    vi.mocked(db.user.findUnique).mockResolvedValue(mockUser as any);
 
     const res = await app.request('/api/auth/login', {
       method: 'POST',
@@ -104,10 +113,10 @@ describe('Auth API', () => {
   });
 
   it('GET /me - 有效 Token', async () => {
-    vi.mocked(db.user.findUnique).mockResolvedValue(mockUser);
+    vi.mocked(db.user.findUnique).mockResolvedValue(mockUser as any);
 
     const res = await app.request('/api/auth/me', {
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` }
     });
 
     expect(res.status).toBe(200);
@@ -121,3 +130,4 @@ describe('Auth API', () => {
     expect(res.status).toBe(401);
   });
 });
+

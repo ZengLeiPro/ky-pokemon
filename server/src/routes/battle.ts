@@ -212,6 +212,7 @@ battle.get('/:id/state', async (c) => {
   const user = c.get('user');
   const battleId = c.req.param('id');
   const now = new Date();
+  const lastSeenThreshold = new Date(now.getTime() - 10 * 1000); // 10 秒内不重复写库，降低轮询压力
 
   const battleRecord = await db.battle.findFirst({
     where: {
@@ -248,14 +249,22 @@ battle.get('/:id/state', async (c) => {
   const isChallenger = battleRecord.challengerId === user.userId;
 
   // 更新当前用户在对战中的最后活跃时间 + 全局 lastSeenAt
-  await db.battle.update({
-    where: { id: battleId },
+  await db.battle.updateMany({
+    where: {
+      id: battleId,
+      ...(isChallenger
+        ? { OR: [{ challengerLastSeen: null }, { challengerLastSeen: { lt: lastSeenThreshold } }] }
+        : { OR: [{ opponentLastSeen: null }, { opponentLastSeen: { lt: lastSeenThreshold } }] })
+    },
     data: isChallenger
       ? { challengerLastSeen: now }
       : { opponentLastSeen: now }
   });
-  await db.user.update({
-    where: { id: user.userId },
+  await db.user.updateMany({
+    where: {
+      id: user.userId,
+      OR: [{ lastSeenAt: null }, { lastSeenAt: { lt: lastSeenThreshold } }]
+    },
     data: { lastSeenAt: now }
   });
 
@@ -391,15 +400,28 @@ battle.post('/:id/action', zValidator('json', submitActionSchema), async (c) => 
   // 保存行动（同时更新活跃时间）
   const actionJson = JSON.stringify({ ...action, timestamp: Date.now() });
   const now = new Date();
+  const lastSeenThreshold = new Date(now.getTime() - 10 * 1000);
 
-  await db.battle.update({
-    where: { id: battleId },
+  const submitResult = await db.battle.updateMany({
+    where: {
+      id: battleId,
+      status: 'active',
+      OR: [{ challengerId: user.userId }, { opponentId: user.userId }],
+      ...(isChallenger ? { challengerAction: null } : { opponentAction: null })
+    },
     data: isChallenger
       ? { challengerAction: actionJson, challengerLastSeen: now }
       : { opponentAction: actionJson, opponentLastSeen: now }
   });
-  await db.user.update({
-    where: { id: user.userId },
+  if (submitResult.count === 0) {
+    return c.json({ success: false, error: '你已提交本回合行动或对战已结束' }, 400);
+  }
+
+  await db.user.updateMany({
+    where: {
+      id: user.userId,
+      OR: [{ lastSeenAt: null }, { lastSeenAt: { lt: lastSeenThreshold } }]
+    },
     data: { lastSeenAt: now }
   });
 
@@ -407,11 +429,20 @@ battle.post('/:id/action', zValidator('json', submitActionSchema), async (c) => 
   const updatedBattle = await db.battle.findUnique({ where: { id: battleId } });
 
   if (updatedBattle?.challengerAction && updatedBattle?.opponentAction) {
-    const challengerTeam = JSON.parse(updatedBattle.challengerTeam);
-    const opponentTeam = JSON.parse(updatedBattle.opponentTeam!);
-    const currentState = JSON.parse(updatedBattle.currentState!);
-    const challengerAction = JSON.parse(updatedBattle.challengerAction);
-    const opponentAction = JSON.parse(updatedBattle.opponentAction);
+    let challengerTeam: any;
+    let opponentTeam: any;
+    let currentState: any;
+    let challengerAction: any;
+    let opponentAction: any;
+    try {
+      challengerTeam = JSON.parse(updatedBattle.challengerTeam);
+      opponentTeam = JSON.parse(updatedBattle.opponentTeam!);
+      currentState = JSON.parse(updatedBattle.currentState!);
+      challengerAction = JSON.parse(updatedBattle.challengerAction);
+      opponentAction = JSON.parse(updatedBattle.opponentAction);
+    } catch {
+      return c.json({ success: false, error: '对战数据损坏，无法结算本回合' }, 500);
+    }
 
     // 处理回合
     const { newState, result, winnerId } = processTurn(
@@ -423,30 +454,42 @@ battle.post('/:id/action', zValidator('json', submitActionSchema), async (c) => 
       updatedBattle.currentTurn
     );
 
-    // 保存新状态
-    await db.battle.update({
-      where: { id: battleId },
+    const winnerUserId = winnerId === 'challenger'
+      ? updatedBattle.challengerId
+      : winnerId === 'opponent'
+        ? updatedBattle.opponentId
+        : null;
+
+    // 使用“带条件的 updateMany”抢占结算权，确保同一回合只会被结算一次
+    const settleResult = await db.battle.updateMany({
+      where: {
+        id: battleId,
+        status: 'active',
+        currentTurn: updatedBattle.currentTurn,
+        challengerAction: updatedBattle.challengerAction,
+        opponentAction: updatedBattle.opponentAction
+      },
       data: {
         currentState: JSON.stringify(newState),
         challengerAction: null,
         opponentAction: null,
         currentTurn: { increment: 1 },
-        status: winnerId ? 'finished' : 'active',
-        winnerId: winnerId === 'challenger' ? updatedBattle.challengerId
-          : winnerId === 'opponent' ? updatedBattle.opponentId
-          : null,
-        finishReason: winnerId ? 'normal' : undefined
+        status: winnerUserId ? 'finished' : 'active',
+        winnerId: winnerUserId,
+        finishReason: winnerUserId ? 'normal' : null
       }
     });
 
-    // 保存回合日志
-    await db.battleTurnLog.create({
-      data: {
-        battleId,
-        turn: updatedBattle.currentTurn,
-        log: JSON.stringify(result)
-      }
-    });
+    // 只有抢占成功的一方记录回合日志，避免重复日志
+    if (settleResult.count > 0) {
+      await db.battleTurnLog.create({
+        data: {
+          battleId,
+          turn: updatedBattle.currentTurn,
+          log: JSON.stringify(result)
+        }
+      });
+    }
   }
 
   return c.json({ success: true, data: { message: '行动已提交' } });

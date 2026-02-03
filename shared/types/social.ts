@@ -6,7 +6,8 @@ export type FriendshipStatus = 'pending' | 'accepted' | 'rejected';
 
 export interface Friend {
   id: string;           // friendship ID
-  odId: string;       // 好友的 user ID
+  friendUserId: string; // 好友的 user ID
+  odId?: string;        // 兼容旧字段（计划废弃）
   username: string;
   status: FriendshipStatus;
   isOnline: boolean;
@@ -41,7 +42,8 @@ export interface Message {
 }
 
 export interface Conversation {
-  odId: string;
+  friendUserId: string;
+  odId?: string; // 兼容旧字段（计划废弃）
   username: string;
   lastMessage: string;
   lastMessageTime: string;

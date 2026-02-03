@@ -4,7 +4,7 @@ import { BriefcaseMedical, Zap, Key } from 'lucide-react';
 import { ItemCategory } from '../../types';
 
 const BagView: React.FC = () => {
-  const { inventory, playerParty, useItem } = useGameStore();
+  const { inventory, playerParty, applyItem } = useGameStore();
   const [activeTab, setActiveTab] = useState<ItemCategory>('MEDICINE');
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
@@ -27,7 +27,7 @@ const BagView: React.FC = () => {
 
   const handleUseItem = (pokemonId: string) => {
     if (selectedItem) {
-      useItem(selectedItem, pokemonId);
+      applyItem(selectedItem, pokemonId);
       setSelectedItem(null);
     }
   };

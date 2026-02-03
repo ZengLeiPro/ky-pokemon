@@ -42,7 +42,7 @@ export function BattleChallengeModal({
       loadFriends();
       loadPendingBattleChallenges();
       if (friend) {
-        setSelectedFriendId(friend.odId);
+        setSelectedFriendId(friend.friendUserId);
       }
     }
   }, [isOpen]);
@@ -174,12 +174,12 @@ export function BattleChallengeModal({
                   .map(friendItem => (
                   <button
                     key={friendItem.id}
-                    onClick={() => friendItem.isOnline && setSelectedFriendId(friendItem.odId)}
+                    onClick={() => friendItem.isOnline && setSelectedFriendId(friendItem.friendUserId)}
                     disabled={!friendItem.isOnline}
                     className={`w-full p-3 rounded flex items-center justify-between ${
                       !friendItem.isOnline
                         ? 'bg-gray-800 opacity-50 cursor-not-allowed'
-                        : selectedFriendId === friendItem.odId
+                        : selectedFriendId === friendItem.friendUserId
                           ? 'bg-blue-900 border border-blue-500'
                           : 'bg-gray-800 hover:bg-gray-700'
                     }`}
@@ -193,7 +193,7 @@ export function BattleChallengeModal({
                         <span className="text-xs text-gray-400">离线</span>
                       )}
                     </span>
-                    {selectedFriendId === friendItem.odId && (
+                    {selectedFriendId === friendItem.friendUserId && (
                       <span className="text-blue-400">✓</span>
                     )}
                   </button>

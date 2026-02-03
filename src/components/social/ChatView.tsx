@@ -57,7 +57,7 @@ export default function ChatView() {
     setIsSending(false);
   };
 
-  const currentFriend = friends.find(f => f.odId === currentChatFriendId);
+  const currentFriend = friends.find(f => f.friendUserId === currentChatFriendId);
 
   return (
     <div className="h-screen flex flex-col">
@@ -88,10 +88,10 @@ export default function ChatView() {
           <div className="p-2 text-sm font-bold text-gray-500 border-b">会话</div>
           {conversations.map(conv => (
             <div
-              key={conv.odId}
-              onClick={() => setCurrentChat(conv.odId)}
+              key={conv.friendUserId}
+              onClick={() => setCurrentChat(conv.friendUserId)}
               className={`p-3 cursor-pointer hover:bg-gray-100 ${
-                currentChatFriendId === conv.odId ? 'bg-blue-50' : ''
+                currentChatFriendId === conv.friendUserId ? 'bg-blue-50' : ''
               }`}
             >
               <div className="flex items-center justify-between">

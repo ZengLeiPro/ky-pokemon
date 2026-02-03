@@ -4,7 +4,7 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-这是一个基于 **React 19** + **Zustand** 开发的现代化宝可梦 RPG 网页游戏。项目采用纯前端架构（Serverless Client-Side），利用浏览器能力在本地运行完整的游戏引擎和数据库逻辑。
+这是一个基于 **React 19** + **Zustand** 开发的现代化宝可梦 RPG 网页游戏。项目包含前端游戏引擎（浏览器本地存档）以及可选的 Node.js 服务端（登录/云存档/好友/聊天/交换/PvP 等社交功能）。
 
 ## 🎮 核心玩法
 
@@ -52,10 +52,15 @@
    npm install
    ```
 
-2. **启动开发环境**:
+2. **启动开发环境（前端 + 服务端）**:
    ```bash
    npm run dev
    ```
+
+> 服务端依赖与数据库：
+> - `cd server && npm install`
+> - 本地 PostgreSQL 可用 `docker compose -f server/docker-compose.yml up -d`
+> - 服务端环境变量见 `server/.env`（生产环境务必修改 `JWT_SECRET`）
 
 3. **构建生产版本**:
    ```bash
@@ -78,5 +83,5 @@ src/
 
 ## ⚠️ 说明
 
-- 本项目目前为**纯前端应用**，无需后端服务即可完整运行。
-- 游戏存档存储在浏览器的 **IndexedDB** 中，清理浏览器缓存或数据可能会导致进度丢失。
+- 单机游戏体验可仅运行前端（存档在浏览器 **IndexedDB**），清理浏览器缓存或数据可能会导致进度丢失。
+- 若要使用登录/云存档/好友/聊天/交换/PvP 等功能，需要同时启动 `server/`。

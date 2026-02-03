@@ -112,6 +112,15 @@ function getSpeed(pokemon: Pokemon, state: PokemonBattleState): number {
   return spe;
 }
 
+function hasAlivePokemon(teamState: PokemonBattleState[]): boolean {
+  return teamState.some((s) => s.currentHp > 0);
+}
+
+function findNextAliveIndex(teamState: PokemonBattleState[]): number | null {
+  const idx = teamState.findIndex((s) => s.currentHp > 0);
+  return idx >= 0 ? idx : null;
+}
+
 export interface ProcessTurnResult {
   newState: BattleState;
   result: TurnResult;
@@ -130,40 +139,21 @@ export function processTurn(
   const events: TurnEvent[] = [];
   let winnerId: string | null = null;
 
-  // 获取当前出战的宝可梦
-  const challengerPokemon = challengerTeam[state.challengerActive];
-  const opponentPokemon = opponentTeam[state.opponentActive];
-
-  // 检查是否有人已经输了
-  let challengerAlive = state.challengerTeamState[state.challengerActive].currentHp > 0;
-  let opponentAlive = state.opponentTeamState[state.opponentActive].currentHp > 0;
-
-  if (!challengerAlive || !opponentAlive) {
-    // 处理已经分出胜负的情况
-    if (!challengerAlive && !opponentAlive) {
-      events.push({ type: 'faint', actor: 'challenger', message: '双方宝可梦同时倒下！' });
-      events.push({ type: 'faint', actor: 'opponent', message: '' });
-      winnerId = null; // 平局
-    } else if (!challengerAlive) {
-      events.push({ type: 'faint', actor: 'challenger', message: `${challengerPokemon.nickname || challengerPokemon.speciesName} 倒下了！` });
-      winnerId = opponentTeam[0] ? 'opponent' : null; // 简单处理
-    } else {
-      events.push({ type: 'faint', actor: 'opponent', message: `${opponentPokemon.nickname || opponentPokemon.speciesName} 倒下了！` });
-      winnerId = challengerTeam[0] ? 'challenger' : null;
-    }
-
-    return {
-      newState: state,
-      result: { turn: currentTurn, events },
-      winnerId
-    };
-  }
-
   // 准备行动队列
   type ActionItem = { action: BattleAction; team: 'challenger' | 'opponent'; pokemon: Pokemon; state: PokemonBattleState };
   const actions: ActionItem[] = [
-    { action: challengerAction, team: 'challenger', pokemon: challengerPokemon, state: state.challengerTeamState[state.challengerActive] },
-    { action: opponentAction, team: 'opponent', pokemon: opponentPokemon, state: state.opponentTeamState[state.opponentActive] }
+    {
+      action: challengerAction,
+      team: 'challenger',
+      pokemon: challengerTeam[state.challengerActive],
+      state: state.challengerTeamState[state.challengerActive]
+    },
+    {
+      action: opponentAction,
+      team: 'opponent',
+      pokemon: opponentTeam[state.opponentActive],
+      state: state.opponentTeamState[state.opponentActive]
+    }
   ];
 
   // 排序：投降优先，然后是换人，最后按优先度和速度
@@ -203,14 +193,30 @@ export function processTurn(
   for (const action of actions) {
     if (executedActions.includes(action.team)) continue; // 已行动的队伍跳过
 
+    // 如果当前出战宝可梦已倒下，除“换人/投降”外都无法行动
+    const actorActiveIndex = action.team === 'challenger' ? newState.challengerActive : newState.opponentActive;
+    const actorTeamState = action.team === 'challenger' ? newState.challengerTeamState : newState.opponentTeamState;
+    const actorAlive = actorTeamState[actorActiveIndex]?.currentHp > 0;
+    if (!actorAlive && action.action.type === 'move') {
+      const actorTeam = action.team === 'challenger' ? challengerTeam : opponentTeam;
+      const actorPokemon = actorTeam[actorActiveIndex];
+      events.push({
+        type: 'status',
+        actor: action.team,
+        message: `${actorPokemon.nickname || actorPokemon.speciesName} 已倒下，无法行动！`
+      });
+      executedActions.push(action.team);
+      continue;
+    }
+
     switch (action.action.type) {
       case 'forfeit':
         events.push({
           type: 'status',
           actor: action.team,
           message: action.team === 'challenger'
-            ? `${challengerPokemon.nickname || challengerPokemon.speciesName} 投降了！`
-            : `${opponentPokemon.nickname || opponentPokemon.speciesName} 投降了！`
+            ? `${challengerTeam[newState.challengerActive].nickname || challengerTeam[newState.challengerActive].speciesName} 投降了！`
+            : `${opponentTeam[newState.opponentActive].nickname || opponentTeam[newState.opponentActive].speciesName} 投降了！`
         });
         winnerId = action.team === 'challenger' ? 'opponent' : 'challenger';
         break;
@@ -221,7 +227,7 @@ export function processTurn(
         const targetState = action.team === 'challenger' ? newState.challengerTeamState : newState.opponentTeamState;
 
         // 检查目标宝可梦是否可用
-        if (newIndex >= targetTeam.length || newState[action.team === 'challenger' ? 'challengerTeamState' : 'opponentTeamState'][newIndex].currentHp <= 0) {
+        if (newIndex >= targetTeam.length || targetState[newIndex].currentHp <= 0) {
           events.push({
             type: 'status',
             actor: action.team,
@@ -248,7 +254,13 @@ export function processTurn(
 
       case 'move': {
         const moveIndex = action.action.moveIndex!;
-        const move = action.pokemon.moves[moveIndex];
+        const attackerTeam = action.team === 'challenger' ? challengerTeam : opponentTeam;
+        const attackerState = action.team === 'challenger'
+          ? newState.challengerTeamState[newState.challengerActive]
+          : newState.opponentTeamState[newState.opponentActive];
+        const attackerPokemon = attackerTeam[action.team === 'challenger' ? newState.challengerActive : newState.opponentActive];
+
+        const move = attackerPokemon.moves[moveIndex];
 
         if (!move) {
           events.push({
@@ -259,7 +271,9 @@ export function processTurn(
           continue;
         }
 
-        if (move.ppCurrent <= 0) {
+        const used = attackerState.ppUsed[moveIndex] ?? 0;
+        const ppLeft = (move.move.ppMax ?? 0) - used;
+        if (ppLeft <= 0) {
           events.push({
             type: 'status',
             actor: action.team,
@@ -269,55 +283,53 @@ export function processTurn(
         }
 
         // 状态异常导致无法行动
-        if (action.pokemon.status === 'SLP') {
+        if (attackerPokemon.status === 'SLP') {
           const wakeUp = Math.random() < 0.33;
           if (!wakeUp) {
             events.push({
               type: 'status',
               actor: action.team,
-              message: `${action.pokemon.nickname || action.pokemon.speciesName} 还在睡觉！`
+              message: `${attackerPokemon.nickname || attackerPokemon.speciesName} 还在睡觉！`
             });
             break;
           }
         }
 
-        if (action.pokemon.status === 'FRZ') {
+        if (attackerPokemon.status === 'FRZ') {
           const thaw = Math.random() < 0.2;
           if (!thaw) {
             events.push({
               type: 'status',
               actor: action.team,
-              message: `${action.pokemon.nickname || action.pokemon.speciesName} 冻住了！`
+              message: `${attackerPokemon.nickname || attackerPokemon.speciesName} 冻住了！`
             });
             break;
           }
         }
 
         // 执行招式
-        const target = action.team === 'challenger' ? opponentPokemon : challengerPokemon;
-        const targetState = action.team === 'challenger'
-          ? newState.opponentTeamState[newState.opponentActive]
-          : newState.challengerTeamState[newState.challengerActive];
+        const defenderTeam = action.team === 'challenger' ? opponentTeam : challengerTeam;
+        const defenderActiveIndex = action.team === 'challenger' ? newState.opponentActive : newState.challengerActive;
+        const defenderPokemon = defenderTeam[defenderActiveIndex];
+        const defenderState = action.team === 'challenger'
+          ? newState.opponentTeamState[defenderActiveIndex]
+          : newState.challengerTeamState[defenderActiveIndex];
 
         // 减少 PP
-        if (action.team === 'challenger') {
-          newState.challengerTeamState[newState.challengerActive].ppUsed[moveIndex]++;
-        } else {
-          newState.opponentTeamState[newState.opponentActive].ppUsed[moveIndex]++;
-        }
+        attackerState.ppUsed[moveIndex] = used + 1;
 
         events.push({
           type: 'move',
           actor: action.team,
-          message: `${action.pokemon.nickname || action.pokemon.speciesName} 使用了 ${move.move.name}！`
+          message: `${attackerPokemon.nickname || attackerPokemon.speciesName} 使用了 ${move.move.name}！`
         });
 
         // 计算伤害
         if (move.move.category !== 'Status') {
-          const damageResult = calculateDamage(action.pokemon, target, move.move, newState.weather);
-          const actualDamage = Math.min(damageResult.damage, targetState.currentHp);
+          const damageResult = calculateDamage(attackerPokemon, defenderPokemon, move.move, newState.weather);
+          const actualDamage = Math.min(damageResult.damage, defenderState.currentHp);
 
-          targetState.currentHp -= actualDamage;
+          defenderState.currentHp -= actualDamage;
 
           events.push({
             type: 'damage',
@@ -327,12 +339,12 @@ export function processTurn(
           });
 
           // 检查是否倒下
-          if (targetState.currentHp <= 0) {
-            targetState.currentHp = 0;
+          if (defenderState.currentHp <= 0) {
+            defenderState.currentHp = 0;
             events.push({
               type: 'faint',
               actor: action.team === 'challenger' ? 'opponent' : 'challenger',
-              message: `${target.nickname || target.speciesName} 倒下了！`
+              message: `${defenderPokemon.nickname || defenderPokemon.speciesName} 倒下了！`
             });
           }
         }
@@ -341,7 +353,34 @@ export function processTurn(
     }
 
     executedActions.push(action.team);
+
+    // 一旦分出胜负，本回合无需继续执行后续行动
+    if (winnerId) break;
   }
+
+  // 如果出战宝可梦倒下，自动切换到下一只可用宝可梦（简化处理）
+  function autoSwitch(team: 'challenger' | 'opponent') {
+    const activeIndex = team === 'challenger' ? newState.challengerActive : newState.opponentActive;
+    const teamState = team === 'challenger' ? newState.challengerTeamState : newState.opponentTeamState;
+    if (teamState[activeIndex]?.currentHp > 0) return;
+
+    const nextIndex = findNextAliveIndex(teamState);
+    if (nextIndex == null) return;
+
+    if (team === 'challenger') newState.challengerActive = nextIndex;
+    else newState.opponentActive = nextIndex;
+
+    const teamPokemon = team === 'challenger' ? challengerTeam : opponentTeam;
+    const nextPokemon = teamPokemon[nextIndex];
+    events.push({
+      type: 'switch',
+      actor: team,
+      message: `${nextPokemon.nickname || nextPokemon.speciesName} 出战！`
+    });
+  }
+
+  autoSwitch('challenger');
+  autoSwitch('opponent');
 
   // 处理天气回合
   if (newState.weather && newState.weather !== 'None') {
@@ -359,8 +398,8 @@ export function processTurn(
   }
 
   // 检查胜负
-  challengerAlive = newState.challengerTeamState.some((s: PokemonBattleState) => s.currentHp > 0);
-  opponentAlive = newState.opponentTeamState.some((s: PokemonBattleState) => s.currentHp > 0);
+  const challengerAlive = hasAlivePokemon(newState.challengerTeamState);
+  const opponentAlive = hasAlivePokemon(newState.opponentTeamState);
 
   if (!challengerAlive && !opponentAlive) {
     events.push({ type: 'faint', message: '平局！' });

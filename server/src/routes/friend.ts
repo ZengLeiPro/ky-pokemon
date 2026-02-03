@@ -5,7 +5,6 @@ import { authMiddleware } from '../middleware/auth.js';
 import {
   searchUserSchema,
   sendFriendRequestSchema,
-  handleFriendRequestSchema
 } from '../../../shared/schemas/social.schema.js';
 import { isUserOnline } from '../lib/online-utils.js';
 
@@ -87,6 +86,22 @@ friend.post('/request', zValidator('json', sendFriendRequestSchema), async (c) =
     }
     if (existing.status === 'pending') {
       return c.json({ success: false, error: '已有待处理的好友请求' }, 400);
+    }
+    if (existing.status === 'rejected') {
+      // 复用历史记录，避免触发唯一约束（并将方向修正为“我 -> 对方”）
+      try {
+        const updated = await db.friendship.update({
+          where: { id: existing.id },
+          data: {
+            userId: user.userId,
+            friendId: targetUserId,
+            status: 'pending'
+          }
+        });
+        return c.json({ success: true, data: { id: updated.id } });
+      } catch (e: any) {
+        return c.json({ success: false, error: '无法重新发送好友请求' }, 500);
+      }
     }
   }
 
@@ -199,6 +214,7 @@ friend.get('/list', async (c) => {
     const friendUser = f.userId === user.userId ? f.friend : f.user;
     return {
       id: f.id,
+      friendUserId: friendUser.id,
       odId: friendUser.id,
       username: friendUser.username,
       status: f.status,
