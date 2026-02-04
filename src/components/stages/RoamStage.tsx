@@ -27,7 +27,6 @@ const PARTICLE_BG_STYLE: React.CSSProperties = {
 const RoamStage: React.FC = () => {
   const { startBattle, startLegendaryBattle, startGymBattle, addLog, addItem, playerLocationId, moveTo, buyItem, playerMoney, setView, weather, legendaryProgress, badges } = useGameStore();
   const [showShop, setShowShop] = useState(false);
-  const [showGym, setShowGym] = useState(false);
   const [showLegendary, setShowLegendary] = useState(false);
 
   const location = WORLD_MAP[playerLocationId];
@@ -216,8 +215,8 @@ const RoamStage: React.FC = () => {
 
                 <button
                     onClick={() => {
-                        if (hasGym) {
-                            setShowGym(true);
+                        if (hasGym && location.gym) {
+                            startGymBattle(location.gym);
                         } else {
                             addLog("这里没有道馆。", "info");
                         }
@@ -225,7 +224,7 @@ const RoamStage: React.FC = () => {
                     className={`col-span-3 bg-rose-600/90 hover:bg-rose-600 active:bg-rose-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-rose-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group ${!hasGym ? 'opacity-50 grayscale cursor-not-allowed' : ''}`}
                 >
                     <Swords size={18} className="group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] font-bold">宝可梦道馆</span>
+                    <span className="text-[10px] font-bold">{hasGym && location.gym ? `挑战馆主 ${location.gym.leaderName}` : '宝可梦道馆'}</span>
                 </button>
 
                 {/* 传说宝可梦遭遇按钮 */}
@@ -252,54 +251,6 @@ const RoamStage: React.FC = () => {
                 )}
             </div>
         </div>
-
-        {showGym && location.gym && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
-            <div className="bg-slate-900 border-2 border-rose-500/50 rounded-2xl p-6 max-w-sm w-full animate-fade-in-up">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                  <Swords size={24} className="text-rose-500" />
-                  {location.name}道馆
-                </h2>
-                <button
-                  onClick={() => setShowGym(false)}
-                  className="text-slate-400 hover:text-white text-sm px-3 py-1 bg-slate-800 rounded-lg"
-                >
-                  关闭
-                </button>
-              </div>
-
-              <div className="mb-6 bg-slate-800/50 p-4 rounded-xl flex items-center gap-4">
-                 <div className="w-16 h-16 bg-slate-700 rounded-full flex items-center justify-center text-2xl">
-                    🥋
-                 </div>
-                 <div>
-                     <h3 className="font-bold text-white text-lg">{location.gym.leaderName}</h3>
-                     <p className="text-rose-400 text-xs font-mono uppercase tracking-wider">GYM LEADER</p>
-                     <p className="text-slate-400 text-xs mt-1">{location.gym.description}</p>
-                 </div>
-              </div>
-
-              <div className="space-y-3">
-                <button
-                  onClick={() => {
-                    if (location.gym) {
-                        startGymBattle(location.gym);
-                        setShowGym(false);
-                    }
-                  }}
-                  className="w-full bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white py-3 px-4 rounded-xl font-bold transition-all shadow-lg shadow-rose-900/20 flex items-center justify-center gap-2"
-                >
-                  <Swords size={18} className="animate-pulse" />
-                  挑战馆主
-                </button>
-                <div className="text-center text-xs text-slate-500 mt-2">
-                    推荐等级: Lv.{location.gym.level}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Legendary Pokemon Encounter Modal */}
         {showLegendary && legendaryEncounter && legendaryAvailable && (
