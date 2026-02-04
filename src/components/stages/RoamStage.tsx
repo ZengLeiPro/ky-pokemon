@@ -363,52 +363,123 @@ const RoamStage: React.FC = () => {
         {/* Pokemon Center Modal */}
         {showPokeCenter && (
           <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
-            <div className="bg-slate-900 border-2 border-indigo-500/50 rounded-2xl p-6 max-w-sm w-full animate-fade-in-up">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                  <House size={24} className="text-indigo-500" />
-                  宝可梦中心
-                </h2>
-                <button
-                  onClick={() => setShowPokeCenter(false)}
-                  className="text-slate-400 hover:text-white text-sm px-3 py-1 bg-slate-800 rounded-lg"
-                >
-                  关闭
-                </button>
+            <div className="bg-slate-900 border-2 border-rose-400/50 rounded-2xl max-w-sm w-full animate-fade-in-up overflow-hidden">
+              {/* Pixel Art Pokemon Center Scene */}
+              <div className="relative w-full h-48 overflow-hidden" style={{ imageRendering: 'pixelated' }}>
+                {/* Background - walls */}
+                <div className="absolute inset-0 bg-gradient-to-b from-amber-100 to-amber-50"></div>
+                {/* Back wall pattern */}
+                <div className="absolute top-0 left-0 right-0 h-20 bg-rose-300"></div>
+                <div className="absolute top-20 left-0 right-0 h-2 bg-rose-400"></div>
+                {/* Floor */}
+                <div className="absolute bottom-0 left-0 right-0 h-14 bg-amber-200/80">
+                  <div className="absolute inset-0" style={{ backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 24px, rgba(0,0,0,0.05) 24px, rgba(0,0,0,0.05) 25px)', backgroundSize: '25px 100%' }}></div>
+                </div>
+
+                {/* Machine on the left */}
+                <div className="absolute left-4 top-6 w-12 h-16">
+                  <div className="w-full h-full bg-slate-400 rounded-t-lg border-2 border-slate-500">
+                    <div className="mt-1 mx-1 h-3 bg-slate-600 rounded-sm"></div>
+                    <div className="mt-1 flex justify-center gap-1 flex-wrap px-1">
+                      <div className="w-2 h-2 rounded-full bg-slate-500"></div>
+                      <div className="w-2 h-2 rounded-full bg-slate-500"></div>
+                      <div className="w-2 h-2 rounded-full bg-slate-500"></div>
+                      <div className="w-2 h-2 rounded-full bg-slate-500"></div>
+                      <div className="w-2 h-2 rounded-full bg-slate-500"></div>
+                      <div className="w-2 h-2 rounded-full bg-slate-500"></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Counter / Desk */}
+                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-52 h-14">
+                  {/* Counter top surface */}
+                  <div className="absolute top-0 left-0 right-0 h-4 bg-amber-700 rounded-t-sm border-t-2 border-amber-600"></div>
+                  {/* Counter front */}
+                  <div className="absolute top-4 left-0 right-0 bottom-0 bg-rose-500 border-2 border-rose-600">
+                    {/* Pokeball decorations on counter front */}
+                    <div className="flex justify-center gap-6 mt-1">
+                      <div className="w-6 h-6 rounded-full bg-white border-2 border-slate-700 relative overflow-hidden">
+                        <div className="absolute top-0 left-0 right-0 h-1/2 bg-red-500"></div>
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white border border-slate-700 z-10"></div>
+                        <div className="absolute top-[45%] left-0 right-0 h-[2px] bg-slate-700"></div>
+                      </div>
+                      <div className="w-6 h-6 rounded-full bg-white border-2 border-slate-700 relative overflow-hidden">
+                        <div className="absolute top-0 left-0 right-0 h-1/2 bg-red-500"></div>
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white border border-slate-700 z-10"></div>
+                        <div className="absolute top-[45%] left-0 right-0 h-[2px] bg-slate-700"></div>
+                      </div>
+                      <div className="w-6 h-6 rounded-full bg-white border-2 border-slate-700 relative overflow-hidden">
+                        <div className="absolute top-0 left-0 right-0 h-1/2 bg-red-500"></div>
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white border border-slate-700 z-10"></div>
+                        <div className="absolute top-[45%] left-0 right-0 h-[2px] bg-slate-700"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Nurse Joy */}
+                <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                  {/* Hair / Hat */}
+                  <div className="relative">
+                    <div className="w-10 h-5 bg-pink-300 rounded-t-full"></div>
+                    {/* Nurse cap */}
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-6 h-4 bg-white rounded-t-lg border border-pink-200">
+                      <div className="absolute top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-red-400"></div>
+                    </div>
+                  </div>
+                  {/* Face */}
+                  <div className="w-8 h-6 bg-[#FFDAB9] rounded-b-lg relative">
+                    <div className="absolute top-1 left-1 w-1.5 h-1.5 bg-rose-800 rounded-full"></div>
+                    <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-rose-800 rounded-full"></div>
+                    <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-2 h-1 bg-rose-400 rounded-full"></div>
+                  </div>
+                  {/* Body */}
+                  <div className="w-10 h-8 bg-white rounded-b-lg border-t-0 relative">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-red-400"></div>
+                  </div>
+                </div>
+
+                {/* Speech bubble */}
+                <div className="absolute top-4 right-4 bg-white/90 px-3 py-1.5 rounded-xl text-[10px] text-slate-700 font-bold shadow-sm">
+                  欢迎光临!
+                  <div className="absolute -bottom-1 left-4 w-2 h-2 bg-white/90 rotate-45"></div>
+                </div>
               </div>
 
-              <div className="mb-6 bg-slate-800/50 p-4 rounded-xl text-slate-300 text-sm leading-relaxed">
-                欢迎来到宝可梦中心！<br/>
-                我们会回复你所有的宝可梦，让它们精神百倍。
-              </div>
+              {/* Content Area */}
+              <div className="p-5">
+                <h2 className="text-lg font-bold text-white text-center mb-1">宝可梦中心</h2>
+                <p className="text-slate-400 text-xs text-center mb-5">我来帮你的宝可梦恢复精神吧！</p>
 
-              <div className="space-y-3">
-                 <button
-                   onClick={() => {
-                     healParty();
-                     setShowPokeCenter(false);
-                   }}
-                   className="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white py-3 px-4 rounded-xl font-bold transition-all shadow-lg shadow-indigo-900/20 flex items-center justify-center gap-2"
-                 >
-                  <Heart size={18} className="text-pink-300 fill-pink-300 animate-pulse" />
-                  治疗宝可梦
-                </button>
-                <button
-                  onClick={() => {
-                    setShowPokeCenter(false);
-                    setView('TRADE');
-                  }}
-                  className="w-full bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white py-3 px-4 rounded-xl font-bold transition-all shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2"
-                >
-                  <ArrowLeftRight size={18} className="text-emerald-300" />
-                  交换柜台
-                </button>
-                <button
-                  onClick={() => setShowPokeCenter(false)}
-                  className="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 px-4 rounded-xl font-bold transition-colors"
-                >
-                  离开
-                </button>
+                <div className="space-y-3">
+                   <button
+                     onClick={() => {
+                       healParty();
+                       setShowPokeCenter(false);
+                     }}
+                     className="w-full bg-rose-500 hover:bg-rose-400 active:bg-rose-600 text-white py-3 px-4 rounded-xl font-bold transition-all shadow-lg shadow-rose-900/30 flex items-center justify-center gap-2"
+                   >
+                    <Heart size={18} className="text-pink-200 fill-pink-200 animate-pulse" />
+                    治疗宝可梦
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowPokeCenter(false);
+                      setView('TRADE');
+                    }}
+                    className="w-full bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white py-3 px-4 rounded-xl font-bold transition-all shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2"
+                  >
+                    <ArrowLeftRight size={18} className="text-emerald-300" />
+                    交换柜台
+                  </button>
+                  <button
+                    onClick={() => setShowPokeCenter(false)}
+                    className="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 px-4 rounded-xl font-bold transition-colors"
+                  >
+                    离开
+                  </button>
+                </div>
               </div>
             </div>
           </div>
