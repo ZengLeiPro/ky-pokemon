@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import { SPECIES_DATA, MOVES, TYPE_COLORS, TYPE_TRANSLATIONS } from '../../constants';
 import TypeBadge from '../ui/TypeBadge';
 import { Search, Disc, X, ChevronRight } from 'lucide-react';
+import { SpeciesData } from '@shared/types';
 
 const DexView: React.FC = () => {
   const { pokedex } = useGameStore();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSpecies, setSelectedSpecies] = useState<any>(null);
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [selectedSpecies, setSelectedSpecies] = useState<SpeciesData | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchTerm), 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   // Sort species by pokedexId
   const sortedSpecies = Object.values(SPECIES_DATA).sort((a, b) => (a.pokedexId || 999) - (b.pokedexId || 999));
@@ -17,9 +24,9 @@ const DexView: React.FC = () => {
   const seenCount = Object.values(pokedex).filter(status => status !== 'UNKNOWN').length;
 
   const filteredSpecies = sortedSpecies.filter(species => {
-      if (!searchTerm) return true;
-      
-      const term = searchTerm.trim().toLowerCase();
+      if (!debouncedSearch) return true;
+
+      const term = debouncedSearch.trim().toLowerCase();
       const status = pokedex[species.pokedexId!] || 'UNKNOWN';
       
       // 匹配 ID (例如 "1", "001")

@@ -24,7 +24,7 @@ pokedex.get('/', async (c) => {
     pokedexData[entry.speciesId] = entry.status;
   });
 
-  return c.json({ success: true, pokedex: pokedexData });
+  return c.json({ success: true, data: { pokedex: pokedexData } });
 });
 
 // 更新图鉴状态
@@ -111,9 +111,11 @@ pokedex.get('/stats', async (c) => {
 
   return c.json({
     success: true,
-    stats: {
-      catchCounts,
-      totalPlayers
+    data: {
+      stats: {
+        catchCounts,
+        totalPlayers
+      }
     }
   });
 });
@@ -145,7 +147,7 @@ pokedex.get('/leaderboard', async (c) => {
     caughtCount: entry._count.speciesId
   }));
 
-  return c.json({ success: true, leaderboard: rankings });
+  return c.json({ success: true, data: { leaderboard: rankings } });
 });
 
 export default pokedex;

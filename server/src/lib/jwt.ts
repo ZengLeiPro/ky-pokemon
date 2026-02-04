@@ -12,7 +12,7 @@ export async function signToken(payload: { userId: string; username: string }) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('7d')
+    .setExpirationTime(process.env.JWT_EXPIRES_IN || '7d')
     .sign(getJwtSecret());
 }
 

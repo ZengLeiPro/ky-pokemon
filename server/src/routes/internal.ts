@@ -2,13 +2,21 @@ import { Hono } from 'hono';
 import { execFile } from 'child_process';
 import { createRequire } from 'module';
 import { promisify } from 'util';
+import { timingSafeEqual } from 'node:crypto';
 import { z } from 'zod';
 import { seedDatabase } from '../lib/seed.js';
+import { PokedexStatus } from '@prisma/client';
 import { db } from '../lib/db.js';
 
 const execFileAsync = promisify(execFile);
 const require = createRequire(import.meta.url);
 const prismaCliPath = require.resolve('prisma/build/index.js');
+const isProd = process.env.NODE_ENV === 'production';
+
+function safeCompare(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(Buffer.from(a), Buffer.from(b));
+}
 
 const ResolveMigrationSchema = z.object({
   migration: z
@@ -21,7 +29,7 @@ const internal = new Hono();
 // 中间件：验证 Token
 internal.use('/*', async (c, next) => {
   const token = c.req.header('x-migration-token');
-  if (!process.env.MIGRATION_TOKEN || token !== process.env.MIGRATION_TOKEN) {
+  if (!process.env.MIGRATION_TOKEN || !token || !safeCompare(token, process.env.MIGRATION_TOKEN)) {
     return c.json({ success: false, error: '未授权' }, 401);
   }
   await next();
@@ -35,12 +43,15 @@ internal.post('/db-migrate', async (c) => {
       [prismaCliPath, 'migrate', 'deploy'],
       { timeout: 10 * 60 * 1000 }
     );
-    console.log('Migration stdout:', stdout);
-    if (stderr) console.error('Migration stderr:', stderr);
+    if (!isProd) {
+      console.log('Migration stdout:', stdout);
+      if (stderr) console.error('Migration stderr:', stderr);
+    }
+    console.log('Migration complete.');
 
     return c.json({ success: true, stdout, stderr });
   } catch (error: any) {
-    console.error('Migration failed:', error);
+    console.error('Migration failed:', error.message);
     return c.json({ success: false, error: error.message, stderr: error.stderr }, 500);
   }
 });
@@ -61,12 +72,15 @@ internal.post('/db-migrate-resolve', async (c) => {
       [prismaCliPath, 'migrate', 'resolve', `--${action}`, migration],
       { timeout: 10 * 60 * 1000 }
     );
-    console.log('Resolve stdout:', stdout);
-    if (stderr) console.error('Resolve stderr:', stderr);
+    if (!isProd) {
+      console.log('Resolve stdout:', stdout);
+      if (stderr) console.error('Resolve stderr:', stderr);
+    }
+    console.log('Resolve complete.');
 
     return c.json({ success: true, stdout, stderr });
   } catch (error: any) {
-    console.error('Resolve failed:', error);
+    console.error('Resolve failed:', error.message);
     return c.json({ success: false, error: error.message, stderr: error.stderr }, 500);
   }
 });
@@ -108,7 +122,7 @@ internal.post('/migrate-pokedex-data', async (c) => {
         const entries: {
           userId: string;
           speciesId: number;
-          status: string;
+          status: PokedexStatus;
           firstSeenAt: Date;
           firstCaughtAt: Date | null;
         }[] = [];
@@ -119,7 +133,7 @@ internal.post('/migrate-pokedex-data', async (c) => {
           entries.push({
             userId: save.userId,
             speciesId: parseInt(speciesIdStr),
-            status,
+            status: status as PokedexStatus,
             firstSeenAt: save.createdAt,
             firstCaughtAt: status === 'CAUGHT' ? save.createdAt : null
           });

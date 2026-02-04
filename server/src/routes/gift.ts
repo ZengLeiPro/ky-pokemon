@@ -13,6 +13,7 @@ import {
   removeInventoryItem,
   removePokemonById
 } from '../lib/game-save-utils.js';
+import { validateUUIDParam } from '../lib/validation.js';
 
 class ApiError extends Error {
   status: ContentfulStatusCode;
@@ -232,6 +233,8 @@ gift.get('/sent', async (c) => {
 gift.post('/:id/accept', async (c) => {
   const user = c.get('user');
   const giftId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, giftId);
+  if (invalidId) return invalidId;
 
   try {
     await db.$transaction(async (tx) => {
@@ -352,6 +355,8 @@ gift.post('/:id/accept', async (c) => {
 gift.post('/:id/reject', async (c) => {
   const user = c.get('user');
   const giftId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, giftId);
+  if (invalidId) return invalidId;
 
   const giftRequest = await db.giftRequest.findUnique({
     where: { id: giftId }
@@ -381,6 +386,8 @@ gift.post('/:id/reject', async (c) => {
 gift.post('/:id/cancel', async (c) => {
   const user = c.get('user');
   const giftId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, giftId);
+  if (invalidId) return invalidId;
 
   const giftRequest = await db.giftRequest.findUnique({
     where: { id: giftId }

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, PokedexStatus } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -31,7 +31,7 @@ async function migratePokedexData() {
       const entries: {
         userId: string;
         speciesId: number;
-        status: string;
+        status: PokedexStatus;
         firstSeenAt: Date;
         firstCaughtAt: Date | null;
       }[] = [];
@@ -42,8 +42,8 @@ async function migratePokedexData() {
         entries.push({
           userId: save.userId,
           speciesId: parseInt(speciesIdStr),
-          status,
-          firstSeenAt: save.createdAt, // 使用存档创建时间作为近似值
+          status: status as PokedexStatus,
+          firstSeenAt: save.createdAt,
           firstCaughtAt: status === 'CAUGHT' ? save.createdAt : null
         });
       }

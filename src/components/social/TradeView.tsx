@@ -53,13 +53,18 @@ export default function TradeView() {
     loadSentTradeRequests();
     loadPublicTradeRequests();
 
+    const animationIds = shownAnimationIdsRef.current;
+
     // 轮询机制：每3秒刷新一次请求列表
     const pollInterval = setInterval(() => {
       loadReceivedTradeRequests();
       loadSentTradeRequests();
     }, 3000);
 
-    return () => clearInterval(pollInterval);
+    return () => {
+      clearInterval(pollInterval);
+      animationIds.clear();
+    };
   }, []);
 
   // 检测接收方的请求是否从 accepted 变为 completed

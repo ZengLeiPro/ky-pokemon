@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useSocialStore } from '@/stores/socialStore';
 import { useGameStore } from '@/stores/gameStore';
+import { useToast } from '@/components/ui/Toast';
 import HPBar from '@/components/ui/HPBar';
 import TypeBadge from '@/components/ui/TypeBadge';
 
@@ -37,7 +38,16 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
 
     const poll = async () => {
       attempts += 1;
-      const result = await loadBattleState(battleId);
+      let result: Awaited<ReturnType<typeof loadBattleState>>;
+      try {
+        result = await loadBattleState(battleId);
+      } catch {
+        if (cancelled) return;
+        useToast.getState().show('加载对战状态失败，请检查网络', 'error');
+        setIsPreparing(false);
+        setPrepareError('加载对战状态失败');
+        return;
+      }
       if (cancelled) return;
 
       if (result.success === false) {

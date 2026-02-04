@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useSocialStore } from '@/stores/socialStore';
 import { useGameStore } from '@/stores/gameStore';
+import { useToast } from '@/components/ui/Toast';
 import { TradeRequestModal } from './TradeRequestModal';
 import { BattleChallengeModal } from './BattleChallengeModal';
 
@@ -53,6 +54,8 @@ export default function ChatView() {
     const success = await sendMessage(currentChatFriendId, inputValue.trim());
     if (success) {
       setInputValue('');
+    } else {
+      useToast.getState().show('消息发送失败，请重试', 'error');
     }
     setIsSending(false);
   };
@@ -84,7 +87,7 @@ export default function ChatView() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* 左侧会话列表 */}
-        <div className="w-64 border-r overflow-y-auto">
+        <div className="w-full md:w-64 border-r overflow-y-auto">
           <div className="p-2 text-sm font-bold text-gray-500 border-b">会话</div>
           {conversations.map(conv => (
             <div

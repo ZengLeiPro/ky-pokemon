@@ -1,10 +1,12 @@
 import { Hono } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import { zValidator } from '@hono/zod-validator';
+import { GameMode } from '@prisma/client';
 import { db } from '../lib/db.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { createTradeRequestSchema, acceptTradeSchema } from '../../../shared/schemas/social.schema.js';
 import { addPokemonToPcBox, parseJsonOrThrow, removePokemonById } from '../lib/game-save-utils.js';
+import { validateUUIDParam } from '../lib/validation.js';
 
 const trade = new Hono<{ Variables: { user: { userId: string } } }>();
 
@@ -20,7 +22,7 @@ class ApiError extends Error {
 }
 
 // 辅助函数：从存档获取宝可梦
-async function getPokemonFromSave(userId: string, pokemonId: string, gameMode: string = 'NORMAL') {
+async function getPokemonFromSave(userId: string, pokemonId: string, gameMode: GameMode = 'NORMAL') {
   const save = await db.gameSave.findUnique({
     where: { userId_mode: { userId, mode: gameMode } }
   });
@@ -219,6 +221,8 @@ trade.get('/public', async (c) => {
 trade.post('/:id/accept', zValidator('json', acceptTradeSchema), async (c) => {
   const user = c.get('user');
   const tradeId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, tradeId);
+  if (invalidId) return invalidId;
   const { pokemonId } = c.req.valid('json');
 
   const tradeRequest = await db.tradeRequest.findFirst({
@@ -259,6 +263,8 @@ trade.post('/:id/accept', zValidator('json', acceptTradeSchema), async (c) => {
 trade.post('/:id/confirm', async (c) => {
   const user = c.get('user');
   const tradeId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, tradeId);
+  if (invalidId) return invalidId;
 
   try {
     await db.$transaction(async (tx) => {
@@ -338,6 +344,8 @@ trade.post('/:id/confirm', async (c) => {
 trade.post('/:id/reject', async (c) => {
   const user = c.get('user');
   const tradeId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, tradeId);
+  if (invalidId) return invalidId;
 
   const tradeRequest = await db.tradeRequest.findFirst({
     where: {
@@ -363,6 +371,8 @@ trade.post('/:id/reject', async (c) => {
 trade.post('/:id/cancel', async (c) => {
   const user = c.get('user');
   const tradeId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, tradeId);
+  if (invalidId) return invalidId;
 
   const tradeRequest = await db.tradeRequest.findFirst({
     where: {

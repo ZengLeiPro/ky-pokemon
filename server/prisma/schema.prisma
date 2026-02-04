@@ -8,6 +8,53 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ========== Enum ==========
+
+enum GameMode {
+  NORMAL
+  CHEAT
+}
+
+enum FriendshipStatus {
+  pending
+  accepted
+  rejected
+}
+
+enum TradeStatus {
+  pending
+  accepted
+  completed
+  rejected
+  cancelled
+}
+
+enum BattleStatus {
+  pending
+  active
+  finished
+  cancelled
+}
+
+enum GiftType {
+  pokemon
+  item
+}
+
+enum GiftStatus {
+  pending
+  accepted
+  rejected
+  cancelled
+}
+
+enum PokedexStatus {
+  SEEN
+  CAUGHT
+}
+
+// ========== Model ==========
+
 model User {
   id           String    @id @default(uuid())
   username     String    @unique
@@ -46,7 +93,7 @@ model GameSave {
   id              String   @id @default(uuid())
   userId          String
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  mode            String   @default("NORMAL") // "NORMAL" | "CHEAT"
+  mode            GameMode @default(NORMAL)
 
   // 游戏数据 (JSON 存储，复用 shared 类型)
   team            String   // Pokemon[] (JSON string)
@@ -72,9 +119,9 @@ model Friendship {
   friendId   String
   user       User     @relation("UserFriends", fields: [userId], references: [id], onDelete: Cascade)
   friend     User     @relation("FriendOf", fields: [friendId], references: [id], onDelete: Cascade)
-  status     String   @default("pending")  // pending | accepted | rejected
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  status     FriendshipStatus @default(pending)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
 
   @@unique([userId, friendId])
   @@index([userId])
@@ -113,7 +160,7 @@ model TradeRequest {
   requestedType   String?
 
   // 状态
-  status          String   @default("pending")  // pending | accepted | completed | rejected | cancelled
+  status          TradeStatus @default(pending)
 
   // 接收者选择的宝可梦（接受时填写）
   receiverPokemon String?  // { pokemonId: string, snapshot: Pokemon } JSON
@@ -142,7 +189,7 @@ model Battle {
   opponent        User     @relation("OpponentBattles", fields: [opponentId], references: [id], onDelete: Cascade)
 
   // 状态
-  status          String   @default("pending")  // pending | active | finished | cancelled
+  status          BattleStatus @default(pending)
 
   // 对战快照（开始时复制双方队伍）
   challengerTeam  String   // Pokemon[] JSON
@@ -183,7 +230,7 @@ model BattleTurnLog {
   log       String   // TurnResult JSON
   createdAt DateTime @default(now())
 
-  @@index([battleId])
+  @@index([battleId, turn])
 }
 
 // ========== 礼物赠送 ==========
@@ -195,7 +242,7 @@ model GiftRequest {
   receiver         User     @relation("ReceivedGifts", fields: [receiverId], references: [id], onDelete: Cascade)
 
   // 礼物类型：pokemon 或 item
-  giftType         String   // "pokemon" | "item"
+  giftType         GiftType
 
   // 宝可梦礼物（存储快照）
   giftPokemon      String?  // { pokemonId: string, snapshot: Pokemon } JSON
@@ -208,13 +255,13 @@ model GiftRequest {
   giftItemCategory String?  // 物品分类快照（MEDICINE/POKEBALLS/KEY_ITEMS）
 
   // 状态
-  status           String   @default("pending")  // pending | accepted | rejected | cancelled
+  status           GiftStatus @default(pending)
 
   // 附言
   message          String?
 
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 
   @@index([senderId])
   @@index([receiverId])
@@ -226,9 +273,9 @@ model PokedexEntry {
   id            String    @id @default(uuid())
   userId        String
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  speciesId     Int       // 宝可梦图鉴编号 1-151
-  status        String    // "SEEN" | "CAUGHT"
-  firstSeenAt   DateTime  @default(now())
+  speciesId     Int            // 宝可梦图鉴编号 1-151
+  status        PokedexStatus
+  firstSeenAt   DateTime       @default(now())
   firstCaughtAt DateTime?
   updatedAt     DateTime  @updatedAt
 

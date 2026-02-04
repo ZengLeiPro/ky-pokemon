@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '../../stores/gameStore';
 import { SPECIES_DATA } from '../../constants';
+import { SpeciesData } from '@shared/types';
 
 const EvolutionView: React.FC = () => {
   const { evolution, advanceEvolutionStage, completeEvolution } = useGameStore();
   const { pokemon, targetSpeciesId, stage } = evolution;
-  const [targetSpecies, setTargetSpecies] = useState<any>(null);
+  const [targetSpecies, setTargetSpecies] = useState<SpeciesData | null>(null);
 
   useEffect(() => {
     if (targetSpeciesId && SPECIES_DATA[targetSpeciesId]) {

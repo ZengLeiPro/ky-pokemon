@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { GameMode, PokedexStatus } from '@prisma/client';
 import { db } from '../lib/db.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { SaveGameRequestSchema } from '../../../shared/schemas/index.js';
@@ -9,7 +10,11 @@ game.use('/*', authMiddleware);
 
 game.get('/save', async (c) => {
   const user = c.get('user');
-  const mode = c.req.query('mode') || 'NORMAL';
+  const mode = (c.req.query('mode') || 'NORMAL') as GameMode;
+
+  if (mode !== 'NORMAL' && mode !== 'CHEAT') {
+    return c.json({ success: false, error: '无效的游戏模式' }, 400);
+  }
   
   const save = await db.gameSave.findUnique({
     where: { 
@@ -65,12 +70,16 @@ game.post('/save', async (c) => {
 
   const parsed = SaveGameRequestSchema.safeParse(body);
   if (!parsed.success) {
-    console.error('Save validation failed:', JSON.stringify(parsed.error.format(), null, 2));
+    if (process.env.NODE_ENV !== 'production') {
+      console.error('Save validation failed:', JSON.stringify(parsed.error.format(), null, 2));
+    } else {
+      console.error('Save validation failed');
+    }
     return c.json({ success: false, error: '存档数据格式错误', details: parsed.error.format() }, 400);
   }
 
   const { team, pcBox, currentLocationId, badges, pokedex, inventory, legendaryProgress, money, playTime, mode } = parsed.data;
-  const saveMode = mode || 'NORMAL';
+  const saveMode = (mode || 'NORMAL') as GameMode;
 
   const save = await db.gameSave.upsert({
     where: {
@@ -111,7 +120,7 @@ game.post('/save', async (c) => {
       .filter(([_, status]) => status !== 'UNKNOWN')
       .map(([speciesIdStr, status]) => ({
         speciesId: parseInt(speciesIdStr),
-        status
+        status: status as PokedexStatus
       }));
 
     // 获取用户现有的图鉴记录
@@ -167,7 +176,11 @@ game.post('/save', async (c) => {
 
 game.delete('/save', async (c) => {
   const user = c.get('user');
-  const mode = c.req.query('mode') || 'NORMAL';
+  const mode = (c.req.query('mode') || 'NORMAL') as GameMode;
+
+  if (mode !== 'NORMAL' && mode !== 'CHEAT') {
+    return c.json({ success: false, error: '无效的游戏模式' }, 400);
+  }
 
   await db.gameSave.delete({
     where: {

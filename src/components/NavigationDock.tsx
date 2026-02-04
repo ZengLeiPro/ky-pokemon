@@ -1,9 +1,10 @@
 import React from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { Users, Backpack, BookOpen, UserCircle, Map, LucideIcon } from 'lucide-react';
+import { ViewState } from '../types';
 
 interface NavItem {
-  id: string;
+  id: ViewState;
   label: string;
   icon: LucideIcon;
   color: string;
@@ -54,7 +55,7 @@ const NavigationDock: React.FC = () => {
           return (
             <button
               key={item.id}
-              onClick={() => setView(item.id as any)}
+              onClick={() => setView(item.id)}
               className="flex flex-col items-center justify-center gap-1.5 pb-2 active:scale-95 transition-transform h-full"
             >
               <div className={`

@@ -1,17 +1,19 @@
 import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
+import { GameMode } from '@prisma/client';
 import { db } from '../lib/db.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { challengeBattleSchema, acceptBattleSchema, submitActionSchema } from '../../../shared/schemas/social.schema.js';
 import { processTurn } from '../lib/battle-engine.js';
 import { isUserOnline } from '../lib/online-utils.js';
+import { validateUUIDParam } from '../lib/validation.js';
 
 const battle = new Hono<{ Variables: { user: { userId: string } } }>();
 
 battle.use('/*', authMiddleware);
 
 // 辅助函数：从存档获取队伍
-async function getTeamFromSave(userId: string, gameMode: string = 'NORMAL') {
+async function getTeamFromSave(userId: string, gameMode: GameMode = 'NORMAL') {
   const save = await db.gameSave.findUnique({
     where: { userId_mode: { userId, mode: gameMode } }
   });
@@ -141,6 +143,8 @@ battle.get('/pending', async (c) => {
 battle.post('/:id/accept', zValidator('json', acceptBattleSchema), async (c) => {
   const user = c.get('user');
   const battleId = c.req.param('id');
+  const invalid = validateUUIDParam(c, battleId);
+  if (invalid) return invalid;
   const { gameMode } = c.req.valid('json');
 
   // 作弊模式不能对战
@@ -211,6 +215,8 @@ battle.post('/:id/accept', zValidator('json', acceptBattleSchema), async (c) => 
 battle.get('/:id/state', async (c) => {
   const user = c.get('user');
   const battleId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, battleId);
+  if (invalidId) return invalidId;
   const now = new Date();
   const lastSeenThreshold = new Date(now.getTime() - 10 * 1000); // 10 秒内不重复写库，降低轮询压力
 
@@ -370,6 +376,8 @@ battle.get('/:id/state', async (c) => {
 battle.post('/:id/action', zValidator('json', submitActionSchema), async (c) => {
   const user = c.get('user');
   const battleId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, battleId);
+  if (invalidId) return invalidId;
   const action = c.req.valid('json');
 
   const battleRecord = await db.battle.findFirst({
@@ -499,6 +507,8 @@ battle.post('/:id/action', zValidator('json', submitActionSchema), async (c) => 
 battle.post('/:id/surrender', async (c) => {
   const user = c.get('user');
   const battleId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, battleId);
+  if (invalidId) return invalidId;
 
   const battleRecord = await db.battle.findFirst({
     where: {
@@ -534,6 +544,8 @@ battle.post('/:id/surrender', async (c) => {
 battle.post('/:id/reject', async (c) => {
   const user = c.get('user');
   const battleId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, battleId);
+  if (invalidId) return invalidId;
 
   const battleRecord = await db.battle.findFirst({
     where: {
@@ -594,6 +606,8 @@ battle.get('/active', async (c) => {
 battle.post('/:id/cancel', async (c) => {
   const user = c.get('user');
   const battleId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, battleId);
+  if (invalidId) return invalidId;
 
   const battleRecord = await db.battle.findFirst({
     where: {

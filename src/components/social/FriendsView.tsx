@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSocialStore } from '@/stores/socialStore';
 import { useGameStore } from '@/stores/gameStore';
+import { useToast } from '@/components/ui/Toast';
 import { BattleChallengeModal } from './BattleChallengeModal';
 import { GiftSendModal } from './GiftSendModal';
 
@@ -40,14 +41,25 @@ export default function FriendsView() {
   const [acceptingBattleId, setAcceptingBattleId] = useState<string | null>(null);
   const [showGiftModal, setShowGiftModal] = useState(false);
   const [giftTargetFriend, setGiftTargetFriend] = useState<{ id: string; username: string } | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadFriends();
-    loadPendingRequests();
-    loadPendingBattleChallenges();
-    loadStuckBattle();
-    loadReceivedGiftRequests();
-    // 定期刷新好友列表获取最新在线状态
+    const loadAll = async () => {
+      try {
+        setLoadError(null);
+        await Promise.all([
+          loadFriends(),
+          loadPendingRequests(),
+          loadPendingBattleChallenges(),
+          loadStuckBattle(),
+          loadReceivedGiftRequests()
+        ]);
+      } catch {
+        setLoadError('加载数据失败，请检查网络后重试');
+        useToast.getState().show('加载好友数据失败', 'error');
+      }
+    };
+    loadAll();
     const interval = setInterval(loadFriends, 15000);
     return () => clearInterval(interval);
   }, []);
@@ -154,6 +166,26 @@ export default function FriendsView() {
       {isCheatMode && (
         <div className="mb-4 p-3 bg-yellow-100 text-yellow-700 rounded">
           作弊模式下无法进行好友对战
+        </div>
+      )}
+
+      {/* 加载失败提示 */}
+      {loadError && (
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded flex items-center justify-between">
+          <span>{loadError}</span>
+          <button
+            onClick={() => {
+              setLoadError(null);
+              loadFriends();
+              loadPendingRequests();
+              loadPendingBattleChallenges();
+              loadStuckBattle();
+              loadReceivedGiftRequests();
+            }}
+            className="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
+          >
+            重试
+          </button>
         </div>
       )}
 

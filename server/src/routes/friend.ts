@@ -7,6 +7,7 @@ import {
   sendFriendRequestSchema,
 } from '../../../shared/schemas/social.schema.js';
 import { isUserOnline } from '../lib/online-utils.js';
+import { validateUUIDParam } from '../lib/validation.js';
 
 const friend = new Hono<{ Variables: { user: { userId: string } } }>();
 
@@ -99,7 +100,7 @@ friend.post('/request', zValidator('json', sendFriendRequestSchema), async (c) =
           }
         });
         return c.json({ success: true, data: { id: updated.id } });
-      } catch (e: any) {
+      } catch {
         return c.json({ success: false, error: '无法重新发送好友请求' }, 500);
       }
     }
@@ -146,6 +147,8 @@ friend.get('/pending', async (c) => {
 friend.post('/request/:id/accept', async (c) => {
   const user = c.get('user');
   const requestId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, requestId);
+  if (invalidId) return invalidId;
 
   const friendship = await db.friendship.findFirst({
     where: {
@@ -171,6 +174,8 @@ friend.post('/request/:id/accept', async (c) => {
 friend.post('/request/:id/reject', async (c) => {
   const user = c.get('user');
   const requestId = c.req.param('id');
+  const invalidId = validateUUIDParam(c, requestId);
+  if (invalidId) return invalidId;
 
   const friendship = await db.friendship.findFirst({
     where: {
@@ -230,6 +235,8 @@ friend.get('/list', async (c) => {
 friend.delete('/:friendshipId', async (c) => {
   const user = c.get('user');
   const friendshipId = c.req.param('friendshipId');
+  const invalidId = validateUUIDParam(c, friendshipId);
+  if (invalidId) return invalidId;
 
   const friendship = await db.friendship.findFirst({
     where: {

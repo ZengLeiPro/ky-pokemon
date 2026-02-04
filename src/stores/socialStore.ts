@@ -403,8 +403,8 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
   },
 
   startChatPolling: () => {
-    const { chatPollingInterval } = get();
-    if (chatPollingInterval) return;
+    const existing = get().chatPollingInterval;
+    if (existing) clearInterval(existing);
 
     const poll = async () => {
       try {

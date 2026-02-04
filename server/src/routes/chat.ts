@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { db } from '../lib/db.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { sendMessageSchema, getMessagesSchema } from '../../../shared/schemas/social.schema.js';
+import { validateUUIDParam } from '../lib/validation.js';
 
 const chat = new Hono<{ Variables: { user: { userId: string } } }>();
 
@@ -17,6 +18,8 @@ const PollQuerySchema = z.object({
 chat.get('/:friendId/messages', zValidator('query', getMessagesSchema), async (c) => {
   const user = c.get('user');
   const friendId = c.req.param('friendId');
+  const invalidId = validateUUIDParam(c, friendId);
+  if (invalidId) return invalidId;
   const { limit, before } = c.req.valid('query');
 
   // 验证是否是好友
@@ -76,6 +79,8 @@ chat.get('/:friendId/messages', zValidator('query', getMessagesSchema), async (c
 chat.post('/:friendId/send', zValidator('json', sendMessageSchema), async (c) => {
   const user = c.get('user');
   const friendId = c.req.param('friendId');
+  const invalidId = validateUUIDParam(c, friendId);
+  if (invalidId) return invalidId;
   const { content } = c.req.valid('json');
 
   // 验证是否是好友
@@ -146,6 +151,8 @@ chat.get('/unread', async (c) => {
 chat.post('/:friendId/read', async (c) => {
   const user = c.get('user');
   const friendId = c.req.param('friendId');
+  const invalidId = validateUUIDParam(c, friendId);
+  if (invalidId) return invalidId;
 
   // 只允许与好友之间的消息标记为已读
   const friendship = await db.friendship.findFirst({
