@@ -4,6 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>关都传说：掌上对决</title>
+    <script>
+      // Polyfill: crypto.randomUUID() - 兼容不支持该 API 的旧版浏览器
+      if (typeof crypto !== 'undefined' && typeof crypto.randomUUID !== 'function') {
+        crypto.randomUUID = function() {
+          return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, function(c) {
+            var n = Number(c);
+            return (n ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (n / 4)))).toString(16);
+          });
+        };
+      }
+    </script>
   </head>
   <body class="bg-gray-900 text-slate-100 overflow-hidden">
     <div id="root"></div>

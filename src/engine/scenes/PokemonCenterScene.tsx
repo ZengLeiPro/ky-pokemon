@@ -13,6 +13,8 @@ interface PokemonCenterSceneProps {
   onHealTeam: () => void;
   /** 打开 PC 箱 */
   onOpenPC: () => void;
+  /** 打开交换界面 */
+  onTrade: () => void;
 }
 
 /**
@@ -28,6 +30,7 @@ export function PokemonCenterScene({
   onExit,
   onHealTeam,
   onOpenPC,
+  onTrade,
 }: PokemonCenterSceneProps) {
   // 淡入控制
   const [fadeIn, setFadeIn] = useState(true);
@@ -56,11 +59,14 @@ export function PokemonCenterScene({
         case 'open-pc':
           onOpenPC();
           break;
+        case 'open-trade':
+          onTrade();
+          break;
         default:
           break;
       }
     },
-    [onHealTeam, onOpenPC],
+    [onHealTeam, onOpenPC, onTrade],
   );
 
   return (

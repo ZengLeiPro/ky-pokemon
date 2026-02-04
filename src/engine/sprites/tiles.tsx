@@ -396,6 +396,42 @@ export const tileRenderers: Record<string, (size: number) => JSX.Element> = {
     </svg>
   ),
 
+  /** 交换终端（GTS 风格交换机器） */
+  'trade-machine': (size: number) => (
+    <svg width={size} height={size} viewBox="0 0 16 16">
+      {/* 地板 */}
+      <rect width="16" height="16" fill="#E8D4B8" />
+      {/* 机器基座 */}
+      <rect x="2" y="8" width="12" height="8" fill="#4868A0" rx="1" />
+      <rect x="2" y="8" width="12" height="2" fill="#5078B0" rx="1" />
+      {/* 机器顶部 */}
+      <rect x="2" y="1" width="12" height="8" fill="#5078B0" rx="1.5" />
+      <rect x="3" y="2" width="10" height="6" fill="#405890" rx="1" />
+      {/* 屏幕 */}
+      <rect x="4" y="2.5" width="8" height="4.5" fill="#40C8A0" rx="0.5" />
+      {/* 屏幕上的交换箭头图标 */}
+      <polygon points="5,5 7,3.5 7,4.5 9,4.5 9,3.5 11,5 9,6.5 9,5.5 7,5.5 7,6.5" fill="#F0F8F0" opacity="0.8" />
+      {/* 屏幕光效 */}
+      <rect x="4.5" y="3" width="3" height="0.5" fill="#60E8C0" opacity="0.5" rx="0.2" />
+      {/* 精灵球凹槽（左右两个，代表交换双方） */}
+      <circle cx="5.5" cy="10" r="1.5" fill="#D0D0D8" stroke="#3858A0" strokeWidth="0.4" />
+      <line x1="4" y1="10" x2="7" y2="10" stroke="#3858A0" strokeWidth="0.3" />
+      <circle cx="5.5" cy="10" r="0.5" fill="#F0F0F0" />
+      <circle cx="10.5" cy="10" r="1.5" fill="#D0D0D8" stroke="#3858A0" strokeWidth="0.4" />
+      <line x1="9" y1="10" x2="12" y2="10" stroke="#3858A0" strokeWidth="0.3" />
+      <circle cx="10.5" cy="10" r="0.5" fill="#F0F0F0" />
+      {/* 中间交换箭头 */}
+      <polygon points="7.2,10 8,9.2 8.8,10 8,10.8" fill="#50E0B0" />
+      {/* 指示灯 */}
+      <circle cx="8" cy="13" r="0.8" fill="#50E050" />
+      <circle cx="8" cy="13" r="0.4" fill="#80FF80" />
+      {/* 底部通风口 */}
+      <rect x="4" y="14.5" width="2" height="0.5" fill="#3858A0" rx="0.2" />
+      <rect x="7" y="14.5" width="2" height="0.5" fill="#3858A0" rx="0.2" />
+      <rect x="10" y="14.5" width="2" height="0.5" fill="#3858A0" rx="0.2" />
+    </svg>
+  ),
+
   /** 雕像/装饰物 */
   statue: (size: number) => (
     <svg width={size} height={size} viewBox="0 0 16 16">

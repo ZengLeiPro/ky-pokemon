@@ -10,7 +10,7 @@ import type { MapData } from '../types';
  * 布局概览（12 列 x 10 行）：
  *
  *  行0: 墙壁顶部（全行）
- *  行1: 墙壁正面 | 书架 | 空 | 治愈机器 | 柜台(左中右) | 空 | 植物 | 墙壁正面
+ *  行1: 墙壁正面 | 书架 | 空 | 治愈机器 | 柜台(左中右) | 空 | 植物 | 交换终端 | 墙壁正面
  *  行2: 地板，柜台正面对应位置有 counter-front
  *  行3: 地板，中间区域开阔
  *  行4: 地板，PC 终端在左侧墙边
@@ -63,7 +63,7 @@ export const pokemonCenterMap: MapData = {
       ['wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top'],
       // 行1: 墙壁正面 + 家具设备
       //  列:  0            1           2     3                  4               5                6               7      8      9        10          11
-      ['wall-front', 'bookshelf', null, 'healing-machine', 'counter-left', 'counter-center', 'counter-right', null, null, 'plant', null, 'wall-front'],
+      ['wall-front', 'bookshelf', null, 'healing-machine', 'counter-left', 'counter-center', 'counter-right', null, null, 'plant', 'trade-machine', 'wall-front'],
       // 行2: 柜台正面 + 地板
       [null, null, null, null, 'counter-front', 'counter-front', 'counter-front', null, null, null, null, null],
       // 行3: 开阔地板
@@ -116,7 +116,7 @@ export const pokemonCenterMap: MapData = {
     // 行0: 墙壁顶部，全部不可通行
     [true, true, true, true, true, true, true, true, true, true, true, true],
     // 行1: 墙壁正面 + 家具设备，全部不可通行（乔伊小姐站在 (5,1) 但 NPC 碰撞由引擎处理，此处设 false）
-    [true, true, false, true, true, false, true, false, false, true, false, true],
+    [true, true, false, true, true, false, true, false, false, true, true, true],
     // 行2: 柜台正面不可通行，其余可通行
     [false, false, false, false, true, true, true, false, false, false, false, false],
     // 行3: 开阔地板
@@ -213,6 +213,14 @@ export const pokemonCenterMap: MapData = {
       type: 'item',
       message: '宝可梦存储系统已启动...',
       onInteract: 'open-pc',
+    },
+    // 交换终端交互
+    {
+      id: 'trade-terminal',
+      position: { x: 10, y: 1 },
+      type: 'item',
+      message: '宝可梦交换系统已启动...',
+      onInteract: 'open-trade',
     },
   ],
 };
