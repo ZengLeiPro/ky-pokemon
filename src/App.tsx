@@ -14,6 +14,7 @@ import DexView from './components/stages/DexView';
 import PCBoxView from './components/stages/PCBoxView';
 import StarterSelectionView from './components/stages/StarterSelectionView';
 import MainStageSlider from './components/MainStageSlider';
+import WorldStage from './components/stages/WorldStage';
 import EvolutionView from './components/stages/EvolutionView';
 
 // Auth Views
@@ -107,6 +108,10 @@ const App: React.FC = () => {
         return <TradeView />;
       case 'GIFT':
         return <GiftView />;
+      case 'POKEMON_CENTER':
+        return <WorldStage scene="POKEMON_CENTER" />;
+      case 'GYM':
+        return <WorldStage scene="GYM" />;
       case 'PVP_BATTLE': {
         // 从 localStorage 获取当前对战 ID（仅首次）
         const storedBattleId = localStorage.getItem('currentBattleId');
@@ -130,11 +135,13 @@ const App: React.FC = () => {
   };
 
   // Determine footer Layout
+  // 2D 场景视图列表（不显示 Header、导航栏等 UI 元素）
+  const scene2DViews = ['POKEMON_CENTER', 'GYM'];
   const isChoosingStarter = isAuthenticated && !hasSelectedStarter;
   const showNavDock = !isChoosingStarter && ['ROAM', 'TEAM', 'BAG', 'PROFILE', 'DEX'].includes(view);
-  const showMessageBox = !isChoosingStarter && (view === 'ROAM' || view === 'BATTLE');
-  const showControlPad = !isChoosingStarter && view === 'BATTLE';
-  const showHeader = !isChoosingStarter && !['FRIENDS', 'CHAT', 'PVP_BATTLE', 'TRADE', 'GIFT'].includes(view);
+  const showMessageBox = !isChoosingStarter && (view === 'ROAM' || view === 'BATTLE') && !scene2DViews.includes(view);
+  const showControlPad = !isChoosingStarter && view === 'BATTLE' && !scene2DViews.includes(view);
+  const showHeader = !isChoosingStarter && !['FRIENDS', 'CHAT', 'PVP_BATTLE', 'TRADE', 'GIFT', ...scene2DViews].includes(view);
 
   const renderContent = () => {
     // 认证页面使用全屏布局，无需 Header 和 Footer
