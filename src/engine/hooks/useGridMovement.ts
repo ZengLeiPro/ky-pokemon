@@ -28,6 +28,8 @@ interface UseGridMovementResult {
   walkFrame: number;
   /** 请求向指定方向移动一格 */
   requestMove: (dir: Direction) => void;
+  /** 清除待处理方向，当前移动完成后立即停下 */
+  clearPending: () => void;
   /** 直接设置位置（如传送） */
   teleport: (pos: GridPosition, dir?: Direction) => void;
 }
@@ -212,6 +214,13 @@ export function useGridMovement({
   );
 
   /**
+   * 清除待处理方向，当前移动完成后立即停下
+   */
+  const clearPending = useCallback(() => {
+    pendingDirectionRef.current = null;
+  }, []);
+
+  /**
    * 传送：直接设置位置，无动画
    */
   const teleport = useCallback((pos: GridPosition, dir?: Direction) => {
@@ -258,6 +267,7 @@ export function useGridMovement({
     isMoving,
     walkFrame,
     requestMove,
+    clearPending,
     teleport,
   };
 }

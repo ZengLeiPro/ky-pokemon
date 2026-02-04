@@ -74,6 +74,7 @@ export function GameWorld({
     isMoving: playerIsMoving,
     walkFrame,
     requestMove,
+    clearPending,
     teleport,
   } = useGridMovement({
     initialPosition: spawnPos,
@@ -128,8 +129,10 @@ export function GameWorld({
     if (dialogActive) return;
     if (pressedDirection) {
       requestMove(pressedDirection);
+    } else {
+      clearPending();
     }
-  }, [pressedDirection, dialogActive, requestMove]);
+  }, [pressedDirection, dialogActive, requestMove, clearPending]);
 
   // ---- 摇杆驱动移动（使用 requestAnimationFrame 轮询） ----
   useEffect(() => {
@@ -222,7 +225,10 @@ export function GameWorld({
   // ---- 摇杆方向变化 ----
   const handleJoystickDirection = useCallback((dir: Direction | null) => {
     joystickDirRef.current = dir;
-  }, []);
+    if (!dir) {
+      clearPending();
+    }
+  }, [clearPending]);
 
   // ---- 摇杆 A 按钮 ----
   const handleJoystickInteract = useCallback(() => {
