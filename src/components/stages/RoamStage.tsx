@@ -25,7 +25,7 @@ const PARTICLE_BG_STYLE: React.CSSProperties = {
 };
 
 const RoamStage: React.FC = () => {
-  const { startBattle, startLegendaryBattle, startGymBattle, addLog, addItem, playerLocationId, moveTo, buyItem, playerMoney, setView, weather, legendaryProgress, badges } = useGameStore();
+  const { startBattle, startLegendaryBattle, addLog, addItem, playerLocationId, moveTo, buyItem, playerMoney, setView, weather, legendaryProgress, badges } = useGameStore();
   const [showShop, setShowShop] = useState(false);
   const [showLegendary, setShowLegendary] = useState(false);
 
@@ -215,8 +215,8 @@ const RoamStage: React.FC = () => {
 
                 <button
                     onClick={() => {
-                        if (hasGym && location.gym) {
-                            startGymBattle(location.gym);
+                        if (hasGym) {
+                            setView('GYM');
                         } else {
                             addLog("这里没有道馆。", "info");
                         }
@@ -224,7 +224,7 @@ const RoamStage: React.FC = () => {
                     className={`col-span-3 bg-rose-600/90 hover:bg-rose-600 active:bg-rose-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-rose-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group ${!hasGym ? 'opacity-50 grayscale cursor-not-allowed' : ''}`}
                 >
                     <Swords size={18} className="group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] font-bold">{hasGym && location.gym ? `挑战馆主 ${location.gym.leaderName}` : '宝可梦道馆'}</span>
+                    <span className="text-[10px] font-bold">宝可梦道馆</span>
                 </button>
 
                 {/* 传说宝可梦遭遇按钮 */}
