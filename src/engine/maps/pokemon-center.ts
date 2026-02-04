@@ -184,6 +184,28 @@ export const pokemonCenterMap: MapData = {
       targetScene: 'outside',
       targetSpawn: 'pokemon-center-door',
     },
+    // 柜台正面交互 - 与乔伊小姐对话治疗
+    {
+      id: 'counter-heal-left',
+      position: { x: 4, y: 2 },
+      type: 'item',
+      message: '让我帮你的宝可梦恢复体力吧!...好了! 你的宝可梦已经完全恢复了!',
+      onInteract: 'heal',
+    },
+    {
+      id: 'counter-heal-center',
+      position: { x: 5, y: 2 },
+      type: 'item',
+      message: '让我帮你的宝可梦恢复体力吧!...好了! 你的宝可梦已经完全恢复了!',
+      onInteract: 'heal',
+    },
+    {
+      id: 'counter-heal-right',
+      position: { x: 6, y: 2 },
+      type: 'item',
+      message: '让我帮你的宝可梦恢复体力吧!...好了! 你的宝可梦已经完全恢复了!',
+      onInteract: 'heal',
+    },
     // PC 终端交互
     {
       id: 'pc-terminal',
