@@ -1,7 +1,7 @@
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
-import legacy from '@vitejs/plugin-legacy';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
@@ -10,13 +10,7 @@ export default defineConfig(({ mode }) => {
         port: 3000,
         host: '0.0.0.0',
       },
-      plugins: [
-        react(),
-        legacy({
-          targets: ['Chrome >= 70', 'Android >= 70', 'iOS >= 12', 'Safari >= 12'],
-          modernTargets: ['Chrome >= 70', 'Android >= 70', 'iOS >= 12', 'Safari >= 12'],
-        }),
-      ],
+      plugins: [react(), tailwindcss()],
       resolve: {
         alias: {
           '@': path.resolve(__dirname, 'src'),
