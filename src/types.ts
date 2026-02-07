@@ -22,7 +22,8 @@ export type ViewState =
   | 'GIFT'         // 礼物界面
   // 2D 游戏场景
   | 'POKEMON_CENTER'  // 宝可梦中心 (2D场景)
-  | 'GYM';            // 道馆 (2D场景)
+  | 'GYM'             // 道馆 (2D场景)
+  | 'SHOP';           // 商店 (2D场景)
 
 export interface LogEntry {
   id: string;

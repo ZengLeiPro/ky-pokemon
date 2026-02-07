@@ -532,6 +532,206 @@ export const tileRenderers: Record<string, (size: number) => JSX.Element> = {
     </svg>
   ),
 
+  // ----------------------------------------------------------
+  // 商店专用
+  // ----------------------------------------------------------
+
+  /** 商店地板 - 木质地板 */
+  'shop-floor': (size: number) => (
+    <svg width={size} height={size} viewBox="0 0 16 16">
+      <rect width="16" height="16" fill="#C8A878" />
+      {/* 木纹 */}
+      <rect x="0" y="0" width="16" height="4" fill="#C0A070" />
+      <rect x="0" y="4" width="16" height="4" fill="#C8A878" />
+      <rect x="0" y="8" width="16" height="4" fill="#C0A070" />
+      <rect x="0" y="12" width="16" height="4" fill="#C8A878" />
+      {/* 木板间隙 */}
+      <line x1="0" y1="4" x2="16" y2="4" stroke="#B09060" strokeWidth="0.3" />
+      <line x1="0" y1="8" x2="16" y2="8" stroke="#B09060" strokeWidth="0.3" />
+      <line x1="0" y1="12" x2="16" y2="12" stroke="#B09060" strokeWidth="0.3" />
+      <line x1="8" y1="0" x2="8" y2="4" stroke="#B89868" strokeWidth="0.2" />
+      <line x1="4" y1="4" x2="4" y2="8" stroke="#B89868" strokeWidth="0.2" />
+      <line x1="12" y1="8" x2="12" y2="12" stroke="#B89868" strokeWidth="0.2" />
+    </svg>
+  ),
+
+  /** 商店柜台左端 */
+  'shop-counter-left': (size: number) => (
+    <svg width={size} height={size} viewBox="0 0 16 16">
+      <rect x="0" y="2" width="16" height="14" fill="#6B5B3A" rx="2" />
+      <rect x="0" y="2" width="16" height="4" fill="#8B7355" rx="2" />
+      <rect x="1" y="3" width="14" height="1" fill="#9B8365" rx="0.5" />
+      <rect x="0" y="2" width="3" height="14" fill="#5B4B2A" rx="1" />
+      <rect x="0" y="14" width="16" height="2" fill="#4B3B1A" rx="1" />
+    </svg>
+  ),
+
+  /** 商店柜台中段 */
+  'shop-counter-center': (size: number) => (
+    <svg width={size} height={size} viewBox="0 0 16 16">
+      <rect x="0" y="2" width="16" height="14" fill="#6B5B3A" />
+      <rect x="0" y="2" width="16" height="4" fill="#8B7355" />
+      <rect x="0" y="3" width="16" height="1" fill="#9B8365" />
+      {/* 正面装饰 */}
+      <rect x="0" y="9" width="16" height="1" fill="#5B4B2A" />
+      {/* 金币标志 */}
+      <circle cx="8" cy="11" r="2.5" fill="#FFD700" stroke="#DAA520" strokeWidth="0.5" />
+      <text x="8" y="12.2" textAnchor="middle" fill="#8B6914" fontSize="3" fontFamily="monospace" fontWeight="bold">¥</text>
+      <rect x="0" y="14" width="16" height="2" fill="#4B3B1A" />
+    </svg>
+  ),
+
+  /** 商店柜台右端 */
+  'shop-counter-right': (size: number) => (
+    <svg width={size} height={size} viewBox="0 0 16 16">
+      <rect x="0" y="2" width="16" height="14" fill="#6B5B3A" rx="2" />
+      <rect x="0" y="2" width="16" height="4" fill="#8B7355" rx="2" />
+      <rect x="1" y="3" width="14" height="1" fill="#9B8365" rx="0.5" />
+      <rect x="13" y="2" width="3" height="14" fill="#5B4B2A" rx="1" />
+      <rect x="0" y="14" width="16" height="2" fill="#4B3B1A" rx="1" />
+    </svg>
+  ),
+
+  /** 商店柜台正面 */
+  'shop-counter-front': (size: number) => (
+    <svg width={size} height={size} viewBox="0 0 16 16">
+      <rect x="0" y="0" width="16" height="16" fill="#6B5B3A" />
+      <rect x="0" y="0" width="16" height="2" fill="#8B7355" />
+      <rect x="0" y="1" width="16" height="1" fill="#9B8365" />
+      <rect x="1" y="4" width="14" height="8" fill="#5B4B2A" rx="1" />
+      {/* 商品展示格 */}
+      <rect x="2" y="5" width="5" height="3" fill="#7B6B4A" rx="0.5" />
+      <rect x="9" y="5" width="5" height="3" fill="#7B6B4A" rx="0.5" />
+      <rect x="2" y="9" width="5" height="2" fill="#7B6B4A" rx="0.5" />
+      <rect x="9" y="9" width="5" height="2" fill="#7B6B4A" rx="0.5" />
+      <rect x="0" y="14" width="16" height="2" fill="#4B3B1A" />
+    </svg>
+  ),
+
+  /** 商品货架 - 药品类 */
+  'shelf-potions': (size: number) => (
+    <svg width={size} height={size} viewBox="0 0 16 16">
+      <rect width="16" height="16" fill="#C8A878" />
+      {/* 货架主体 */}
+      <rect x="1" y="1" width="14" height="15" fill="#7B5B3A" rx="0.5" />
+      <rect x="1" y="5" width="14" height="1" fill="#6B4B2A" />
+      <rect x="1" y="10" width="14" height="1" fill="#6B4B2A" />
+      <rect x="1" y="1" width="14" height="1.5" fill="#8B6B4A" rx="0.5" />
+      {/* 第一层 - 药水瓶 */}
+      <rect x="2.5" y="2.5" width="2" height="2.5" fill="#A060D0" rx="0.5" />
+      <rect x="3" y="2" width="1" height="0.8" fill="#B070E0" rx="0.3" />
+      <rect x="5.5" y="2.5" width="2" height="2.5" fill="#60A0D0" rx="0.5" />
+      <rect x="6" y="2" width="1" height="0.8" fill="#70B0E0" rx="0.3" />
+      <rect x="8.5" y="2.5" width="2" height="2.5" fill="#D0A060" rx="0.5" />
+      <rect x="9" y="2" width="1" height="0.8" fill="#E0B070" rx="0.3" />
+      <rect x="11.5" y="2.5" width="2" height="2.5" fill="#60D0A0" rx="0.5" />
+      <rect x="12" y="2" width="1" height="0.8" fill="#70E0B0" rx="0.3" />
+      {/* 第二层 - 较大药瓶 */}
+      <rect x="3" y="6.5" width="2.5" height="3" fill="#D06060" rx="0.5" />
+      <rect x="3.5" y="6" width="1.5" height="1" fill="#E07070" rx="0.3" />
+      <rect x="7" y="6.5" width="2.5" height="3" fill="#6060D0" rx="0.5" />
+      <rect x="7.5" y="6" width="1.5" height="1" fill="#7070E0" rx="0.3" />
+      <rect x="11" y="6.5" width="2.5" height="3" fill="#60D060" rx="0.5" />
+      <rect x="11.5" y="6" width="1.5" height="1" fill="#70E070" rx="0.3" />
+      {/* 第三层 - 小盒子 */}
+      <rect x="2.5" y="11.5" width="3" height="2.5" fill="#E8D8C0" rx="0.3" />
+      <rect x="6.5" y="11.5" width="3" height="2.5" fill="#D8C8B0" rx="0.3" />
+      <rect x="10.5" y="11.5" width="3" height="2.5" fill="#E8D8C0" rx="0.3" />
+    </svg>
+  ),
+
+  /** 商品货架 - 精灵球类 */
+  'shelf-pokeballs': (size: number) => (
+    <svg width={size} height={size} viewBox="0 0 16 16">
+      <rect width="16" height="16" fill="#C8A878" />
+      {/* 货架主体 */}
+      <rect x="1" y="1" width="14" height="15" fill="#7B5B3A" rx="0.5" />
+      <rect x="1" y="5" width="14" height="1" fill="#6B4B2A" />
+      <rect x="1" y="10" width="14" height="1" fill="#6B4B2A" />
+      <rect x="1" y="1" width="14" height="1.5" fill="#8B6B4A" rx="0.5" />
+      {/* 第一层 - 精灵球 */}
+      <circle cx="4" cy="3.5" r="1.3" fill="#F0F0F0" stroke="#808080" strokeWidth="0.3" />
+      <path d="M 2.7 3.5 A 1.3 1.3 0 0 1 5.3 3.5 Z" fill="#E05040" />
+      <line x1="2.7" y1="3.5" x2="5.3" y2="3.5" stroke="#404040" strokeWidth="0.3" />
+      <circle cx="4" cy="3.5" r="0.4" fill="#F8F8F8" stroke="#404040" strokeWidth="0.2" />
+      <circle cx="8" cy="3.5" r="1.3" fill="#F0F0F0" stroke="#808080" strokeWidth="0.3" />
+      <path d="M 6.7 3.5 A 1.3 1.3 0 0 1 9.3 3.5 Z" fill="#E05040" />
+      <line x1="6.7" y1="3.5" x2="9.3" y2="3.5" stroke="#404040" strokeWidth="0.3" />
+      <circle cx="8" cy="3.5" r="0.4" fill="#F8F8F8" stroke="#404040" strokeWidth="0.2" />
+      <circle cx="12" cy="3.5" r="1.3" fill="#F0F0F0" stroke="#808080" strokeWidth="0.3" />
+      <path d="M 10.7 3.5 A 1.3 1.3 0 0 1 13.3 3.5 Z" fill="#E05040" />
+      <line x1="10.7" y1="3.5" x2="13.3" y2="3.5" stroke="#404040" strokeWidth="0.3" />
+      <circle cx="12" cy="3.5" r="0.4" fill="#F8F8F8" stroke="#404040" strokeWidth="0.2" />
+      {/* 第二层 - 超级球 */}
+      <circle cx="4" cy="8" r="1.3" fill="#F0F0F0" stroke="#808080" strokeWidth="0.3" />
+      <path d="M 2.7 8 A 1.3 1.3 0 0 1 5.3 8 Z" fill="#4080D0" />
+      <line x1="2.7" y1="8" x2="5.3" y2="8" stroke="#404040" strokeWidth="0.3" />
+      <circle cx="4" cy="8" r="0.4" fill="#F8F8F8" stroke="#404040" strokeWidth="0.2" />
+      <circle cx="8" cy="8" r="1.3" fill="#F0F0F0" stroke="#808080" strokeWidth="0.3" />
+      <path d="M 6.7 8 A 1.3 1.3 0 0 1 9.3 8 Z" fill="#4080D0" />
+      <line x1="6.7" y1="8" x2="9.3" y2="8" stroke="#404040" strokeWidth="0.3" />
+      <circle cx="8" cy="8" r="0.4" fill="#F8F8F8" stroke="#404040" strokeWidth="0.2" />
+      <circle cx="12" cy="8" r="1.3" fill="#F0F0F0" stroke="#808080" strokeWidth="0.3" />
+      <path d="M 10.7 8 A 1.3 1.3 0 0 1 13.3 8 Z" fill="#4080D0" />
+      <line x1="10.7" y1="8" x2="13.3" y2="8" stroke="#404040" strokeWidth="0.3" />
+      <circle cx="12" cy="8" r="0.4" fill="#F8F8F8" stroke="#404040" strokeWidth="0.2" />
+      {/* 第三层 - 高级球 */}
+      <circle cx="4" cy="12.5" r="1.3" fill="#F0F0F0" stroke="#808080" strokeWidth="0.3" />
+      <path d="M 2.7 12.5 A 1.3 1.3 0 0 1 5.3 12.5 Z" fill="#F0D040" />
+      <line x1="2.7" y1="12.5" x2="5.3" y2="12.5" stroke="#404040" strokeWidth="0.3" />
+      <circle cx="4" cy="12.5" r="0.4" fill="#F8F8F8" stroke="#404040" strokeWidth="0.2" />
+      <circle cx="8" cy="12.5" r="1.3" fill="#F0F0F0" stroke="#808080" strokeWidth="0.3" />
+      <path d="M 6.7 12.5 A 1.3 1.3 0 0 1 9.3 12.5 Z" fill="#F0D040" />
+      <line x1="6.7" y1="12.5" x2="9.3" y2="12.5" stroke="#404040" strokeWidth="0.3" />
+      <circle cx="8" cy="12.5" r="0.4" fill="#F8F8F8" stroke="#404040" strokeWidth="0.2" />
+      <circle cx="12" cy="12.5" r="1.3" fill="#F0F0F0" stroke="#808080" strokeWidth="0.3" />
+      <path d="M 10.7 12.5 A 1.3 1.3 0 0 1 13.3 12.5 Z" fill="#F0D040" />
+      <line x1="10.7" y1="12.5" x2="13.3" y2="12.5" stroke="#404040" strokeWidth="0.3" />
+      <circle cx="12" cy="12.5" r="0.4" fill="#F8F8F8" stroke="#404040" strokeWidth="0.2" />
+    </svg>
+  ),
+
+  /** 收银台 */
+  'cash-register': (size: number) => (
+    <svg width={size} height={size} viewBox="0 0 16 16">
+      <rect width="16" height="16" fill="#C8A878" />
+      {/* 桌面 */}
+      <rect x="2" y="8" width="12" height="8" fill="#8B7355" rx="1" />
+      <rect x="2" y="8" width="12" height="2" fill="#9B8365" rx="1" />
+      {/* 收银机主体 */}
+      <rect x="3" y="2" width="10" height="8" fill="#505860" rx="1" />
+      {/* 屏幕 */}
+      <rect x="4" y="3" width="8" height="3" fill="#80D080" rx="0.5" />
+      {/* 屏幕文字 */}
+      <text x="8" y="5.2" textAnchor="middle" fill="#408040" fontSize="2" fontFamily="monospace">¥0000</text>
+      {/* 按键 */}
+      <rect x="4" y="7" width="2" height="1.5" fill="#404850" rx="0.3" />
+      <rect x="7" y="7" width="2" height="1.5" fill="#404850" rx="0.3" />
+      <rect x="10" y="7" width="2" height="1.5" fill="#D04040" rx="0.3" />
+      {/* 钱箱 */}
+      <rect x="4" y="11" width="8" height="2" fill="#404850" rx="0.5" />
+      <rect x="6" y="11.5" width="4" height="1" fill="#505860" rx="0.3" />
+    </svg>
+  ),
+
+  /** 商店招牌 */
+  'shop-sign': (size: number) => (
+    <svg width={size} height={size} viewBox="0 0 16 16">
+      <rect width="16" height="16" fill="#C8A878" />
+      {/* 墙壁背景 */}
+      <rect x="0" y="0" width="16" height="16" fill="#B8A080" />
+      {/* 招牌板 */}
+      <rect x="2" y="3" width="12" height="8" fill="#4870A0" rx="1" />
+      <rect x="2.5" y="3.5" width="11" height="7" fill="#5080B0" rx="0.8" />
+      {/* 边框装饰 */}
+      <rect x="3" y="4" width="10" height="6" fill="none" stroke="#FFD700" strokeWidth="0.5" rx="0.5" />
+      {/* SHOP 文字 */}
+      <text x="8" y="8" textAnchor="middle" fill="#FFD700" fontSize="3.5" fontFamily="monospace" fontWeight="bold">SHOP</text>
+      {/* 顶部砖缝 */}
+      <rect x="0" y="0" width="16" height="2" fill="#907860" opacity="0.4" />
+    </svg>
+  ),
+
   /** 柱子 */
   pillar: (size: number) => (
     <svg width={size} height={size} viewBox="0 0 16 16">

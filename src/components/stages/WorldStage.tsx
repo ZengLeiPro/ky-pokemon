@@ -7,11 +7,12 @@ import React, { useCallback } from 'react';
 import { useGameStore } from '@/stores/gameStore';
 import { PokemonCenterScene } from '@/engine/scenes/PokemonCenterScene';
 import { GymScene } from '@/engine/scenes/GymScene';
+import { ShopScene } from '@/engine/scenes/ShopScene';
 import { WORLD_MAP } from '@/constants';
 import type { GymData } from '@/types';
 
 interface WorldStageProps {
-  scene: 'POKEMON_CENTER' | 'GYM';
+  scene: 'POKEMON_CENTER' | 'GYM' | 'SHOP';
 }
 
 /**
@@ -71,6 +72,12 @@ const WorldStage: React.FC<WorldStageProps> = ({ scene }) => {
     startGymBattle(gymData);
   }, [startGymBattle, location]);
 
+  // ---- 商店回调 ----
+
+  const handleShopExit = useCallback(() => {
+    setView('ROAM');
+  }, [setView]);
+
   // ---- 渲染 ----
 
   if (scene === 'POKEMON_CENTER') {
@@ -91,6 +98,14 @@ const WorldStage: React.FC<WorldStageProps> = ({ scene }) => {
         onBattleTrainer={handleBattleTrainer}
         onBattleLeader={handleBattleLeader}
         gymName={location?.gym ? `${location.name}道馆` : '华蓝道馆'}
+      />
+    );
+  }
+
+  if (scene === 'SHOP') {
+    return (
+      <ShopScene
+        onExit={handleShopExit}
       />
     );
   }

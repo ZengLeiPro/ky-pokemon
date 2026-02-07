@@ -34,6 +34,7 @@ const npcRenderers: Record<string, (size: number) => JSX.Element> = {
   'trainer-male': renderTrainerMale,
   'trainer-female': renderTrainerFemale,
   'old-man': renderOldMan,
+  'shopkeeper': renderShopkeeper,
 };
 
 /** 乔伊小姐 - 粉色头发，白色护士服 */
@@ -287,6 +288,61 @@ function renderOldMan(size: number): JSX.Element {
       {/* 鞋子 */}
       <rect x="4" y="14" width="3.5" height="2" fill="#504030" rx="0.5" />
       <rect x="8.5" y="14" width="3.5" height="2" fill="#504030" rx="0.5" />
+    </svg>
+  );
+}
+
+/** 商店店员 - 蓝色围裙，友善 */
+function renderShopkeeper(size: number): JSX.Element {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16">
+      {/* 帽子（店员帽） */}
+      <rect x="4" y="0.5" width="8" height="2.5" fill="#4878A8" rx="1" />
+      <rect x="3.5" y="2.5" width="9" height="1" fill="#4878A8" rx="0.3" />
+      {/* 帽子装饰 */}
+      <rect x="6" y="1" width="4" height="1.5" fill="#5888B8" rx="0.5" />
+
+      {/* 头发（棕色短发） */}
+      <rect x="4" y="3" width="1.5" height="2" fill="#705030" />
+      <rect x="10.5" y="3" width="1.5" height="2" fill="#705030" />
+
+      {/* 脸 */}
+      <rect x="5" y="3.5" width="6" height="4" fill="#F8D0A8" rx="0.5" />
+
+      {/* 眼睛 */}
+      <ellipse cx="6.5" cy="5.5" rx="0.8" ry="0.9" fill="#406040" />
+      <ellipse cx="9.5" cy="5.5" rx="0.8" ry="0.9" fill="#406040" />
+      <circle cx="6.8" cy="5.2" r="0.3" fill="#F8F8F8" />
+      <circle cx="9.8" cy="5.2" r="0.3" fill="#F8F8F8" />
+
+      {/* 笑脸 */}
+      <path d="M 7 7 Q 8 7.8 9 7" fill="none" stroke="#C08060" strokeWidth="0.3" />
+
+      {/* 白衬衫 */}
+      <rect x="4" y="7.5" width="8" height="4.5" fill="#F0F0F0" rx="0.5" />
+
+      {/* 蓝色围裙 */}
+      <rect x="4.5" y="8.5" width="7" height="3.5" fill="#4878A8" rx="0.3" />
+      {/* 围裙口袋 */}
+      <rect x="5.5" y="10" width="2" height="1.5" fill="#3868A0" rx="0.3" />
+      {/* 围裙带子 */}
+      <line x1="4" y1="8.5" x2="5" y2="8" stroke="#4878A8" strokeWidth="0.5" />
+      <line x1="12" y1="8.5" x2="11" y2="8" stroke="#4878A8" strokeWidth="0.5" />
+
+      {/* 手臂 */}
+      <rect x="3" y="8" width="1.5" height="3" fill="#F0F0F0" rx="0.5" />
+      <rect x="11.5" y="8" width="1.5" height="3" fill="#F0F0F0" rx="0.5" />
+      {/* 手 */}
+      <rect x="3" y="10.5" width="1.5" height="1" fill="#F8D0A8" rx="0.3" />
+      <rect x="11.5" y="10.5" width="1.5" height="1" fill="#F8D0A8" rx="0.3" />
+
+      {/* 裤子 */}
+      <rect x="4.5" y="12" width="3" height="2.5" fill="#505860" rx="0.3" />
+      <rect x="8.5" y="12" width="3" height="2.5" fill="#505860" rx="0.3" />
+
+      {/* 鞋子 */}
+      <rect x="4" y="14" width="3.5" height="2" fill="#404040" rx="0.5" />
+      <rect x="8.5" y="14" width="3.5" height="2" fill="#404040" rx="0.5" />
     </svg>
   );
 }

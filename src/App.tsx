@@ -112,6 +112,8 @@ const App: React.FC = () => {
         return <WorldStage scene="POKEMON_CENTER" />;
       case 'GYM':
         return <WorldStage scene="GYM" />;
+      case 'SHOP':
+        return <WorldStage scene="SHOP" />;
       case 'PVP_BATTLE': {
         // 从 localStorage 获取当前对战 ID（仅首次）
         const storedBattleId = localStorage.getItem('currentBattleId');
@@ -136,7 +138,7 @@ const App: React.FC = () => {
 
   // Determine footer Layout
   // 2D 场景视图列表（不显示 Header、导航栏等 UI 元素）
-  const scene2DViews = ['POKEMON_CENTER', 'GYM'];
+  const scene2DViews = ['POKEMON_CENTER', 'GYM', 'SHOP'];
   const isChoosingStarter = isAuthenticated && !hasSelectedStarter;
   const showNavDock = !isChoosingStarter && ['ROAM', 'TEAM', 'BAG', 'PROFILE', 'DEX'].includes(view);
   const showMessageBox = !isChoosingStarter && (view === 'ROAM' || view === 'BATTLE') && !scene2DViews.includes(view);
