@@ -23,7 +23,8 @@ export type ViewState =
   // 2D 游戏场景
   | 'POKEMON_CENTER'  // 宝可梦中心 (2D场景)
   | 'GYM'             // 道馆 (2D场景)
-  | 'SHOP';           // 商店 (2D场景)
+  | 'SHOP'            // 商店 (2D场景)
+  | 'SPRITE_PREVIEW'; // 精灵预览 (调试)
 
 export interface LogEntry {
   id: string;

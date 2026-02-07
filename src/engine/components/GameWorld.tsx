@@ -11,6 +11,7 @@ import { useKeyboard } from '../hooks/useKeyboard';
 import { useInteraction } from '../hooks/useInteraction';
 import { TileMapRenderer } from './TileMapRenderer';
 import { PlayerSprite } from './PlayerSprite';
+import type { PlayerSpriteRenderer } from './PlayerSprite';
 import { NPCSprite } from './NPCSprite';
 import { VirtualJoystick } from './VirtualJoystick';
 import { DialogBox } from './DialogBox';
@@ -24,6 +25,8 @@ interface GameWorldProps {
   onSceneChange?: (sceneId: string, spawnId: string) => void;
   /** 特殊交互回调（heal, open-pc, battle 等） */
   onInteraction?: (type: string, data: unknown) => void;
+  /** 自定义玩家精灵渲染函数 */
+  playerSpriteRenderer?: PlayerSpriteRenderer;
 }
 
 /**
@@ -44,6 +47,7 @@ export function GameWorld({
   initialSpawn,
   onSceneChange,
   onInteraction,
+  playerSpriteRenderer,
 }: GameWorldProps) {
   // 容器 ref，用于测量视口尺寸
   const containerRef = useRef<HTMLDivElement>(null);
@@ -303,6 +307,7 @@ export function GameWorld({
           direction={playerDirection}
           walkFrame={walkFrame}
           tileSize={tileSize}
+          spriteRenderer={playerSpriteRenderer}
         />
 
         {/* 头顶层（渲染在玩家上方） */}

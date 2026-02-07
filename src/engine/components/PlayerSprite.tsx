@@ -3,8 +3,11 @@
 // ============================================================
 
 import React from 'react';
+import type { JSX } from 'react';
 import type { Direction, PixelPosition } from '../types';
-import { getPlayerSprite } from '../sprites/player';
+import { getPlayerSprite as defaultGetPlayerSprite } from '../sprites/player';
+
+export type PlayerSpriteRenderer = (direction: Direction, frame: number, size: number) => JSX.Element;
 
 interface PlayerSpriteProps {
   /** 当前像素坐标 */
@@ -15,6 +18,8 @@ interface PlayerSpriteProps {
   walkFrame: number;
   /** 瓦片像素大小 */
   tileSize: number;
+  /** 自定义精灵渲染函数（用于精灵预览等场景） */
+  spriteRenderer?: PlayerSpriteRenderer;
 }
 
 /**
@@ -26,7 +31,9 @@ const PlayerSprite = React.memo(function PlayerSprite({
   direction,
   walkFrame,
   tileSize,
+  spriteRenderer,
 }: PlayerSpriteProps) {
+  const render = spriteRenderer ?? defaultGetPlayerSprite;
   return (
     <div
       style={{
@@ -42,7 +49,7 @@ const PlayerSprite = React.memo(function PlayerSprite({
         pointerEvents: 'none',
       }}
     >
-      {getPlayerSprite(direction, walkFrame, tileSize)}
+      {render(direction, walkFrame, tileSize)}
     </div>
   );
 });

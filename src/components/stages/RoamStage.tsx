@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
-import { Compass, HardDrive, Crown, Navigation, ShoppingBag, House, Swords, Users } from 'lucide-react';
+import { Compass, HardDrive, Crown, Navigation, ShoppingBag, House, Swords, Users, Eye } from 'lucide-react';
 import { WORLD_MAP, SPECIES_DATA } from '../../constants';
 
 const TOUCH_PAN_Y_STYLE: React.CSSProperties = { touchAction: 'pan-y' };
@@ -210,6 +210,14 @@ const RoamStage: React.FC = () => {
                 >
                     <Users size={18} className="group-hover:scale-110 transition-transform" />
                     <span className="text-[10px] font-bold">好友</span>
+                </button>
+
+                <button
+                    onClick={() => setView('SPRITE_PREVIEW')}
+                    className="bg-slate-600/90 hover:bg-slate-600 active:bg-slate-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-slate-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
+                >
+                    <Eye size={18} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold">精灵预览</span>
                 </button>
 
                 <button
