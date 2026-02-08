@@ -16,12 +16,12 @@ import { TILE_SIZE } from '../constants';
 import type { Direction } from '../types';
 
 const VARIANTS: { label: string; renderer: PlayerSpriteRenderer }[] = [
-  { label: '原版', renderer: getOriginal },
-  { label: '方案 1', renderer: getV1 },
-  { label: '方案 2', renderer: getV2 },
-  { label: '方案 3', renderer: getV3 },
-  { label: '方案 4', renderer: getV4 },
-  { label: '方案 5', renderer: getV5 },
+  { label: '冒险者', renderer: getOriginal },
+  { label: '女主角', renderer: getV1 },
+  { label: '女孩', renderer: getV2 },
+  { label: '猫女', renderer: getV3 },
+  { label: '红色', renderer: getV4 },
+  { label: '绿色', renderer: getV5 },
 ];
 
 const DIRECTIONS: Direction[] = ['down', 'left', 'up', 'right'];
@@ -101,7 +101,7 @@ export function SpritePreviewScene({ onExit }: SpritePreviewSceneProps) {
                 {DIRECTIONS.map((dir) => (
                   <div key={dir} className="flex flex-col gap-0.5">
                     {FRAMES.map((frame) => (
-                      <div key={frame} style={{ width: TILE_SIZE * 0.45, height: TILE_SIZE * 0.45 }}>
+                      <div key={frame} style={{ width: TILE_SIZE * 0.45, height: TILE_SIZE * 0.9, overflow: 'hidden' }}>
                         {v.renderer(dir, frame, TILE_SIZE * 0.45)}
                       </div>
                     ))}

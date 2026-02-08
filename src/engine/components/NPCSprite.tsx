@@ -26,9 +26,9 @@ const NPCSprite = React.memo(function NPCSprite({
       style={{
         position: 'absolute',
         left: npc.position.x * tileSize,
-        top: npc.position.y * tileSize,
+        top: npc.position.y * tileSize - tileSize,
         width: tileSize,
-        height: tileSize,
+        height: tileSize * 2,
         zIndex: 15,
         pointerEvents: 'none',
       }}

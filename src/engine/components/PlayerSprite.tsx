@@ -41,9 +41,10 @@ const PlayerSprite = React.memo(function PlayerSprite({
         left: 0,
         top: 0,
         width: tileSize,
-        height: tileSize,
+        height: tileSize * 2,
         // 使用 transform 实现流畅移动（GPU 加速）
-        transform: `translate(${pixelPosition.x}px, ${pixelPosition.y}px)`,
+        // 向上偏移 1 格，使脚底对齐网格位置
+        transform: `translate(${pixelPosition.x}px, ${pixelPosition.y - tileSize}px)`,
         willChange: 'transform',
         zIndex: 20,
         pointerEvents: 'none',
