@@ -10,7 +10,7 @@ import type { MapData } from '../types';
  * 布局概览（12 列 x 10 行）：
  *
  *  行0: 墙壁顶部（全行）
- *  行1: 墙壁正面 | 书架 | 空 | 治愈机器 | 柜台(左中右) | 空 | 植物 | 交换终端 | 墙壁正面
+ *  行1: 墙壁正面 | 药品架 | 墙壁 | 治愈机器 | 柜台(左中右) | 墙壁 | PC终端 | 植物 | 交换终端 | 墙壁正面
  *  行2: 地板，柜台正面对应位置有 counter-front
  *  行3: 地板，中间区域开阔
  *  行4: 地板，PC 终端在左侧墙边
@@ -60,10 +60,10 @@ export const pokemonCenterMap: MapData = {
     // --------------------------------------------------------
     objects: [
       // 行0: 墙壁顶部（家具位置用对应的 -top 瓦片替代 wall-top，形成完整的 2 格高物体）
-      ['wall-top', 'bookshelf-top', 'wall-top', 'healing-machine-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'pc-terminal-top', 'wall-top', 'trade-machine-top', 'wall-top'],
+      ['wall-top', 'shelf-potions-top', 'wall-top', 'healing-machine-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'pc-terminal-top', 'wall-top', 'trade-machine-top', 'wall-top'],
       // 行1: 墙壁正面 + 家具设备
       //  列:  0            1           2     3                  4               5                6               7      8              9        10              11
-      ['wall-front', 'bookshelf', null, 'healing-machine', 'counter-left', 'counter-center', 'counter-right', null, 'pc-terminal', 'plant', 'trade-machine', 'wall-front'],
+      ['wall-front', 'shelf-potions', 'wall-front', 'healing-machine', 'counter-left', 'counter-center', 'counter-right', 'wall-front', 'pc-terminal', 'plant', 'trade-machine', 'wall-front'],
       // 行2: 柜台正面 + 地板
       [null, null, null, null, 'counter-front', 'counter-front', 'counter-front', null, null, null, null, null],
       // 行3: 开阔地板
@@ -116,7 +116,7 @@ export const pokemonCenterMap: MapData = {
     // 行0: 墙壁顶部，全部不可通行
     [true, true, true, true, true, true, true, true, true, true, true, true],
     // 行1: 墙壁正面 + 家具设备，全部不可通行（乔伊小姐站在 (5,1) 但 NPC 碰撞由引擎处理，此处设 false）
-    [true, true, false, true, true, false, true, false, true, true, true, true],
+    [true, true, true, true, true, false, true, true, true, true, true, true],
     // 行2: 柜台正面不可通行，其余可通行
     [false, false, false, false, true, true, true, false, false, false, false, false],
     // 行3: 开阔地板

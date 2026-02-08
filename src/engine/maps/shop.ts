@@ -10,7 +10,7 @@ import type { MapData } from '../types';
  * 布局概览（12 列 x 10 行）：
  *
  *  行0: 墙壁顶部（全行）
- *  行1: 墙壁正面 | 药品货架 | 空 | 收银台 | 柜台(左中右) | 空 | 精灵球货架 | 墙壁正面
+ *  行1: 墙壁正面 | 药品货架 | 墙壁 | 收银台 | 柜台(左中右) | 墙壁x2 | 植物 | 精灵球货架 | 墙壁正面
  *  行2: 地板，柜台正面对应位置有 shop-counter-front
  *  行3: 地板，中间区域开阔
  *  行4: 地板，左侧商品货架
@@ -63,7 +63,7 @@ export const shopMap: MapData = {
       ['wall-top', 'shelf-potions-top', 'wall-top', 'cash-register-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'shelf-pokeballs-top', 'wall-top'],
       // 行1: 墙壁正面 + 货架 + 柜台 + 收银台
       //  列:  0            1                2     3                     4                     5                      6                     7      8      9        10                11
-      ['wall-front', 'shelf-potions', null, 'cash-register', 'shop-counter-left', 'shop-counter-center', 'shop-counter-right', null, null, 'plant', 'shelf-pokeballs', 'wall-front'],
+      ['wall-front', 'shelf-potions', 'wall-front', 'cash-register', 'shop-counter-left', 'shop-counter-center', 'shop-counter-right', 'wall-front', 'wall-front', 'plant', 'shelf-pokeballs', 'wall-front'],
       // 行2: 柜台正面 + 地板
       [null, null, null, null, 'shop-counter-front', 'shop-counter-front', 'shop-counter-front', null, null, null, null, null],
       // 行3: 开阔地板
@@ -106,7 +106,7 @@ export const shopMap: MapData = {
     // 行0: 墙壁顶部，全部不可通行
     [true, true, true, true, true, true, true, true, true, true, true, true],
     // 行1: 墙壁正面 + 货架 + 柜台，店员站位 (5,1) 设为 false（NPC 碰撞由引擎处理）
-    [true, true, false, true, true, false, true, false, false, true, true, true],
+    [true, true, true, true, true, false, true, true, true, true, true, true],
     // 行2: 柜台正面不可通行，其余可通行
     [false, false, false, false, true, true, true, false, false, false, false, false],
     // 行3: 开阔地板
