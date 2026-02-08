@@ -18,6 +18,9 @@ const TILE_IDS = [
   'shop-counter-right', 'shop-counter-front',
   'shelf-potions', 'shelf-pokeballs', 'cash-register', 'shop-sign',
   'pillar',
+  'bookshelf-top', 'healing-machine-top', 'trade-machine-top',
+  'pc-terminal-top', 'shelf-potions-top', 'shelf-pokeballs-top',
+  'cash-register-top',
 ] as const;
 
 /**

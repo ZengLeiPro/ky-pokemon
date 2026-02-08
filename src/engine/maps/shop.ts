@@ -59,17 +59,17 @@ export const shopMap: MapData = {
     // 物体层 - 墙壁、货架、柜台、收银台
     // --------------------------------------------------------
     objects: [
-      // 行0: 墙壁顶部
-      ['wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top'],
+      // 行0: 墙壁顶部（货架/收银台位置用 -top 瓦片替代 wall-top，形成完整 2 格高物体）
+      ['wall-top', 'shelf-potions-top', 'wall-top', 'cash-register-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'shelf-pokeballs-top', 'wall-top'],
       // 行1: 墙壁正面 + 货架 + 柜台 + 收银台
-      //  列:  0            1                2     3                     4                     5                      6                     7      8      9                  10                11
-      ['wall-front', 'shelf-potions', null, 'cash-register', 'shop-counter-left', 'shop-counter-center', 'shop-counter-right', null, null, 'shop-sign', 'shelf-pokeballs', 'wall-front'],
+      //  列:  0            1                2     3                     4                     5                      6                     7      8      9        10                11
+      ['wall-front', 'shelf-potions', null, 'cash-register', 'shop-counter-left', 'shop-counter-center', 'shop-counter-right', null, null, 'plant', 'shelf-pokeballs', 'wall-front'],
       // 行2: 柜台正面 + 地板
       [null, null, null, null, 'shop-counter-front', 'shop-counter-front', 'shop-counter-front', null, null, null, null, null],
       // 行3: 开阔地板
       [null, null, null, null, null, null, null, null, null, null, null, null],
-      // 行4: 左侧商品货架
-      [null, 'shelf-potions', null, null, null, null, null, null, null, null, 'shelf-pokeballs', null],
+      // 行4: 开阔地板（悬浮货架已移除）
+      [null, null, null, null, null, null, null, null, null, null, null, null],
       // 行5: 地板
       [null, null, null, null, null, null, null, null, null, null, null, null],
       // 行6: 开阔地板
@@ -111,8 +111,8 @@ export const shopMap: MapData = {
     [false, false, false, false, true, true, true, false, false, false, false, false],
     // 行3: 开阔地板
     [false, false, false, false, false, false, false, false, false, false, false, false],
-    // 行4: 货架不可通行
-    [false, true, false, false, false, false, false, false, false, false, true, false],
+    // 行4: 开阔地板
+    [false, false, false, false, false, false, false, false, false, false, false, false],
     // 行5: 地板
     [false, false, false, false, false, false, false, false, false, false, false, false],
     // 行6: 开阔地板

@@ -59,17 +59,17 @@ export const pokemonCenterMap: MapData = {
     // 物体层 - 墙壁、家具、设备
     // --------------------------------------------------------
     objects: [
-      // 行0: 墙壁顶部
-      ['wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top'],
+      // 行0: 墙壁顶部（家具位置用对应的 -top 瓦片替代 wall-top，形成完整的 2 格高物体）
+      ['wall-top', 'bookshelf-top', 'wall-top', 'healing-machine-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'pc-terminal-top', 'wall-top', 'trade-machine-top', 'wall-top'],
       // 行1: 墙壁正面 + 家具设备
-      //  列:  0            1           2     3                  4               5                6               7      8      9        10          11
-      ['wall-front', 'bookshelf', null, 'healing-machine', 'counter-left', 'counter-center', 'counter-right', null, null, 'plant', 'trade-machine', 'wall-front'],
+      //  列:  0            1           2     3                  4               5                6               7      8              9        10              11
+      ['wall-front', 'bookshelf', null, 'healing-machine', 'counter-left', 'counter-center', 'counter-right', null, 'pc-terminal', 'plant', 'trade-machine', 'wall-front'],
       // 行2: 柜台正面 + 地板
       [null, null, null, null, 'counter-front', 'counter-front', 'counter-front', null, null, null, null, null],
       // 行3: 开阔地板
       [null, null, null, null, null, null, null, null, null, null, null, null],
-      // 行4: 左侧 PC 终端
-      [null, 'pc-terminal', null, null, null, null, null, null, null, null, null, null],
+      // 行4: 开阔地板（PC 终端已移至墙边 (8,1)）
+      [null, null, null, null, null, null, null, null, null, null, null, null],
       // 行5: 右侧长椅
       [null, null, null, null, null, null, null, null, null, 'bench-left', 'bench-right', null],
       // 行6: 开阔地板
@@ -116,13 +116,13 @@ export const pokemonCenterMap: MapData = {
     // 行0: 墙壁顶部，全部不可通行
     [true, true, true, true, true, true, true, true, true, true, true, true],
     // 行1: 墙壁正面 + 家具设备，全部不可通行（乔伊小姐站在 (5,1) 但 NPC 碰撞由引擎处理，此处设 false）
-    [true, true, false, true, true, false, true, false, false, true, true, true],
+    [true, true, false, true, true, false, true, false, true, true, true, true],
     // 行2: 柜台正面不可通行，其余可通行
     [false, false, false, false, true, true, true, false, false, false, false, false],
     // 行3: 开阔地板
     [false, false, false, false, false, false, false, false, false, false, false, false],
-    // 行4: PC 终端不可通行
-    [false, true, false, false, false, false, false, false, false, false, false, false],
+    // 行4: 开阔地板
+    [false, false, false, false, false, false, false, false, false, false, false, false],
     // 行5: 长椅不可通行
     [false, false, false, false, false, false, false, false, false, true, true, false],
     // 行6: 开阔地板
@@ -206,10 +206,10 @@ export const pokemonCenterMap: MapData = {
       message: '让我帮你的宝可梦恢复体力吧!...好了! 你的宝可梦已经完全恢复了!',
       onInteract: 'heal',
     },
-    // PC 终端交互
+    // PC 终端交互（PC 在 (8,1)，从 (8,2) 面朝上交互）
     {
       id: 'pc-terminal',
-      position: { x: 1, y: 4 },
+      position: { x: 8, y: 2 },
       type: 'item',
       message: '宝可梦存储系统已启动...',
       onInteract: 'open-pc',
