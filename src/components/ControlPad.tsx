@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { LogOut, Package, User, ArrowLeft } from 'lucide-react';
 import { calculateDamage } from '../lib/mechanics';
-import { TYPE_TRANSLATIONS, TYPE_COLORS } from '../constants';
+import { TYPE_TRANSLATIONS, TYPE_COLORS, BALL_IMAGES } from '../constants';
 import HPBar from './ui/HPBar';
 
 const ControlPad: React.FC = () => {
@@ -119,11 +119,13 @@ const ControlPad: React.FC = () => {
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center">
-                      <div className={`w-4 h-4 rounded-full border-2 border-white ${
-                        item.id === 'greatball' ? 'bg-blue-500' : 
-                        item.id === 'ultraball' ? 'bg-yellow-500' : 
-                        item.id === 'masterball' ? 'bg-purple-500' : 'bg-red-500'
-                      }`} style={{ borderBottomColor: '#1e293b' }}></div>
+                      {BALL_IMAGES[item.id] ? (
+                        <img src={BALL_IMAGES[item.id]} alt={item.name} className="w-6 h-6 object-contain" style={{ imageRendering: 'pixelated' }} />
+                      ) : (
+                        <div className={`w-4 h-4 rounded-full border-2 border-white ${
+                          item.id === 'masterball' ? 'bg-purple-500' : 'bg-red-500'
+                        }`} style={{ borderBottomColor: '#1e293b' }}></div>
+                      )}
                     </div>
                     <div className="text-left">
                       <div className="text-sm font-bold text-slate-200">{item.name}</div>

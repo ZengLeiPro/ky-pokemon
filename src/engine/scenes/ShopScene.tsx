@@ -7,6 +7,7 @@ import { GameWorld } from '../components/GameWorld';
 import { shopMap } from '../maps/shop';
 import { useGameStore } from '@/stores/gameStore';
 import { ShoppingBag } from 'lucide-react';
+import { BALL_IMAGES } from '@/constants';
 
 interface ShopSceneProps {
   /** 离开商店 */
@@ -140,10 +141,10 @@ export function ShopScene({ onExit }: ShopSceneProps) {
                   <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">捕获用精灵球</h3>
                 </div>
                 <div className="space-y-3">
-                  <ShopItem name="精灵球" desc="用于捕获野生宝可梦的标准球" price={200} accent="rose" onBuy={() => buyItem('pokeball', 200, 1)} />
-                  <ShopItem name="超级球" desc="比精灵球更容易捉到宝可梦" price={600} accent="rose" onBuy={() => buyItem('greatball', 600, 1)} />
-                  <ShopItem name="高级球" desc="非常优秀的球，捕获率更高" price={1200} accent="rose" onBuy={() => buyItem('ultraball', 1200, 1)} />
-                  <ShopItem name="等级球" desc="我方等级越高于对方，越容易捕捉" price={1000} accent="rose" onBuy={() => buyItem('levelball', 1000, 1)} />
+                  <ShopItem name="精灵球" desc="用于捕获野生宝可梦的标准球" price={200} accent="rose" icon={BALL_IMAGES['pokeball']} onBuy={() => buyItem('pokeball', 200, 1)} />
+                  <ShopItem name="超级球" desc="比精灵球更容易捉到宝可梦" price={600} accent="rose" icon={BALL_IMAGES['greatball']} onBuy={() => buyItem('greatball', 600, 1)} />
+                  <ShopItem name="高级球" desc="非常优秀的球，捕获率更高" price={1200} accent="rose" icon={BALL_IMAGES['ultraball']} onBuy={() => buyItem('ultraball', 1200, 1)} />
+                  <ShopItem name="等级球" desc="我方等级越高于对方，越容易捕捉" price={1000} accent="rose" icon={BALL_IMAGES['levelball']} onBuy={() => buyItem('levelball', 1000, 1)} />
                 </div>
               </div>
             </div>
@@ -155,11 +156,12 @@ export function ShopScene({ onExit }: ShopSceneProps) {
 }
 
 /** 商品项组件 */
-function ShopItem({ name, desc, price, accent, onBuy }: {
+function ShopItem({ name, desc, price, accent, icon, onBuy }: {
   name: string;
   desc: string;
   price: number;
   accent: 'amber' | 'rose';
+  icon?: string;
   onBuy: () => void;
 }) {
   const colorMap = {
@@ -179,6 +181,11 @@ function ShopItem({ name, desc, price, accent, onBuy }: {
   return (
     <div className="bg-slate-800/50 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/50 transition-colors">
       <div className="flex items-start justify-between mb-3">
+        {icon && (
+          <div className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center shrink-0 mr-3">
+            <img src={icon} alt={name} className="w-8 h-8 object-contain" style={{ imageRendering: 'pixelated' }} />
+          </div>
+        )}
         <div className="flex-1">
           <h4 className="font-bold text-white text-base">{name}</h4>
           <p className="text-xs text-slate-400 mt-1 leading-relaxed">{desc}</p>

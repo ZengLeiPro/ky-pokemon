@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import { BriefcaseMedical, Zap, Key } from 'lucide-react';
 import { ItemCategory } from '../../types';
+import { BALL_IMAGES } from '../../constants';
 
 const BagView: React.FC = () => {
   const { inventory, playerParty, applyItem } = useGameStore();
@@ -76,8 +77,11 @@ const BagView: React.FC = () => {
                     }`}
                 >
                     <div className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center text-slate-400 shrink-0">
-                        {/* Placeholder for item icon */}
-                        <div className="w-6 h-6 rounded-full bg-slate-700/50 border border-slate-600"></div>
+                        {BALL_IMAGES[item.id] ? (
+                          <img src={BALL_IMAGES[item.id]} alt={item.name} className="w-7 h-7 object-contain" style={{ imageRendering: 'pixelated' }} />
+                        ) : (
+                          <div className="w-6 h-6 rounded-full bg-slate-700/50 border border-slate-600"></div>
+                        )}
                     </div>
                     <div className="flex-1">
                         <div className="flex justify-between items-center mb-1">

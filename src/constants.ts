@@ -4,6 +4,14 @@ export * from '@shared/constants';
 // 前端特有常量
 import type { PokemonType } from '@shared/types';
 
+/** 精灵球图片映射 */
+export const BALL_IMAGES: Record<string, string> = {
+  pokeball: '/assets/balls/pokeball.png',
+  greatball: '/assets/balls/greatball.png',
+  ultraball: '/assets/balls/ultraball.png',
+  levelball: '/assets/balls/levelball.png',
+};
+
 export const TYPE_COLORS: Record<PokemonType, string> = {
   Normal: '#A8A77A',
   Fire: '#EE8130',
