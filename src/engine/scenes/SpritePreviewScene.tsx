@@ -11,6 +11,7 @@ import { getPlayerSprite as getV2 } from '../sprites/player-v2';
 import { getPlayerSprite as getV3 } from '../sprites/player-v3';
 import { getPlayerSprite as getV4 } from '../sprites/player-v4';
 import { getPlayerSprite as getV5 } from '../sprites/player-v5';
+import { getPlayerSprite as getV6 } from '../sprites/player-v6';
 import type { PlayerSpriteRenderer } from '../components/PlayerSprite';
 import { TILE_SIZE } from '../constants';
 import type { Direction } from '../types';
@@ -22,6 +23,7 @@ const VARIANTS: { label: string; renderer: PlayerSpriteRenderer }[] = [
   { label: '猫女', renderer: getV3 },
   { label: '红色', renderer: getV4 },
   { label: '绿色', renderer: getV5 },
+  { label: '小智', renderer: getV6 },
 ];
 
 const DIRECTIONS: Direction[] = ['down', 'left', 'up', 'right'];
