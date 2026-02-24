@@ -1,7 +1,7 @@
 import { renderSpriteFrame } from './spritesheet';
 import type { Direction } from '../types';
 
-const SPRITE_URL = '/sprites/player/ash.png';
+const SPRITE_URL = '/sprites/player/ash.png?v=2';
 
 export function getPlayerSprite(
   direction: Direction,
