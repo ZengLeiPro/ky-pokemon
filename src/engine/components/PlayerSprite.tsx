@@ -5,7 +5,8 @@
 import React from 'react';
 import type { JSX } from 'react';
 import type { Direction, PixelPosition } from '../types';
-import { getPlayerSprite as defaultGetPlayerSprite } from '../sprites/player';
+import { useGameStore } from '@/stores/gameStore';
+import { getRendererByIndex } from '../sprites/variants';
 
 export type PlayerSpriteRenderer = (direction: Direction, frame: number, size: number) => JSX.Element;
 
@@ -33,7 +34,8 @@ const PlayerSprite = React.memo(function PlayerSprite({
   tileSize,
   spriteRenderer,
 }: PlayerSpriteProps) {
-  const render = spriteRenderer ?? defaultGetPlayerSprite;
+  const playerSpriteIndex = useGameStore((s) => s.playerSpriteIndex);
+  const render = spriteRenderer ?? getRendererByIndex(playerSpriteIndex);
   return (
     <div
       style={{

@@ -2,29 +2,13 @@
 // 精灵预览场景 - 用于对比不同角色精灵方案
 // ============================================================
 
-import { useState, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { GameWorld } from '../components/GameWorld';
 import { spritePreviewMap } from '../maps/sprite-preview';
-import { getPlayerSprite as getOriginal } from '../sprites/player';
-import { getPlayerSprite as getV1 } from '../sprites/player-v1';
-import { getPlayerSprite as getV2 } from '../sprites/player-v2';
-import { getPlayerSprite as getV3 } from '../sprites/player-v3';
-import { getPlayerSprite as getV4 } from '../sprites/player-v4';
-import { getPlayerSprite as getV5 } from '../sprites/player-v5';
-import { getPlayerSprite as getV6 } from '../sprites/player-v6';
-import type { PlayerSpriteRenderer } from '../components/PlayerSprite';
+import { SPRITE_VARIANTS } from '../sprites/variants';
+import { useGameStore } from '@/stores/gameStore';
 import { TILE_SIZE } from '../constants';
 import type { Direction } from '../types';
-
-const VARIANTS: { label: string; renderer: PlayerSpriteRenderer }[] = [
-  { label: '冒险者', renderer: getOriginal },
-  { label: '女主角', renderer: getV1 },
-  { label: '女孩', renderer: getV2 },
-  { label: '猫女', renderer: getV3 },
-  { label: '红色', renderer: getV4 },
-  { label: '绿色', renderer: getV5 },
-  { label: '小智', renderer: getV6 },
-];
 
 const DIRECTIONS: Direction[] = ['down', 'left', 'up', 'right'];
 const FRAMES = [0, 1, 2];
@@ -34,10 +18,11 @@ interface SpritePreviewSceneProps {
 }
 
 export function SpritePreviewScene({ onExit }: SpritePreviewSceneProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const activeIndex = useGameStore((s) => s.playerSpriteIndex);
+  const setActiveIndex = useGameStore((s) => s.setPlayerSpriteIndex);
 
   const activeRenderer = useMemo(
-    () => VARIANTS[activeIndex].renderer,
+    () => SPRITE_VARIANTS[activeIndex]?.renderer ?? SPRITE_VARIANTS[0].renderer,
     [activeIndex],
   );
 
@@ -73,7 +58,7 @@ export function SpritePreviewScene({ onExit }: SpritePreviewSceneProps) {
       <div className="absolute bottom-20 left-0 right-0 z-50 flex flex-col items-center gap-3 pointer-events-none">
         {/* 方案切换按钮组 */}
         <div className="flex gap-2 pointer-events-auto">
-          {VARIANTS.map((v, i) => (
+          {SPRITE_VARIANTS.map((v, i) => (
             <button
               key={v.label}
               onClick={() => setActiveIndex(i)}
@@ -90,7 +75,7 @@ export function SpritePreviewScene({ onExit }: SpritePreviewSceneProps) {
 
         {/* 精灵缩略预览 */}
         <div className="flex gap-4 bg-slate-900/80 backdrop-blur-sm rounded-2xl px-4 py-3 border border-slate-700/50 pointer-events-auto">
-          {VARIANTS.map((v, vi) => (
+          {SPRITE_VARIANTS.map((v, vi) => (
             <div
               key={v.label}
               className={`flex flex-col items-center gap-1 cursor-pointer transition-all ${

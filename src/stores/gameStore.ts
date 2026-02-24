@@ -62,6 +62,7 @@ interface GameState {
   pokedex: Record<number, PokedexStatus>;
   badges: string[];
   hasSelectedStarter: boolean;
+  playerSpriteIndex: number;
   weather: Weather;
   weatherDuration: number;
   isGameLoading: boolean;
@@ -87,6 +88,7 @@ interface GameState {
   gameMode: 'NORMAL' | 'CHEAT';
   setGameMode: (mode: 'NORMAL' | 'CHEAT') => void;
 
+  setPlayerSpriteIndex: (index: number) => void;
   setView: (view: ViewState) => void;
   setSelectedPokemon: (id: string | null) => void;
   addLog: (message: string, type?: LogEntry['type']) => void;
@@ -131,6 +133,7 @@ export const useGameStore = create<GameState>()(
   pokedex: initialPokedex,
   badges: [],
   hasSelectedStarter: false,
+  playerSpriteIndex: 0,
   weather: 'None',
   weatherDuration: 0,
   isGameLoading: false,
@@ -182,6 +185,7 @@ export const useGameStore = create<GameState>()(
       pokedex: initialPokedex,
       badges: [],
       hasSelectedStarter: false,
+      playerSpriteIndex: 0,
       weather: 'None',
       weatherDuration: 0,
       inventory: initialInventory,
@@ -206,6 +210,7 @@ export const useGameStore = create<GameState>()(
     state.logs.push(createLogEntry(`获得了 ${starter.speciesName}！开始你的冒险吧。`, 'urgent'));
   })),
 
+  setPlayerSpriteIndex: (index) => set({ playerSpriteIndex: index }),
   setView: (view) => set({ view }),
   setSelectedPokemon: (id) => set({ selectedPokemonId: id }),
 
@@ -1136,6 +1141,7 @@ export const useGameStore = create<GameState>()(
             inventory: save.inventory || get().inventory,
             playerMoney: save.money ?? 3000,
             legendaryProgress: save.legendaryProgress || {},
+            playerSpriteIndex: save.playerSpriteIndex ?? 0,
             hasSelectedStarter: (save.team?.length > 0),
             view: 'ROAM',
             isGameLoading: false
@@ -1169,7 +1175,8 @@ export const useGameStore = create<GameState>()(
             return rest;
         }),
         money: state.playerMoney,
-        legendaryProgress: state.legendaryProgress
+        legendaryProgress: state.legendaryProgress,
+        playerSpriteIndex: state.playerSpriteIndex
       };
 
       console.log('Saving game data:', saveData);
