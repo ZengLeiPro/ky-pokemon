@@ -22,9 +22,6 @@ import EvolutionView from './components/stages/EvolutionView';
 import LoginView from './components/auth/LoginView';
 import RegisterView from './components/auth/RegisterView';
 
-// Redeem Code
-import RedeemCodeView from './components/stages/RedeemCodeView';
-
 // Social Views
 import FriendsView from './components/social/FriendsView';
 import ChatView from './components/social/ChatView';
@@ -112,8 +109,6 @@ const App: React.FC = () => {
         return <TradeView />;
       case 'GIFT':
         return <GiftView />;
-      case 'REDEEM_CODE':
-        return <RedeemCodeView />;
       case 'POKEMON_CENTER':
         return <WorldStage scene="POKEMON_CENTER" />;
       case 'GYM':
@@ -151,7 +146,7 @@ const App: React.FC = () => {
   const showNavDock = !isChoosingStarter && ['ROAM', 'TEAM', 'BAG', 'PROFILE', 'DEX'].includes(view);
   const showMessageBox = !isChoosingStarter && (view === 'ROAM' || view === 'BATTLE') && !scene2DViews.includes(view);
   const showControlPad = !isChoosingStarter && view === 'BATTLE' && !scene2DViews.includes(view);
-  const showHeader = !isChoosingStarter && !['FRIENDS', 'CHAT', 'PVP_BATTLE', 'TRADE', 'GIFT', 'REDEEM_CODE', ...scene2DViews].includes(view);
+  const showHeader = !isChoosingStarter && !['FRIENDS', 'CHAT', 'PVP_BATTLE', 'TRADE', 'GIFT', ...scene2DViews].includes(view);
 
   const renderContent = () => {
     // 认证页面使用全屏布局，无需 Header 和 Footer

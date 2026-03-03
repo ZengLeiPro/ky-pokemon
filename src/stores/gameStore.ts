@@ -23,8 +23,6 @@ const initialPokedex: Record<number, PokedexStatus> = {};
 Object.values(SPECIES_DATA).forEach(s => {
       initialPokedex[s.pokedexId!] = 'UNKNOWN';
   });
-  initialPokedex[4] = 'CAUGHT'; 
-  initialPokedex[19] = 'SEEN';
 
   const initialInventory: InventoryItem[] = [
     { 
