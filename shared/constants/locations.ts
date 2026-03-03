@@ -457,7 +457,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       name: '冠军之路',
       description: '挑战四天王前的最终试炼。强大的宝可梦栖息于此。据说有传说的宝可梦栖息。',
       region: '关都',
-      connections: ['route-23'],
+      connections: ['route-23', 'pokemon-league'],
       encounters: ['zubat', 'golbat', 'geodude', 'graveler', 'onix', 'machop', 'machoke', 'marowak', 'larvitar', 'gligar'],
       bgGradient: 'from-purple-900 via-slate-900 to-black',
       legendaryEncounter: {
