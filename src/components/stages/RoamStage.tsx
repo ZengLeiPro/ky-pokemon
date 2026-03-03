@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
-import { Compass, HardDrive, Crown, Navigation, ShoppingBag, House, Swords, Users, Eye } from 'lucide-react';
+import { Compass, HardDrive, Crown, Navigation, ShoppingBag, House, Swords, Users, Eye, Gift } from 'lucide-react';
 import { WORLD_MAP, SPECIES_DATA } from '../../constants';
 
 const TOUCH_PAN_Y_STYLE: React.CSSProperties = { touchAction: 'pan-y' };
@@ -218,6 +218,14 @@ const RoamStage: React.FC = () => {
                 >
                     <Eye size={18} className="group-hover:scale-110 transition-transform" />
                     <span className="text-[10px] font-bold">精灵预览</span>
+                </button>
+
+                <button
+                    onClick={() => setView('REDEEM_CODE')}
+                    className="bg-orange-600/90 hover:bg-orange-600 active:bg-orange-700 text-white p-3 rounded-2xl shadow-lg border-b-4 border-orange-800 active:border-b-0 active:translate-y-1 transition-all flex flex-col items-center justify-center gap-2 group"
+                >
+                    <Gift size={18} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold">礼包码</span>
                 </button>
 
                 <button

@@ -20,6 +20,7 @@ export type ViewState =
   | 'PVP_BATTLE'   // PvP 对战
   | 'TRADE'        // 交换界面
   | 'GIFT'         // 礼物界面
+  | 'REDEEM_CODE'  // 礼包码兑换
   // 2D 游戏场景
   | 'POKEMON_CENTER'  // 宝可梦中心 (2D场景)
   | 'GYM'             // 道馆 (2D场景)

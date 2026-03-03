@@ -16,7 +16,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
     description: '连接真新镇与常磐市的乡村小路。草丛中隐藏着宝可梦。',
     region: '关都',
     connections: ['pallet-town', 'viridian-city'],
-    encounters: ['pidgey', 'rattata'],
+    encounters: ['pidgey', 'rattata', 'sentret', 'hoothoot'],
     bgGradient: 'from-emerald-900 via-slate-900 to-black'
   },
   'viridian-city': {
@@ -43,7 +43,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
     description: '通往常磐森林的道路。',
     region: '关都',
     connections: ['viridian-city', 'viridian-forest', 'digletts-cave'],
-    encounters: ['pidgey', 'rattata', 'caterpie', 'weedle'],
+    encounters: ['pidgey', 'rattata', 'caterpie', 'weedle', 'sentret', 'ledyba'],
     bgGradient: 'from-emerald-900 via-slate-900 to-black'
   },
   'viridian-forest': {
@@ -52,7 +52,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
     description: '树木茂密，光线昏暗的天然迷宫。充满了虫属性宝可梦。',
     region: '关都',
     connections: ['route-2', 'pewter-city'],
-    encounters: ['caterpie', 'weedle', 'pikachu'],
+    encounters: ['caterpie', 'weedle', 'pikachu', 'ledyba', 'spinarak', 'hoothoot'],
     bgGradient: 'from-green-950 via-green-900 to-black',
     weatherRates: { Rain: 0.2 }
   },
@@ -88,7 +88,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '这就因陨石坠落而闻名的神秘山脉。',
       region: '关都',
       connections: ['route-3', 'route-4'],
-      encounters: ['zubat', 'geodude', 'clefairy', 'paras'],
+      encounters: ['zubat', 'geodude', 'clefairy', 'paras', 'teddiursa', 'slugma'],
       bgGradient: 'from-slate-900 via-purple-950 to-black'
   },
   'route-4': {
@@ -97,7 +97,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '通往华蓝市的下坡路。',
       region: '关都',
       connections: ['mt-moon', 'cerulean-city'],
-      encounters: ['rattata', 'spearow', 'ekans', 'sandshrew'],
+      encounters: ['rattata', 'spearow', 'ekans', 'sandshrew', 'wooper', 'marill'],
       bgGradient: 'from-emerald-800 via-cyan-950 to-black'
   },
   'cerulean-city': {
@@ -124,7 +124,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '著名的黄金球大桥所在地。',
       region: '关都',
       connections: ['cerulean-city', 'route-25'],
-      encounters: ['caterpie', 'weedle', 'metapod', 'kakuna', 'pidgey', 'abra'],
+      encounters: ['caterpie', 'weedle', 'metapod', 'kakuna', 'pidgey', 'abra', 'spinarak', 'ledyba'],
       bgGradient: 'from-green-800 via-blue-900 to-black'
   },
   'route-5': {
@@ -133,7 +133,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '连接华蓝市与南方的斜坡。',
       region: '关都',
       connections: ['cerulean-city', 'vermilion-city'],
-      encounters: ['pidgey', 'rattata', 'jigglypuff', 'meowth'],
+      encounters: ['pidgey', 'rattata', 'jigglypuff', 'meowth', 'snubbull', 'aipom'],
       bgGradient: 'from-emerald-700 via-slate-800 to-black'
   },
   'vermilion-city': {
@@ -159,7 +159,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '枯叶市东边的草地。',
       region: '关都',
       connections: ['vermilion-city', 'route-12', 'digletts-cave'],
-      encounters: ['ekans', 'sandshrew', 'drowzee'],
+      encounters: ['ekans', 'sandshrew', 'drowzee', 'houndour', 'murkrow'],
       bgGradient: 'from-emerald-800 via-green-900 to-black'
   },
   'route-9': {
@@ -177,7 +177,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '漆黑的隧道。需要闪光才能看清道路。',
       region: '关都',
       connections: ['route-9', 'lavender-town', 'route-10'],
-      encounters: ['zubat', 'geodude', 'machop', 'onix', 'cubone'],
+      encounters: ['zubat', 'geodude', 'machop', 'onix', 'cubone', 'gligar', 'swinub'],
       bgGradient: 'from-gray-900 via-stone-900 to-black',
       weatherRates: { Sandstorm: 0.3 }
   },
@@ -187,7 +187,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '高贵的紫色之镇。这里有着著名的宝可梦塔。',
       region: '关都',
       connections: ['rock-tunnel', 'route-8', 'route-12', 'pokemon-tower'],
-      encounters: ['gastly', 'haunter', 'cubone'],
+      encounters: ['gastly', 'haunter', 'cubone', 'misdreavus', 'murkrow'],
       bgGradient: 'from-purple-900 via-slate-900 to-black',
       weatherRates: { Rain: 0.2 }
   },
@@ -197,7 +197,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '连接紫苑镇与彩虹市的道路。',
       region: '关都',
       connections: ['lavender-town', 'celadon-city'],
-      encounters: ['pidgey', 'meowth', 'ekans', 'vulpix', 'growlithe'],
+      encounters: ['pidgey', 'meowth', 'ekans', 'vulpix', 'growlithe', 'houndour', 'snubbull'],
       bgGradient: 'from-emerald-800 via-stone-800 to-black'
   },
   'celadon-city': {
@@ -206,7 +206,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '有着名为彩虹的颜色的城市。',
       region: '关都',
       connections: ['route-8', 'route-7', 'route-16', 'celadon-game-corner'],
-      encounters: ['grimer', 'koffing'],
+      encounters: ['grimer', 'koffing', 'murkrow', 'houndour'],
       bgGradient: 'from-green-800 via-emerald-900 to-slate-900',
       gym: {
           leaderName: '莉佳',
@@ -223,7 +223,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '以垂钓者闻名的沿海道路。',
       region: '关都',
       connections: ['lavender-town', 'route-11', 'route-13'],
-      encounters: ['oddish', 'bellsprout', 'venonat', 'krabby', 'farfetchd'],
+      encounters: ['oddish', 'bellsprout', 'venonat', 'krabby', 'farfetchd', 'marill', 'wooper'],
       bgGradient: 'from-blue-900 via-cyan-900 to-black',
       weatherRates: { Rain: 0.5, Sunny: 0.3 }
   },
@@ -277,7 +277,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '可以遇到稀有宝可梦的自然保护区。',
       region: '关都',
       connections: ['fuchsia-city'],
-      encounters: ['nidorino', 'nidorina', 'parasect', 'venonat', 'exeggcute', 'rhyhorn', 'chansey', 'kangaskhan', 'scyther', 'pinsir', 'tauros', 'dratini'],
+      encounters: ['nidorino', 'nidorina', 'parasect', 'venonat', 'exeggcute', 'rhyhorn', 'chansey', 'kangaskhan', 'scyther', 'pinsir', 'tauros', 'dratini', 'teddiursa', 'gligar', 'heracross'],
       bgGradient: 'from-green-700 via-lime-800 to-emerald-900'
   },
   'route-18': {
@@ -313,7 +313,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '通往双子岛的水上路线。',
       region: '关都',
       connections: ['fuchsia-city', 'route-20'],
-      encounters: ['tentacool', 'tentacruel', 'magikarp', 'horsea', 'staryu'],
+      encounters: ['tentacool', 'tentacruel', 'magikarp', 'horsea', 'staryu', 'chinchou', 'marill'],
       bgGradient: 'from-blue-800 via-cyan-900 to-black',
       weatherRates: { Rain: 0.3 }
   },
@@ -323,7 +323,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '双子岛附近的海域。',
       region: '关都',
       connections: ['route-19', 'seafoam-islands', 'cinnabar-island'],
-      encounters: ['tentacool', 'magikarp', 'horsea', 'seadra', 'staryu', 'shellder'],
+      encounters: ['tentacool', 'magikarp', 'horsea', 'seadra', 'staryu', 'shellder', 'chinchou', 'wooper'],
       bgGradient: 'from-cyan-800 via-blue-900 to-black'
   },
   'seafoam-islands': {
@@ -363,7 +363,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '废弃的研究所。曾经进行过秘密实验。',
       region: '关都',
       connections: ['cinnabar-island'],
-      encounters: ['rattata', 'raticate', 'vulpix', 'growlithe', 'ponyta', 'grimer', 'muk', 'koffing', 'weezing', 'magmar'],
+      encounters: ['rattata', 'raticate', 'vulpix', 'growlithe', 'ponyta', 'grimer', 'muk', 'koffing', 'weezing', 'magmar', 'slugma', 'houndour'],
       bgGradient: 'from-gray-800 via-slate-900 to-black'
   },
   'route-21': {
@@ -372,7 +372,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '从红莲岛返回真新镇的水路。',
       region: '关都',
       connections: ['cinnabar-island', 'pallet-town'],
-      encounters: ['tentacool', 'magikarp', 'staryu', 'tangela'],
+      encounters: ['tentacool', 'magikarp', 'staryu', 'tangela', 'chinchou'],
       bgGradient: 'from-blue-700 via-cyan-800 to-black'
   },
   'route-6': {
@@ -381,7 +381,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '从5号道路延伸到枯叶市的道路。',
       region: '关都',
       connections: ['vermilion-city', 'route-5'],
-      encounters: ['pidgey', 'rattata', 'oddish', 'bellsprout', 'meowth'],
+      encounters: ['pidgey', 'rattata', 'oddish', 'bellsprout', 'meowth', 'sentret', 'hoothoot'],
       bgGradient: 'from-emerald-700 via-slate-800 to-black'
   },
   'route-7': {
@@ -390,7 +390,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '连接彩虹市与玉虹市的短道。',
       region: '关都',
       connections: ['celadon-city', 'saffron-city'],
-      encounters: ['pidgey', 'rattata', 'vulpix', 'meowth', 'growlithe'],
+      encounters: ['pidgey', 'rattata', 'vulpix', 'meowth', 'growlithe', 'snubbull', 'murkrow'],
       bgGradient: 'from-green-700 via-slate-800 to-black'
   },
   'saffron-city': {
@@ -416,7 +416,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '通往无人发电厂的道路。',
       region: '关都',
       connections: ['rock-tunnel', 'power-plant'],
-      encounters: ['voltorb', 'magnemite', 'electabuzz'],
+      encounters: ['voltorb', 'magnemite', 'electabuzz', 'mareep'],
       bgGradient: 'from-yellow-800 via-slate-900 to-black',
       weatherRates: { Rain: 0.2 }
   },
@@ -458,7 +458,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '挑战四天王前的最终试炼。强大的宝可梦栖息于此。据说有传说的宝可梦栖息。',
       region: '关都',
       connections: ['route-23'],
-      encounters: ['zubat', 'golbat', 'geodude', 'graveler', 'onix', 'machop', 'machoke', 'marowak'],
+      encounters: ['zubat', 'golbat', 'geodude', 'graveler', 'onix', 'machop', 'machoke', 'marowak', 'larvitar', 'gligar'],
       bgGradient: 'from-purple-900 via-slate-900 to-black',
       legendaryEncounter: {
           speciesId: 'moltres',
@@ -471,7 +471,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '祭奠逝去宝可梦的灵塔。',
       region: '关都',
       connections: ['lavender-town'],
-      encounters: ['gastly', 'haunter', 'cubone', 'marowak'],
+      encounters: ['gastly', 'haunter', 'cubone', 'marowak', 'misdreavus'],
       bgGradient: 'from-purple-950 via-gray-900 to-black'
   },
   'cerulean-cave': {
@@ -480,7 +480,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '只有最强训练家才能进入的神秘洞穴。据说有极强的宝可梦栖息。',
       region: '关都',
       connections: ['cerulean-city'],
-      encounters: ['golbat', 'parasect', 'venomoth', 'kadabra', 'hypno', 'magneton', 'electrode', 'rhydon', 'chansey', 'ditto'],
+      encounters: ['golbat', 'parasect', 'venomoth', 'kadabra', 'hypno', 'magneton', 'electrode', 'rhydon', 'chansey', 'ditto', 'larvitar', 'sneasel'],
       bgGradient: 'from-indigo-900 via-purple-950 to-black',
       legendaryEncounter: {
           speciesId: 'mewtwo',
@@ -493,7 +493,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '停靠在枯叶市港口的豪华游轮。',
       region: '关都',
       connections: ['vermilion-city'],
-      encounters: ['tentacool', 'tentacruel', 'magikarp', 'gyarados', 'staryu', 'shellder'],
+      encounters: ['tentacool', 'tentacruel', 'magikarp', 'gyarados', 'staryu', 'shellder', 'chinchou', 'wooper'],
       bgGradient: 'from-blue-700 via-slate-800 to-black'
   },
   'route-25': {
@@ -502,7 +502,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '通往海角小屋的岬角道路。',
       region: '关都',
       connections: ['route-24', 'cerulean-cape'],
-      encounters: ['pidgey', 'oddish', 'bellsprout', 'abra', 'slowpoke', 'psyduck', 'poliwag', 'goldeen'],
+      encounters: ['pidgey', 'oddish', 'bellsprout', 'abra', 'slowpoke', 'psyduck', 'poliwag', 'goldeen', 'marill', 'wooper'],
       bgGradient: 'from-blue-800 via-green-900 to-black'
   },
   'cerulean-cape': {
@@ -511,7 +511,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '华蓝市北边的海角。适合垂钓。',
       region: '关都',
       connections: ['route-25'],
-      encounters: ['magikarp', 'goldeen', 'seaking', 'poliwag', 'tentacool', 'lickitung'],
+      encounters: ['magikarp', 'goldeen', 'seaking', 'poliwag', 'tentacool', 'lickitung', 'marill', 'chinchou'],
       bgGradient: 'from-cyan-700 via-blue-800 to-black'
   },
   'celadon-game-corner': {
@@ -520,7 +520,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '彩虹市著名的游戏娱乐中心。可以用代币兑换稀有宝可梦。',
       region: '关都',
       connections: ['celadon-city'],
-      encounters: ['porygon', 'eevee', 'dratini'],
+      encounters: ['porygon', 'eevee', 'dratini', 'porygon2', 'togepi'],
       bgGradient: 'from-purple-800 via-pink-900 to-slate-900'
   },
   'fighting-dojo': {
@@ -529,7 +529,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '玉虹市的格斗道场。曾经是正式道馆。',
       region: '关都',
       connections: ['saffron-city'],
-      encounters: ['hitmonlee', 'hitmonchan', 'machop', 'machoke', 'primeape'],
+      encounters: ['hitmonlee', 'hitmonchan', 'machop', 'machoke', 'primeape', 'heracross'],
       bgGradient: 'from-orange-800 via-red-900 to-slate-900'
   },
   'cinnabar-lab': {
@@ -550,7 +550,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       name: '宝可梦联盟',
       description: '关都地区最强训练家的殿堂。',
       region: '关都',
-      connections: ['victory-road'],
+      connections: ['victory-road', 'new-bark-town'],
       encounters: [],
       bgGradient: 'from-indigo-800 via-purple-900 to-black'
   },
@@ -560,7 +560,234 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '常磐市郊外的宁静池塘。',
       region: '关都',
       connections: ['viridian-city'],
-      encounters: ['poliwag', 'poliwhirl', 'goldeen', 'seaking', 'magikarp', 'psyduck'],
+      encounters: ['poliwag', 'poliwhirl', 'goldeen', 'seaking', 'magikarp', 'psyduck', 'wooper', 'marill'],
       bgGradient: 'from-blue-700 via-cyan-800 to-emerald-900'
+  },
+
+  // ===== 城都地区 (Johto) =====
+  'new-bark-town': {
+      id: 'new-bark-town',
+      name: '若叶镇',
+      description: '风起之镇。城都地区冒险的起点。',
+      region: '城都',
+      connections: ['pokemon-league', 'cherrygrove-city'],
+      encounters: ['sentret', 'hoothoot', 'pidgey', 'rattata'],
+      bgGradient: 'from-green-700 via-emerald-800 to-slate-900'
+  },
+  'cherrygrove-city': {
+      id: 'cherrygrove-city',
+      name: '吉花市',
+      description: '花香四溢的美丽小城。',
+      region: '城都',
+      connections: ['new-bark-town', 'violet-city'],
+      encounters: ['ledyba', 'spinarak', 'caterpie', 'weedle'],
+      bgGradient: 'from-pink-700 via-rose-800 to-slate-900'
+  },
+  'violet-city': {
+      id: 'violet-city',
+      name: '桔梗市',
+      description: '高耸入云的壮丽之城。有着古老的宝可梦塔。',
+      region: '城都',
+      connections: ['cherrygrove-city', 'azalea-town', 'ecruteak-city'],
+      encounters: ['pidgey', 'hoothoot', 'bellsprout', 'mareep'],
+      bgGradient: 'from-violet-800 via-purple-900 to-slate-900',
+      gym: {
+          leaderName: '阿速',
+          badgeName: '飞翼徽章',
+          badgeId: 'zephyr-badge',
+          description: '以优雅的飞行系宝可梦闻名的训练家。',
+          pokemon: ['pidgey', 'pidgeotto'],
+          level: 9
+      }
+  },
+  'azalea-town': {
+      id: 'azalea-town',
+      name: '桧皮镇',
+      description: '与自然共存的小镇。以虫系宝可梦闻名。',
+      region: '城都',
+      connections: ['violet-city', 'ilex-forest', 'goldenrod-city'],
+      encounters: ['caterpie', 'weedle', 'spinarak', 'pineco'],
+      bgGradient: 'from-lime-800 via-green-900 to-slate-900',
+      gym: {
+          leaderName: '阿笔',
+          badgeName: '虫甲徽章',
+          badgeId: 'hive-badge',
+          description: '热爱虫系宝可梦的少年训练家。',
+          pokemon: ['metapod', 'kakuna', 'scyther'],
+          level: 16
+      }
+  },
+  'ilex-forest': {
+      id: 'ilex-forest',
+      name: '桧皮森林',
+      description: '古老而神秘的森林。据说有守护森林的神奇宝可梦。',
+      region: '城都',
+      connections: ['azalea-town', 'goldenrod-city'],
+      encounters: ['oddish', 'paras', 'pineco', 'hoothoot'],
+      bgGradient: 'from-green-950 via-emerald-950 to-black',
+      weatherRates: { Rain: 0.3 },
+      legendaryEncounter: {
+          speciesId: 'celebi',
+          level: 30,
+          minBadges: 6
+      }
+  },
+  'goldenrod-city': {
+      id: 'goldenrod-city',
+      name: '满金市',
+      description: '城都地区最繁华的大都市。拥有百货大楼和广播塔。',
+      region: '城都',
+      connections: ['azalea-town', 'ilex-forest', 'ecruteak-city'],
+      encounters: ['rattata', 'meowth', 'snubbull', 'aipom'],
+      bgGradient: 'from-yellow-700 via-amber-800 to-slate-900',
+      gym: {
+          leaderName: '小茜',
+          badgeName: '正规徽章',
+          badgeId: 'plain-badge',
+          description: '使用一般系宝可梦的可爱女孩，但实力不容小觑。',
+          pokemon: ['clefairy', 'miltank'],
+          level: 20
+      }
+  },
+  'ecruteak-city': {
+      id: 'ecruteak-city',
+      name: '圆朱市',
+      description: '承载历史与传统的古都。钟楼与烧焦塔矗立于此。',
+      region: '城都',
+      connections: ['goldenrod-city', 'violet-city', 'olivine-city', 'mahogany-town', 'tin-tower'],
+      encounters: ['gastly', 'misdreavus', 'murkrow', 'zubat'],
+      bgGradient: 'from-amber-800 via-orange-900 to-slate-900',
+      gym: {
+          leaderName: '松叶',
+          badgeName: '幻影徽章',
+          badgeId: 'fog-badge',
+          description: '操纵幽灵系宝可梦的神秘训练家。',
+          pokemon: ['gastly', 'haunter', 'gengar', 'misdreavus'],
+          level: 25
+      }
+  },
+  'olivine-city': {
+      id: 'olivine-city',
+      name: '浅葱市',
+      description: '面朝大海的港口城市。灯塔是城市的标志。',
+      region: '城都',
+      connections: ['ecruteak-city', 'whirl-islands', 'mahogany-town'],
+      encounters: ['tentacool', 'magnemite', 'voltorb', 'chinchou'],
+      bgGradient: 'from-cyan-700 via-steel-800 to-slate-900',
+      gym: {
+          leaderName: '小美',
+          badgeName: '钢铁徽章',
+          badgeId: 'mineral-badge',
+          description: '温柔而坚强的钢系训练家。',
+          pokemon: ['magnemite', 'steelix'],
+          level: 30
+      }
+  },
+  'mahogany-town': {
+      id: 'mahogany-town',
+      name: '沼木镇',
+      description: '被群山环绕的寒冷小镇。忍者的据点。',
+      region: '城都',
+      connections: ['ecruteak-city', 'olivine-city', 'blackthorn-city', 'lake-of-rage', 'mt-mortar'],
+      encounters: ['swinub', 'sneasel', 'delibird', 'jynx'],
+      bgGradient: 'from-sky-900 via-blue-950 to-slate-900',
+      weatherRates: { Hail: 0.3 },
+      gym: {
+          leaderName: '柳伯',
+          badgeName: '冰河徽章',
+          badgeId: 'glacier-badge',
+          description: '冰系宝可梦的老练使者。',
+          pokemon: ['seel', 'dewgong', 'piloswine'],
+          level: 31
+      }
+  },
+  'blackthorn-city': {
+      id: 'blackthorn-city',
+      name: '烟墨市',
+      description: '龙之传承者所守护的山中之城。',
+      region: '城都',
+      connections: ['mahogany-town', 'silver-cave'],
+      encounters: ['dratini', 'horsea', 'magikarp', 'larvitar'],
+      bgGradient: 'from-indigo-800 via-violet-900 to-slate-900',
+      gym: {
+          leaderName: '小椿',
+          badgeName: '升龙徽章',
+          badgeId: 'rising-badge',
+          description: '龙系宝可梦的骄傲传承者。',
+          pokemon: ['dragonair', 'dragonair', 'kingdra'],
+          level: 37
+      }
+  },
+  'lake-of-rage': {
+      id: 'lake-of-rage',
+      name: '愤怒之湖',
+      description: '传闻有红色暴鲤龙出没的神秘湖泊。',
+      region: '城都',
+      connections: ['mahogany-town'],
+      encounters: ['magikarp', 'gyarados', 'goldeen', 'psyduck'],
+      bgGradient: 'from-red-900 via-blue-950 to-black',
+      weatherRates: { Rain: 0.5 },
+      legendaryEncounter: {
+          speciesId: 'raikou',
+          level: 40,
+          minBadges: 4
+      }
+  },
+  'tin-tower': {
+      id: 'tin-tower',
+      name: '钟楼',
+      description: '供奉凤王的神圣高塔。据说彩虹羽毛可以召唤凤王。',
+      region: '城都',
+      connections: ['ecruteak-city'],
+      encounters: ['gastly', 'misdreavus', 'unown'],
+      bgGradient: 'from-yellow-700 via-amber-900 to-black',
+      legendaryEncounter: {
+          speciesId: 'ho-oh',
+          level: 70,
+          minBadges: 8
+      }
+  },
+  'whirl-islands': {
+      id: 'whirl-islands',
+      name: '漩涡列岛',
+      description: '被漩涡包围的神秘岛群。据说海之神栖息于最深处。',
+      region: '城都',
+      connections: ['olivine-city'],
+      encounters: ['tentacool', 'seel', 'horsea', 'krabby'],
+      bgGradient: 'from-blue-800 via-cyan-950 to-black',
+      weatherRates: { Rain: 0.4 },
+      legendaryEncounter: {
+          speciesId: 'suicune',
+          level: 40,
+          minBadges: 5
+      }
+  },
+  'silver-cave': {
+      id: 'silver-cave',
+      name: '白银山',
+      description: '城都地区最深处的洞穴。只有集齐徽章的训练家才能进入。传说中最强训练家在此修行。',
+      region: '城都',
+      connections: ['blackthorn-city'],
+      encounters: ['larvitar', 'ursaring', 'sneasel', 'golduck'],
+      bgGradient: 'from-gray-800 via-slate-900 to-black',
+      legendaryEncounter: {
+          speciesId: 'lugia',
+          level: 70,
+          minBadges: 8
+      }
+  },
+  'mt-mortar': {
+      id: 'mt-mortar',
+      name: '断崖山',
+      description: '崎岖险峻的山地。许多格斗系宝可梦在此修炼。',
+      region: '城都',
+      connections: ['mahogany-town'],
+      encounters: ['machop', 'zubat', 'marill', 'geodude'],
+      bgGradient: 'from-stone-800 via-amber-900 to-black',
+      legendaryEncounter: {
+          speciesId: 'entei',
+          level: 40,
+          minBadges: 4
+      }
   }
 };
