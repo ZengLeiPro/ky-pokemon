@@ -28,6 +28,7 @@ import ChatView from './components/social/ChatView';
 import TradeView from './components/social/TradeView';
 import GiftView from './components/social/GiftView';
 import { PvPBattleView } from './components/social/PvPBattleView';
+import RedeemCodeView from './components/stages/RedeemCodeView';
 
 import { Toast } from './components/ui/Toast';
 import CheatConsole from './components/CheatConsole';
@@ -109,6 +110,8 @@ const App: React.FC = () => {
         return <TradeView />;
       case 'GIFT':
         return <GiftView />;
+      case 'REDEEM_CODE':
+        return <RedeemCodeView />;
       case 'POKEMON_CENTER':
         return <WorldStage scene="POKEMON_CENTER" />;
       case 'GYM':
@@ -146,7 +149,7 @@ const App: React.FC = () => {
   const showNavDock = !isChoosingStarter && ['ROAM', 'TEAM', 'BAG', 'PROFILE', 'DEX'].includes(view);
   const showMessageBox = !isChoosingStarter && (view === 'ROAM' || view === 'BATTLE') && !scene2DViews.includes(view);
   const showControlPad = !isChoosingStarter && view === 'BATTLE' && !scene2DViews.includes(view);
-  const showHeader = !isChoosingStarter && !['FRIENDS', 'CHAT', 'PVP_BATTLE', 'TRADE', 'GIFT', ...scene2DViews].includes(view);
+  const showHeader = !isChoosingStarter && !['FRIENDS', 'CHAT', 'PVP_BATTLE', 'TRADE', 'GIFT', 'REDEEM_CODE', ...scene2DViews].includes(view);
 
   const renderContent = () => {
     // 认证页面使用全屏布局，无需 Header 和 Footer
