@@ -185,4 +185,32 @@ internal.post('/migrate-pokedex-data', async (c) => {
   }
 });
 
+// 清除指定礼包码的兑换记录
+internal.post('/redeem-reset', async (c) => {
+  try {
+    const body = await c.req.json<{ code?: string; username?: string }>();
+    const { code, username } = body;
+
+    if (!code) {
+      return c.json({ success: false, error: '缺少 code 参数' }, 400);
+    }
+
+    const where: any = { code: code.toUpperCase() };
+
+    // 如果指定了用户名，只删该用户的记录
+    if (username) {
+      const user = await db.user.findUnique({ where: { username } });
+      if (!user) {
+        return c.json({ success: false, error: `用户 ${username} 不存在` }, 400);
+      }
+      where.userId = user.id;
+    }
+
+    const result = await db.redeemRecord.deleteMany({ where });
+    return c.json({ success: true, deleted: result.count });
+  } catch (error: any) {
+    return c.json({ success: false, error: error.message }, 500);
+  }
+});
+
 export default internal;
