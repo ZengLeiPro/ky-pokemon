@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import HPBar from '../ui/HPBar';
 import TypeBadge from '../ui/TypeBadge';
+import { MOVES } from '@shared/constants';
+import { TYPE_TRANSLATIONS, TYPE_COLORS } from '../../constants';
 
 const BattleStage: React.FC = () => {
-  const { battle, playerParty, setView, confirmNickname } = useGameStore();
+  const { battle, playerParty, setView, confirmNickname, learnPendingMove } = useGameStore();
   const playerMon = playerParty[battle.playerActiveIndex];
   const enemyMon = battle.enemy;
   const [nicknameInput, setNicknameInput] = useState('');
+  const [selectedForgetIndex, setSelectedForgetIndex] = useState<number | null>(null);
 
   if (!playerMon || !enemyMon) return <div className="flex h-full items-center justify-center text-slate-400 animate-pulse">进入战斗中...</div>;
 
@@ -56,6 +59,94 @@ const BattleStage: React.FC = () => {
                 </div>
             </div>
         )}
+
+        {battle.phase === 'MOVE_LEARN' && battle.pendingMoveLearn && (() => {
+            const pending = battle.pendingMoveLearn;
+            const pokemon = playerParty[pending.pokemonIndex];
+            const newMove = MOVES[pending.moveId];
+            if (!pokemon || !newMove) return null;
+            return (
+                <div className="absolute inset-0 z-50 bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+                    <div className="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto">
+                        <h3 className="text-lg font-bold text-white mb-1 text-center">
+                            {pokemon.speciesName} 想学习
+                        </h3>
+                        <div className="text-center mb-4">
+                            <span className="inline-block px-3 py-1 rounded-full text-sm font-bold text-white" style={{ backgroundColor: TYPE_COLORS[newMove.type] }}>
+                                {newMove.name}
+                            </span>
+                            <div className="text-xs text-slate-400 mt-1">
+                                {TYPE_TRANSLATIONS[newMove.type]} / {newMove.category} / 威力 {newMove.power || '-'} / 命中 {newMove.accuracy || '-'}
+                            </div>
+                            {newMove.description && (
+                                <p className="text-xs text-slate-500 mt-1">{newMove.description}</p>
+                            )}
+                        </div>
+
+                        <p className="text-sm text-yellow-400 text-center mb-3">
+                            但已经学了4个招式了，要忘记一个吗？
+                        </p>
+
+                        <div className="space-y-2 mb-4">
+                            {pokemon.moves.map((m, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setSelectedForgetIndex(selectedForgetIndex === idx ? null : idx)}
+                                    className={`w-full text-left p-3 rounded-lg border transition-all ${
+                                        selectedForgetIndex === idx
+                                            ? 'border-red-500 bg-red-500/10 ring-1 ring-red-500'
+                                            : 'border-slate-700 bg-slate-900 hover:border-slate-600'
+                                    }`}
+                                >
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: TYPE_COLORS[m.move.type] }}></span>
+                                                <span className="font-bold text-sm text-slate-200">{m.move.name}</span>
+                                            </div>
+                                            <div className="text-[10px] text-slate-400 ml-4">
+                                                {TYPE_TRANSLATIONS[m.move.type]} / {m.move.category} / 威力 {m.move.power || '-'}
+                                            </div>
+                                        </div>
+                                        {selectedForgetIndex === idx && (
+                                            <span className="text-xs text-red-400 font-bold">忘记</span>
+                                        )}
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => {
+                                    if (selectedForgetIndex !== null) {
+                                        learnPendingMove(selectedForgetIndex);
+                                        setSelectedForgetIndex(null);
+                                    }
+                                }}
+                                disabled={selectedForgetIndex === null}
+                                className={`flex-1 py-3 rounded-xl font-bold transition-colors shadow-lg active:scale-95 ${
+                                    selectedForgetIndex !== null
+                                        ? 'bg-cyan-600 hover:bg-cyan-500 text-white'
+                                        : 'bg-slate-700 text-slate-500 cursor-not-allowed'
+                                }`}
+                            >
+                                学习新招式
+                            </button>
+                            <button
+                                onClick={() => {
+                                    learnPendingMove(null);
+                                    setSelectedForgetIndex(null);
+                                }}
+                                className="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-300 py-3 rounded-xl font-bold transition-colors shadow-lg active:scale-95"
+                            >
+                                不学了
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        })()}
 
         {/* Enemy Info - Top Left */}
         <div className="relative z-10 pt-6 px-4 flex justify-between items-start animate-fade-in-down">

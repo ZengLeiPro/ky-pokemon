@@ -77,10 +77,15 @@ interface GameState {
     gymBadgeReward?: string;
     gymBadgeName?: string;
     playerActiveIndex: number;
-    phase: 'INPUT' | 'PROCESSING' | 'ENDED' | 'FORCED_SWITCH' | 'NICKNAME';
+    phase: 'INPUT' | 'PROCESSING' | 'ENDED' | 'FORCED_SWITCH' | 'NICKNAME' | 'MOVE_LEARN';
     caughtPokemonId?: string;
     isLegendary?: boolean;  // 是否是传说宝可梦战斗
     legendarySpeciesId?: string;  // 传说宝可梦的物种ID
+    pendingMoveLearn?: {
+      pokemonIndex: number;
+      moveId: string;
+      remainingMoves: string[]; // 剩余待学的招式 moveId 列表
+    };
   };
 
   gameMode: 'NORMAL' | 'CHEAT';
@@ -117,6 +122,11 @@ interface GameState {
   triggerEvolution: (pokemon: Pokemon, targetSpeciesId: string) => void;
   advanceEvolutionStage: (stage: EvolutionState['stage']) => void;
   completeEvolution: () => void;
+
+  // 招式管理
+  learnPendingMove: (forgetIndex: number | null) => void;
+  forgetMove: (pokemonId: string, moveIndex: number) => void;
+  learnMove: (pokemonId: string, moveId: string, forgetIndex?: number) => void;
 }
 
 export const useGameStore = create<GameState>()(
@@ -745,7 +755,7 @@ export const useGameStore = create<GameState>()(
         
         set(produce((state: GameState) => {
             const p = state.playerParty[state.battle.playerActiveIndex];
-            const { updatedPokemon, leveledUp, learnedMoves, evolutionCandidate } = gainExperience(p, expAmount);
+            const { updatedPokemon, leveledUp, learnedMoves, pendingMoves, evolutionCandidate } = gainExperience(p, expAmount);
 
             state.playerParty[state.battle.playerActiveIndex] = updatedPokemon;
             state.logs.push(createLogEntry(`获得了 ${expAmount} 点经验值。`));
@@ -759,9 +769,25 @@ export const useGameStore = create<GameState>()(
                     });
                 }
 
+                // 有待学习的招式（招式已满4个），进入选择界面
+                if (pendingMoves && pendingMoves.length > 0) {
+                    const firstMoveId = pendingMoves[0];
+                    const firstMove = MOVES[firstMoveId];
+                    if (firstMove) {
+                        state.logs.push(createLogEntry(`${updatedPokemon.speciesName} 想学会 ${firstMove.name}...`, 'urgent'));
+                        state.logs.push(createLogEntry(`但是，${updatedPokemon.speciesName} 已经学会了4个招式。`, 'urgent'));
+                    }
+                    state.battle.pendingMoveLearn = {
+                        pokemonIndex: state.battle.playerActiveIndex,
+                        moveId: firstMoveId,
+                        remainingMoves: pendingMoves.slice(1),
+                    };
+                    state.battle.phase = 'MOVE_LEARN';
+                }
+
                 if (evolutionCandidate) {
                      state.logs.push(createLogEntry(`什么？ ${updatedPokemon.speciesName} 的样子...`, 'urgent'));
-                     
+
                      state.evolution = {
                          isEvolving: true,
                          pokemon: updatedPokemon,
@@ -970,12 +996,24 @@ export const useGameStore = create<GameState>()(
           else ballModifier = 1.0;
       }
 
+      // 状态异常修正（Gen V+ 官方公式）
+      let statusModifier = 1.0;
+      if (enemy.status === 'SLP' || enemy.status === 'FRZ') {
+          statusModifier = 2.5;
+      } else if (enemy.status === 'PAR' || enemy.status === 'PSN' || enemy.status === 'BRN') {
+          statusModifier = 1.5;
+      }
+
       // 全局捕捉率倍数（2.0 = 捕捉成功率翻倍）
       const globalCatchMultiplier = 2.0;
-      const catchChance = Math.min(1, (catchRate / 255) * (1 - hpRatio * 0.5) * ballModifier * globalCatchMultiplier);
+      const catchChance = Math.min(1, (catchRate / 255) * (1 - hpRatio * 0.5) * ballModifier * statusModifier * globalCatchMultiplier);
       const roll = Math.random();
 
       addLog(`扔出了${pokeballItem.name}！`, 'combat');
+      if (statusModifier > 1) {
+          const statusNames: Record<string, string> = { SLP: '睡眠', FRZ: '冰冻', PAR: '麻痹', PSN: '中毒', BRN: '灼伤' };
+          addLog(`${enemy.speciesName} 处于${statusNames[enemy.status!]}状态，更容易捕捉！(x${statusModifier})`, 'info');
+      }
       await new Promise(r => setTimeout(r, 800));
 
       if (roll < catchChance) {
@@ -1386,28 +1424,28 @@ export const useGameStore = create<GameState>()(
 
   completeEvolution: () => set(produce((state: GameState) => {
     const { pokemon, targetSpeciesId } = state.evolution;
-    
+
     if (!pokemon || !targetSpeciesId) {
         state.evolution.isEvolving = false;
         return;
     }
-    
+
     // 执行真正的进化计算
     const evolvedMon = evolvePokemon(pokemon, targetSpeciesId);
-    
+
     // 更新队伍中的宝可梦
     const idx = state.playerParty.findIndex(p => p.id === pokemon.id);
     if (idx !== -1) {
         state.playerParty[idx] = evolvedMon;
         state.logs.push(createLogEntry(`恭喜！你的 ${pokemon.speciesName} 进化成了 ${evolvedMon.speciesName}！`, 'urgent'));
-        
+
         // 更新图鉴
         const newDexId = evolvedMon.speciesData.pokedexId;
         if (newDexId !== undefined) {
              state.pokedex[newDexId] = 'CAUGHT';
         }
     }
-    
+
     // 重置状态
     state.evolution = {
         isEvolving: false,
@@ -1415,6 +1453,91 @@ export const useGameStore = create<GameState>()(
         targetSpeciesId: null,
         stage: 'START'
     };
+  })),
+
+  // ===== 招式管理 =====
+
+  learnPendingMove: (forgetIndex: number | null) => set(produce((state: GameState) => {
+    const pending = state.battle.pendingMoveLearn;
+    if (!pending) return;
+
+    const pokemon = state.playerParty[pending.pokemonIndex];
+    const moveData = MOVES[pending.moveId];
+    if (!pokemon || !moveData) return;
+
+    if (forgetIndex !== null && forgetIndex >= 0 && forgetIndex < pokemon.moves.length) {
+      const forgotten = pokemon.moves[forgetIndex].move.name;
+      pokemon.moves[forgetIndex] = { move: moveData, ppCurrent: moveData.ppMax };
+      state.logs.push(createLogEntry(`${pokemon.speciesName} 忘记了 ${forgotten}，学会了 ${moveData.name}！`));
+    } else {
+      state.logs.push(createLogEntry(`${pokemon.speciesName} 放弃了学习 ${moveData.name}。`));
+    }
+
+    // 检查是否还有剩余待学的招式
+    const remaining = pending.remainingMoves;
+    if (remaining.length > 0) {
+      const nextMoveId = remaining[0];
+      const nextMove = MOVES[nextMoveId];
+      state.battle.pendingMoveLearn = {
+        pokemonIndex: pending.pokemonIndex,
+        moveId: nextMoveId,
+        remainingMoves: remaining.slice(1),
+      };
+      if (nextMove) {
+        // 如果已有空位就直接学
+        if (pokemon.moves.length < 4) {
+          pokemon.moves.push({ move: nextMove, ppCurrent: nextMove.ppMax });
+          state.logs.push(createLogEntry(`${pokemon.speciesName} 学会了 ${nextMove.name}！`));
+          // 继续检查下一个
+          const stillRemaining = state.battle.pendingMoveLearn.remainingMoves;
+          if (stillRemaining.length === 0) {
+            state.battle.pendingMoveLearn = undefined;
+            state.battle.phase = 'ENDED';
+          }
+        }
+        // 否则保持 MOVE_LEARN phase
+      }
+    } else {
+      state.battle.pendingMoveLearn = undefined;
+      state.battle.phase = 'ENDED';
+    }
+  })),
+
+  forgetMove: (pokemonId: string, moveIndex: number) => set(produce((state: GameState) => {
+    const pokemon = state.playerParty.find(p => p.id === pokemonId)
+      || state.playerStorage.find(p => p.id === pokemonId);
+    if (!pokemon) return;
+    if (moveIndex < 0 || moveIndex >= pokemon.moves.length) return;
+    if (pokemon.moves.length <= 1) {
+      state.logs.push(createLogEntry(`${pokemon.speciesName} 至少需要保留一个招式！`, 'urgent'));
+      return;
+    }
+    const forgotten = pokemon.moves[moveIndex].move.name;
+    pokemon.moves.splice(moveIndex, 1);
+    state.logs.push(createLogEntry(`${pokemon.speciesName} 忘记了 ${forgotten}。`));
+  })),
+
+  learnMove: (pokemonId: string, moveId: string, forgetIndex?: number) => set(produce((state: GameState) => {
+    const pokemon = state.playerParty.find(p => p.id === pokemonId)
+      || state.playerStorage.find(p => p.id === pokemonId);
+    if (!pokemon) return;
+    const moveData = MOVES[moveId];
+    if (!moveData) return;
+
+    // 检查是否已经学会了这个招式
+    if (pokemon.moves.find(m => m.move.id === moveData.id)) {
+      state.logs.push(createLogEntry(`${pokemon.speciesName} 已经会 ${moveData.name} 了！`));
+      return;
+    }
+
+    if (pokemon.moves.length < 4) {
+      pokemon.moves.push({ move: moveData, ppCurrent: moveData.ppMax });
+      state.logs.push(createLogEntry(`${pokemon.speciesName} 学会了 ${moveData.name}！`));
+    } else if (forgetIndex !== undefined && forgetIndex >= 0 && forgetIndex < pokemon.moves.length) {
+      const forgotten = pokemon.moves[forgetIndex].move.name;
+      pokemon.moves[forgetIndex] = { move: moveData, ppCurrent: moveData.ppMax };
+      state.logs.push(createLogEntry(`${pokemon.speciesName} 忘记了 ${forgotten}，学会了 ${moveData.name}！`));
+    }
   })),
 })
 );

@@ -8,6 +8,7 @@ export interface ExperienceGainResult {
   leveledUp: boolean;
   levelChanges?: { oldStats: BaseStats; newStats: BaseStats };
   learnedMoves: string[];
+  pendingMoves: string[]; // 招式已满4个时，待玩家选择的新招式 moveId 列表
   evolutionCandidate?: { targetSpeciesId: string };
 }
 
@@ -70,7 +71,8 @@ export const gainExperience = (
 
     let levelChanges;
     const learnedMoves: string[] = [];
-    
+    const pendingMoves: string[] = [];
+
     if (leveledUp) {
         // Recalculate stats
         const { stats, maxHp } = calculateStats(newPokemon.baseStats, newPokemon.ivs, newPokemon.evs, newPokemon.level);
@@ -102,14 +104,8 @@ export const gainExperience = (
                                  newPokemon.moves.push({ move: moveData, ppCurrent: moveData.ppMax });
                                  learnedMoves.push(moveData.name);
                              } else {
-                                 // Full! For MVP, we just notify "Could not learn X" or auto-replace first non-damaging move?
-                                 // Let's keep it simple: Auto-replace the first move (Slot 1) for now to ensure user sees new moves
-                                 // Ideally this should be a UI choice.
-                                 // Let's implement "Auto-Forget Slot 1" for MVP to keep game dynamic.
-                                 const forgotten = newPokemon.moves[0].move.name;
-                                 newPokemon.moves.shift();
-                                 newPokemon.moves.push({ move: moveData, ppCurrent: moveData.ppMax });
-                                 learnedMoves.push(`${moveData.name} (忘记了 ${forgotten})`);
+                                 // 招式已满，交给 UI 让玩家选择忘记哪个
+                                 pendingMoves.push(m.moveId);
                              }
                          }
                      }
@@ -121,5 +117,5 @@ export const gainExperience = (
     // Check Evolution Logic
     const evolutionCandidate = checkEvolution(newPokemon, leveledUp);
 
-    return { updatedPokemon: newPokemon, leveledUp, levelChanges, learnedMoves, evolutionCandidate };
+    return { updatedPokemon: newPokemon, leveledUp, levelChanges, learnedMoves, pendingMoves, evolutionCandidate };
 };
