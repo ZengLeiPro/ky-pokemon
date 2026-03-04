@@ -268,6 +268,17 @@ model GiftRequest {
   @@index([status])
 }
 
+// ========== 礼包码兑换记录 ==========
+model RedeemRecord {
+  id        String   @id @default(uuid())
+  userId    String
+  code      String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, code])
+  @@index([code])
+}
+
 // ========== 图鉴记录 ==========
 model PokedexEntry {
   id            String    @id @default(uuid())
