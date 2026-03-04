@@ -39,12 +39,12 @@ redeem.post('/', async (c) => {
     return c.json({ success: false, error: '无效的礼包码' }, 400);
   }
 
-  // 检查这个码是否已被任何人兑换过（全局只能用一次）
-  const existing = await db.redeemRecord.findFirst({
-    where: { code },
+  // 检查当前用户是否已兑换过这个码（每个用户只能兑换一次）
+  const existing = await db.redeemRecord.findUnique({
+    where: { userId_code: { userId, code } },
   });
   if (existing) {
-    return c.json({ success: false, error: '这个礼包码已经被使用过了' }, 400);
+    return c.json({ success: false, error: '你已经兑换过这个礼包码了' }, 400);
   }
 
   // 查找用户当前存档（NORMAL 模式）
