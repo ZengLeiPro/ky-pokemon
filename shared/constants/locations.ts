@@ -742,7 +742,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       encounters: ['gastly', 'misdreavus', 'unown', 'xatu', 'togetic'],
       bgGradient: 'from-yellow-700 via-amber-900 to-black',
       legendaryEncounter: {
-          speciesId: 'ho-oh',
+          speciesId: 'hoOh',
           level: 70,
           minBadges: 8
       }
