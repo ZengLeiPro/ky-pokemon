@@ -266,3 +266,17 @@ jobs:
            if [ "$HTTP_CODE" != "200" ]; then
              echo "::warning::Seeding failed with status $HTTP_CODE. Continuing as it might be non-critical."
            fi
+
+      - name: 清除礼包码兑换记录（临时）
+        env:
+          FC_URL: ${{ steps.deploy.outputs.FC_URL }}
+          MIGRATION_TOKEN: ${{ secrets.MIGRATION_TOKEN }}
+        run: |
+           RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "${FC_URL}/api/internal/redeem-reset" \
+             -H "x-migration-token: ${MIGRATION_TOKEN}" \
+             -H "Content-Type: application/json" \
+             -d '{"code":"LKY202650"}' \
+             --max-time 30)
+           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+           BODY=$(echo "$RESPONSE" | sed '$d')
+           echo "Redeem reset response: $BODY (HTTP $HTTP_CODE)"
