@@ -10,16 +10,16 @@ const REDEEM_CODES: Record<string, {
     money?: number;
   };
 }> = {
-  // 示例（取消注释即可启用）：
-  // 'WELCOME2024': {
-  //   description: '欢迎礼包',
-  //   rewards: {
-  //     items: [
-  //       { id: 'ultraBall', name: '高级球', description: '性能比较好的精灵球。', category: 'POKEBALLS', quantity: 10 },
-  //     ],
-  //     money: 5000,
-  //   },
-  // },
+  'LKY202650': {
+    description: '楷言特别礼包',
+    rewards: {
+      items: [
+        { id: 'masterball', name: '大师球', description: '必定能捉到野生宝可梦的终极球。', category: 'POKEBALLS', quantity: 1 },
+        { id: 'ultraball', name: '高级球', description: '性能比较好的精灵球。', category: 'POKEBALLS', quantity: 10 },
+        { id: 'max-potion', name: '全满药', description: '能回复宝可梦全部HP。', category: 'MEDICINE', quantity: 5 },
+      ],
+    },
+  },
 };
 
 export default function RedeemCodeView() {
