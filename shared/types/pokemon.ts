@@ -35,6 +35,16 @@ export interface PokemonMove {
 
 export type StatusCondition = 'BRN' | 'PAR' | 'SLP' | 'PSN' | 'FRZ';
 
+export interface StatStages {
+  atk: number;   // -6 ~ +6
+  def: number;
+  spa: number;
+  spd: number;
+  spe: number;
+  accuracy: number;
+  evasion: number;
+}
+
 export interface Pokemon {
   id: string;
   speciesName: string;
@@ -50,6 +60,7 @@ export interface Pokemon {
   stats: BaseStats;
   moves: PokemonMove[];
   status?: StatusCondition;
+  statStages?: StatStages;
   exp: number;
   nextLevelExp: number;
   spriteUrl?: string;

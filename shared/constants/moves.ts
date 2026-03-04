@@ -180,39 +180,129 @@ export const MOVES: Record<string, Move> = {
   mudSlap: { id: 'mudSlap', name: '掷泥', type: 'Ground', category: 'Special', power: 20, accuracy: 100, ppMax: 10, description: '向对手的脸投掷泥块进行攻击。会降低对手的命中率。' },
 };
 
-export const MOVE_EFFECTS: Record<string, {
-  type: 'status' | 'weather' | 'heal';
-  id: string;
+// 招式效果类型定义
+export interface MoveEffect {
+  type: 'status' | 'weather' | 'stat' | 'heal' | 'drain' | 'recoil' | 'fixed_damage' | 'false_swipe' | 'multi_hit' | 'self_status';
+  id?: string;
   chance: number;
   value?: number;
-}> = {
-    ember: { type: 'status', id: 'BRN', chance: 0.1 },
-    flamethrower: { type: 'status', id: 'BRN', chance: 0.1 },
-    fireBlast: { type: 'status', id: 'BRN', chance: 0.1 }, 
-    willOWisp: { type: 'status', id: 'BRN', chance: 0.85 }, 
-    poisonPowder: { type: 'status', id: 'PSN', chance: 1.0 },
-    poisonSting: { type: 'status', id: 'PSN', chance: 0.3 },
-    sludge: { type: 'status', id: 'PSN', chance: 0.3 },
-    sleepPowder: { type: 'status', id: 'SLP', chance: 1.0 },
-    hypnosis: { type: 'status', id: 'SLP', chance: 1.0 },
-    sing: { type: 'status', id: 'SLP', chance: 1.0 },
-    stunSpore: { type: 'status', id: 'PAR', chance: 1.0 },
-    thunderWave: { type: 'status', id: 'PAR', chance: 1.0 },
-    thunderShock: { type: 'status', id: 'PAR', chance: 0.1 },
-    thunderbolt: { type: 'status', id: 'PAR', chance: 0.1 },
-    bodySlam: { type: 'status', id: 'PAR', chance: 0.3 },
-    lick: { type: 'status', id: 'PAR', chance: 0.3 },
-    iceBeam: { type: 'status', id: 'FRZ', chance: 0.1 },
-    powderSnow: { type: 'status', id: 'FRZ', chance: 0.1 },
-    blizzard: { type: 'status', id: 'FRZ', chance: 0.1 },
-    sacredFire: { type: 'status', id: 'BRN', chance: 0.5 },
-    flameWheel: { type: 'status', id: 'BRN', chance: 0.1 },
-    spark: { type: 'status', id: 'PAR', chance: 0.3 },
-    dragonBreath: { type: 'status', id: 'PAR', chance: 0.3 },
-    sludgeBomb: { type: 'status', id: 'PSN', chance: 0.3 },
+  // stat 效果专用
+  target?: 'self' | 'opponent';
+  stat?: string;    // atk, def, spa, spd, spe, accuracy, evasion
+  stages?: number;  // +1, -1, +2, -2 等
+}
 
-    sunnyDay: { type: 'weather', id: 'Sunny', chance: 1.0 },
-    rainDance: { type: 'weather', id: 'Rain', chance: 1.0 },
-    sandstorm: { type: 'weather', id: 'Sandstorm', chance: 1.0 },
-    hail: { type: 'weather', id: 'Hail', chance: 1.0 },
+export const MOVE_EFFECTS: Record<string, MoveEffect[]> = {
+    // === 状态异常效果 ===
+    ember: [{ type: 'status', id: 'BRN', chance: 0.1 }],
+    flamethrower: [{ type: 'status', id: 'BRN', chance: 0.1 }],
+    fireBlast: [{ type: 'status', id: 'BRN', chance: 0.1 }],
+    willOWisp: [{ type: 'status', id: 'BRN', chance: 0.85 }],
+    sacredFire: [{ type: 'status', id: 'BRN', chance: 0.5 }],
+    flameWheel: [{ type: 'status', id: 'BRN', chance: 0.1 }],
+    fireSpin: [{ type: 'status', id: 'BRN', chance: 0.1 }],
+
+    poisonPowder: [{ type: 'status', id: 'PSN', chance: 1.0 }],
+    poisonSting: [{ type: 'status', id: 'PSN', chance: 0.3 }],
+    poisonGas: [{ type: 'status', id: 'PSN', chance: 1.0 }],
+    sludge: [{ type: 'status', id: 'PSN', chance: 0.3 }],
+    sludgeBomb: [{ type: 'status', id: 'PSN', chance: 0.3 }],
+    smog: [{ type: 'status', id: 'PSN', chance: 0.4 }],
+    twineedle: [{ type: 'status', id: 'PSN', chance: 0.2 }],
+
+    sleepPowder: [{ type: 'status', id: 'SLP', chance: 1.0 }],
+    hypnosis: [{ type: 'status', id: 'SLP', chance: 1.0 }],
+    sing: [{ type: 'status', id: 'SLP', chance: 1.0 }],
+    lovelyKiss: [{ type: 'status', id: 'SLP', chance: 1.0 }],
+
+    stunSpore: [{ type: 'status', id: 'PAR', chance: 1.0 }],
+    thunderWave: [{ type: 'status', id: 'PAR', chance: 1.0 }],
+    thunderShock: [{ type: 'status', id: 'PAR', chance: 0.1 }],
+    thunderbolt: [{ type: 'status', id: 'PAR', chance: 0.1 }],
+    bodySlam: [{ type: 'status', id: 'PAR', chance: 0.3 }],
+    lick: [{ type: 'status', id: 'PAR', chance: 0.3 }],
+    spark: [{ type: 'status', id: 'PAR', chance: 0.3 }],
+    dragonBreath: [{ type: 'status', id: 'PAR', chance: 0.3 }],
+
+    iceBeam: [{ type: 'status', id: 'FRZ', chance: 0.1 }],
+    powderSnow: [{ type: 'status', id: 'FRZ', chance: 0.1 }],
+
+    // === 天气效果 ===
+    sunnyDay: [{ type: 'weather', id: 'Sunny', chance: 1.0 }],
+    rainDance: [{ type: 'weather', id: 'Rain', chance: 1.0 }],
+    sandstorm: [{ type: 'weather', id: 'Sandstorm', chance: 1.0 }],
+    hail: [{ type: 'weather', id: 'Hail', chance: 1.0 }],
+
+    // === 能力变化效果 - 对手 ===
+    growl: [{ type: 'stat', target: 'opponent', stat: 'atk', stages: -1, chance: 1.0 }],
+    leer: [{ type: 'stat', target: 'opponent', stat: 'def', stages: -1, chance: 1.0 }],
+    tailWhip: [{ type: 'stat', target: 'opponent', stat: 'def', stages: -1, chance: 1.0 }],
+    stringShot: [{ type: 'stat', target: 'opponent', stat: 'spe', stages: -2, chance: 1.0 }],
+    sandAttack: [{ type: 'stat', target: 'opponent', stat: 'accuracy', stages: -1, chance: 1.0 }],
+    smokescreen: [{ type: 'stat', target: 'opponent', stat: 'accuracy', stages: -1, chance: 1.0 }],
+    kinesis: [{ type: 'stat', target: 'opponent', stat: 'accuracy', stages: -1, chance: 1.0 }],
+    scaryFace: [{ type: 'stat', target: 'opponent', stat: 'spe', stages: -2, chance: 1.0 }],
+    screech: [{ type: 'stat', target: 'opponent', stat: 'def', stages: -2, chance: 1.0 }],
+    metalSound: [{ type: 'stat', target: 'opponent', stat: 'spd', stages: -2, chance: 1.0 }],
+    sweetScent: [{ type: 'stat', target: 'opponent', stat: 'evasion', stages: -2, chance: 1.0 }],
+    cottonSpore: [{ type: 'stat', target: 'opponent', stat: 'spe', stages: -2, chance: 1.0 }],
+
+    // === 能力变化效果 - 自己 ===
+    harden: [{ type: 'stat', target: 'self', stat: 'def', stages: 1, chance: 1.0 }],
+    defenseCurl: [{ type: 'stat', target: 'self', stat: 'def', stages: 1, chance: 1.0 }],
+    withdraw: [{ type: 'stat', target: 'self', stat: 'def', stages: 1, chance: 1.0 }],
+    barrier: [{ type: 'stat', target: 'self', stat: 'def', stages: 2, chance: 1.0 }],
+    agility: [{ type: 'stat', target: 'self', stat: 'spe', stages: 2, chance: 1.0 }],
+    amnesia: [{ type: 'stat', target: 'self', stat: 'spd', stages: 2, chance: 1.0 }],
+    meditate: [{ type: 'stat', target: 'self', stat: 'atk', stages: 1, chance: 1.0 }],
+    sharpen: [{ type: 'stat', target: 'self', stat: 'atk', stages: 1, chance: 1.0 }],
+    growth: [
+        { type: 'stat', target: 'self', stat: 'atk', stages: 1, chance: 1.0 },
+        { type: 'stat', target: 'self', stat: 'spa', stages: 1, chance: 1.0 },
+    ],
+    minimize: [{ type: 'stat', target: 'self', stat: 'evasion', stages: 2, chance: 1.0 }],
+    charge: [{ type: 'stat', target: 'self', stat: 'spd', stages: 1, chance: 1.0 }],
+    focusEnergy: [{ type: 'stat', target: 'self', stat: 'atk', stages: 1, chance: 1.0 }],
+
+    // === 攻击招式附带能力变化（有概率触发）===
+    metalClaw: [{ type: 'stat', target: 'self', stat: 'atk', stages: 1, chance: 0.1 }],
+    ancientPower: [
+        { type: 'stat', target: 'self', stat: 'atk', stages: 1, chance: 0.1 },
+        { type: 'stat', target: 'self', stat: 'def', stages: 1, chance: 0.1 },
+        { type: 'stat', target: 'self', stat: 'spa', stages: 1, chance: 0.1 },
+        { type: 'stat', target: 'self', stat: 'spd', stages: 1, chance: 0.1 },
+        { type: 'stat', target: 'self', stat: 'spe', stages: 1, chance: 0.1 },
+    ],
+    acid: [{ type: 'stat', target: 'opponent', stat: 'spd', stages: -1, chance: 0.1 }],
+    auroraBeam: [{ type: 'stat', target: 'opponent', stat: 'atk', stages: -1, chance: 0.1 }],
+    psychic: [{ type: 'stat', target: 'opponent', stat: 'spd', stages: -1, chance: 0.1 }],
+    crunch: [{ type: 'stat', target: 'opponent', stat: 'def', stages: -1, chance: 0.2 }],
+    ironTail: [{ type: 'stat', target: 'opponent', stat: 'def', stages: -1, chance: 0.3 }],
+    playRough: [{ type: 'stat', target: 'opponent', stat: 'atk', stages: -1, chance: 0.1 }],
+    moonblast: [{ type: 'stat', target: 'opponent', stat: 'spa', stages: -1, chance: 0.3 }],
+    mudShot: [{ type: 'stat', target: 'opponent', stat: 'spe', stages: -1, chance: 1.0 }],
+    mudSlap: [{ type: 'stat', target: 'opponent', stat: 'accuracy', stages: -1, chance: 1.0 }],
+    icyWind: [{ type: 'stat', target: 'opponent', stat: 'spe', stages: -1, chance: 1.0 }],
+    constrict: [{ type: 'stat', target: 'opponent', stat: 'spe', stages: -1, chance: 0.1 }],
+    bubble: [{ type: 'stat', target: 'opponent', stat: 'spe', stages: -1, chance: 0.1 }],
+    rockSlide: [{ type: 'stat', target: 'opponent', stat: 'spe', stages: 0, chance: 0.3 }], // 畏缩用spe占位，后续可扩展
+
+    // === 吸血/回复效果 ===
+    absorb: [{ type: 'drain', chance: 1.0, value: 0.5 }],
+    megaDrain: [{ type: 'drain', chance: 1.0, value: 0.5 }],
+    leechLife: [{ type: 'drain', chance: 1.0, value: 0.5 }],
+    recover: [{ type: 'heal', chance: 1.0, value: 0.5 }],
+    rest: [{ type: 'self_status', id: 'SLP', chance: 1.0 }, { type: 'heal', chance: 1.0, value: 1.0 }],
+
+    // === 反伤效果（受到自身造成伤害的一定比例）===
+    takeDown: [{ type: 'recoil', chance: 1.0, value: 0.25 }],
+    submission: [{ type: 'recoil', chance: 1.0, value: 0.25 }],
+
+    // === 固定伤害 ===
+    sonicBoom: [{ type: 'fixed_damage', chance: 1.0, value: 20 }],
+    nightShade: [{ type: 'fixed_damage', chance: 1.0, value: -1 }],  // -1 表示等于使用者等级
+    seismicToss: [{ type: 'fixed_damage', chance: 1.0, value: -1 }],
+
+    // === 点到为止 ===
+    falseSwipe: [{ type: 'false_swipe', chance: 1.0 }],
 };

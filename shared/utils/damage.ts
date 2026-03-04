@@ -8,6 +8,27 @@ export interface DamageResult {
 }
 
 /**
+ * 根据能力等级（-6 ~ +6）获取倍率
+ * 正版宝可梦的能力等级系统
+ */
+const getStatStageMod = (stage: number): number => {
+  const clamped = Math.max(-6, Math.min(6, stage));
+  if (clamped >= 0) return (2 + clamped) / 2;
+  return 2 / (2 - clamped);
+};
+
+/**
+ * 根据命中/闪避等级获取倍率
+ */
+const getAccuracyStageMod = (stage: number): number => {
+  const clamped = Math.max(-6, Math.min(6, stage));
+  if (clamped >= 0) return (3 + clamped) / 3;
+  return 3 / (3 - clamped);
+};
+
+export { getStatStageMod, getAccuracyStageMod };
+
+/**
  * 计算伤害（Gen 3+ 公式）
  */
 export const calculateDamage = (
@@ -21,8 +42,21 @@ export const calculateDamage = (
     return { damage: 0, isCritical: false, typeEffectiveness: 1 };
   }
 
+  const atkStages = attacker.statStages;
+  const defStages = defender.statStages;
+
   let a = move.category === 'Physical' ? attacker.stats.atk : attacker.stats.spa;
-  const d = move.category === 'Physical' ? defender.stats.def : defender.stats.spd;
+  let d = move.category === 'Physical' ? defender.stats.def : defender.stats.spd;
+
+  // 应用能力等级修正
+  if (atkStages) {
+    const atkStage = move.category === 'Physical' ? atkStages.atk : atkStages.spa;
+    a = Math.floor(a * getStatStageMod(atkStage));
+  }
+  if (defStages) {
+    const defStage = move.category === 'Physical' ? defStages.def : defStages.spd;
+    d = Math.floor(d * getStatStageMod(defStage));
+  }
 
   // 灼伤减半物攻
   if (attacker.status === 'BRN' && move.category === 'Physical') {

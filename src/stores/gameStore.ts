@@ -257,7 +257,10 @@ export const useGameStore = create<GameState>()(
 
     const enemy = createPokemon(speciesKey, 3 + Math.floor(Math.random() * 3), []);
 
+    const defaultStages = () => ({ atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 });
+
     set(produce((state: GameState) => {
+      enemy.statStages = defaultStages();
       state.battle.active = true;
       state.battle.enemy = enemy;
       state.battle.enemyParty = [];
@@ -268,6 +271,8 @@ export const useGameStore = create<GameState>()(
       state.battle.isLegendary = false;
       state.battle.legendarySpeciesId = undefined;
       state.view = 'BATTLE';
+      // 初始化玩家出战宝可梦的能力等级
+      state.playerParty[state.battle.playerActiveIndex].statStages = defaultStages();
       state.logs.push(createLogEntry(`野生的 ${enemy.speciesName} 出现了！`, 'urgent'));
 
       const dexId = enemyData.pokedexId!;
@@ -282,8 +287,10 @@ export const useGameStore = create<GameState>()(
     if (!enemyData) return;
 
     const enemy = createPokemon(speciesId, level, []);
+    const defaultStages = () => ({ atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 });
 
     set(produce((state: GameState) => {
+      enemy.statStages = defaultStages();
       state.battle.active = true;
       state.battle.enemy = enemy;
       state.battle.enemyParty = [];
@@ -294,6 +301,7 @@ export const useGameStore = create<GameState>()(
       state.battle.isLegendary = true;
       state.battle.legendarySpeciesId = speciesId;
       state.view = 'BATTLE';
+      state.playerParty[state.battle.playerActiveIndex].statStages = defaultStages();
       state.logs.push(createLogEntry(`传说的 ${enemy.speciesName} 出现了！`, 'urgent'));
 
       const dexId = enemyData.pokedexId!;
@@ -308,7 +316,10 @@ export const useGameStore = create<GameState>()(
       const firstEnemy = enemyParty.shift();
       if (!firstEnemy) return;
 
+      const defaultStages = () => ({ atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 });
+
       set(produce((state: GameState) => {
+          firstEnemy.statStages = defaultStages();
           state.battle.active = true;
           state.battle.enemy = firstEnemy;
           state.battle.enemyParty = enemyParty;
@@ -318,7 +329,8 @@ export const useGameStore = create<GameState>()(
           state.battle.gymBadgeReward = gym.badgeId;
           state.battle.gymBadgeName = gym.badgeName;
           state.view = 'BATTLE';
-          
+          state.playerParty[state.battle.playerActiveIndex].statStages = defaultStages();
+
           state.logs.push(createLogEntry(`${gym.leaderName} 发起了挑战！`, 'urgent'));
           state.logs.push(createLogEntry(`${gym.leaderName} 派出了 ${firstEnemy.speciesName}！`, 'urgent'));
 
@@ -345,6 +357,7 @@ export const useGameStore = create<GameState>()(
       state.battle.isLegendary = false;
       state.battle.legendarySpeciesId = undefined;
       state.view = 'ROAM';
+      state.playerParty.forEach(p => { p.statStages = undefined; });
       state.logs.push(createLogEntry('成功逃跑了！'));
     }));
   },
@@ -367,13 +380,27 @@ export const useGameStore = create<GameState>()(
     const enemyMon = battle.enemy;
     const enemyMoveData = enemyMon.moves[Math.floor(Math.random() * enemyMon.moves.length)];
     
-    // Paralysis speed drop (1/4 speed)
-    const getSpeed = (p: Pokemon) => p.status === 'PAR' ? Math.floor(p.stats.spe * 0.25) : p.stats.spe;
+    // 速度计算：考虑能力等级和麻痹
+    const getSpeed = (p: Pokemon) => {
+        let spe = p.stats.spe;
+        if (p.statStages) {
+            const stage = p.statStages.spe;
+            if (stage >= 0) spe = Math.floor(spe * (2 + stage) / 2);
+            else spe = Math.floor(spe * 2 / (2 - stage));
+        }
+        if (p.status === 'PAR') spe = Math.floor(spe * 0.25);
+        return spe;
+    };
 
     const playerSpeed = getSpeed(playerMon);
     const enemySpeed = getSpeed(enemyMon);
     
-    const playerGoesFirst = playerSpeed >= enemySpeed; 
+    // 先制判断：优先度 > 速度
+    const playerPriority = playerMoveData.move.priority || 0;
+    const enemyPriority = enemyMoveData.move.priority || 0;
+    const playerGoesFirst = playerPriority !== enemyPriority
+        ? playerPriority > enemyPriority
+        : playerSpeed >= enemySpeed;
     
     const executeTurn = async (attackerSnapshot: Pokemon, defenderSnapshot: Pokemon, moveData: any, isPlayer: boolean) => {
         const currentState = get();
@@ -432,48 +459,116 @@ export const useGameStore = create<GameState>()(
         }
 
         addLog(`${attacker.speciesName} 使用了 ${moveData.move.name}！`, 'combat');
-        
-        if (moveData.move.description) {
-            addLog(moveData.move.description, 'info');
-        }
-
         await new Promise(r => setTimeout(r, 800));
 
-        const result = calculateDamage(attacker, defender, moveData.move, currentState.weather);
-        
-        if (result.damage > 0) {
-            if (isPlayer) {
-                set(produce((state: GameState) => {
-                    if (state.battle.enemy) {
-                        state.battle.enemy.currentHp = Math.max(0, state.battle.enemy.currentHp - result.damage);
-                    }
-                }));
-            } else {
-                 set(produce((state: GameState) => {
-                     const p = state.playerParty[state.battle.playerActiveIndex];
-                     p.currentHp = Math.max(0, p.currentHp - result.damage);
-                 }));
+        // 命中判定（考虑命中/闪避等级）
+        let moveAccuracy = moveData.move.accuracy;
+        if (moveAccuracy < 100) {
+            const atkAcc = attacker.statStages?.accuracy || 0;
+            const defEva = defender.statStages?.evasion || 0;
+            const accStage = atkAcc - defEva;
+            const accMod = accStage >= 0 ? (3 + accStage) / 3 : 3 / (3 - accStage);
+            moveAccuracy = Math.floor(moveAccuracy * accMod);
+            if (Math.random() * 100 >= moveAccuracy) {
+                addLog(`${attacker.speciesName} 的攻击没有命中！`);
+                await new Promise(r => setTimeout(r, 600));
+                return;
             }
+        }
+
+        const effects = MOVE_EFFECTS[moveData.move.id];
+
+        // 检查是否为固定伤害招式
+        const fixedDmgEffect = effects?.find(e => e.type === 'fixed_damage');
+        const falseSwipeEffect = effects?.find(e => e.type === 'false_swipe');
+        const drainEffect = effects?.find(e => e.type === 'drain');
+        const recoilEffect = effects?.find(e => e.type === 'recoil');
+
+        let actualDamage = 0;
+
+        if (fixedDmgEffect) {
+            // 固定伤害：音爆=20，黑夜魔影/地球上投=等级
+            actualDamage = fixedDmgEffect.value === -1 ? attacker.level : (fixedDmgEffect.value || 0);
+            const typeMod = moveData.move.type === 'Ghost' ?
+                (defender.types.includes('Normal') ? 0 : 1) :
+                (moveData.move.type === 'Normal' ? (defender.types.includes('Ghost') ? 0 : 1) :
+                (moveData.move.type === 'Fighting' ? (defender.types.includes('Ghost') ? 0 : 1) : 1));
+            if (typeMod === 0) {
+                addLog("似乎没有效果。", 'info');
+                actualDamage = 0;
+            }
+        } else if (moveData.move.category !== 'Status') {
+            const result = calculateDamage(attacker, defender, moveData.move, currentState.weather);
+            actualDamage = result.damage;
 
             if (result.isCritical) addLog("击中要害！", 'urgent');
             if (result.typeEffectiveness > 1) addLog("效果绝佳！", 'info');
             if (result.typeEffectiveness < 1 && result.typeEffectiveness > 0) addLog("效果不理想...", 'info');
-            if (result.typeEffectiveness === 0) addLog("似乎没有效果。", 'info');
-        } else {
-            if (moveData.move.category !== 'Status') {
-                addLog("但是失败了！");
+            if (result.typeEffectiveness === 0) { addLog("似乎没有效果。", 'info'); actualDamage = 0; }
+        }
+
+        // 点到为止：至少留 1 HP
+        if (falseSwipeEffect && actualDamage > 0) {
+            if (defender.currentHp - actualDamage < 1) {
+                actualDamage = Math.max(0, defender.currentHp - 1);
             }
         }
 
-        // Apply Move Effects (Status / Weather)
-        const effect = MOVE_EFFECTS[moveData.move.id];
-        if (effect) {
-            const roll = Math.random();
-            if (roll < effect.chance) {
+        // 扣血
+        if (actualDamage > 0) {
+            if (isPlayer) {
+                set(produce((state: GameState) => {
+                    if (state.battle.enemy) {
+                        state.battle.enemy.currentHp = Math.max(0, state.battle.enemy.currentHp - actualDamage);
+                    }
+                }));
+            } else {
+                set(produce((state: GameState) => {
+                    const p = state.playerParty[state.battle.playerActiveIndex];
+                    p.currentHp = Math.max(0, p.currentHp - actualDamage);
+                }));
+            }
+            addLog(`造成了 ${actualDamage} 点伤害！`, 'combat');
+        } else if (moveData.move.category !== 'Status' && !fixedDmgEffect) {
+            addLog("但是失败了！");
+        }
+
+        // 吸血回复
+        if (drainEffect && actualDamage > 0) {
+            const healAmount = Math.floor(actualDamage * (drainEffect.value || 0.5));
+            if (healAmount > 0) {
+                set(produce((state: GameState) => {
+                    const self = isPlayer ? state.playerParty[state.battle.playerActiveIndex] : state.battle.enemy;
+                    if (self) {
+                        self.currentHp = Math.min(self.maxHp, self.currentHp + healAmount);
+                    }
+                }));
+                addLog(`${attacker.speciesName} 吸收了对手的体力！`);
+            }
+        }
+
+        // 反伤
+        if (recoilEffect && actualDamage > 0) {
+            const recoilDmg = Math.floor(actualDamage * (recoilEffect.value || 0.25));
+            if (recoilDmg > 0) {
+                set(produce((state: GameState) => {
+                    const self = isPlayer ? state.playerParty[state.battle.playerActiveIndex] : state.battle.enemy;
+                    if (self) {
+                        self.currentHp = Math.max(0, self.currentHp - recoilDmg);
+                    }
+                }));
+                addLog(`${attacker.speciesName} 受到了反作用力伤害！`);
+            }
+        }
+
+        // 应用招式效果
+        if (effects) {
+            for (const effect of effects) {
+                const roll = Math.random();
+                if (roll >= effect.chance) continue;
+
                 if (effect.type === 'status') {
-                    // Check if defender already has status
                     const targetHasStatus = defender.status !== undefined;
-                    // Type immunities (Poison vs Steel/Poison, Burn vs Fire, etc - simplified)
                     let immune = false;
                     if (effect.id === 'PSN' && (defender.types.includes('Poison') || defender.types.includes('Steel'))) immune = true;
                     if (effect.id === 'BRN' && defender.types.includes('Fire')) immune = true;
@@ -481,40 +576,104 @@ export const useGameStore = create<GameState>()(
                     if (effect.id === 'PAR' && defender.types.includes('Electric')) immune = true;
 
                     if (!targetHasStatus && !immune && defender.currentHp > 0) {
-                         set(produce((state: GameState) => {
-                             const target = isPlayer ? state.playerParty[state.battle.playerActiveIndex] : state.battle.enemy;
-                             if (target) {
-                                 target.status = effect.id as any;
-                                 let msg = '';
-                                 switch(effect.id) {
-                                     case 'BRN': msg = `${target.speciesName} 灼伤了！`; break;
-                                     case 'PSN': msg = `${target.speciesName} 中毒了！`; break;
-                                     case 'PAR': msg = `${target.speciesName} 麻痹了！`; break;
-                                     case 'SLP': msg = `${target.speciesName} 睡着了！`; break;
-                                     case 'FRZ': msg = `${target.speciesName} 冻结了！`; break;
-                                 }
-                                 state.logs.push(createLogEntry(msg, 'urgent'));
-                             }
-                         }));
+                        set(produce((state: GameState) => {
+                            const target = isPlayer ? state.battle.enemy : state.playerParty[state.battle.playerActiveIndex];
+                            if (target) {
+                                target.status = effect.id as any;
+                                const msgs: Record<string, string> = {
+                                    'BRN': `${target.speciesName} 灼伤了！`,
+                                    'PSN': `${target.speciesName} 中毒了！`,
+                                    'PAR': `${target.speciesName} 麻痹了！`,
+                                    'SLP': `${target.speciesName} 睡着了！`,
+                                    'FRZ': `${target.speciesName} 冻结了！`,
+                                };
+                                state.logs.push(createLogEntry(msgs[effect.id!] || '', 'urgent'));
+                            }
+                        }));
                     }
+                } else if (effect.type === 'self_status') {
+                    // 自我施加状态（如睡觉）
+                    set(produce((state: GameState) => {
+                        const self = isPlayer ? state.playerParty[state.battle.playerActiveIndex] : state.battle.enemy;
+                        if (self) {
+                            self.status = effect.id as any;
+                            if (effect.id === 'SLP') state.logs.push(createLogEntry(`${self.speciesName} 睡着了！`));
+                        }
+                    }));
                 } else if (effect.type === 'weather') {
                     set(produce((state: GameState) => {
                         state.weather = effect.id as any;
                         state.weatherDuration = 5;
-                        let msg = '';
-                        switch(effect.id) {
-                            case 'Sunny': msg = `阳光变得强烈了！`; break;
-                            case 'Rain': msg = `开始下雨了！`; break;
-                            case 'Sandstorm': msg = `刮起了沙暴！`; break;
-                            case 'Hail': msg = `开始下冰雹了！`; break;
+                        const msgs: Record<string, string> = {
+                            'Sunny': '阳光变得强烈了！',
+                            'Rain': '开始下雨了！',
+                            'Sandstorm': '刮起了沙暴！',
+                            'Hail': '开始下冰雹了！',
+                        };
+                        state.logs.push(createLogEntry(msgs[effect.id!] || '', 'info'));
+                    }));
+                } else if (effect.type === 'stat') {
+                    // 能力变化
+                    const targetIsOpponent = effect.target === 'opponent';
+                    set(produce((state: GameState) => {
+                        const target = targetIsOpponent
+                            ? (isPlayer ? state.battle.enemy : state.playerParty[state.battle.playerActiveIndex])
+                            : (isPlayer ? state.playerParty[state.battle.playerActiveIndex] : state.battle.enemy);
+                        if (!target || target.currentHp <= 0) return;
+
+                        if (!target.statStages) {
+                            target.statStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
                         }
-                        state.logs.push(createLogEntry(msg, 'info'));
+
+                        const stat = effect.stat as keyof typeof target.statStages;
+                        const stages = effect.stages || 0;
+                        const oldVal = target.statStages[stat];
+                        target.statStages[stat] = Math.max(-6, Math.min(6, oldVal + stages));
+                        const newVal = target.statStages[stat];
+
+                        if (newVal !== oldVal) {
+                            const statNames: Record<string, string> = {
+                                atk: '攻击', def: '防御', spa: '特攻', spd: '特防', spe: '速度',
+                                accuracy: '命中率', evasion: '闪避率'
+                            };
+                            const change = stages > 0
+                                ? (stages >= 2 ? '大幅提高' : '提高')
+                                : (stages <= -2 ? '大幅降低' : '降低');
+                            state.logs.push(createLogEntry(
+                                `${target.speciesName} 的${statNames[stat] || stat}${change}了！`, 'info'
+                            ));
+                        } else {
+                            const direction = stages > 0 ? '已经无法再提高了' : '已经无法再降低了';
+                            state.logs.push(createLogEntry(
+                                `${target.speciesName} 的能力${direction}！`, 'info'
+                            ));
+                        }
+                    }));
+                } else if (effect.type === 'heal') {
+                    // 回复（自我再生、睡觉等）
+                    const healRatio = effect.value || 0.5;
+                    set(produce((state: GameState) => {
+                        const self = isPlayer ? state.playerParty[state.battle.playerActiveIndex] : state.battle.enemy;
+                        if (self) {
+                            const healAmount = Math.floor(self.maxHp * healRatio);
+                            const oldHp = self.currentHp;
+                            self.currentHp = Math.min(self.maxHp, self.currentHp + healAmount);
+                            const actual = self.currentHp - oldHp;
+                            if (actual > 0) {
+                                state.logs.push(createLogEntry(`${self.speciesName} 回复了 ${actual} 点HP！`, 'info'));
+                            }
+                            // 睡觉招式同时清除异常状态
+                            if (healRatio >= 1.0) {
+                                delete self.status;
+                            }
+                        }
                     }));
                 }
+                // drain、recoil、fixed_damage、false_swipe 已在上方处理
             }
         }
 
-         await new Promise(r => setTimeout(r, 600));
+        await new Promise(r => setTimeout(r, 600));
     };
 
     if (playerGoesFirst) {
@@ -615,6 +774,7 @@ export const useGameStore = create<GameState>()(
             if (state.battle.enemyParty.length > 0) {
                 const nextEnemy = state.battle.enemyParty.shift();
                 if (nextEnemy) {
+                    nextEnemy.statStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
                     state.battle.enemy = nextEnemy;
                     state.battle.turnCount = 1;
                     state.battle.phase = 'INPUT';
@@ -654,6 +814,8 @@ export const useGameStore = create<GameState>()(
             state.battle.legendarySpeciesId = undefined;
             state.playerMoney += 120;
             state.view = 'ROAM';
+            // 战斗结束，清除所有宝可梦的能力等级
+            state.playerParty.forEach(p => { p.statStages = undefined; });
         }));
     } else if (currentPlayer.currentHp <= 0) {
         addLog(`${currentPlayer.speciesName} 倒下了！`);
@@ -671,7 +833,7 @@ export const useGameStore = create<GameState>()(
                  state.battle.active = false;
                  state.battle.enemy = null;
                  state.view = 'ROAM';
-                 state.playerParty.forEach(p => p.currentHp = p.maxHp); 
+                 state.playerParty.forEach(p => { p.currentHp = p.maxHp; p.statStages = undefined; });
                  state.playerMoney = Math.floor(state.playerMoney / 2);
             }));
         }
@@ -976,9 +1138,15 @@ export const useGameStore = create<GameState>()(
           return;
       }
 
+      // 清除旧宝可梦的能力等级
+      state.playerParty[currentIndex].statStages = undefined;
+
       const temp = state.playerParty[currentIndex];
       state.playerParty[currentIndex] = targetPokemon;
       state.playerParty[targetIndex] = temp;
+
+      // 给新出场的宝可梦初始化能力等级
+      state.playerParty[currentIndex].statStages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
 
       state.logs.push(createLogEntry(`去吧！${targetPokemon.speciesName}！`, 'combat'));
 
@@ -1106,6 +1274,7 @@ export const useGameStore = create<GameState>()(
       state.battle.isLegendary = false;
       state.battle.legendarySpeciesId = undefined;
       state.view = 'ROAM';
+      state.playerParty.forEach(p => { p.statStages = undefined; });
   })),
 
   loadGame: async (userId: string) => {
