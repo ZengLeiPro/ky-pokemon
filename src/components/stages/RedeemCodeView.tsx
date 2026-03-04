@@ -37,9 +37,14 @@ export default function RedeemCodeView() {
   });
 
   const handleRedeem = () => {
-    const trimmed = code.trim().toUpperCase();
+    const trimmed = code.trim();
     if (!trimmed) {
       setMessage({ text: '请输入礼包码', type: 'error' });
+      return;
+    }
+
+    if (trimmed !== trimmed.toUpperCase()) {
+      setMessage({ text: '礼包码必须使用大写字母', type: 'error' });
       return;
     }
 
@@ -138,7 +143,7 @@ export default function RedeemCodeView() {
         </div>
 
         <p className="text-slate-500 text-xs text-center">
-          礼包码不区分大小写，每个码只能使用一次
+          礼包码必须使用大写字母，每个码只能使用一次
         </p>
       </div>
     </div>
