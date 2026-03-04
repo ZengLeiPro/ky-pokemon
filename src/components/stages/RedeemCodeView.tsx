@@ -1,22 +1,23 @@
 import { useState } from 'react';
 import { useGameStore } from '@/stores/gameStore';
 import { Gift } from 'lucide-react';
+import { createPokemon } from '@/lib/mechanics';
+import { produce } from 'immer';
 
 // 礼包码奖励配置 —— 在这里添加新的礼包码
 const REDEEM_CODES: Record<string, {
   description: string;
   rewards: {
     items?: Array<{ id: string; name: string; description: string; category: string; quantity: number }>;
+    pokemon?: Array<{ speciesKey: string; level: number }>;
     money?: number;
   };
 }> = {
   'LKY202650': {
     description: '楷言特别礼包',
     rewards: {
-      items: [
-        { id: 'masterball', name: '大师球', description: '必定能捉到野生宝可梦的终极球。', category: 'POKEBALLS', quantity: 1 },
-        { id: 'ultraball', name: '高级球', description: '性能比较好的精灵球。', category: 'POKEBALLS', quantity: 10 },
-        { id: 'max-potion', name: '全满药', description: '能回复宝可梦全部HP。', category: 'MEDICINE', quantity: 5 },
+      pokemon: [
+        { speciesKey: 'lugia', level: 50 },
       ],
     },
   },
@@ -53,13 +54,28 @@ export default function RedeemCodeView() {
       return;
     }
 
-    // 发放奖励
+    // 发放物品奖励
     if (reward.rewards.items) {
       for (const item of reward.rewards.items) {
         addItem(item.id, item.quantity);
       }
     }
-    // money 奖励暂不支持，后续可以加
+
+    // 发放宝可梦奖励
+    if (reward.rewards.pokemon) {
+      for (const p of reward.rewards.pokemon) {
+        const newPokemon = createPokemon(p.speciesKey, p.level, []);
+        useGameStore.setState(produce((state: any) => {
+          if (state.playerParty.length < 6) {
+            state.playerParty.push(newPokemon);
+          } else {
+            state.playerStorage.push(newPokemon);
+          }
+          state.pokedex[newPokemon.speciesData.pokedexId] = 'CAUGHT';
+        }));
+        addLog(`获得了 ${newPokemon.speciesName} (Lv.${p.level})！`, 'urgent');
+      }
+    }
 
     // 记录已兑换
     const newRedeemed = new Set(redeemedCodes);
