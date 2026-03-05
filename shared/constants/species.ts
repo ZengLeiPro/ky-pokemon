@@ -8,7 +8,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 45, atk: 49, def: 49, spa: 65, spd: 65, spe: 45 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'leechSeed', level: 7 }, { moveId: 'vineWhip', level: 13 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'leechSeed', level: 7 }, { moveId: 'vineWhip', level: 13 }, { moveId: 'poisonPowder', level: 15 }, { moveId: 'sleepPowder', level: 17 }, { moveId: 'absorb', level: 19 }, { moveId: 'razorLeaf', level: 22 }, { moveId: 'growth', level: 25 }, { moveId: 'sweetScent', level: 27 }],
     evolutions: [{ targetSpeciesId: 'ivysaur', level: 16 }],
   },
   ivysaur: {
@@ -18,7 +18,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 62, def: 63, spa: 80, spd: 80, spe: 60 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'leechSeed', level: 1 }, { moveId: 'vineWhip', level: 13 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'leechSeed', level: 1 }, { moveId: 'vineWhip', level: 13 }, { moveId: 'poisonPowder', level: 15 }, { moveId: 'sleepPowder', level: 17 }, { moveId: 'absorb', level: 19 }, { moveId: 'razorLeaf', level: 22 }, { moveId: 'growth', level: 25 }, { moveId: 'megaDrain', level: 30 }, { moveId: 'sweetScent', level: 33 }],
     evolutions: [{ targetSpeciesId: 'venusaur', level: 32 }],
   },
   venusaur: {
@@ -28,7 +28,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png',
-    learnset: [{ moveId: 'vineWhip', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'leechSeed', level: 1 }],
+    learnset: [{ moveId: 'vineWhip', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'leechSeed', level: 1 }, { moveId: 'poisonPowder', level: 1 }, { moveId: 'sleepPowder', level: 1 }, { moveId: 'razorLeaf', level: 22 }, { moveId: 'growth', level: 25 }, { moveId: 'megaDrain', level: 30 }, { moveId: 'bodySlam', level: 36 }, { moveId: 'sludgeBomb', level: 40 }, { moveId: 'solarBeam', level: 46 }],
   },
   charmander: {
     pokedexId: 4,
@@ -37,7 +37,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 39, atk: 52, def: 43, spa: 60, spd: 50, spe: 65 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'ember', level: 9 }, { moveId: 'metalClaw', level: 13 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'ember', level: 9 }, { moveId: 'metalClaw', level: 13 }, { moveId: 'smokescreen', level: 15 }, { moveId: 'fireSpin', level: 19 }, { moveId: 'slash', level: 22 }, { moveId: 'scaryFace', level: 25 }, { moveId: 'flameWheel', level: 28 }],
     evolutions: [{ targetSpeciesId: 'charmeleon', level: 16 }],
   },
   charmeleon: {
@@ -47,7 +47,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 58, atk: 64, def: 58, spa: 80, spd: 65, spe: 80 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'metalClaw', level: 13 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'metalClaw', level: 13 }, { moveId: 'smokescreen', level: 15 }, { moveId: 'fireSpin', level: 19 }, { moveId: 'slash', level: 24 }, { moveId: 'scaryFace', level: 28 }, { moveId: 'flameWheel', level: 32 }, { moveId: 'flamethrower', level: 36 }],
     evolutions: [{ targetSpeciesId: 'charizard', level: 36 }],
   },
   charizard: {
@@ -57,7 +57,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'ember', level: 1 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'smokescreen', level: 1 }, { moveId: 'metalClaw', level: 13 }, { moveId: 'fireSpin', level: 19 }, { moveId: 'slash', level: 24 }, { moveId: 'wingAttack', level: 30 }, { moveId: 'dragonBreath', level: 36 }, { moveId: 'flamethrower', level: 42 }, { moveId: 'fireBlast', level: 50 }],
   },
   squirtle: {
     pokedexId: 7,
@@ -66,7 +66,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 44, atk: 48, def: 65, spa: 50, spd: 64, spe: 43 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'bubble', level: 8 }, { moveId: 'waterGun', level: 15 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'bubble', level: 8 }, { moveId: 'waterGun', level: 15 }, { moveId: 'withdraw', level: 18 }, { moveId: 'rapidSpin', level: 20 }, { moveId: 'bite', level: 23 }, { moveId: 'waterSport', level: 25 }, { moveId: 'headbutt', level: 28 }],
     evolutions: [{ targetSpeciesId: 'wartortle', level: 16 }],
   },
   wartortle: {
@@ -76,7 +76,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 59, atk: 63, def: 80, spa: 65, spd: 80, spe: 58 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/8.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'waterGun', level: 15 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'waterGun', level: 15 }, { moveId: 'withdraw', level: 18 }, { moveId: 'rapidSpin', level: 20 }, { moveId: 'bite', level: 23 }, { moveId: 'headbutt', level: 28 }, { moveId: 'icyWind', level: 32 }, { moveId: 'surf', level: 36 }],
     evolutions: [{ targetSpeciesId: 'blastoise', level: 36 }],
   },
   blastoise: {
@@ -86,7 +86,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 79, atk: 83, def: 100, spa: 85, spd: 105, spe: 78 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'bubble', level: 1 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'withdraw', level: 1 }, { moveId: 'bite', level: 23 }, { moveId: 'rapidSpin', level: 28 }, { moveId: 'bodySlam', level: 33 }, { moveId: 'surf', level: 38 }, { moveId: 'iceBeam', level: 42 }, { moveId: 'hydroPump', level: 48 }],
   },
   caterpie: {
     pokedexId: 10,
@@ -95,7 +95,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 45, atk: 30, def: 35, spa: 20, spd: 20, spe: 45 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'stringShot', level: 1 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'stringShot', level: 1 }, { moveId: 'furyCutter', level: 5 }],
     evolutions: [{ targetSpeciesId: 'metapod', level: 7 }],
   },
   metapod: {
@@ -105,7 +105,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 50, atk: 20, def: 55, spa: 25, spd: 25, spe: 30 },
     catchRate: 120,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/11.png',
-    learnset: [{ moveId: 'harden', level: 1 }],
+    learnset: [{ moveId: 'harden', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'stringShot', level: 1 }],
     evolutions: [{ targetSpeciesId: 'butterfree', level: 10 }],
   },
   butterfree: {
@@ -115,7 +115,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 45, def: 50, spa: 90, spd: 80, spe: 70 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/12.png',
-    learnset: [{ moveId: 'confusion', level: 1 }, { moveId: 'poisonPowder', level: 15 }, { moveId: 'stunSpore', level: 16 }, { moveId: 'sleepPowder', level: 17 }],
+    learnset: [{ moveId: 'confusion', level: 1 }, { moveId: 'poisonPowder', level: 15 }, { moveId: 'stunSpore', level: 16 }, { moveId: 'sleepPowder', level: 17 }, { moveId: 'gust', level: 20 }, { moveId: 'supersonic', level: 24 }, { moveId: 'signalBeam', level: 30 }, { moveId: 'psychic', level: 36 }, { moveId: 'megaDrain', level: 40 }, { moveId: 'swift', level: 42 }],
   },
   weedle: {
     pokedexId: 13,
@@ -124,7 +124,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 35, def: 30, spa: 20, spd: 20, spe: 50 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/13.png',
-    learnset: [{ moveId: 'poisonSting', level: 1 }, { moveId: 'stringShot', level: 1 }],
+    learnset: [{ moveId: 'poisonSting', level: 1 }, { moveId: 'stringShot', level: 1 }, { moveId: 'furyCutter', level: 5 }],
     evolutions: [{ targetSpeciesId: 'kakuna', level: 7 }],
   },
   kakuna: {
@@ -134,7 +134,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 45, atk: 25, def: 50, spa: 25, spd: 25, spe: 35 },
     catchRate: 120,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/14.png',
-    learnset: [{ moveId: 'harden', level: 1 }],
+    learnset: [{ moveId: 'harden', level: 1 }, { moveId: 'poisonSting', level: 1 }, { moveId: 'stringShot', level: 1 }],
     evolutions: [{ targetSpeciesId: 'beedrill', level: 10 }],
   },
   beedrill: {
@@ -144,7 +144,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 90, def: 40, spa: 45, spd: 80, spe: 75 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/15.png',
-    learnset: [{ moveId: 'furyAttack', level: 1 }, { moveId: 'focusEnergy', level: 16 }, { moveId: 'twineedle', level: 20 }, { moveId: 'rage', level: 25 }],
+    learnset: [{ moveId: 'furyAttack', level: 1 }, { moveId: 'focusEnergy', level: 16 }, { moveId: 'twineedle', level: 20 }, { moveId: 'rage', level: 25 }, { moveId: 'pursuit', level: 28 }, { moveId: 'poisonSting', level: 1 }, { moveId: 'furyCutter', level: 30 }, { moveId: 'agility', level: 33 }, { moveId: 'sludgeBomb', level: 38 }, { moveId: 'signalBeam', level: 42 }],
   },
   pidgey: {
     pokedexId: 16,
@@ -153,7 +153,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 45, def: 40, spa: 35, spd: 35, spe: 56 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/16.png',
-    learnset: [{ moveId: 'gust', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'sandAttack', level: 5 }, { moveId: 'quickAttack', level: 12 }],
+    learnset: [{ moveId: 'gust', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'sandAttack', level: 5 }, { moveId: 'quickAttack', level: 12 }, { moveId: 'twister', level: 17 }, { moveId: 'wingAttack', level: 22 }, { moveId: 'agility', level: 27 }, { moveId: 'swift', level: 30 }],
     evolutions: [{ targetSpeciesId: 'pidgeotto', level: 18 }],
   },
   pidgeotto: {
@@ -163,7 +163,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 63, atk: 60, def: 55, spa: 50, spd: 50, spe: 71 },
     catchRate: 120,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/17.png',
-    learnset: [{ moveId: 'gust', level: 1 }, { moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'quickAttack', level: 12 }],
+    learnset: [{ moveId: 'gust', level: 1 }, { moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'quickAttack', level: 12 }, { moveId: 'twister', level: 17 }, { moveId: 'wingAttack', level: 22 }, { moveId: 'agility', level: 29 }, { moveId: 'swift', level: 33 }, { moveId: 'drillPeck', level: 38 }],
     evolutions: [{ targetSpeciesId: 'pidgeot', level: 36 }],
   },
   pidgeot: {
@@ -173,7 +173,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 83, atk: 80, def: 75, spa: 70, spd: 70, spe: 101 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/18.png',
-    learnset: [{ moveId: 'gust', level: 1 }, { moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'quickAttack', level: 1 }],
+    learnset: [{ moveId: 'gust', level: 1 }, { moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'twister', level: 17 }, { moveId: 'wingAttack', level: 22 }, { moveId: 'agility', level: 29 }, { moveId: 'swift', level: 33 }, { moveId: 'drillPeck', level: 40 }, { moveId: 'bodySlam', level: 44 }],
   },
   rattata: {
     pokedexId: 19,
@@ -182,7 +182,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 30, atk: 56, def: 35, spa: 25, spd: 35, spe: 72 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/19.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'quickAttack', level: 7 }, { moveId: 'hyperFang', level: 14 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'quickAttack', level: 7 }, { moveId: 'hyperFang', level: 14 }, { moveId: 'bite', level: 16 }, { moveId: 'focusEnergy', level: 18 }, { moveId: 'pursuit', level: 20 }, { moveId: 'bodySlam', level: 25 }],
     evolutions: [{ targetSpeciesId: 'raticate', level: 20 }],
   },
   raticate: {
@@ -192,7 +192,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 55, atk: 81, def: 60, spa: 50, spd: 70, spe: 97 },
     catchRate: 127,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/20.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'hyperFang', level: 14 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'hyperFang', level: 14 }, { moveId: 'bite', level: 16 }, { moveId: 'focusEnergy', level: 18 }, { moveId: 'pursuit', level: 20 }, { moveId: 'scaryFace', level: 27 }, { moveId: 'crunch', level: 33 }, { moveId: 'bodySlam', level: 38 }],
   },
   spearow: {
     pokedexId: 21,
@@ -201,7 +201,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 60, def: 30, spa: 31, spd: 31, spe: 70 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/21.png',
-    learnset: [{ moveId: 'growl', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'leer', level: 9 }, { moveId: 'furyAttack', level: 15 }],
+    learnset: [{ moveId: 'growl', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'leer', level: 9 }, { moveId: 'furyAttack', level: 15 }, { moveId: 'pursuit', level: 18 }, { moveId: 'wingAttack', level: 22 }, { moveId: 'agility', level: 25 }, { moveId: 'focusEnergy', level: 28 }],
     evolutions: [{ targetSpeciesId: 'fearow', level: 20 }],
   },
   fearow: {
@@ -211,7 +211,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 90, def: 65, spa: 61, spd: 61, spe: 100 },
     catchRate: 90,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/22.png',
-    learnset: [{ moveId: 'leer', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'furyAttack', level: 15 }],
+    learnset: [{ moveId: 'leer', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'furyAttack', level: 15 }, { moveId: 'pursuit', level: 18 }, { moveId: 'wingAttack', level: 22 }, { moveId: 'agility', level: 29 }, { moveId: 'focusEnergy', level: 33 }, { moveId: 'drillPeck', level: 37 }, { moveId: 'takeDown', level: 42 }],
   },
   ekans: {
     pokedexId: 23,
@@ -220,7 +220,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 35, atk: 60, def: 44, spa: 40, spd: 54, spe: 55 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/23.png',
-    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'poisonSting', level: 10 }, { moveId: 'bite', level: 17 }],
+    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'poisonSting', level: 10 }, { moveId: 'bite', level: 17 }, { moveId: 'acid', level: 19 }, { moveId: 'screech', level: 22 }, { moveId: 'smog', level: 25 }, { moveId: 'scaryFace', level: 28 }],
     evolutions: [{ targetSpeciesId: 'arbok', level: 22 }],
   },
   arbok: {
@@ -230,7 +230,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 95, def: 69, spa: 65, spd: 79, spe: 80 },
     catchRate: 90,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/24.png',
-    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'poisonSting', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'bite', level: 17 }],
+    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'poisonSting', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'bite', level: 17 }, { moveId: 'acid', level: 19 }, { moveId: 'screech', level: 22 }, { moveId: 'smog', level: 25 }, { moveId: 'scaryFace', level: 28 }, { moveId: 'crunch', level: 33 }, { moveId: 'sludgeBomb', level: 40 }],
   },
   pikachu: {
     pokedexId: 25,
@@ -239,7 +239,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png',
-    learnset: [{ moveId: 'growl', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'tailWhip', level: 6 }, { moveId: 'thunderWave', level: 9 }],
+    learnset: [{ moveId: 'growl', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'tailWhip', level: 6 }, { moveId: 'thunderWave', level: 9 }, { moveId: 'quickAttack', level: 13 }, { moveId: 'charge', level: 17 }, { moveId: 'spark', level: 20 }, { moveId: 'agility', level: 24 }, { moveId: 'bodySlam', level: 28 }, { moveId: 'thunderbolt', level: 33 }],
     evolutions: [{ targetSpeciesId: 'raichu', item: 'thunder-stone' }],
   },
   raichu: {
@@ -249,7 +249,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 90, def: 55, spa: 90, spd: 80, spe: 110 },
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/26.png',
-    learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'thunderbolt', level: 1 }],
+    learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'thunderbolt', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'charge', level: 1 }, { moveId: 'thunderWave', level: 1 }, { moveId: 'spark', level: 1 }, { moveId: 'agility', level: 1 }, { moveId: 'bodySlam', level: 1 }, { moveId: 'ironTail', level: 1 }],
   },
   sandshrew: {
     pokedexId: 27,
@@ -258,7 +258,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 50, atk: 75, def: 85, spa: 20, spd: 30, spe: 40 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/27.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'defenseCurl', level: 6 }, { moveId: 'sandAttack', level: 10 }, { moveId: 'slash', level: 17 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'defenseCurl', level: 6 }, { moveId: 'sandAttack', level: 10 }, { moveId: 'slash', level: 17 }, { moveId: 'mudSlap', level: 19 }, { moveId: 'rollout', level: 22 }, { moveId: 'rapidSpin', level: 25 }, { moveId: 'dig', level: 28 }, { moveId: 'sandstorm', level: 32 }],
     evolutions: [{ targetSpeciesId: 'sandslash', level: 22 }],
   },
   sandslash: {
@@ -268,7 +268,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 75, atk: 100, def: 110, spa: 45, spd: 55, spe: 65 },
     catchRate: 90,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/28.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'sandAttack', level: 1 }, { moveId: 'defenseCurl', level: 1 }, { moveId: 'slash', level: 17 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'sandAttack', level: 1 }, { moveId: 'defenseCurl', level: 1 }, { moveId: 'slash', level: 17 }, { moveId: 'mudSlap', level: 19 }, { moveId: 'rollout', level: 22 }, { moveId: 'rapidSpin', level: 25 }, { moveId: 'dig', level: 30 }, { moveId: 'sandstorm', level: 35 }, { moveId: 'earthquake', level: 42 }],
   },
   'nidoran-f': {
     pokedexId: 29,
@@ -277,7 +277,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 55, atk: 47, def: 52, spa: 40, spd: 40, spe: 41 },
     catchRate: 235,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/29.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'scratch', level: 8 }, { moveId: 'poisonSting', level: 14 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'scratch', level: 8 }, { moveId: 'poisonSting', level: 14 }, { moveId: 'tailWhip', level: 16 }, { moveId: 'bite', level: 19 }, { moveId: 'doubleKick', level: 22 }, { moveId: 'acid', level: 25 }, { moveId: 'sludge', level: 30 }],
     evolutions: [{ targetSpeciesId: 'nidorina', level: 16 }],
   },
   nidorina: {
@@ -287,7 +287,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 70, atk: 62, def: 67, spa: 55, spd: 55, spe: 56 },
     catchRate: 120,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/30.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'poisonSting', level: 14 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'poisonSting', level: 14 }, { moveId: 'tailWhip', level: 16 }, { moveId: 'bite', level: 19 }, { moveId: 'doubleKick', level: 22 }, { moveId: 'acid', level: 25 }, { moveId: 'sludge', level: 30 }, { moveId: 'bodySlam', level: 35 }],
     evolutions: [{ targetSpeciesId: 'nidoqueen', item: 'moon-stone' }],
   },
   nidoqueen: {
@@ -297,7 +297,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 90, atk: 92, def: 87, spa: 75, spd: 85, spe: 76 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/31.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'bodySlam', level: 1 }, { moveId: 'tailWhip', level: 1 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'bodySlam', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'poisonSting', level: 1 }, { moveId: 'bite', level: 1 }, { moveId: 'doubleKick', level: 22 }, { moveId: 'sludgeBomb', level: 35 }, { moveId: 'earthquake', level: 42 }, { moveId: 'crunch', level: 46 }],
   },
   'nidoran-m': {
     pokedexId: 32,
@@ -306,7 +306,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 46, atk: 57, def: 40, spa: 40, spd: 40, spe: 50 },
     catchRate: 235,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/32.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'hornAttack', level: 8 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'hornAttack', level: 8 }, { moveId: 'poisonSting', level: 12 }, { moveId: 'focusEnergy', level: 16 }, { moveId: 'doubleKick', level: 19 }, { moveId: 'acid', level: 22 }, { moveId: 'sludge', level: 28 }],
     evolutions: [{ targetSpeciesId: 'nidorino', level: 16 }],
   },
   nidorino: {
@@ -316,7 +316,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 61, atk: 72, def: 57, spa: 55, spd: 55, spe: 65 },
     catchRate: 120,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/33.png',
-    learnset: [{ moveId: 'hornAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'peck', level: 1 }],
+    learnset: [{ moveId: 'hornAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'poisonSting', level: 12 }, { moveId: 'focusEnergy', level: 16 }, { moveId: 'doubleKick', level: 19 }, { moveId: 'acid', level: 22 }, { moveId: 'sludge', level: 28 }, { moveId: 'bodySlam', level: 34 }],
     evolutions: [{ targetSpeciesId: 'nidoking', item: 'moon-stone' }],
   },
   nidoking: {
@@ -326,7 +326,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 81, atk: 102, def: 77, spa: 85, spd: 75, spe: 85 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/34.png',
-    learnset: [{ moveId: 'hornAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'thrash', level: 1 }, { moveId: 'poisonSting', level: 1 }],
+    learnset: [{ moveId: 'hornAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'thrash', level: 1 }, { moveId: 'poisonSting', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'doubleKick', level: 19 }, { moveId: 'sludge', level: 28 }, { moveId: 'bodySlam', level: 34 }, { moveId: 'sludgeBomb', level: 38 }, { moveId: 'earthquake', level: 44 }, { moveId: 'megahorn', level: 50 }],
   },
   clefairy: {
     pokedexId: 35,
@@ -335,7 +335,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 70, atk: 45, def: 48, spa: 60, spd: 65, spe: 35 },
     catchRate: 150,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/35.png',
-    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'encore', level: 5 }, { moveId: 'sing', level: 13 }],
+    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'encore', level: 5 }, { moveId: 'sing', level: 13 }, { moveId: 'doubleSlap', level: 17 }, { moveId: 'defenseCurl', level: 20 }, { moveId: 'metronome', level: 24 }, { moveId: 'dazzlingGleam', level: 28 }, { moveId: 'bodySlam', level: 33 }, { moveId: 'moonblast', level: 38 }],
     evolutions: [{ targetSpeciesId: 'clefable', item: 'moon-stone' }],
   },
   clefable: {
@@ -345,7 +345,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 95, atk: 70, def: 73, spa: 95, spd: 90, spe: 60 },
     catchRate: 25,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/36.png',
-    learnset: [{ moveId: 'doubleSlap', level: 1 }, { moveId: 'sing', level: 1 }, { moveId: 'minimize', level: 1 }, { moveId: 'metronome', level: 1 }],
+    learnset: [{ moveId: 'doubleSlap', level: 1 }, { moveId: 'sing', level: 1 }, { moveId: 'minimize', level: 1 }, { moveId: 'metronome', level: 1 }, { moveId: 'pound', level: 1 }, { moveId: 'encore', level: 1 }, { moveId: 'dazzlingGleam', level: 1 }, { moveId: 'bodySlam', level: 33 }, { moveId: 'moonblast', level: 40 }, { moveId: 'playRough', level: 44 }],
   },
   vulpix: {
     pokedexId: 37,
@@ -354,7 +354,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 38, atk: 41, def: 40, spa: 50, spd: 65, spe: 65 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/37.png',
-    learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'quickAttack', level: 16 }, { moveId: 'willOWisp', level: 17 }],
+    learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'quickAttack', level: 16 }, { moveId: 'willOWisp', level: 17 }, { moveId: 'confuseRay', level: 20 }, { moveId: 'fireSpin', level: 23 }, { moveId: 'smokescreen', level: 26 }, { moveId: 'flameWheel', level: 30 }, { moveId: 'flamethrower', level: 36 }],
     evolutions: [{ targetSpeciesId: 'ninetales', item: 'fire-stone' }],
   },
   ninetales: {
@@ -364,7 +364,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 73, atk: 76, def: 75, spa: 81, spd: 100, spe: 100 },
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/38.png',
-    learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'roar', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'quickAttack', level: 1 }],
+    learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'roar', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'willOWisp', level: 1 }, { moveId: 'confuseRay', level: 1 }, { moveId: 'fireSpin', level: 1 }, { moveId: 'flameWheel', level: 30 }, { moveId: 'flamethrower', level: 38 }, { moveId: 'fireBlast', level: 46 }],
   },
   jigglypuff: {
     pokedexId: 39,
@@ -373,7 +373,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 115, atk: 45, def: 20, spa: 45, spd: 25, spe: 20 },
     catchRate: 170,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/39.png',
-    learnset: [{ moveId: 'sing', level: 1 }, { moveId: 'pound', level: 9 }, { moveId: 'disable', level: 14 }, { moveId: 'defenseCurl', level: 19 }],
+    learnset: [{ moveId: 'sing', level: 1 }, { moveId: 'pound', level: 9 }, { moveId: 'disable', level: 14 }, { moveId: 'defenseCurl', level: 19 }, { moveId: 'doubleSlap', level: 22 }, { moveId: 'rollout', level: 25 }, { moveId: 'bodySlam', level: 28 }, { moveId: 'dazzlingGleam', level: 33 }, { moveId: 'playRough', level: 38 }, { moveId: 'rest', level: 40 }],
     evolutions: [{ targetSpeciesId: 'wigglytuff', item: 'moon-stone' }],
   },
   wigglytuff: {
@@ -383,7 +383,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 140, atk: 70, def: 45, spa: 85, spd: 50, spe: 45 },
     catchRate: 50,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/40.png',
-    learnset: [{ moveId: 'doubleSlap', level: 1 }, { moveId: 'sing', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'defenseCurl', level: 1 }],
+    learnset: [{ moveId: 'doubleSlap', level: 1 }, { moveId: 'sing', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'defenseCurl', level: 1 }, { moveId: 'pound', level: 1 }, { moveId: 'rollout', level: 25 }, { moveId: 'bodySlam', level: 30 }, { moveId: 'dazzlingGleam', level: 35 }, { moveId: 'playRough', level: 40 }, { moveId: 'moonblast', level: 46 }],
   },
   zubat: {
     pokedexId: 41,
@@ -392,7 +392,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 45, def: 35, spa: 30, spd: 40, spe: 55 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/41.png',
-    learnset: [{ moveId: 'leechLife', level: 1 }, { moveId: 'astonish', level: 6 }, { moveId: 'supersonic', level: 10 }, { moveId: 'bite', level: 15 }],
+    learnset: [{ moveId: 'leechLife', level: 1 }, { moveId: 'astonish', level: 6 }, { moveId: 'supersonic', level: 10 }, { moveId: 'bite', level: 15 }, { moveId: 'wingAttack', level: 18 }, { moveId: 'confuseRay', level: 21 }, { moveId: 'swift', level: 24 }, { moveId: 'screech', level: 28 }],
     evolutions: [{ targetSpeciesId: 'golbat', level: 22 }],
   },
   golbat: {
@@ -402,7 +402,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 75, atk: 80, def: 70, spa: 65, spd: 75, spe: 90 },
     catchRate: 90,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/42.png',
-    learnset: [{ moveId: 'bite', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'leechLife', level: 1 }, { moveId: 'astonish', level: 1 }],
+    learnset: [{ moveId: 'bite', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'leechLife', level: 1 }, { moveId: 'astonish', level: 1 }, { moveId: 'supersonic', level: 1 }, { moveId: 'wingAttack', level: 22 }, { moveId: 'confuseRay', level: 28 }, { moveId: 'swift', level: 33 }, { moveId: 'sludgeBomb', level: 38 }, { moveId: 'crunch', level: 44 }],
   },
   oddish: {
     pokedexId: 43,
@@ -411,7 +411,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 45, atk: 50, def: 55, spa: 75, spd: 65, spe: 30 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/43.png',
-    learnset: [{ moveId: 'absorb', level: 1 }, { moveId: 'sweetScent', level: 7 }, { moveId: 'poisonPowder', level: 15 }, { moveId: 'stunSpore', level: 17 }, { moveId: 'sunnyDay', level: 22 }],
+    learnset: [{ moveId: 'absorb', level: 1 }, { moveId: 'sweetScent', level: 7 }, { moveId: 'poisonPowder', level: 15 }, { moveId: 'stunSpore', level: 17 }, { moveId: 'sunnyDay', level: 22 }, { moveId: 'acid', level: 24 }, { moveId: 'megaDrain', level: 28 }, { moveId: 'sleepPowder', level: 32 }, { moveId: 'razorLeaf', level: 36 }],
     evolutions: [{ targetSpeciesId: 'gloom', level: 21 }],
   },
   gloom: {
@@ -421,7 +421,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 65, def: 70, spa: 85, spd: 75, spe: 40 },
     catchRate: 120,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/44.png',
-    learnset: [{ moveId: 'absorb', level: 1 }, { moveId: 'poisonPowder', level: 1 }, { moveId: 'stunSpore', level: 1 }, { moveId: 'sweetScent', level: 1 }],
+    learnset: [{ moveId: 'absorb', level: 1 }, { moveId: 'poisonPowder', level: 1 }, { moveId: 'stunSpore', level: 1 }, { moveId: 'sweetScent', level: 1 }, { moveId: 'acid', level: 24 }, { moveId: 'megaDrain', level: 28 }, { moveId: 'sleepPowder', level: 32 }, { moveId: 'razorLeaf', level: 36 }, { moveId: 'sludge', level: 40 }],
     evolutions: [{ targetSpeciesId: 'vileplume', item: 'leaf-stone' }],
   },
   vileplume: {
@@ -431,7 +431,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 75, atk: 80, def: 85, spa: 110, spd: 90, spe: 50 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/45.png',
-    learnset: [{ moveId: 'acid', level: 1 }, { moveId: 'absorb', level: 1 }, { moveId: 'megaDrain', level: 1 }, { moveId: 'stunSpore', level: 1 }],
+    learnset: [{ moveId: 'acid', level: 1 }, { moveId: 'absorb', level: 1 }, { moveId: 'megaDrain', level: 1 }, { moveId: 'stunSpore', level: 1 }, { moveId: 'poisonPowder', level: 1 }, { moveId: 'sleepPowder', level: 1 }, { moveId: 'razorLeaf', level: 1 }, { moveId: 'sludgeBomb', level: 38 }, { moveId: 'solarBeam', level: 44 }, { moveId: 'petalDance', level: 50 }],
   },
   paras: {
     pokedexId: 46,
@@ -440,7 +440,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 35, atk: 70, def: 55, spa: 45, spd: 55, spe: 25 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/46.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'poisonPowder', level: 13 }, { moveId: 'stunSpore', level: 13 }, { moveId: 'leechLife', level: 20 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'poisonPowder', level: 13 }, { moveId: 'stunSpore', level: 13 }, { moveId: 'leechLife', level: 20 }, { moveId: 'absorb', level: 15 }, { moveId: 'furyCutter', level: 22 }, { moveId: 'slash', level: 25 }, { moveId: 'growth', level: 28 }, { moveId: 'megaDrain', level: 32 }],
     evolutions: [{ targetSpeciesId: 'parasect', level: 24 }],
   },
   parasect: {
@@ -450,7 +450,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 95, def: 80, spa: 60, spd: 80, spe: 30 },
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/47.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'poisonPowder', level: 1 }, { moveId: 'stunSpore', level: 1 }, { moveId: 'leechLife', level: 1 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'poisonPowder', level: 1 }, { moveId: 'stunSpore', level: 1 }, { moveId: 'leechLife', level: 1 }, { moveId: 'absorb', level: 1 }, { moveId: 'furyCutter', level: 22 }, { moveId: 'slash', level: 25 }, { moveId: 'growth', level: 28 }, { moveId: 'megaDrain', level: 32 }, { moveId: 'signalBeam', level: 38 }, { moveId: 'solarBeam', level: 44 }],
   },
   venonat: {
     pokedexId: 48,
@@ -459,7 +459,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 55, def: 50, spa: 40, spd: 55, spe: 45 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/48.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'foresight', level: 1 }, { moveId: 'supersonic', level: 11 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'foresight', level: 1 }, { moveId: 'supersonic', level: 11 }, { moveId: 'confusion', level: 15 }, { moveId: 'poisonPowder', level: 19 }, { moveId: 'leechLife', level: 23 }, { moveId: 'stunSpore', level: 27 }, { moveId: 'signalBeam', level: 33 }],
     evolutions: [{ targetSpeciesId: 'venomoth', level: 31 }],
   },
   venomoth: {
@@ -469,7 +469,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 70, atk: 65, def: 60, spa: 90, spd: 75, spe: 90 },
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/49.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'supersonic', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'poisonPowder', level: 1 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'supersonic', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'poisonPowder', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'leechLife', level: 23 }, { moveId: 'stunSpore', level: 27 }, { moveId: 'signalBeam', level: 33 }, { moveId: 'psychic', level: 38 }, { moveId: 'sludgeBomb', level: 44 }],
   },
   diglett: {
     pokedexId: 50,
@@ -478,7 +478,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 10, atk: 55, def: 25, spa: 35, spd: 45, spe: 95 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/50.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'magnitude', level: 9 }, { moveId: 'growl', level: 15 }, { moveId: 'dig', level: 19 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'magnitude', level: 9 }, { moveId: 'growl', level: 15 }, { moveId: 'dig', level: 19 }, { moveId: 'sandAttack', level: 5 }, { moveId: 'mudSlap', level: 12 }, { moveId: 'slash', level: 22 }, { moveId: 'sandstorm', level: 25 }, { moveId: 'earthquake', level: 33 }],
     evolutions: [{ targetSpeciesId: 'dugtrio', level: 26 }],
   },
   dugtrio: {
@@ -488,7 +488,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 35, atk: 100, def: 50, spa: 50, spd: 70, spe: 120 },
     catchRate: 50,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/51.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'dig', level: 1 }, { moveId: 'triAttack', level: 1 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'dig', level: 1 }, { moveId: 'triAttack', level: 1 }, { moveId: 'sandAttack', level: 1 }, { moveId: 'mudSlap', level: 1 }, { moveId: 'magnitude', level: 1 }, { moveId: 'slash', level: 26 }, { moveId: 'sandstorm', level: 32 }, { moveId: 'earthquake', level: 40 }],
   },
   meowth: {
     pokedexId: 52,
@@ -497,7 +497,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 45, def: 35, spa: 40, spd: 40, spe: 90 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/52.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'bite', level: 12 }, { moveId: 'payDay', level: 17 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'bite', level: 12 }, { moveId: 'payDay', level: 17 }, { moveId: 'fakeOut', level: 9 }, { moveId: 'screech', level: 20 }, { moveId: 'furyAttack', level: 23 }, { moveId: 'slash', level: 27 }, { moveId: 'feintAttack', level: 30 }],
     evolutions: [{ targetSpeciesId: 'persian', level: 28 }],
   },
   persian: {
@@ -507,7 +507,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 70, def: 60, spa: 65, spd: 65, spe: 115 },
     catchRate: 90,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/53.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'bite', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'screech', level: 1 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'bite', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'fakeOut', level: 1 }, { moveId: 'payDay', level: 1 }, { moveId: 'feintAttack', level: 28 }, { moveId: 'slash', level: 33 }, { moveId: 'swift', level: 38 }, { moveId: 'bodySlam', level: 42 }],
   },
   psyduck: {
     pokedexId: 54,
@@ -516,7 +516,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 50, atk: 52, def: 48, spa: 65, spd: 50, spe: 55 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/54.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'waterSport', level: 1 }, { moveId: 'screech', level: 23 }, { moveId: 'tailWhip', level: 28 }, { moveId: 'rainDance', level: 32 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'waterSport', level: 1 }, { moveId: 'screech', level: 23 }, { moveId: 'tailWhip', level: 28 }, { moveId: 'rainDance', level: 32 }, { moveId: 'waterGun', level: 10 }, { moveId: 'confusion', level: 16 }, { moveId: 'disable', level: 20 }, { moveId: 'headbutt', level: 30 }, { moveId: 'surf', level: 38 }],
     evolutions: [{ targetSpeciesId: 'golduck', level: 33 }],
   },
   golduck: {
@@ -526,7 +526,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 80, atk: 82, def: 78, spa: 95, spd: 80, spe: 85 },
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/55.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'waterSport', level: 1 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'waterSport', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'confusion', level: 16 }, { moveId: 'screech', level: 23 }, { moveId: 'headbutt', level: 30 }, { moveId: 'psychic', level: 36 }, { moveId: 'surf', level: 40 }, { moveId: 'hydroPump', level: 48 }],
   },
   mankey: {
     pokedexId: 56,
@@ -535,7 +535,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 80, def: 35, spa: 35, spd: 45, spe: 70 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/56.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'lowKick', level: 9 }, { moveId: 'karateChop', level: 15 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'lowKick', level: 9 }, { moveId: 'karateChop', level: 15 }, { moveId: 'focusEnergy', level: 18 }, { moveId: 'furyAttack', level: 21 }, { moveId: 'seismicToss', level: 24 }, { moveId: 'revenge', level: 27 }, { moveId: 'crossChop', level: 33 }],
     evolutions: [{ targetSpeciesId: 'primeape', level: 28 }],
   },
   primeape: {
@@ -545,7 +545,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 105, def: 60, spa: 60, spd: 70, spe: 95 },
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/57.png',
-    learnset: [{ moveId: 'karateChop', level: 1 }, { moveId: 'scratch', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'lowKick', level: 1 }],
+    learnset: [{ moveId: 'karateChop', level: 1 }, { moveId: 'scratch', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'lowKick', level: 1 }, { moveId: 'focusEnergy', level: 1 }, { moveId: 'furyAttack', level: 21 }, { moveId: 'seismicToss', level: 24 }, { moveId: 'revenge', level: 28 }, { moveId: 'crossChop', level: 35 }, { moveId: 'thrash', level: 40 }, { moveId: 'brickBreak', level: 44 }],
   },
   growlithe: {
     pokedexId: 58,
@@ -554,7 +554,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 55, atk: 70, def: 45, spa: 70, spd: 50, spe: 60 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/58.png',
-    learnset: [{ moveId: 'bite', level: 1 }, { moveId: 'roar', level: 1 }, { moveId: 'ember', level: 18 }, { moveId: 'odorSleuth', level: 19 }],
+    learnset: [{ moveId: 'bite', level: 1 }, { moveId: 'roar', level: 1 }, { moveId: 'ember', level: 18 }, { moveId: 'odorSleuth', level: 19 }, { moveId: 'leer', level: 7 }, { moveId: 'flameWheel', level: 22 }, { moveId: 'takeDown', level: 27 }, { moveId: 'agility', level: 31 }, { moveId: 'flamethrower', level: 36 }],
     evolutions: [{ targetSpeciesId: 'arcanine', item: 'fire-stone' }],
   },
   arcanine: {
@@ -564,7 +564,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 90, atk: 110, def: 80, spa: 100, spd: 80, spe: 95 },
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/59.png',
-    learnset: [{ moveId: 'takeDown', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'bite', level: 1 }, { moveId: 'roar', level: 1 }],
+    learnset: [{ moveId: 'takeDown', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'bite', level: 1 }, { moveId: 'roar', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'odorSleuth', level: 1 }, { moveId: 'flameWheel', level: 22 }, { moveId: 'agility', level: 31 }, { moveId: 'flamethrower', level: 38 }, { moveId: 'extremeSpeed', level: 42 }, { moveId: 'fireBlast', level: 50 }],
   },
   poliwag: {
     pokedexId: 60,
@@ -573,7 +573,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 50, def: 40, spa: 40, spd: 40, spe: 90 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/60.png',
-    learnset: [{ moveId: 'bubble', level: 1 }, { moveId: 'hypnosis', level: 16 }, { moveId: 'waterGun', level: 19 }, { moveId: 'doubleSlap', level: 25 }, { moveId: 'rainDance', level: 28 }],
+    learnset: [{ moveId: 'bubble', level: 1 }, { moveId: 'hypnosis', level: 16 }, { moveId: 'waterGun', level: 19 }, { moveId: 'doubleSlap', level: 25 }, { moveId: 'rainDance', level: 28 }, { moveId: 'bodySlam', level: 31 }, { moveId: 'surf', level: 36 }],
     evolutions: [{ targetSpeciesId: 'poliwhirl', level: 25 }],
   },
   poliwhirl: {
@@ -583,7 +583,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 65, def: 65, spa: 50, spd: 50, spe: 90 },
     catchRate: 120,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/61.png',
-    learnset: [{ moveId: 'waterGun', level: 1 }, { moveId: 'hypnosis', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'doubleSlap', level: 26 }],
+    learnset: [{ moveId: 'waterGun', level: 1 }, { moveId: 'hypnosis', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'doubleSlap', level: 26 }, { moveId: 'bodySlam', level: 31 }, { moveId: 'rainDance', level: 35 }, { moveId: 'surf', level: 38 }, { moveId: 'submission', level: 42 }],
     evolutions: [{ targetSpeciesId: 'poliwrath', item: 'water-stone' }],
   },
   poliwrath: {
@@ -593,7 +593,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 90, atk: 95, def: 95, spa: 70, spd: 90, spe: 70 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/62.png',
-    learnset: [{ moveId: 'doubleSlap', level: 1 }, { moveId: 'bodySlam', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'submission', level: 1 }],
+    learnset: [{ moveId: 'doubleSlap', level: 1 }, { moveId: 'bodySlam', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'submission', level: 1 }, { moveId: 'hypnosis', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'brickBreak', level: 35 }, { moveId: 'surf', level: 40 }, { moveId: 'crossChop', level: 44 }, { moveId: 'hydroPump', level: 50 }],
   },
   abra: {
     pokedexId: 63,
@@ -602,7 +602,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 25, atk: 20, def: 15, spa: 105, spd: 55, spe: 90 },
     catchRate: 200,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/63.png',
-    learnset: [{ moveId: 'teleport', level: 1 }],
+    learnset: [{ moveId: 'teleport', level: 1 }, { moveId: 'confusion', level: 16 }],
     evolutions: [{ targetSpeciesId: 'kadabra', level: 16 }],
   },
   kadabra: {
@@ -612,7 +612,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 35, def: 30, spa: 120, spd: 70, spe: 105 },
     catchRate: 100,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/64.png',
-    learnset: [{ moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'teleport', level: 1 }, { moveId: 'kinesis', level: 1 }],
+    learnset: [{ moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'teleport', level: 1 }, { moveId: 'kinesis', level: 1 }, { moveId: 'reflect', level: 22 }, { moveId: 'recover', level: 28 }, { moveId: 'barrier', level: 33 }, { moveId: 'psychic', level: 38 }, { moveId: 'futureSight', level: 44 }],
   },
   alakazam: {
     pokedexId: 65,
@@ -621,7 +621,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 55, atk: 50, def: 45, spa: 135, spd: 95, spe: 120 },
     catchRate: 50,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png',
-    learnset: [{ moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'teleport', level: 1 }, { moveId: 'kinesis', level: 1 }],
+    learnset: [{ moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'teleport', level: 1 }, { moveId: 'kinesis', level: 1 }, { moveId: 'reflect', level: 22 }, { moveId: 'recover', level: 28 }, { moveId: 'barrier', level: 33 }, { moveId: 'psychic', level: 38 }, { moveId: 'futureSight', level: 44 }, { moveId: 'amnesia', level: 48 }],
   },
   machop: {
     pokedexId: 66,
@@ -630,7 +630,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 70, atk: 80, def: 50, spa: 35, spd: 35, spe: 35 },
     catchRate: 180,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/66.png',
-    learnset: [{ moveId: 'karateChop', level: 1 }, { moveId: 'lowKick', level: 20 }, { moveId: 'foresight', level: 22 }, { moveId: 'leer', level: 25 }],
+    learnset: [{ moveId: 'karateChop', level: 1 }, { moveId: 'lowKick', level: 20 }, { moveId: 'foresight', level: 22 }, { moveId: 'leer', level: 25 }, { moveId: 'focusEnergy', level: 10 }, { moveId: 'revenge', level: 26 }, { moveId: 'seismicToss', level: 29 }, { moveId: 'brickBreak', level: 33 }, { moveId: 'bodySlam', level: 37 }],
     evolutions: [{ targetSpeciesId: 'machoke', level: 28 }],
   },
   machoke: {
@@ -640,7 +640,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 80, atk: 100, def: 70, spa: 50, spd: 60, spe: 45 },
     catchRate: 90,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/67.png',
-    learnset: [{ moveId: 'karateChop', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'lowKick', level: 1 }, { moveId: 'foresight', level: 22 }],
+    learnset: [{ moveId: 'karateChop', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'lowKick', level: 1 }, { moveId: 'foresight', level: 22 }, { moveId: 'focusEnergy', level: 10 }, { moveId: 'revenge', level: 28 }, { moveId: 'seismicToss', level: 32 }, { moveId: 'brickBreak', level: 36 }, { moveId: 'bodySlam', level: 40 }, { moveId: 'crossChop', level: 44 }],
   },
   machamp: {
     pokedexId: 68,
@@ -649,7 +649,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 90, atk: 130, def: 80, spa: 65, spd: 85, spe: 55 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/68.png',
-    learnset: [{ moveId: 'karateChop', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'lowKick', level: 1 }, { moveId: 'foresight', level: 22 }],
+    learnset: [{ moveId: 'karateChop', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'lowKick', level: 1 }, { moveId: 'foresight', level: 22 }, { moveId: 'focusEnergy', level: 10 }, { moveId: 'revenge', level: 28 }, { moveId: 'seismicToss', level: 32 }, { moveId: 'brickBreak', level: 36 }, { moveId: 'bodySlam', level: 40 }, { moveId: 'crossChop', level: 44 }, { moveId: 'dynamicPunch', level: 50 }],
   },
   bellsprout: {
     pokedexId: 69,
@@ -658,7 +658,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 50, atk: 75, def: 35, spa: 70, spd: 30, spe: 40 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/69.png',
-    learnset: [{ moveId: 'vineWhip', level: 1 }, { moveId: 'growth', level: 1 }, { moveId: 'wrap', level: 13 }, { moveId: 'poisonPowder', level: 15 }],
+    learnset: [{ moveId: 'vineWhip', level: 1 }, { moveId: 'growth', level: 1 }, { moveId: 'wrap', level: 13 }, { moveId: 'poisonPowder', level: 15 }, { moveId: 'sleepPowder', level: 17 }, { moveId: 'stunSpore', level: 19 }, { moveId: 'acid', level: 22 }, { moveId: 'razorLeaf', level: 27 }, { moveId: 'megaDrain', level: 32 }],
     evolutions: [{ targetSpeciesId: 'weepinbell', level: 21 }],
   },
   weepinbell: {
@@ -668,7 +668,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 90, def: 50, spa: 85, spd: 45, spe: 55 },
     catchRate: 120,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/70.png',
-    learnset: [{ moveId: 'vineWhip', level: 1 }, { moveId: 'wrap', level: 1 }, { moveId: 'growth', level: 1 }, { moveId: 'poisonPowder', level: 15 }],
+    learnset: [{ moveId: 'vineWhip', level: 1 }, { moveId: 'wrap', level: 1 }, { moveId: 'growth', level: 1 }, { moveId: 'poisonPowder', level: 15 }, { moveId: 'sleepPowder', level: 17 }, { moveId: 'acid', level: 22 }, { moveId: 'razorLeaf', level: 27 }, { moveId: 'megaDrain', level: 32 }, { moveId: 'sludge', level: 36 }],
     evolutions: [{ targetSpeciesId: 'victreebel', item: 'leaf-stone' }],
   },
   victreebel: {
@@ -678,7 +678,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 80, atk: 105, def: 65, spa: 100, spd: 70, spe: 70 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/71.png',
-    learnset: [{ moveId: 'vineWhip', level: 1 }, { moveId: 'acid', level: 1 }, { moveId: 'razorLeaf', level: 1 }, { moveId: 'stunSpore', level: 1 }],
+    learnset: [{ moveId: 'vineWhip', level: 1 }, { moveId: 'acid', level: 1 }, { moveId: 'razorLeaf', level: 1 }, { moveId: 'stunSpore', level: 1 }, { moveId: 'sleepPowder', level: 1 }, { moveId: 'growth', level: 1 }, { moveId: 'megaDrain', level: 32 }, { moveId: 'sludgeBomb', level: 38 }, { moveId: 'solarBeam', level: 44 }, { moveId: 'petalDance', level: 50 }],
   },
   tentacool: {
     pokedexId: 72,
@@ -687,7 +687,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 40, def: 35, spa: 50, spd: 100, spe: 70 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/72.png',
-    learnset: [{ moveId: 'acid', level: 1 }, { moveId: 'supersonic', level: 7 }, { moveId: 'wrap', level: 13 }, { moveId: 'poisonSting', level: 18 }],
+    learnset: [{ moveId: 'acid', level: 1 }, { moveId: 'supersonic', level: 7 }, { moveId: 'wrap', level: 13 }, { moveId: 'poisonSting', level: 18 }, { moveId: 'waterGun', level: 22 }, { moveId: 'screech', level: 25 }, { moveId: 'sludge', level: 28 }, { moveId: 'surf', level: 34 }],
     evolutions: [{ targetSpeciesId: 'tentacruel', level: 30 }],
   },
   tentacruel: {
@@ -697,7 +697,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 80, atk: 70, def: 65, spa: 80, spd: 120, spe: 100 },
     catchRate: 60,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/73.png',
-    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'supersonic', level: 1 }, { moveId: 'acid', level: 1 }, { moveId: 'poisonSting', level: 18 }],
+    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'supersonic', level: 1 }, { moveId: 'acid', level: 1 }, { moveId: 'poisonSting', level: 18 }, { moveId: 'waterGun', level: 22 }, { moveId: 'screech', level: 25 }, { moveId: 'sludge', level: 30 }, { moveId: 'surf', level: 36 }, { moveId: 'sludgeBomb', level: 42 }, { moveId: 'hydroPump', level: 48 }],
   },
   geodude: {
     pokedexId: 74,
@@ -706,7 +706,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 80, def: 100, spa: 30, spd: 30, spe: 20 },
     catchRate: 255,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/74.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'mudSport', level: 6 }, { moveId: 'defenseCurl', level: 11 }, { moveId: 'rockThrow', level: 16 }, { moveId: 'sandstorm', level: 22 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'mudSport', level: 6 }, { moveId: 'defenseCurl', level: 11 }, { moveId: 'rockThrow', level: 16 }, { moveId: 'sandstorm', level: 22 }, { moveId: 'magnitude', level: 18 }, { moveId: 'rollout', level: 25 }, { moveId: 'rockBlast', level: 28 }, { moveId: 'dig', level: 32 }],
     evolutions: [{ targetSpeciesId: 'graveler', level: 25 }],
   },
   graveler: {
@@ -716,7 +716,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 55, atk: 95, def: 115, spa: 45, spd: 45, spe: 35 },
     catchRate: 120,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/75.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'defenseCurl', level: 1 }, { moveId: 'mudSport', level: 1 }, { moveId: 'rockThrow', level: 16 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'defenseCurl', level: 1 }, { moveId: 'mudSport', level: 1 }, { moveId: 'rockThrow', level: 16 }, { moveId: 'magnitude', level: 18 }, { moveId: 'sandstorm', level: 22 }, { moveId: 'rollout', level: 25 }, { moveId: 'rockBlast', level: 30 }, { moveId: 'dig', level: 35 }, { moveId: 'rockSlide', level: 40 }],
   },
   golem: {
     pokedexId: 76,
@@ -725,7 +725,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 80, atk: 120, def: 130, spa: 55, spd: 65, spe: 45 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/76.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'defenseCurl', level: 1 }, { moveId: 'mudSport', level: 1 }, { moveId: 'rockThrow', level: 16 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'defenseCurl', level: 1 }, { moveId: 'mudSport', level: 1 }, { moveId: 'rockThrow', level: 16 }, { moveId: 'magnitude', level: 18 }, { moveId: 'sandstorm', level: 22 }, { moveId: 'rollout', level: 25 }, { moveId: 'rockBlast', level: 30 }, { moveId: 'rockSlide', level: 38 }, { moveId: 'earthquake', level: 44 }],
   },
   ponyta: {
     pokedexId: 77,
@@ -734,7 +734,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 50, atk: 85, def: 55, spa: 65, spd: 65, spe: 90 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/77.png',
-    learnset: [{ moveId: 'ember', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'tailWhip', level: 30 }, { moveId: 'stomp', level: 32 }],
+    learnset: [{ moveId: 'ember', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'tailWhip', level: 30 }, { moveId: 'stomp', level: 32 }, { moveId: 'growl', level: 5 }, { moveId: 'flameWheel', level: 20 }, { moveId: 'fireSpin', level: 25 }, { moveId: 'agility', level: 35 }, { moveId: 'flamethrower', level: 38 }, { moveId: 'takeDown', level: 42 }],
     evolutions: [{ targetSpeciesId: 'rapidash', level: 40 }],
   },
   rapidash: {
@@ -744,7 +744,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 100, def: 70, spa: 80, spd: 80, spe: 105 },
     catchRate: 60,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/78.png',
-    learnset: [{ moveId: 'stomp', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'ember', level: 1 }],
+    learnset: [{ moveId: 'stomp', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'flameWheel', level: 20 }, { moveId: 'fireSpin', level: 25 }, { moveId: 'agility', level: 35 }, { moveId: 'flamethrower', level: 42 }, { moveId: 'takeDown', level: 46 }, { moveId: 'fireBlast', level: 52 }],
   },
   slowpoke: {
     pokedexId: 79,
@@ -753,7 +753,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 90, atk: 65, def: 65, spa: 40, spd: 40, spe: 15 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/79.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'curse', level: 1 }, { moveId: 'yawn', level: 1 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'curse', level: 1 }, { moveId: 'yawn', level: 1 }, { moveId: 'waterGun', level: 15 }, { moveId: 'headbutt', level: 20 }, { moveId: 'disable', level: 25 }, { moveId: 'amnesia', level: 29 }, { moveId: 'psychic', level: 36 }, { moveId: 'surf', level: 40 }],
     evolutions: [{ targetSpeciesId: 'slowbro', level: 37 }],
   },
   slowbro: {
@@ -763,7 +763,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 95, atk: 75, def: 110, spa: 100, spd: 80, spe: 30 },
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/80.png',
-    learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }],
+    learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'yawn', level: 1 }, { moveId: 'amnesia', level: 29 }, { moveId: 'psychic', level: 38 }, { moveId: 'surf', level: 42 }, { moveId: 'hydroPump', level: 48 }],
   },
   magnemite: {
     pokedexId: 81,
@@ -772,7 +772,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 25, atk: 35, def: 70, spa: 95, spd: 55, spe: 45 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/81.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'metalSound', level: 1 }, { moveId: 'sonicBoom', level: 21 }, { moveId: 'thunderShock', level: 25 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'metalSound', level: 1 }, { moveId: 'sonicBoom', level: 21 }, { moveId: 'thunderShock', level: 25 }, { moveId: 'thunderWave', level: 15 }, { moveId: 'spark', level: 28 }, { moveId: 'screech', level: 31 }, { moveId: 'thunderbolt', level: 35 }],
     evolutions: [{ targetSpeciesId: 'magneton', level: 30 }],
   },
   magneton: {
@@ -782,7 +782,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 50, atk: 60, def: 95, spa: 120, spd: 70, spe: 70 },
     catchRate: 60,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/82.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'sonicBoom', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'metalSound', level: 1 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'sonicBoom', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'metalSound', level: 1 }, { moveId: 'thunderWave', level: 1 }, { moveId: 'spark', level: 30 }, { moveId: 'screech', level: 34 }, { moveId: 'thunderbolt', level: 38 }, { moveId: 'triAttack', level: 42 }, { moveId: 'ironTail', level: 46 }],
   },
   farfetchd: {
     pokedexId: 83,
@@ -791,7 +791,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 52, atk: 90, def: 55, spa: 58, spd: 62, spe: 60 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/83.png',
-    learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'leer', level: 7 }, { moveId: 'furyAttack', level: 15 }],
+    learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'leer', level: 7 }, { moveId: 'furyAttack', level: 15 }, { moveId: 'slash', level: 19 }, { moveId: 'wingAttack', level: 23 }, { moveId: 'agility', level: 27 }, { moveId: 'falseSwipe', level: 30 }, { moveId: 'bodySlam', level: 35 }],
   },
   doduo: {
     pokedexId: 84,
@@ -800,7 +800,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 35, atk: 85, def: 45, spa: 35, spd: 35, spe: 75 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/84.png',
-    learnset: [{ moveId: 'peck', level: 1 }, { moveId: 'pursuit', level: 9 }, { moveId: 'growl', level: 20 }, { moveId: 'furyAttack', level: 24 }],
+    learnset: [{ moveId: 'peck', level: 1 }, { moveId: 'pursuit', level: 9 }, { moveId: 'growl', level: 20 }, { moveId: 'furyAttack', level: 24 }, { moveId: 'agility', level: 28 }, { moveId: 'wingAttack', level: 30 }, { moveId: 'quickAttack', level: 14 }, { moveId: 'drillPeck', level: 36 }],
     evolutions: [{ targetSpeciesId: 'dodrio', level: 31 }],
   },
   dodrio: {
@@ -810,7 +810,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 110, def: 70, spa: 60, spd: 60, spe: 110 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/85.png',
-    learnset: [{ moveId: 'furyAttack', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'pursuit', level: 1 }],
+    learnset: [{ moveId: 'furyAttack', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'pursuit', level: 1 }, { moveId: 'quickAttack', level: 14 }, { moveId: 'agility', level: 28 }, { moveId: 'wingAttack', level: 31 }, { moveId: 'drillPeck', level: 38 }, { moveId: 'thrash', level: 44 }, { moveId: 'bodySlam', level: 48 }],
   },
   seel: {
     pokedexId: 86,
@@ -819,7 +819,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 45, def: 55, spa: 45, spd: 70, spe: 45 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/86.png',
-    learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'icyWind', level: 17 }, { moveId: 'growl', level: 30 }, { moveId: 'auroraBeam', level: 35 }, { moveId: 'hail', level: 40 }],
+    learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'icyWind', level: 17 }, { moveId: 'growl', level: 30 }, { moveId: 'auroraBeam', level: 35 }, { moveId: 'hail', level: 40 }, { moveId: 'waterGun', level: 10 }, { moveId: 'rest', level: 25 }, { moveId: 'bodySlam', level: 33 }, { moveId: 'surf', level: 38 }],
     evolutions: [{ targetSpeciesId: 'dewgong', level: 34 }],
   },
   dewgong: {
@@ -829,7 +829,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 90, atk: 70, def: 80, spa: 70, spd: 95, spe: 70 },
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/87.png',
-    learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'auroraBeam', level: 1 }, { moveId: 'icyWind', level: 1 }],
+    learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'auroraBeam', level: 1 }, { moveId: 'icyWind', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'rest', level: 25 }, { moveId: 'bodySlam', level: 34 }, { moveId: 'surf', level: 38 }, { moveId: 'iceBeam', level: 44 }, { moveId: 'hydroPump', level: 50 }],
   },
   grimer: {
     pokedexId: 88,
@@ -838,7 +838,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 80, atk: 80, def: 50, spa: 40, spd: 50, spe: 25 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/88.png',
-    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'poisonGas', level: 30 }, { moveId: 'minimize', level: 33 }],
+    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'poisonGas', level: 30 }, { moveId: 'minimize', level: 33 }, { moveId: 'smog', level: 12 }, { moveId: 'sludge', level: 22 }, { moveId: 'screech', level: 28 }, { moveId: 'acid', level: 35 }, { moveId: 'sludgeBomb', level: 40 }],
     evolutions: [{ targetSpeciesId: 'muk', level: 38 }],
   },
   muk: {
@@ -848,7 +848,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 105, atk: 105, def: 75, spa: 65, spd: 100, spe: 50 },
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/89.png',
-    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'poisonGas', level: 1 }, { moveId: 'minimize', level: 33 }],
+    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'poisonGas', level: 1 }, { moveId: 'minimize', level: 33 }, { moveId: 'smog', level: 12 }, { moveId: 'sludge', level: 22 }, { moveId: 'screech', level: 28 }, { moveId: 'acid', level: 35 }, { moveId: 'sludgeBomb', level: 42 }, { moveId: 'bodySlam', level: 46 }],
   },
   shellder: {
     pokedexId: 90,
@@ -857,7 +857,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 30, atk: 65, def: 100, spa: 45, spd: 25, spe: 40 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/90.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'withdraw', level: 1 }, { moveId: 'icicleSpear', level: 8 }, { moveId: 'supersonic', level: 18 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'withdraw', level: 1 }, { moveId: 'icicleSpear', level: 8 }, { moveId: 'supersonic', level: 18 }, { moveId: 'icyWind', level: 22 }, { moveId: 'clamp', level: 25 }, { moveId: 'waterGun', level: 14 }, { moveId: 'auroraBeam', level: 30 }, { moveId: 'iceBeam', level: 38 }],
     evolutions: [{ targetSpeciesId: 'cloyster', item: 'water-stone' }],
   },
   cloyster: {
@@ -867,7 +867,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 50, atk: 95, def: 180, spa: 85, spd: 45, spe: 70 },
     catchRate: 60,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/91.png',
-    learnset: [{ moveId: 'supersonic', level: 1 }, { moveId: 'auroraBeam', level: 1 }, { moveId: 'withdraw', level: 1 }, { moveId: 'clamp', level: 1 }],
+    learnset: [{ moveId: 'supersonic', level: 1 }, { moveId: 'auroraBeam', level: 1 }, { moveId: 'withdraw', level: 1 }, { moveId: 'clamp', level: 1 }, { moveId: 'icicleSpear', level: 1 }, { moveId: 'icyWind', level: 1 }, { moveId: 'iceBeam', level: 38 }, { moveId: 'surf', level: 42 }, { moveId: 'hydroPump', level: 48 }],
   },
   gastly: {
     pokedexId: 92,
@@ -876,7 +876,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 30, atk: 35, def: 30, spa: 100, spd: 35, spe: 80 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/92.png',
-    learnset: [{ moveId: 'nightShade', level: 1 }, { moveId: 'confuseRay', level: 1 }, { moveId: 'lick', level: 1 }, { moveId: 'spite', level: 8 }],
+    learnset: [{ moveId: 'nightShade', level: 1 }, { moveId: 'confuseRay', level: 1 }, { moveId: 'lick', level: 1 }, { moveId: 'spite', level: 8 }, { moveId: 'hypnosis', level: 12 }, { moveId: 'curse', level: 16 }, { moveId: 'smog', level: 20 }, { moveId: 'shadowBall', level: 28 }],
     evolutions: [{ targetSpeciesId: 'haunter', level: 25 }],
   },
   haunter: {
@@ -886,7 +886,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 45, atk: 50, def: 45, spa: 115, spd: 55, spe: 95 },
     catchRate: 90,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/93.png',
-    learnset: [{ moveId: 'nightShade', level: 1 }, { moveId: 'confuseRay', level: 1 }, { moveId: 'lick', level: 1 }, { moveId: 'spite', level: 1 }],
+    learnset: [{ moveId: 'nightShade', level: 1 }, { moveId: 'confuseRay', level: 1 }, { moveId: 'lick', level: 1 }, { moveId: 'spite', level: 1 }, { moveId: 'hypnosis', level: 12 }, { moveId: 'curse', level: 16 }, { moveId: 'smog', level: 20 }, { moveId: 'shadowBall', level: 30 }, { moveId: 'sludge', level: 35 }, { moveId: 'sludgeBomb', level: 42 }],
   },
   gengar: {
     pokedexId: 94,
@@ -895,7 +895,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png',
-    learnset: [{ moveId: 'nightShade', level: 1 }, { moveId: 'confuseRay', level: 1 }, { moveId: 'lick', level: 1 }, { moveId: 'spite', level: 1 }],
+    learnset: [{ moveId: 'nightShade', level: 1 }, { moveId: 'confuseRay', level: 1 }, { moveId: 'lick', level: 1 }, { moveId: 'spite', level: 1 }, { moveId: 'hypnosis', level: 12 }, { moveId: 'curse', level: 16 }, { moveId: 'smog', level: 20 }, { moveId: 'shadowBall', level: 30 }, { moveId: 'sludge', level: 35 }, { moveId: 'sludgeBomb', level: 42 }, { moveId: 'psychic', level: 48 }],
   },
   onix: {
     pokedexId: 95,
@@ -904,7 +904,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 35, atk: 45, def: 160, spa: 30, spd: 45, spe: 70 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/95.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'bind', level: 15 }, { moveId: 'rockThrow', level: 19 }, { moveId: 'sandstorm', level: 25 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'bind', level: 15 }, { moveId: 'rockThrow', level: 19 }, { moveId: 'sandstorm', level: 25 }, { moveId: 'harden', level: 9 }, { moveId: 'dig', level: 28 }, { moveId: 'rockSlide', level: 33 }, { moveId: 'ironTail', level: 38 }, { moveId: 'earthquake', level: 44 }],
   },
   drowzee: {
     pokedexId: 96,
@@ -913,7 +913,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 48, def: 45, spa: 43, spd: 90, spe: 42 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/96.png',
-    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'hypnosis', level: 1 }, { moveId: 'disable', level: 12 }, { moveId: 'confusion', level: 17 }],
+    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'hypnosis', level: 1 }, { moveId: 'disable', level: 12 }, { moveId: 'confusion', level: 17 }, { moveId: 'headbutt', level: 21 }, { moveId: 'reflect', level: 25 }, { moveId: 'psychic', level: 33 }, { moveId: 'amnesia', level: 37 }],
     evolutions: [{ targetSpeciesId: 'hypno', level: 26 }],
   },
   hypno: {
@@ -923,7 +923,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 85, atk: 73, def: 70, spa: 73, spd: 115, spe: 67 },
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/97.png',
-    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'hypnosis', level: 1 }],
+    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'hypnosis', level: 1 }, { moveId: 'headbutt', level: 21 }, { moveId: 'reflect', level: 25 }, { moveId: 'psychic', level: 35 }, { moveId: 'amnesia', level: 40 }, { moveId: 'futureSight', level: 46 }],
   },
   krabby: {
     pokedexId: 98,
@@ -932,7 +932,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 30, atk: 105, def: 90, spa: 25, spd: 25, spe: 50 },
     catchRate: 225,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/98.png',
-    learnset: [{ moveId: 'leer', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'viceGrip', level: 20 }, { moveId: 'mudShot', level: 23 }],
+    learnset: [{ moveId: 'leer', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'viceGrip', level: 20 }, { moveId: 'mudShot', level: 23 }, { moveId: 'waterGun', level: 12 }, { moveId: 'harden', level: 16 }, { moveId: 'metalClaw', level: 25 }, { moveId: 'stomp', level: 28 }, { moveId: 'surf', level: 35 }],
     evolutions: [{ targetSpeciesId: 'kingler', level: 28 }],
   },
   kingler: {
@@ -942,7 +942,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 55, atk: 130, def: 115, spa: 50, spd: 50, spe: 75 },
     catchRate: 60,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/99.png',
-    learnset: [{ moveId: 'viceGrip', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'metalClaw', level: 1 }],
+    learnset: [{ moveId: 'viceGrip', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'metalClaw', level: 1 }, { moveId: 'waterGun', level: 12 }, { moveId: 'harden', level: 16 }, { moveId: 'mudShot', level: 23 }, { moveId: 'stomp', level: 28 }, { moveId: 'slash', level: 33 }, { moveId: 'surf', level: 38 }, { moveId: 'crunch', level: 44 }],
   },
   voltorb: {
     pokedexId: 100,
@@ -951,7 +951,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 30, def: 50, spa: 55, spd: 55, spe: 100 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/100.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'charge', level: 1 }, { moveId: 'sonicBoom', level: 17 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'charge', level: 1 }, { moveId: 'sonicBoom', level: 17 }, { moveId: 'thunderShock', level: 10 }, { moveId: 'thunderWave', level: 14 }, { moveId: 'spark', level: 22 }, { moveId: 'swift', level: 26 }, { moveId: 'thunderbolt', level: 33 }],
     evolutions: [{ targetSpeciesId: 'electrode', level: 30 }],
   },
   electrode: {
@@ -961,7 +961,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 50, def: 70, spa: 80, spd: 80, spe: 150 },
     catchRate: 60,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/101.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'sonicBoom', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'charge', level: 1 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'sonicBoom', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'charge', level: 1 }, { moveId: 'thunderShock', level: 10 }, { moveId: 'thunderWave', level: 14 }, { moveId: 'spark', level: 22 }, { moveId: 'swift', level: 30 }, { moveId: 'thunderbolt', level: 36 }, { moveId: 'agility', level: 40 }],
   },
   exeggcute: {
     pokedexId: 102,
@@ -970,7 +970,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 40, def: 80, spa: 60, spd: 45, spe: 40 },
     catchRate: 90,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/102.png',
-    learnset: [{ moveId: 'hypnosis', level: 1 }, { moveId: 'barrage', level: 1 }, { moveId: 'uproar', level: 1 }, { moveId: 'confusion', level: 19 }],
+    learnset: [{ moveId: 'hypnosis', level: 1 }, { moveId: 'barrage', level: 1 }, { moveId: 'uproar', level: 1 }, { moveId: 'confusion', level: 19 }, { moveId: 'absorb', level: 10 }, { moveId: 'reflect', level: 15 }, { moveId: 'sleepPowder', level: 24 }, { moveId: 'megaDrain', level: 30 }, { moveId: 'psychic', level: 36 }],
     evolutions: [{ targetSpeciesId: 'exeggutor', item: 'leaf-stone' }],
   },
   exeggutor: {
@@ -980,7 +980,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 95, atk: 95, def: 85, spa: 125, spd: 75, spe: 55 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/103.png',
-    learnset: [{ moveId: 'confusion', level: 1 }, { moveId: 'hypnosis', level: 1 }, { moveId: 'barrage', level: 1 }, { moveId: 'stomp', level: 28 }],
+    learnset: [{ moveId: 'confusion', level: 1 }, { moveId: 'hypnosis', level: 1 }, { moveId: 'barrage', level: 1 }, { moveId: 'stomp', level: 28 }, { moveId: 'absorb', level: 1 }, { moveId: 'sleepPowder', level: 1 }, { moveId: 'megaDrain', level: 1 }, { moveId: 'psychic', level: 38 }, { moveId: 'solarBeam', level: 44 }],
   },
   cubone: {
     pokedexId: 104,
@@ -989,7 +989,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 50, atk: 50, def: 95, spa: 40, spd: 50, spe: 35 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/104.png',
-    learnset: [{ moveId: 'growl', level: 1 }, { moveId: 'boneClub', level: 1 }, { moveId: 'tailWhip', level: 13 }, { moveId: 'headbutt', level: 18 }],
+    learnset: [{ moveId: 'growl', level: 1 }, { moveId: 'boneClub', level: 1 }, { moveId: 'tailWhip', level: 13 }, { moveId: 'headbutt', level: 18 }, { moveId: 'mudSlap', level: 10 }, { moveId: 'focusEnergy', level: 15 }, { moveId: 'dig', level: 22 }, { moveId: 'scaryFace', level: 25 }, { moveId: 'magnitude', level: 30 }],
     evolutions: [{ targetSpeciesId: 'marowak', level: 28 }],
   },
   marowak: {
@@ -999,7 +999,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 80, def: 110, spa: 50, spd: 80, spe: 45 },
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/105.png',
-    learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'focusEnergy', level: 1 }],
+    learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'growl', level: 1 }, { moveId: 'focusEnergy', level: 1 }, { moveId: 'boneClub', level: 1 }, { moveId: 'headbutt', level: 18 }, { moveId: 'mudSlap', level: 10 }, { moveId: 'dig', level: 28 }, { moveId: 'magnitude', level: 33 }, { moveId: 'bodySlam', level: 38 }, { moveId: 'earthquake', level: 44 }],
   },
   hitmonlee: {
     pokedexId: 106,
@@ -1008,7 +1008,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 50, atk: 120, def: 53, spa: 35, spd: 110, spe: 87 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png',
-    learnset: [{ moveId: 'doubleKick', level: 1 }, { moveId: 'meditate', level: 1 }, { moveId: 'revenge', level: 1 }, { moveId: 'brickBreak', level: 20 }],
+    learnset: [{ moveId: 'doubleKick', level: 1 }, { moveId: 'meditate', level: 1 }, { moveId: 'revenge', level: 1 }, { moveId: 'brickBreak', level: 20 }, { moveId: 'focusEnergy', level: 8 }, { moveId: 'lowKick', level: 15 }, { moveId: 'bodySlam', level: 28 }, { moveId: 'crossChop', level: 36 }, { moveId: 'megahorn', level: 42 }],
   },
   hitmonchan: {
     pokedexId: 107,
@@ -1017,7 +1017,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 50, atk: 105, def: 79, spa: 35, spd: 110, spe: 76 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/107.png',
-    learnset: [{ moveId: 'cometPunch', level: 1 }, { moveId: 'agility', level: 1 }, { moveId: 'revenge', level: 1 }, { moveId: 'pursuit', level: 13 }],
+    learnset: [{ moveId: 'cometPunch', level: 1 }, { moveId: 'agility', level: 1 }, { moveId: 'revenge', level: 1 }, { moveId: 'pursuit', level: 13 }, { moveId: 'machPunch', level: 8 }, { moveId: 'focusEnergy', level: 15 }, { moveId: 'brickBreak', level: 28 }, { moveId: 'bodySlam', level: 33 }, { moveId: 'crossChop', level: 40 }, { moveId: 'dynamicPunch', level: 46 }],
   },
   lickitung: {
     pokedexId: 108,
@@ -1026,7 +1026,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 90, atk: 55, def: 75, spa: 60, spd: 75, spe: 30 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/108.png',
-    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'supersonic', level: 1 }, { moveId: 'lick', level: 1 }, { moveId: 'stomp', level: 7 }],
+    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'supersonic', level: 1 }, { moveId: 'lick', level: 1 }, { moveId: 'stomp', level: 7 }, { moveId: 'disable', level: 13 }, { moveId: 'defenseCurl', level: 18 }, { moveId: 'headbutt', level: 25 }, { moveId: 'bodySlam', level: 30 }, { moveId: 'screech', level: 35 }, { moveId: 'rest', level: 40 }],
   },
   koffing: {
     pokedexId: 109,
@@ -1035,7 +1035,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 65, def: 95, spa: 60, spd: 45, spe: 35 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/109.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'smog', level: 1 }, { moveId: 'poisonGas', level: 1 }, { moveId: 'sludge', level: 32 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'smog', level: 1 }, { moveId: 'poisonGas', level: 1 }, { moveId: 'sludge', level: 32 }, { moveId: 'smokescreen', level: 9 }, { moveId: 'acid', level: 17 }, { moveId: 'scaryFace', level: 22 }, { moveId: 'screech', level: 28 }, { moveId: 'sludgeBomb', level: 38 }],
     evolutions: [{ targetSpeciesId: 'weezing', level: 35 }],
   },
   weezing: {
@@ -1045,7 +1045,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 90, def: 120, spa: 85, spd: 70, spe: 60 },
     catchRate: 60,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/110.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'smog', level: 1 }, { moveId: 'sludge', level: 1 }, { moveId: 'poisonGas', level: 1 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'smog', level: 1 }, { moveId: 'sludge', level: 1 }, { moveId: 'poisonGas', level: 1 }, { moveId: 'smokescreen', level: 9 }, { moveId: 'acid', level: 17 }, { moveId: 'scaryFace', level: 22 }, { moveId: 'screech', level: 28 }, { moveId: 'sludgeBomb', level: 40 }, { moveId: 'bodySlam', level: 44 }],
   },
   rhyhorn: {
     pokedexId: 111,
@@ -1054,7 +1054,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 80, atk: 85, def: 95, spa: 30, spd: 30, spe: 25 },
     catchRate: 120,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/111.png',
-    learnset: [{ moveId: 'hornAttack', level: 1 }, { moveId: 'scaryFace', level: 24 }, { moveId: 'rockBlast', level: 29 }, { moveId: 'stomp', level: 30 }],
+    learnset: [{ moveId: 'hornAttack', level: 1 }, { moveId: 'scaryFace', level: 24 }, { moveId: 'rockBlast', level: 29 }, { moveId: 'stomp', level: 30 }, { moveId: 'tailWhip', level: 9 }, { moveId: 'rockThrow', level: 18 }, { moveId: 'dig', level: 33 }, { moveId: 'rockSlide', level: 38 }, { moveId: 'earthquake', level: 44 }],
     evolutions: [{ targetSpeciesId: 'rhydon', level: 42 }],
   },
   rhydon: {
@@ -1064,7 +1064,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 105, atk: 130, def: 120, spa: 45, spd: 45, spe: 40 },
     catchRate: 60,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/112.png',
-    learnset: [{ moveId: 'stomp', level: 1 }, { moveId: 'hornAttack', level: 1 }, { moveId: 'furyAttack', level: 1 }, { moveId: 'tailWhip', level: 1 }],
+    learnset: [{ moveId: 'stomp', level: 1 }, { moveId: 'hornAttack', level: 1 }, { moveId: 'furyAttack', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'rockThrow', level: 18 }, { moveId: 'scaryFace', level: 24 }, { moveId: 'rockBlast', level: 29 }, { moveId: 'dig', level: 33 }, { moveId: 'rockSlide', level: 42 }, { moveId: 'earthquake', level: 48 }, { moveId: 'megahorn', level: 54 }],
   },
   chansey: {
     pokedexId: 113,
@@ -1073,7 +1073,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 250, atk: 5, def: 5, spa: 35, spd: 105, spe: 50 },
     catchRate: 30,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/113.png',
-    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'doubleSlap', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'refresh', level: 9 }],
+    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'doubleSlap', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'refresh', level: 9 }, { moveId: 'growl', level: 5 }, { moveId: 'sing', level: 13 }, { moveId: 'minimize', level: 18 }, { moveId: 'bodySlam', level: 28 }, { moveId: 'recover', level: 33 }, { moveId: 'rest', level: 38 }],
   },
   tangela: {
     pokedexId: 114,
@@ -1082,7 +1082,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 55, def: 115, spa: 100, spd: 40, spe: 60 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/114.png',
-    learnset: [{ moveId: 'bind', level: 1 }, { moveId: 'constrict', level: 1 }, { moveId: 'ingrain', level: 1 }, { moveId: 'vineWhip', level: 29 }],
+    learnset: [{ moveId: 'bind', level: 1 }, { moveId: 'constrict', level: 1 }, { moveId: 'ingrain', level: 1 }, { moveId: 'vineWhip', level: 29 }, { moveId: 'absorb', level: 10 }, { moveId: 'growth', level: 15 }, { moveId: 'poisonPowder', level: 20 }, { moveId: 'megaDrain', level: 27 }, { moveId: 'stunSpore', level: 33 }, { moveId: 'razorLeaf', level: 38 }, { moveId: 'solarBeam', level: 46 }],
   },
   kangaskhan: {
     pokedexId: 115,
@@ -1091,7 +1091,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 105, atk: 95, def: 80, spa: 40, spd: 80, spe: 90 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/115.png',
-    learnset: [{ moveId: 'cometPunch', level: 1 }, { moveId: 'rage', level: 1 }, { moveId: 'fakeOut', level: 19 }, { moveId: 'bite', level: 26 }],
+    learnset: [{ moveId: 'cometPunch', level: 1 }, { moveId: 'rage', level: 1 }, { moveId: 'fakeOut', level: 19 }, { moveId: 'bite', level: 26 }, { moveId: 'leer', level: 7 }, { moveId: 'tailWhip', level: 13 }, { moveId: 'headbutt', level: 22 }, { moveId: 'stomp', level: 28 }, { moveId: 'bodySlam', level: 34 }, { moveId: 'crunch', level: 40 }],
   },
   horsea: {
     pokedexId: 116,
@@ -1100,7 +1100,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 30, atk: 40, def: 70, spa: 70, spd: 25, spe: 60 },
     catchRate: 225,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/116.png',
-    learnset: [{ moveId: 'bubble', level: 1 }, { moveId: 'smokescreen', level: 19 }, { moveId: 'leer', level: 24 }, { moveId: 'twister', level: 29 }],
+    learnset: [{ moveId: 'bubble', level: 1 }, { moveId: 'smokescreen', level: 19 }, { moveId: 'leer', level: 24 }, { moveId: 'twister', level: 29 }, { moveId: 'waterGun', level: 10 }, { moveId: 'agility', level: 22 }, { moveId: 'dragonBreath', level: 33 }, { moveId: 'surf', level: 38 }],
     evolutions: [{ targetSpeciesId: 'seadra', level: 32 }],
   },
   seadra: {
@@ -1110,7 +1110,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 55, atk: 65, def: 95, spa: 95, spd: 45, spe: 85 },
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/117.png',
-    learnset: [{ moveId: 'smokescreen', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'leer', level: 24 }, { moveId: 'twister', level: 29 }],
+    learnset: [{ moveId: 'smokescreen', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'leer', level: 24 }, { moveId: 'twister', level: 29 }, { moveId: 'waterGun', level: 1 }, { moveId: 'agility', level: 22 }, { moveId: 'dragonBreath', level: 33 }, { moveId: 'surf', level: 38 }, { moveId: 'iceBeam', level: 42 }, { moveId: 'hydroPump', level: 48 }],
   },
   goldeen: {
     pokedexId: 118,
@@ -1119,7 +1119,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 45, atk: 67, def: 60, spa: 35, spd: 50, spe: 63 },
     catchRate: 225,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/118.png',
-    learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'waterSport', level: 1 }, { moveId: 'supersonic', level: 19 }],
+    learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'waterSport', level: 1 }, { moveId: 'supersonic', level: 19 }, { moveId: 'waterGun', level: 10 }, { moveId: 'hornAttack', level: 15 }, { moveId: 'furyAttack', level: 24 }, { moveId: 'agility', level: 29 }, { moveId: 'surf', level: 36 }],
     evolutions: [{ targetSpeciesId: 'seaking', level: 33 }],
   },
   seaking: {
@@ -1129,7 +1129,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 80, atk: 92, def: 65, spa: 65, spd: 80, spe: 68 },
     catchRate: 60,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/119.png',
-    learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'supersonic', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'waterSport', level: 1 }],
+    learnset: [{ moveId: 'tailWhip', level: 1 }, { moveId: 'supersonic', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'waterSport', level: 1 }, { moveId: 'waterGun', level: 10 }, { moveId: 'hornAttack', level: 15 }, { moveId: 'furyAttack', level: 24 }, { moveId: 'agility', level: 33 }, { moveId: 'surf', level: 38 }, { moveId: 'hydroPump', level: 44 }],
   },
   staryu: {
     pokedexId: 120,
@@ -1138,7 +1138,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 30, atk: 45, def: 55, spa: 70, spd: 55, spe: 85 },
     catchRate: 225,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/120.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'rapidSpin', level: 10 }, { moveId: 'waterGun', level: 17 }, { moveId: 'camouflage', level: 19 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'rapidSpin', level: 10 }, { moveId: 'waterGun', level: 17 }, { moveId: 'camouflage', level: 19 }, { moveId: 'harden', level: 6 }, { moveId: 'swift', level: 24 }, { moveId: 'recover', level: 28 }, { moveId: 'confusion', level: 33 }, { moveId: 'surf', level: 38 }],
     evolutions: [{ targetSpeciesId: 'starmie', item: 'water-stone' }],
   },
   starmie: {
@@ -1148,7 +1148,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 75, def: 85, spa: 100, spd: 85, spe: 115 },
     catchRate: 60,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/121.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'recover', level: 1 }, { moveId: 'harden', level: 1 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'recover', level: 1 }, { moveId: 'harden', level: 1 }, { moveId: 'rapidSpin', level: 1 }, { moveId: 'swift', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'surf', level: 38 }, { moveId: 'psychic', level: 42 }, { moveId: 'iceBeam', level: 46 }, { moveId: 'hydroPump', level: 50 }],
   },
   'mr-mime': {
     pokedexId: 122,
@@ -1157,7 +1157,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 40, atk: 45, def: 65, spa: 100, spd: 120, spe: 90 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png',
-    learnset: [{ moveId: 'confusion', level: 1 }, { moveId: 'barrier', level: 1 }, { moveId: 'reflect', level: 19 }, { moveId: 'magicalLeaf', level: 22 }],
+    learnset: [{ moveId: 'confusion', level: 1 }, { moveId: 'barrier', level: 1 }, { moveId: 'reflect', level: 19 }, { moveId: 'magicalLeaf', level: 22 }, { moveId: 'pound', level: 1 }, { moveId: 'doubleSlap', level: 15 }, { moveId: 'psychic', level: 30 }, { moveId: 'dazzlingGleam', level: 36 }, { moveId: 'moonblast', level: 42 }, { moveId: 'recover', level: 46 }],
   },
   scyther: {
     pokedexId: 123,
@@ -1166,7 +1166,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 70, atk: 110, def: 80, spa: 55, spd: 80, spe: 105 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/123.png',
-    learnset: [{ moveId: 'quickAttack', level: 1 }, { moveId: 'pursuit', level: 11 }, { moveId: 'falseSwipe', level: 16 }, { moveId: 'leer', level: 17 }],
+    learnset: [{ moveId: 'quickAttack', level: 1 }, { moveId: 'pursuit', level: 11 }, { moveId: 'falseSwipe', level: 16 }, { moveId: 'leer', level: 17 }, { moveId: 'focusEnergy', level: 6 }, { moveId: 'agility', level: 21 }, { moveId: 'wingAttack', level: 25 }, { moveId: 'furyCutter', level: 29 }, { moveId: 'slash', level: 33 }, { moveId: 'signalBeam', level: 42 }],
   },
   jynx: {
     pokedexId: 124,
@@ -1175,7 +1175,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 50, def: 35, spa: 115, spd: 95, spe: 95 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/124.png',
-    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'lovelyKiss', level: 1 }, { moveId: 'powderSnow', level: 1 }, { moveId: 'lick', level: 18 }],
+    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'lovelyKiss', level: 1 }, { moveId: 'powderSnow', level: 1 }, { moveId: 'lick', level: 18 }, { moveId: 'confusion', level: 13 }, { moveId: 'icyWind', level: 23 }, { moveId: 'bodySlam', level: 28 }, { moveId: 'iceBeam', level: 35 }, { moveId: 'psychic', level: 41 }, { moveId: 'moonblast', level: 46 }],
   },
   electabuzz: {
     pokedexId: 125,
@@ -1184,7 +1184,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 83, def: 57, spa: 95, spd: 85, spe: 105 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/125.png',
-    learnset: [{ moveId: 'leer', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'swift', level: 25 }, { moveId: 'thunderShock', level: 34 }],
+    learnset: [{ moveId: 'leer', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'swift', level: 25 }, { moveId: 'thunderShock', level: 34 }, { moveId: 'thunderWave', level: 12 }, { moveId: 'charge', level: 18 }, { moveId: 'spark', level: 28 }, { moveId: 'screech', level: 38 }, { moveId: 'thunderbolt', level: 42 }, { moveId: 'bodySlam', level: 46 }],
   },
   magmar: {
     pokedexId: 126,
@@ -1193,7 +1193,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 95, def: 57, spa: 100, spd: 85, spe: 93 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/126.png',
-    learnset: [{ moveId: 'ember', level: 1 }, { moveId: 'sunnyDay', level: 33 }, { moveId: 'leer', level: 36 }, { moveId: 'confuseRay', level: 39 }],
+    learnset: [{ moveId: 'ember', level: 1 }, { moveId: 'sunnyDay', level: 33 }, { moveId: 'leer', level: 36 }, { moveId: 'confuseRay', level: 39 }, { moveId: 'smokescreen', level: 7 }, { moveId: 'fireSpin', level: 19 }, { moveId: 'smog', level: 25 }, { moveId: 'flameWheel', level: 29 }, { moveId: 'scaryFace', level: 35 }, { moveId: 'flamethrower', level: 42 }, { moveId: 'fireBlast', level: 50 }],
   },
   pinsir: {
     pokedexId: 127,
@@ -1202,7 +1202,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 125, def: 100, spa: 55, spd: 70, spe: 85 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/127.png',
-    learnset: [{ moveId: 'viceGrip', level: 1 }, { moveId: 'bind', level: 21 }, { moveId: 'seismicToss', level: 25 }, { moveId: 'revenge', level: 25 }],
+    learnset: [{ moveId: 'viceGrip', level: 1 }, { moveId: 'bind', level: 21 }, { moveId: 'seismicToss', level: 25 }, { moveId: 'revenge', level: 25 }, { moveId: 'focusEnergy', level: 7 }, { moveId: 'harden', level: 13 }, { moveId: 'furyCutter', level: 17 }, { moveId: 'brickBreak', level: 30 }, { moveId: 'slash', level: 35 }, { moveId: 'megahorn', level: 42 }],
   },
   tauros: {
     pokedexId: 128,
@@ -1211,7 +1211,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 75, atk: 100, def: 95, spa: 40, spd: 70, spe: 110 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/128.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'hornAttack', level: 8 }, { moveId: 'scaryFace', level: 13 }, { moveId: 'pursuit', level: 19 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'hornAttack', level: 8 }, { moveId: 'scaryFace', level: 13 }, { moveId: 'pursuit', level: 19 }, { moveId: 'rage', level: 5 }, { moveId: 'stomp', level: 24 }, { moveId: 'takeDown', level: 29 }, { moveId: 'bodySlam', level: 35 }, { moveId: 'thrash', level: 40 }, { moveId: 'rest', level: 44 }],
   },
   magikarp: {
     pokedexId: 129,
@@ -1230,7 +1230,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 95, atk: 125, def: 79, spa: 60, spd: 100, spe: 81 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/130.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'thrash', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'bite', level: 1 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'thrash', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'bite', level: 1 }, { moveId: 'twister', level: 20 }, { moveId: 'scaryFace', level: 25 }, { moveId: 'dragonBreath', level: 30 }, { moveId: 'crunch', level: 35 }, { moveId: 'surf', level: 40 }, { moveId: 'hydroPump', level: 46 }],
   },
   lapras: {
     pokedexId: 131,
@@ -1239,7 +1239,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 130, atk: 85, def: 80, spa: 85, spd: 95, spe: 60 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/131.png',
-    learnset: [{ moveId: 'growl', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'sing', level: 16 }, { moveId: 'mist', level: 20 }],
+    learnset: [{ moveId: 'growl', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'sing', level: 16 }, { moveId: 'mist', level: 20 }, { moveId: 'confuseRay', level: 10 }, { moveId: 'icyWind', level: 22 }, { moveId: 'bodySlam', level: 28 }, { moveId: 'auroraBeam', level: 33 }, { moveId: 'surf', level: 38 }, { moveId: 'iceBeam', level: 42 }, { moveId: 'hydroPump', level: 48 }],
   },
   ditto: {
     pokedexId: 132,
@@ -1257,7 +1257,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 55, atk: 55, def: 50, spa: 45, spd: 65, spe: 55 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png',
-    learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'helpingHand', level: 1 }, { moveId: 'growl', level: 16 }],
+    learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'helpingHand', level: 1 }, { moveId: 'growl', level: 16 }, { moveId: 'quickAttack', level: 10 }, { moveId: 'bite', level: 20 }, { moveId: 'swift', level: 25 }, { moveId: 'takeDown', level: 30 }, { moveId: 'bodySlam', level: 36 }],
     evolutions: [{ targetSpeciesId: 'flareon', item: 'fire-stone' }],
   },
   vaporeon: {
@@ -1267,7 +1267,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 130, atk: 65, def: 60, spa: 110, spd: 95, spe: 65 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/134.png',
-    learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'quickAttack', level: 1 }],
+    learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'bite', level: 1 }, { moveId: 'helpingHand', level: 1 }, { moveId: 'auroraBeam', level: 25 }, { moveId: 'bodySlam', level: 30 }, { moveId: 'surf', level: 36 }, { moveId: 'iceBeam', level: 42 }, { moveId: 'hydroPump', level: 48 }],
   },
   jolteon: {
     pokedexId: 135,
@@ -1276,7 +1276,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 65, def: 60, spa: 110, spd: 95, spe: 130 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/135.png',
-    learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'quickAttack', level: 1 }],
+    learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'helpingHand', level: 1 }, { moveId: 'thunderWave', level: 25 }, { moveId: 'bodySlam', level: 30 }, { moveId: 'spark', level: 36 }, { moveId: 'thunderbolt', level: 42 }, { moveId: 'agility', level: 46 }],
   },
   flareon: {
     pokedexId: 136,
@@ -1285,7 +1285,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 130, def: 60, spa: 95, spd: 110, spe: 65 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/136.png',
-    learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'quickAttack', level: 1 }],
+    learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'quickAttack', level: 1 }, { moveId: 'helpingHand', level: 1 }, { moveId: 'smokescreen', level: 25 }, { moveId: 'bodySlam', level: 30 }, { moveId: 'flameWheel', level: 36 }, { moveId: 'flamethrower', level: 42 }, { moveId: 'fireBlast', level: 48 }],
   },
   porygon: {
     pokedexId: 137,
@@ -1294,7 +1294,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 65, atk: 60, def: 70, spa: 85, spd: 75, spe: 40 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/137.png',
-    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'sharpen', level: 1 }, { moveId: 'conversion', level: 1 }, { moveId: 'conversion2', level: 1 }],
+    learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'sharpen', level: 1 }, { moveId: 'conversion', level: 1 }, { moveId: 'conversion2', level: 1 }, { moveId: 'agility', level: 12 }, { moveId: 'recover', level: 24 }, { moveId: 'triAttack', level: 30 }, { moveId: 'swift', level: 36 }, { moveId: 'thunderbolt', level: 42 }, { moveId: 'iceBeam', level: 46 }],
   },
   omanyte: {
     pokedexId: 138,
@@ -1303,7 +1303,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 35, atk: 40, def: 100, spa: 90, spd: 55, spe: 35 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/138.png',
-    learnset: [{ moveId: 'waterGun', level: 1 }, { moveId: 'withdraw', level: 1 }, { moveId: 'constrict', level: 1 }, { moveId: 'bite', level: 13 }],
+    learnset: [{ moveId: 'waterGun', level: 1 }, { moveId: 'withdraw', level: 1 }, { moveId: 'constrict', level: 1 }, { moveId: 'bite', level: 13 }, { moveId: 'mudShot', level: 19 }, { moveId: 'rollout', level: 25 }, { moveId: 'ancientPower', level: 31 }, { moveId: 'surf', level: 37 }, { moveId: 'rockSlide', level: 42 }],
     evolutions: [{ targetSpeciesId: 'omastar', level: 40 }],
   },
   omastar: {
@@ -1313,7 +1313,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 70, atk: 60, def: 125, spa: 115, spd: 70, spe: 55 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/139.png',
-    learnset: [{ moveId: 'hornAttack', level: 1 }, { moveId: 'bite', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'withdraw', level: 1 }],
+    learnset: [{ moveId: 'hornAttack', level: 1 }, { moveId: 'bite', level: 1 }, { moveId: 'waterGun', level: 1 }, { moveId: 'withdraw', level: 1 }, { moveId: 'mudShot', level: 1 }, { moveId: 'rollout', level: 25 }, { moveId: 'ancientPower', level: 31 }, { moveId: 'surf', level: 40 }, { moveId: 'rockSlide', level: 44 }, { moveId: 'hydroPump', level: 50 }],
   },
   kabuto: {
     pokedexId: 140,
@@ -1322,7 +1322,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 30, atk: 80, def: 90, spa: 55, spd: 45, spe: 55 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/140.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'harden', level: 1 }, { moveId: 'mudShot', level: 25 }, { moveId: 'sandAttack', level: 31 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'harden', level: 1 }, { moveId: 'mudShot', level: 25 }, { moveId: 'sandAttack', level: 31 }, { moveId: 'absorb', level: 16 }, { moveId: 'furyCutter', level: 21 }, { moveId: 'ancientPower', level: 28 }, { moveId: 'rockSlide', level: 35 }, { moveId: 'surf', level: 40 }],
     evolutions: [{ targetSpeciesId: 'kabutops', level: 40 }],
   },
   kabutops: {
@@ -1332,7 +1332,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 60, atk: 115, def: 105, spa: 65, spd: 70, spe: 80 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/141.png',
-    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'absorb', level: 1 }, { moveId: 'harden', level: 1 }, { moveId: 'furyCutter', level: 1 }],
+    learnset: [{ moveId: 'scratch', level: 1 }, { moveId: 'absorb', level: 1 }, { moveId: 'harden', level: 1 }, { moveId: 'furyCutter', level: 1 }, { moveId: 'mudShot', level: 25 }, { moveId: 'slash', level: 30 }, { moveId: 'ancientPower', level: 35 }, { moveId: 'rockSlide', level: 40 }, { moveId: 'surf', level: 44 }, { moveId: 'hydroPump', level: 50 }],
   },
   aerodactyl: {
     pokedexId: 142,
@@ -1341,7 +1341,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 80, atk: 105, def: 65, spa: 60, spd: 75, spe: 130 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/142.png',
-    learnset: [{ moveId: 'wingAttack', level: 1 }, { moveId: 'agility', level: 1 }, { moveId: 'ancientPower', level: 29 }, { moveId: 'supersonic', level: 33 }],
+    learnset: [{ moveId: 'wingAttack', level: 1 }, { moveId: 'agility', level: 1 }, { moveId: 'ancientPower', level: 29 }, { moveId: 'supersonic', level: 33 }, { moveId: 'bite', level: 8 }, { moveId: 'scaryFace', level: 15 }, { moveId: 'takeDown', level: 22 }, { moveId: 'rockSlide', level: 38 }, { moveId: 'crunch', level: 44 }, { moveId: 'dragonBreath', level: 48 }],
   },
   snorlax: {
     pokedexId: 143,
@@ -1350,7 +1350,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 160, atk: 110, def: 65, spa: 65, spd: 110, spe: 30 },
     catchRate: 25,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/143.png',
-    learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'amnesia', level: 1 }, { moveId: 'rest', level: 1 }],
+    learnset: [{ moveId: 'headbutt', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'amnesia', level: 1 }, { moveId: 'rest', level: 1 }, { moveId: 'yawn', level: 9 }, { moveId: 'defenseCurl', level: 15 }, { moveId: 'bodySlam', level: 25 }, { moveId: 'rollout', level: 30 }, { moveId: 'crunch', level: 36 }, { moveId: 'earthquake', level: 44 }],
   },
   articuno: {
     pokedexId: 144,
@@ -1359,7 +1359,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 90, atk: 85, def: 100, spa: 95, spd: 125, spe: 85 },
     catchRate: 3,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/144.png',
-    learnset: [{ moveId: 'gust', level: 1 }, { moveId: 'iceBeam', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'powderSnow', level: 1 }],
+    learnset: [{ moveId: 'gust', level: 1 }, { moveId: 'iceBeam', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'powderSnow', level: 1 }, { moveId: 'mist', level: 13 }, { moveId: 'agility', level: 22 }, { moveId: 'wingAttack', level: 30 }, { moveId: 'auroraBeam', level: 38 }, { moveId: 'reflect', level: 44 }, { moveId: 'drillPeck', level: 50 }],
   },
   zapdos: {
     pokedexId: 145,
@@ -1368,7 +1368,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 90, atk: 90, def: 85, spa: 125, spd: 90, spe: 100 },
     catchRate: 3,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/145.png',
-    learnset: [{ moveId: 'peck', level: 1 }, { moveId: 'drillPeck', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'thunderWave', level: 13 }],
+    learnset: [{ moveId: 'peck', level: 1 }, { moveId: 'drillPeck', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'thunderWave', level: 13 }, { moveId: 'agility', level: 22 }, { moveId: 'charge', level: 30 }, { moveId: 'spark', level: 38 }, { moveId: 'thunderbolt', level: 44 }, { moveId: 'reflect', level: 48 }],
   },
   moltres: {
     pokedexId: 146,
@@ -1377,7 +1377,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 90, atk: 100, def: 90, spa: 125, spd: 85, spe: 90 },
     catchRate: 3,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/146.png',
-    learnset: [{ moveId: 'wingAttack', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'fireSpin', level: 1 }],
+    learnset: [{ moveId: 'wingAttack', level: 1 }, { moveId: 'ember', level: 1 }, { moveId: 'peck', level: 1 }, { moveId: 'fireSpin', level: 1 }, { moveId: 'agility', level: 22 }, { moveId: 'sunnyDay', level: 30 }, { moveId: 'flamethrower', level: 38 }, { moveId: 'drillPeck', level: 44 }, { moveId: 'fireBlast', level: 50 }],
   },
   dratini: {
     pokedexId: 147,
@@ -1386,7 +1386,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 41, atk: 64, def: 45, spa: 50, spd: 50, spe: 50 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/147.png',
-    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'thunderWave', level: 10 }, { moveId: 'twister', level: 15 }],
+    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'thunderWave', level: 10 }, { moveId: 'twister', level: 15 }, { moveId: 'agility', level: 20 }, { moveId: 'dragonBreath', level: 25 }, { moveId: 'bodySlam', level: 30 }, { moveId: 'outrage', level: 40 }],
     evolutions: [{ targetSpeciesId: 'dragonair', level: 30 }],
   },
   dragonair: {
@@ -1396,7 +1396,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 61, atk: 84, def: 65, spa: 70, spd: 70, spe: 70 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/148.png',
-    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'thunderWave', level: 1 }, { moveId: 'twister', level: 1 }],
+    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'thunderWave', level: 1 }, { moveId: 'twister', level: 1 }, { moveId: 'agility', level: 20 }, { moveId: 'dragonBreath', level: 25 }, { moveId: 'bodySlam', level: 33 }, { moveId: 'swift', level: 38 }, { moveId: 'outrage', level: 47 }],
     evolutions: [{ targetSpeciesId: 'dragonite', level: 55 }],
   },
   dragonite: {
@@ -1406,7 +1406,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 91, atk: 134, def: 95, spa: 100, spd: 100, spe: 80 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/149.png',
-    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'thunderWave', level: 1 }, { moveId: 'agility', level: 1 }],
+    learnset: [{ moveId: 'wrap', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'thunderWave', level: 1 }, { moveId: 'agility', level: 1 }, { moveId: 'twister', level: 1 }, { moveId: 'dragonBreath', level: 25 }, { moveId: 'wingAttack', level: 33 }, { moveId: 'bodySlam', level: 38 }, { moveId: 'outrage', level: 47 }, { moveId: 'extremeSpeed', level: 55 }],
   },
   mewtwo: {
     pokedexId: 150,
@@ -1415,7 +1415,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 106, atk: 110, def: 90, spa: 154, spd: 90, spe: 130 },
     catchRate: 3,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/150.png',
-    learnset: [{ moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'psychic', level: 1 }, { moveId: 'swift', level: 1 }],
+    learnset: [{ moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'psychic', level: 1 }, { moveId: 'swift', level: 1 }, { moveId: 'barrier', level: 11 }, { moveId: 'recover', level: 22 }, { moveId: 'amnesia', level: 33 }, { moveId: 'reflect', level: 44 }, { moveId: 'futureSight', level: 55 }, { moveId: 'shadowBall', level: 60 }],
   },
   mew: {
     pokedexId: 151,
@@ -1424,7 +1424,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png',
-    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'transform', level: 10 }, { moveId: 'megaPunch', level: 20 }, { moveId: 'metronome', level: 30 }],
+    learnset: [{ moveId: 'pound', level: 1 }, { moveId: 'transform', level: 10 }, { moveId: 'megaPunch', level: 20 }, { moveId: 'metronome', level: 30 }, { moveId: 'psychic', level: 40 }, { moveId: 'ancientPower', level: 50 }, { moveId: 'amnesia', level: 55 }, { moveId: 'bodySlam', level: 60 }],
   },
   // pokemon-gen2 (152-251)
   chikorita: {
@@ -1625,7 +1625,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 20, atk: 40, def: 15, spa: 35, spd: 35, spe: 60 },
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/172.png',
-    learnset: [{ moveId: 'thunderShock', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'thunderWave', level: 6 }, { moveId: 'sweetScent', level: 11 }],
+    learnset: [{ moveId: 'thunderShock', level: 1 }, { moveId: 'tailWhip', level: 1 }, { moveId: 'thunderWave', level: 6 }, { moveId: 'sweetScent', level: 11 }, { moveId: 'charge', level: 15 }, { moveId: 'quickAttack', level: 18 }, { moveId: 'spark', level: 22 }],
   },
   cleffa: {
     pokedexId: 173,
@@ -1643,7 +1643,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 90, atk: 30, def: 15, spa: 40, spd: 20, spe: 15 },
     catchRate: 170,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/174.png',
-    learnset: [{ moveId: 'sing', level: 1 }, { moveId: 'pound', level: 1 }, { moveId: 'sweetScent', level: 5 }, { moveId: 'doubleSlap', level: 9 }],
+    learnset: [{ moveId: 'sing', level: 1 }, { moveId: 'pound', level: 1 }, { moveId: 'sweetScent', level: 5 }, { moveId: 'doubleSlap', level: 9 }, { moveId: 'defenseCurl', level: 13 }, { moveId: 'bodySlam', level: 17 }, { moveId: 'dazzlingGleam', level: 21 }],
   },
   togepi: {
     pokedexId: 175,
@@ -2117,7 +2117,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     baseStats: { hp: 45, atk: 55, def: 45, spa: 65, spd: 45, spe: 75 },
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/225.png',
-    learnset: [{ moveId: 'powderSnow', level: 1 }, { moveId: 'icyWind', level: 13 }, { moveId: 'quickAttack', level: 19 }, { moveId: 'iceBeam', level: 31 }],
+    learnset: [{ moveId: 'powderSnow', level: 1 }, { moveId: 'icyWind', level: 13 }, { moveId: 'quickAttack', level: 19 }, { moveId: 'iceBeam', level: 31 }, { moveId: 'peck', level: 5 }, { moveId: 'wingAttack', level: 25 }, { moveId: 'auroraBeam', level: 37 }, { moveId: 'bodySlam', level: 43 }],
   },
   mantine: {
     pokedexId: 226,

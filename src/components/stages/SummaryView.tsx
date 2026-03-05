@@ -170,15 +170,13 @@ const SummaryView: React.FC = () => {
                     <div className="flex items-center gap-2 text-slate-300 text-sm font-bold">
                         <Sword size={16} /> 招式 ({pokemon.moves.length}/4)
                     </div>
-                    {learnableMoves.length > 0 && (
-                        <button
-                            onClick={() => { setShowLearnPanel(!showLearnPanel); setForgetTargetMoveId(null); }}
-                            className="flex items-center gap-1 text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors"
-                        >
-                            <BookOpen size={14} />
-                            {showLearnPanel ? '收起' : '学习招式'}
-                        </button>
-                    )}
+                    <button
+                        onClick={() => { setShowLearnPanel(!showLearnPanel); setForgetTargetMoveId(null); }}
+                        className="flex items-center gap-1 text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors"
+                    >
+                        <BookOpen size={14} />
+                        {showLearnPanel ? '收起' : '学习招式'}
+                    </button>
                 </div>
                 <div className="space-y-2">
                     {pokemon.moves.map((m, idx) => (
