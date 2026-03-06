@@ -137,6 +137,18 @@ export function ShopScene({ onExit }: ShopSceneProps) {
 
               <div>
                 <div className="flex items-center gap-2 mb-3">
+                  <div className="h-4 w-1 bg-emerald-500 rounded-full"></div>
+                  <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">经验糖果</h3>
+                </div>
+                <div className="space-y-3">
+                  <ShopItem name="经验糖果S" desc="给宝可梦喂下后，能获得100点经验值" price={500} accent="amber" onBuy={() => buyItem('exp-candy-s', 500, 1)} />
+                  <ShopItem name="经验糖果M" desc="给宝可梦喂下后，能获得500点经验值" price={2000} accent="amber" onBuy={() => buyItem('exp-candy-m', 2000, 1)} />
+                  <ShopItem name="经验糖果L" desc="给宝可梦喂下后，能获得3000点经验值" price={8000} accent="amber" onBuy={() => buyItem('exp-candy-l', 8000, 1)} />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-2 mb-3">
                   <div className="h-4 w-1 bg-rose-500 rounded-full"></div>
                   <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">捕获用精灵球</h3>
                 </div>

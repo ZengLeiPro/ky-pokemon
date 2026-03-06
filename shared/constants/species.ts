@@ -240,7 +240,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     catchRate: 190,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png',
     learnset: [{ moveId: 'growl', level: 1 }, { moveId: 'thunderShock', level: 1 }, { moveId: 'tailWhip', level: 6 }, { moveId: 'thunderWave', level: 9 }, { moveId: 'quickAttack', level: 13 }, { moveId: 'charge', level: 17 }, { moveId: 'spark', level: 20 }, { moveId: 'agility', level: 24 }, { moveId: 'bodySlam', level: 28 }, { moveId: 'thunderbolt', level: 33 }],
-    evolutions: [{ targetSpeciesId: 'raichu', item: 'thunder-stone' }],
+    evolutions: [{ targetSpeciesId: 'raichu', level: 25 }],
   },
   raichu: {
     pokedexId: 26,
@@ -887,6 +887,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     catchRate: 90,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/93.png',
     learnset: [{ moveId: 'nightShade', level: 1 }, { moveId: 'confuseRay', level: 1 }, { moveId: 'lick', level: 1 }, { moveId: 'spite', level: 1 }, { moveId: 'hypnosis', level: 12 }, { moveId: 'curse', level: 16 }, { moveId: 'smog', level: 20 }, { moveId: 'shadowBall', level: 30 }, { moveId: 'sludge', level: 35 }, { moveId: 'sludgeBomb', level: 42 }],
+    evolutions: [{ targetSpeciesId: 'gengar', level: 38 }],
   },
   gengar: {
     pokedexId: 94,
@@ -1258,7 +1259,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png',
     learnset: [{ moveId: 'sandAttack', level: 1 }, { moveId: 'tackle', level: 1 }, { moveId: 'helpingHand', level: 1 }, { moveId: 'growl', level: 16 }, { moveId: 'quickAttack', level: 10 }, { moveId: 'bite', level: 20 }, { moveId: 'swift', level: 25 }, { moveId: 'takeDown', level: 30 }, { moveId: 'bodySlam', level: 36 }],
-    evolutions: [{ targetSpeciesId: 'flareon', item: 'fire-stone' }],
+    evolutions: [{ targetSpeciesId: 'vaporeon', level: 25 }, { targetSpeciesId: 'jolteon', level: 25 }, { targetSpeciesId: 'flareon', level: 25 }],
   },
   vaporeon: {
     pokedexId: 134,

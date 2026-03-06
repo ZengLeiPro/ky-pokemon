@@ -77,8 +77,8 @@ const RoamStage: React.FC = () => {
         ? location.encounters
         : ['rattata', 'pidgey'];
 
-    if (roll < 0.8) {
-      // 80% chance to encounter wild Pokemon
+    if (roll < 0.75) {
+      // 75% chance to encounter wild Pokemon
       const randomEnemy = encounterPool[Math.floor(Math.random() * encounterPool.length)];
       // Validate species exists
       if (SPECIES_DATA[randomEnemy]) {
@@ -86,11 +86,21 @@ const RoamStage: React.FC = () => {
       } else {
           addLog("草丛里有什么东西跑掉了...", "info");
       }
-    } else if (roll < 0.9) {
-      // 10% chance to find item
+    } else if (roll < 0.85) {
+      // 10% chance to find healing item
       addItem('potion', 1);
+    } else if (roll < 0.95) {
+      // 10% chance to find exp candy
+      const candyRoll = Math.random();
+      if (candyRoll < 0.6) {
+        addItem('exp-candy-s', 1);
+      } else if (candyRoll < 0.9) {
+        addItem('exp-candy-m', 1);
+      } else {
+        addItem('exp-candy-l', 1);
+      }
     } else {
-      // 10% chance for nothing
+      // 5% chance for nothing
       addLog("微风吹过，一切都很平静。", "info");
     }
   };

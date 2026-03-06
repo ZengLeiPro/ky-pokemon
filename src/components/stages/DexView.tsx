@@ -207,7 +207,7 @@ const DexView: React.FC = () => {
                                       return (
                                           <div key={idx} className="flex items-center gap-3 bg-slate-800 border border-slate-700 p-3 rounded-xl">
                                               <div className="flex flex-col items-center min-w-[3rem]">
-                                                  <span className="text-[10px] text-slate-500 uppercase">Lv.{evo.level}</span>
+                                                  <span className="text-[10px] text-slate-500 uppercase">{evo.level ? `Lv.${evo.level}` : evo.item ? evo.item : '特殊'}</span>
                                                   <ChevronRight size={16} className="text-slate-600 my-1" />
                                               </div>
                                               <div className="flex items-center gap-3">

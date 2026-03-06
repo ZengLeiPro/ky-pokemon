@@ -15,9 +15,11 @@ export const checkEvolution = (
 
     if (speciesKey && SPECIES_DATA[speciesKey].evolutions) {
         const evolutions = SPECIES_DATA[speciesKey].evolutions!;
-        const evo = evolutions.find(e => e.level && pokemon.level >= e.level);
+        const candidates = evolutions.filter(e => e.level && pokemon.level >= e.level);
 
-        if (evo) {
+        if (candidates.length > 0) {
+            // 如果有多个进化目标（如伊布），随机选一个
+            const evo = candidates[Math.floor(Math.random() * candidates.length)];
             return { targetSpeciesId: evo.targetSpeciesId };
         }
     }

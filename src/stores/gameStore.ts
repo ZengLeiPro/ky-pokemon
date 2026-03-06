@@ -924,6 +924,51 @@ export const useGameStore = create<GameState>()(
           } else {
               state.logs.push(createLogEntry(`${target.speciesName} 的HP已经满了！`));
           }
+      } else if (item.id === 'exp-candy-s') {
+          const expAmount = 100;
+          const { updatedPokemon, leveledUp, learnedMoves, pendingMoves, evolutionCandidate } = gainExperience(target, expAmount);
+          Object.assign(target, updatedPokemon);
+          state.inventory[itemIndex].quantity--;
+          state.logs.push(createLogEntry(`对 ${target.speciesName} 使用了 ${item.name}，获得了 ${expAmount} 点经验值！`));
+          if (leveledUp) {
+              state.logs.push(createLogEntry(`${target.speciesName} 升到了 Lv.${target.level}！`, 'urgent'));
+              if (learnedMoves && learnedMoves.length > 0) {
+                  learnedMoves.forEach(m => state.logs.push(createLogEntry(`${target.speciesName} 学会了 ${m}！`)));
+              }
+              if (evolutionCandidate) {
+                  state.evolution = { isEvolving: true, pokemon: target, targetSpeciesId: evolutionCandidate.targetSpeciesId, stage: 'START' };
+              }
+          }
+      } else if (item.id === 'exp-candy-m') {
+          const expAmount = 500;
+          const { updatedPokemon, leveledUp, learnedMoves, pendingMoves, evolutionCandidate } = gainExperience(target, expAmount);
+          Object.assign(target, updatedPokemon);
+          state.inventory[itemIndex].quantity--;
+          state.logs.push(createLogEntry(`对 ${target.speciesName} 使用了 ${item.name}，获得了 ${expAmount} 点经验值！`));
+          if (leveledUp) {
+              state.logs.push(createLogEntry(`${target.speciesName} 升到了 Lv.${target.level}！`, 'urgent'));
+              if (learnedMoves && learnedMoves.length > 0) {
+                  learnedMoves.forEach(m => state.logs.push(createLogEntry(`${target.speciesName} 学会了 ${m}！`)));
+              }
+              if (evolutionCandidate) {
+                  state.evolution = { isEvolving: true, pokemon: target, targetSpeciesId: evolutionCandidate.targetSpeciesId, stage: 'START' };
+              }
+          }
+      } else if (item.id === 'exp-candy-l') {
+          const expAmount = 3000;
+          const { updatedPokemon, leveledUp, learnedMoves, pendingMoves, evolutionCandidate } = gainExperience(target, expAmount);
+          Object.assign(target, updatedPokemon);
+          state.inventory[itemIndex].quantity--;
+          state.logs.push(createLogEntry(`对 ${target.speciesName} 使用了 ${item.name}，获得了 ${expAmount} 点经验值！`));
+          if (leveledUp) {
+              state.logs.push(createLogEntry(`${target.speciesName} 升到了 Lv.${target.level}！`, 'urgent'));
+              if (learnedMoves && learnedMoves.length > 0) {
+                  learnedMoves.forEach(m => state.logs.push(createLogEntry(`${target.speciesName} 学会了 ${m}！`)));
+              }
+              if (evolutionCandidate) {
+                  state.evolution = { isEvolving: true, pokemon: target, targetSpeciesId: evolutionCandidate.targetSpeciesId, stage: 'START' };
+              }
+          }
       } else if (item.category === 'POKEBALLS') {
           state.logs.push(createLogEntry(`${item.name}只能在战斗中使用！`, 'info'));
       } else if (item.effect) {
@@ -942,6 +987,9 @@ export const useGameStore = create<GameState>()(
               'super-potion': { name: '好伤药', description: '喷雾式伤药，能恢复宝可梦50点HP。', category: 'MEDICINE' },
               'hyper-potion': { name: '超高级伤药', description: '喷雾式伤药，能恢复宝可梦200点HP。', category: 'MEDICINE' },
               'max-potion': { name: '全满药', description: '能回复宝可梦全部HP。', category: 'MEDICINE' },
+              'exp-candy-s': { name: '经验糖果S', description: '给宝可梦喂下后，能获得100点经验值。', category: 'MEDICINE' },
+              'exp-candy-m': { name: '经验糖果M', description: '给宝可梦喂下后，能获得500点经验值。', category: 'MEDICINE' },
+              'exp-candy-l': { name: '经验糖果L', description: '给宝可梦喂下后，能获得3000点经验值。', category: 'MEDICINE' },
               'greatball': { name: '超级球', description: '比起精灵球更容易捉到宝可梦。', category: 'POKEBALLS' },
               'ultraball': { name: '高级球', description: '比起超级球更容易捉到宝可梦。', category: 'POKEBALLS' },
               'masterball': { name: '大师球', description: '必定能捉到野生宝可梦的终极球。', category: 'POKEBALLS' },
@@ -1127,6 +1175,9 @@ export const useGameStore = create<GameState>()(
                 'super-potion': { name: '好伤药', description: '恢复 50 点 HP', category: 'MEDICINE' },
                 'hyper-potion': { name: '超高级伤药', description: '恢复 200 点 HP', category: 'MEDICINE' },
                 'max-potion': { name: '全满药', description: '完全恢复 HP', category: 'MEDICINE' },
+                'exp-candy-s': { name: '经验糖果S', description: '获得100点经验值', category: 'MEDICINE' },
+                'exp-candy-m': { name: '经验糖果M', description: '获得500点经验值', category: 'MEDICINE' },
+                'exp-candy-l': { name: '经验糖果L', description: '获得3000点经验值', category: 'MEDICINE' },
                 'greatball': { name: '超级球', description: '更容易捉到宝可梦', category: 'POKEBALLS' },
                 'ultraball': { name: '高级球', description: '捕获率更高的球', category: 'POKEBALLS' },
                 'masterball': { name: '大师球', description: '必定能捉到的终极球', category: 'POKEBALLS' },
