@@ -749,16 +749,20 @@ export const useGameStore = create<GameState>()(
 
     if (deadEnemy && deadEnemy.currentHp <= 0) {
         addLog(`敌方的 ${deadEnemy.speciesName} 倒下了！`);
-        
-        const expYield = Math.floor((currentEnemy.baseStats.hp + currentEnemy.baseStats.atk + currentEnemy.baseStats.spe) / 3); 
+
+        const expYield = Math.floor((currentEnemy.baseStats.hp + currentEnemy.baseStats.atk + currentEnemy.baseStats.spe) / 3);
         const expAmount = Math.floor(expYield * currentEnemy.level / 5) + 10;
-        
+
         set(produce((state: GameState) => {
-            const p = state.playerParty[state.battle.playerActiveIndex];
+            // === 经验共享：参战宝可梦100%，其他存活宝可梦50% ===
+            const activeIdx = state.battle.playerActiveIndex;
+
+            // 1. 参战宝可梦获得完整经验
+            const p = state.playerParty[activeIdx];
             const { updatedPokemon, leveledUp, learnedMoves, pendingMoves, evolutionCandidate } = gainExperience(p, expAmount);
 
-            state.playerParty[state.battle.playerActiveIndex] = updatedPokemon;
-            state.logs.push(createLogEntry(`获得了 ${expAmount} 点经验值。`));
+            state.playerParty[activeIdx] = updatedPokemon;
+            state.logs.push(createLogEntry(`${updatedPokemon.speciesName} 获得了 ${expAmount} 点经验值。`));
 
             if (leveledUp) {
                 state.logs.push(createLogEntry(`${updatedPokemon.speciesName} 升到了 Lv.${updatedPokemon.level}！`, 'urgent'));
@@ -778,7 +782,7 @@ export const useGameStore = create<GameState>()(
                         state.logs.push(createLogEntry(`但是，${updatedPokemon.speciesName} 已经学会了4个招式。`, 'urgent'));
                     }
                     state.battle.pendingMoveLearn = {
-                        pokemonIndex: state.battle.playerActiveIndex,
+                        pokemonIndex: activeIdx,
                         moveId: firstMoveId,
                         remainingMoves: pendingMoves.slice(1),
                     };
@@ -794,6 +798,40 @@ export const useGameStore = create<GameState>()(
                          targetSpeciesId: evolutionCandidate.targetSpeciesId,
                          stage: 'START'
                      };
+                }
+            }
+
+            // 2. 其他存活的宝可梦获得50%经验
+            const sharedExp = Math.floor(expAmount / 2);
+            if (sharedExp > 0) {
+                for (let i = 0; i < state.playerParty.length; i++) {
+                    if (i === activeIdx) continue; // 跳过参战宝可梦
+                    const mon = state.playerParty[i];
+                    if (mon.currentHp <= 0) continue; // 跳过已倒下的
+
+                    const result = gainExperience(mon, sharedExp);
+                    state.playerParty[i] = result.updatedPokemon;
+                    state.logs.push(createLogEntry(`${result.updatedPokemon.speciesName} 获得了 ${sharedExp} 点经验值。`));
+
+                    if (result.leveledUp) {
+                        state.logs.push(createLogEntry(`${result.updatedPokemon.speciesName} 升到了 Lv.${result.updatedPokemon.level}！`, 'urgent'));
+                        if (result.learnedMoves && result.learnedMoves.length > 0) {
+                            result.learnedMoves.forEach(m => {
+                                state.logs.push(createLogEntry(`${result.updatedPokemon.speciesName} 学会了 ${m}！`));
+                            });
+                        }
+                        // 非参战宝可梦：招式满了自动跳过，不弹选择界面
+                        // 进化留到参战宝可梦的进化结束后（如果没有参战宝可梦进化，则触发第一个）
+                        if (result.evolutionCandidate && !state.evolution.isEvolving) {
+                            state.logs.push(createLogEntry(`什么？ ${result.updatedPokemon.speciesName} 的样子...`, 'urgent'));
+                            state.evolution = {
+                                isEvolving: true,
+                                pokemon: result.updatedPokemon,
+                                targetSpeciesId: result.evolutionCandidate.targetSpeciesId,
+                                stage: 'START'
+                            };
+                        }
+                    }
                 }
             }
 
