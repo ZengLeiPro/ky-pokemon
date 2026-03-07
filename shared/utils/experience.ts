@@ -3,6 +3,9 @@ import { SPECIES_DATA, MOVES, findSpeciesKeyByPokedexId } from '../constants/ind
 import { calculateStats } from './stats.js';
 import { checkEvolution } from './evolution.js';
 
+/** 经验曲线公式：总经验 = 5 * Level² */
+export const expForLevel = (level: number) => 5 * level * level;
+
 export interface ExperienceGainResult {
   updatedPokemon: Pokemon;
   leveledUp: boolean;
@@ -34,31 +37,31 @@ export const gainExperience = (
     let finalLevel = startLevel;
     
     // Check for level up
-    // Using simple cubic curve: Total Exp = Level^3
-    // Current Exp Base = Level^3
+    // Using quadratic curve: Total Exp = 5 * Level²
+    // Current Exp Base = expForLevel(Level)
     // Progress = exp (relative to current level start)
-    // Next Level Threshold = (Level+1)^3 (absolute total exp)
-    
+    // Next Level Threshold = expForLevel(Level+1) (absolute total exp)
+
     while (true) {
         // 检查是否已达到最大等级
         if (newPokemon.level >= 100) {
             newPokemon.level = 100;
             newPokemon.exp = 0;
-            newPokemon.nextLevelExp = Math.pow(101, 3) - Math.pow(100, 3);
+            newPokemon.nextLevelExp = expForLevel(101) - expForLevel(100);
             finalLevel = 100;
             break;
         }
 
-        const currentBaseExp = Math.pow(newPokemon.level, 3);
+        const currentBaseExp = expForLevel(newPokemon.level);
         const totalExp = currentBaseExp + newPokemon.exp; // Absolute total exp
-        const nextLevelThreshold = Math.pow(newPokemon.level + 1, 3);
+        const nextLevelThreshold = expForLevel(newPokemon.level + 1);
 
         if (totalExp >= nextLevelThreshold) {
             newPokemon.level++;
             // Calculate overflow relative to NEW level base
-            const newBaseExp = Math.pow(newPokemon.level, 3);
+            const newBaseExp = expForLevel(newPokemon.level);
             newPokemon.exp = totalExp - newBaseExp;
-            newPokemon.nextLevelExp = Math.pow(newPokemon.level + 1, 3);
+            newPokemon.nextLevelExp = expForLevel(newPokemon.level + 1);
             leveledUp = true;
         } else {
             // Not leveling up (or anymore)

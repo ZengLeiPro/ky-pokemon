@@ -1,6 +1,7 @@
 import type { Pokemon, Move, BaseStats } from '../types/index.js';
 import { SPECIES_DATA, MOVES } from '../constants/index.js';
 import { calculateStats } from './stats.js';
+import { expForLevel } from './experience.js';
 
 /**
  * 创建宝可梦实例
@@ -55,7 +56,7 @@ export const createPokemon = (
         moves: initialMoves.map(m => ({ move: m, ppCurrent: m.ppMax })),
         spriteUrl: data.spriteUrl,
         exp: 0,
-        nextLevelExp: Math.pow(level + 1, 3), // Simplified Cubic exp curve
+        nextLevelExp: expForLevel(level + 1), // Quadratic exp curve: 5 * Level²
         speciesData: {
             pokedexId: data.pokedexId,
             catchRate: data.catchRate

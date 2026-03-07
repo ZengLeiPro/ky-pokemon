@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../stores/gameStore';
-import { createPokemon, gainExperience, calculateStats } from '../lib/mechanics';
+import { createPokemon, gainExperience, calculateStats, expForLevel } from '../lib/mechanics';
 import { produce } from 'immer';
 import { X, ChevronDown, ChevronUp, Terminal } from 'lucide-react';
 import { SPECIES_DATA, MOVES } from '../constants';
@@ -133,8 +133,8 @@ const CHEAT_COMMANDS: CheatCommand[] = [
           }
 
           const targetLevel = 100;
-          const currentTotalExp = Math.pow(pokemon.level, 3) + pokemon.exp;
-          const targetTotalExp = Math.pow(targetLevel, 3); // 100级的总经验值
+          const currentTotalExp = expForLevel(pokemon.level) + pokemon.exp;
+          const targetTotalExp = expForLevel(targetLevel); // 100级的总经验值
           const expNeeded = Math.max(0, targetTotalExp - currentTotalExp);
 
           if (expNeeded > 0) {
@@ -145,7 +145,7 @@ const CHEAT_COMMANDS: CheatCommand[] = [
             if (state.playerParty[index].level > 100) {
               state.playerParty[index].level = 100;
               state.playerParty[index].exp = 0;
-              state.playerParty[index].nextLevelExp = Math.pow(101, 3) - Math.pow(100, 3);
+              state.playerParty[index].nextLevelExp = expForLevel(101) - expForLevel(100);
             }
 
             state.playerParty[index].currentHp = state.playerParty[index].maxHp;
@@ -336,17 +336,17 @@ const CheatConsole: React.FC = () => {
 
       useGameStore.setState(produce((state: any) => {
         const pokemon = state.playerParty[index];
-        const currentTotalExp = Math.pow(pokemon.level, 3) + pokemon.exp;
+        const currentTotalExp = expForLevel(pokemon.level) + pokemon.exp;
 
         // 计算目标经验值
         let targetTotalExp;
         if (targetLevel2 !== null) {
           // 设置到 targetLevel1，但经验值接近 targetLevel2
-          const level2BaseExp = Math.pow(targetLevel2, 3);
+          const level2BaseExp = expForLevel(targetLevel2);
           targetTotalExp = level2BaseExp - 10; // 距离下一级还差10点经验
         } else {
           // 设置到 targetLevel1 的0经验
-          targetTotalExp = Math.pow(targetLevel1, 3);
+          targetTotalExp = expForLevel(targetLevel1);
         }
 
         const expNeeded = targetTotalExp - currentTotalExp;
@@ -392,8 +392,8 @@ const CheatConsole: React.FC = () => {
         } else if (expNeeded < 0) {
           // 需要降级 - 直接设置等级和经验
           state.playerParty[index].level = targetLevel1;
-          state.playerParty[index].exp = targetLevel2 !== null ? (Math.pow(targetLevel2, 3) - 10 - Math.pow(targetLevel1, 3)) : 0;
-          state.playerParty[index].nextLevelExp = Math.pow(targetLevel1 + 1, 3);
+          state.playerParty[index].exp = targetLevel2 !== null ? (expForLevel(targetLevel2) - 10 - expForLevel(targetLevel1)) : 0;
+          state.playerParty[index].nextLevelExp = expForLevel(targetLevel1 + 1);
 
           // 重新计算属性值
           const { stats, maxHp } = calculateStats(

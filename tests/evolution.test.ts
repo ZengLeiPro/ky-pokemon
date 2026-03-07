@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { gainExperience, checkEvolution, evolvePokemon, calculateStats } from '../src/lib/mechanics';
+import { gainExperience, checkEvolution, evolvePokemon, calculateStats, expForLevel } from '../src/lib/mechanics';
 import { Pokemon, BaseStats } from '../src/types';
 import { SPECIES_DATA } from '../src/constants';
 
@@ -21,7 +21,7 @@ function createPokemon(speciesId: string, level: number): Pokemon {
     stats,
     moves: [],
     exp: 0, // Current level progress (0 means just leveled up)
-    nextLevelExp: Math.pow(level + 1, 3),
+    nextLevelExp: expForLevel(level + 1),
     ivs,
     evs,
     types: data.types || ['Normal'],
