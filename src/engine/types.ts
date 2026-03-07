@@ -89,6 +89,8 @@ export interface InteractionZone {
   message?: string;
   /** 交互回调标识（如 'open-pc'） */
   onInteract?: string;
+  /** 关联 NPC id：触发此区域时走对应 NPC 的对话流程（包含选项） */
+  linkedNpcId?: string;
 }
 
 /** 玩家状态 */

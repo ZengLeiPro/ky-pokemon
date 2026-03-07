@@ -187,27 +187,24 @@ export const pokemonCenterMap: MapData = {
       targetScene: 'outside',
       targetSpawn: 'pokemon-center-door',
     },
-    // 柜台正面交互 - 与乔伊小姐对话治疗
+    // 柜台正面交互 - 关联到乔伊小姐，走她的对话+选项流程
     {
       id: 'counter-heal-left',
       position: { x: 4, y: 2 },
       type: 'item',
-      message: '让我帮你的宝可梦恢复体力吧!...好了! 你的宝可梦已经完全恢复了!',
-      onInteract: 'heal',
+      linkedNpcId: 'nurse-joy',
     },
     {
       id: 'counter-heal-center',
       position: { x: 5, y: 2 },
       type: 'item',
-      message: '让我帮你的宝可梦恢复体力吧!...好了! 你的宝可梦已经完全恢复了!',
-      onInteract: 'heal',
+      linkedNpcId: 'nurse-joy',
     },
     {
       id: 'counter-heal-right',
       position: { x: 6, y: 2 },
       type: 'item',
-      message: '让我帮你的宝可梦恢复体力吧!...好了! 你的宝可梦已经完全恢复了!',
-      onInteract: 'heal',
+      linkedNpcId: 'nurse-joy',
     },
     // PC 终端交互（PC 在 (8,1)，从 (8,2) 面朝上交互）
     {

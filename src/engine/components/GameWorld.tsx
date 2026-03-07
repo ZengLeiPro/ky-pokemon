@@ -176,7 +176,24 @@ export function GameWorld({
         setDialogActive(true);
       } else if (result.type === 'zone' && result.zone) {
         const zone = result.zone;
-        if (
+        if (zone.linkedNpcId) {
+          // 关联 NPC：走对应 NPC 的对话流程
+          const linkedNpc = mapData.npcs.find((n) => n.id === zone.linkedNpcId);
+          if (linkedNpc) {
+            dialogNpcRef.current = linkedNpc;
+            setDialogTexts(linkedNpc.dialog);
+            setDialogIndex(0);
+            setDialogSpeaker(linkedNpc.name);
+            if (linkedNpc.choices && linkedNpc.choices.length > 0) {
+              setDialogCallback(undefined);
+              setDialogChoices(linkedNpc.choices);
+            } else {
+              setDialogCallback(linkedNpc.onInteract);
+              setDialogChoices(undefined);
+            }
+            setDialogActive(true);
+          }
+        } else if (
           (zone.type === 'door' || zone.type === 'warp') &&
           zone.targetScene &&
           zone.targetSpawn
