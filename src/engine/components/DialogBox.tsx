@@ -289,7 +289,7 @@ export function DialogBox({
                 }}
                 onMouseEnter={() => setSelectedChoiceIndex(idx)}
               >
-                {idx === selectedChoiceIndex ? '▶ ' : '  '}{choice.label}
+                {choice.label}
               </div>
             ))}
           </div>

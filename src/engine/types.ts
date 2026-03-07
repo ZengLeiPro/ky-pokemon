@@ -59,6 +59,8 @@ export interface DialogChoice {
   label: string;
   /** 选择后触发的交互回调标识 */
   action: string;
+  /** 选择后显示的后续对话（对话结束后才触发 action） */
+  followUpDialog?: string[];
 }
 
 /** NPC 数据 */

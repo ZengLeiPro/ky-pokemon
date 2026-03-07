@@ -296,19 +296,24 @@ export function GameWorld({
 
   // ---- 选项选择 ----
   const handleChoiceSelect = useCallback((choice: DialogChoice) => {
-    setDialogActive(false);
-
-    // 触发选项对应的交互回调
-    if (choice.action !== 'dismiss') {
-      onInteraction?.(choice.action, {
-        npc: dialogNpcRef.current,
-      });
+    if (choice.followUpDialog && choice.followUpDialog.length > 0) {
+      // 有后续对话：显示对话，结束后再触发 action
+      setDialogTexts(choice.followUpDialog);
+      setDialogIndex(0);
+      setDialogChoices(undefined);
+      setDialogCallback(choice.action === 'dismiss' ? undefined : choice.action);
+    } else {
+      // 无后续对话：直接关闭并触发
+      setDialogActive(false);
+      if (choice.action !== 'dismiss') {
+        onInteraction?.(choice.action, {
+          npc: dialogNpcRef.current,
+        });
+      }
+      dialogNpcRef.current = null;
+      setDialogCallback(undefined);
+      setDialogChoices(undefined);
     }
-
-    // 清理
-    dialogNpcRef.current = null;
-    setDialogCallback(undefined);
-    setDialogChoices(undefined);
   }, [onInteraction]);
 
   const tileSize = TILE_SIZE;

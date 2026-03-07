@@ -160,9 +160,14 @@ export const pokemonCenterMap: MapData = {
         '请问你需要什么服务呢?',
       ],
       choices: [
-        { label: '治疗宝可梦', action: 'heal' },
+        { label: '治疗宝可梦', action: 'heal', followUpDialog: [
+          '好的, 让我帮你的宝可梦恢复体力吧!',
+          '...好了! 你的宝可梦已经完全恢复了!',
+        ]},
         { label: '合成招式学习器', action: 'open-tm-craft' },
-        { label: '没事', action: 'dismiss' },
+        { label: '没事', action: 'dismiss', followUpDialog: [
+          '好的, 有需要随时来找我哦!',
+        ]},
       ],
     },
   ],
