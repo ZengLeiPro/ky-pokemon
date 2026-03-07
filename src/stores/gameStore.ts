@@ -811,7 +811,7 @@ export const useGameStore = create<GameState>()(
 
                     const result = gainExperience(mon, sharedExp);
                     state.playerParty[i] = result.updatedPokemon;
-                    state.logs.push(createLogEntry(`${result.updatedPokemon.speciesName} 获得了 ${sharedExp} 点经验值。`));
+                    state.logs.push(createLogEntry(`${result.updatedPokemon.speciesName} 也获得了 ${sharedExp} 点经验值！`, 'info'));
 
                     if (result.leveledUp) {
                         state.logs.push(createLogEntry(`${result.updatedPokemon.speciesName} 升到了 Lv.${result.updatedPokemon.level}！`, 'urgent'));
