@@ -141,9 +141,9 @@ export function ShopScene({ onExit }: ShopSceneProps) {
                   <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">经验糖果</h3>
                 </div>
                 <div className="space-y-3">
-                  <ShopItem name="经验糖果S" desc="给宝可梦喂下后，能获得200点经验值" price={300} accent="amber" onBuy={() => buyItem('exp-candy-s', 300, 1)} />
-                  <ShopItem name="经验糖果M" desc="给宝可梦喂下后，能获得1000点经验值" price={1000} accent="amber" onBuy={() => buyItem('exp-candy-m', 1000, 1)} />
-                  <ShopItem name="经验糖果L" desc="给宝可梦喂下后，能获得5000点经验值" price={5000} accent="amber" onBuy={() => buyItem('exp-candy-l', 5000, 1)} />
+                  <ShopItem name="经验糖果S" desc="给宝可梦喂下后，能获得800点经验值" price={400} accent="amber" onBuy={() => buyItem('exp-candy-s', 400, 1)} />
+                  <ShopItem name="经验糖果M" desc="给宝可梦喂下后，能获得3000点经验值" price={1500} accent="amber" onBuy={() => buyItem('exp-candy-m', 1500, 1)} />
+                  <ShopItem name="经验糖果L" desc="给宝可梦喂下后，能获得10000点经验值" price={5000} accent="amber" onBuy={() => buyItem('exp-candy-l', 5000, 1)} />
                 </div>
               </div>
 
