@@ -132,12 +132,12 @@ export function DialogBox({
         } else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
           e.preventDefault();
           setSelectedChoiceIndex((prev) => (prev < choices.length - 1 ? prev + 1 : 0));
-        } else if (['z', 'Z', 'Enter', ' '].includes(e.key)) {
+        } else if (['z', 'Z', 'a', 'A', 'Enter', ' '].includes(e.key)) {
           e.preventDefault();
           onChoiceSelect?.(choices[selectedChoiceIndex]);
         }
       } else {
-        if (['z', 'Z', 'Enter', ' '].includes(e.key)) {
+        if (['z', 'Z', 'a', 'A', 'Enter', ' '].includes(e.key)) {
           e.preventDefault();
           handleInteract();
         }

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Direction } from '../types';
 import { INTERACTION_KEY } from '../constants';
 
-/** 方向键映射 */
+/** 方向键映射（a/A 留给交互确认键，方向左用方向键） */
 const DIRECTION_KEY_MAP: Record<string, Direction> = {
   ArrowUp: 'up',
   ArrowDown: 'down',
@@ -12,8 +12,6 @@ const DIRECTION_KEY_MAP: Record<string, Direction> = {
   W: 'up',
   s: 'down',
   S: 'down',
-  a: 'left',
-  A: 'left',
   d: 'right',
   D: 'right',
 };
@@ -22,6 +20,8 @@ const DIRECTION_KEY_MAP: Record<string, Direction> = {
 const INTERACT_KEYS = new Set([
   INTERACTION_KEY,
   INTERACTION_KEY.toUpperCase(),
+  'a',
+  'A',
   'Enter',
   ' ', // Space
 ]);
