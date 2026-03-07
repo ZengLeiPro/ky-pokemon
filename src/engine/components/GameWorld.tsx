@@ -3,7 +3,7 @@
 // ============================================================
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Direction, MapData, NPCData, InteractionResult } from '../types';
+import type { Direction, MapData, NPCData, InteractionResult, DialogChoice } from '../types';
 import { TILE_SIZE } from '../constants';
 import { useGridMovement } from '../hooks/useGridMovement';
 import { useCamera } from '../hooks/useCamera';
@@ -59,6 +59,7 @@ export function GameWorld({
   const [dialogIndex, setDialogIndex] = useState(0);
   const [dialogSpeaker, setDialogSpeaker] = useState<string | undefined>();
   const [dialogCallback, setDialogCallback] = useState<string | undefined>();
+  const [dialogChoices, setDialogChoices] = useState<DialogChoice[] | undefined>();
   const dialogNpcRef = useRef<NPCData | null>(null);
 
   // 摇杆方向
@@ -164,7 +165,14 @@ export function GameWorld({
         setDialogTexts(npc.dialog);
         setDialogIndex(0);
         setDialogSpeaker(npc.name);
-        setDialogCallback(npc.onInteract);
+        if (npc.choices && npc.choices.length > 0) {
+          // 有选项的 NPC：回调由选项决定，不用 onInteract
+          setDialogCallback(undefined);
+          setDialogChoices(npc.choices);
+        } else {
+          setDialogCallback(npc.onInteract);
+          setDialogChoices(undefined);
+        }
         setDialogActive(true);
       } else if (result.type === 'zone' && result.zone) {
         const zone = result.zone;
@@ -266,7 +274,25 @@ export function GameWorld({
     // 清理
     dialogNpcRef.current = null;
     setDialogCallback(undefined);
+    setDialogChoices(undefined);
   }, [dialogCallback, onInteraction]);
+
+  // ---- 选项选择 ----
+  const handleChoiceSelect = useCallback((choice: DialogChoice) => {
+    setDialogActive(false);
+
+    // 触发选项对应的交互回调
+    if (choice.action !== 'dismiss') {
+      onInteraction?.(choice.action, {
+        npc: dialogNpcRef.current,
+      });
+    }
+
+    // 清理
+    dialogNpcRef.current = null;
+    setDialogCallback(undefined);
+    setDialogChoices(undefined);
+  }, [onInteraction]);
 
   const tileSize = TILE_SIZE;
 
@@ -322,6 +348,8 @@ export function GameWorld({
           speakerName={dialogSpeaker}
           onAdvance={handleDialogAdvance}
           onClose={handleDialogClose}
+          choices={dialogChoices}
+          onChoiceSelect={handleChoiceSelect}
         />
       )}
 

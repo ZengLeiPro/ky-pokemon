@@ -53,6 +53,14 @@ export interface MapData {
   interactions: InteractionZone[];
 }
 
+/** 对话选项 */
+export interface DialogChoice {
+  /** 选项显示文本 */
+  label: string;
+  /** 选择后触发的交互回调标识 */
+  action: string;
+}
+
 /** NPC 数据 */
 export interface NPCData {
   id: string;
@@ -64,6 +72,8 @@ export interface NPCData {
   dialog: string[];
   /** 交互回调标识（如 'heal', 'open-pc', 'battle'） */
   onInteract?: string;
+  /** 对话选项：在对话文本结束后显示选项菜单，玩家选择后触发对应 action */
+  choices?: DialogChoice[];
 }
 
 /** 交互区域（门、传送点等） */

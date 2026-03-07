@@ -46,6 +46,10 @@ const WorldStage: React.FC<WorldStageProps> = ({ scene }) => {
     setView('TRADE');
   }, [setView]);
 
+  const handleOpenTMCraft = useCallback(() => {
+    addLog('招式学习器合成功能即将开放，敬请期待!');
+  }, [addLog]);
+
   // ---- 道馆回调 ----
 
   const handleGymExit = useCallback(() => {
@@ -87,6 +91,7 @@ const WorldStage: React.FC<WorldStageProps> = ({ scene }) => {
         onHealTeam={handleHealTeam}
         onOpenPC={handleOpenPC}
         onTrade={handleTrade}
+        onOpenTMCraft={handleOpenTMCraft}
       />
     );
   }

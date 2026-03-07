@@ -157,10 +157,13 @@ export const pokemonCenterMap: MapData = {
       spriteId: 'nurse-joy',
       dialog: [
         '欢迎来到宝可梦中心!',
-        '让我帮你的宝可梦恢复体力吧!',
-        '...好了! 你的宝可梦已经完全恢复了!',
+        '请问你需要什么服务呢?',
       ],
-      onInteract: 'heal',
+      choices: [
+        { label: '治疗宝可梦', action: 'heal' },
+        { label: '合成招式学习器', action: 'open-tm-craft' },
+        { label: '没事', action: 'dismiss' },
+      ],
     },
   ],
 

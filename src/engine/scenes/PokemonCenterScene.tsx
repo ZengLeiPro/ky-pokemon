@@ -15,6 +15,8 @@ interface PokemonCenterSceneProps {
   onOpenPC: () => void;
   /** 打开交换界面 */
   onTrade: () => void;
+  /** 打开招式学习器合成界面 */
+  onOpenTMCraft?: () => void;
 }
 
 /**
@@ -31,6 +33,7 @@ export function PokemonCenterScene({
   onHealTeam,
   onOpenPC,
   onTrade,
+  onOpenTMCraft,
 }: PokemonCenterSceneProps) {
   // 淡入控制
   const [fadeIn, setFadeIn] = useState(true);
@@ -62,11 +65,14 @@ export function PokemonCenterScene({
         case 'open-trade':
           onTrade();
           break;
+        case 'open-tm-craft':
+          onOpenTMCraft?.();
+          break;
         default:
           break;
       }
     },
-    [onHealTeam, onOpenPC, onTrade],
+    [onHealTeam, onOpenPC, onTrade, onOpenTMCraft],
   );
 
   return (

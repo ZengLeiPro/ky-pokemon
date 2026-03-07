@@ -3,6 +3,7 @@
 // ============================================================
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import type { DialogChoice } from '../types';
 
 interface DialogBoxProps {
   /** 对话文本数组 */
@@ -15,6 +16,10 @@ interface DialogBoxProps {
   onAdvance: () => void;
   /** 关闭对话框 */
   onClose: () => void;
+  /** 对话选项（在最后一句对话显示完后出现） */
+  choices?: DialogChoice[];
+  /** 选择了某个选项 */
+  onChoiceSelect?: (choice: DialogChoice) => void;
 }
 
 /** 打字机效果每字延迟（毫秒） */
@@ -36,18 +41,27 @@ export function DialogBox({
   speakerName,
   onAdvance,
   onClose,
+  choices,
+  onChoiceSelect,
 }: DialogBoxProps) {
   const currentText = texts[currentIndex] ?? '';
   const isLastDialog = currentIndex >= texts.length - 1;
+  const hasChoices = !!choices && choices.length > 0;
+  /** 是否正在显示选项菜单 */
+  const [showChoices, setShowChoices] = useState(false);
+  /** 当前高亮的选项索引（键盘导航用） */
+  const [selectedChoiceIndex, setSelectedChoiceIndex] = useState(0);
 
   const [displayedChars, setDisplayedChars] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // 当前文本变化时重置打字机
+  // 当前文本变化时重置打字机和选项状态
   useEffect(() => {
     setDisplayedChars(0);
     setIsTyping(true);
+    setShowChoices(false);
+    setSelectedChoiceIndex(0);
   }, [currentIndex, currentText]);
 
   // 打字机效果
@@ -83,6 +97,9 @@ export function DialogBox({
 
   /** 点击/按键处理 */
   const handleInteract = useCallback(() => {
+    // 选项菜单已展示时，点击对话框不做任何事（由选项按钮处理）
+    if (showChoices) return;
+
     if (isTyping) {
       // 还在打字，直接显示全部
       setDisplayedChars(currentText.length);
@@ -91,6 +108,10 @@ export function DialogBox({
         clearInterval(timerRef.current);
         timerRef.current = null;
       }
+    } else if (isLastDialog && hasChoices) {
+      // 最后一句且有选项，显示选项菜单
+      setShowChoices(true);
+      setSelectedChoiceIndex(0);
     } else if (isLastDialog) {
       // 最后一句，关闭对话
       onClose();
@@ -98,19 +119,33 @@ export function DialogBox({
       // 推进到下一句
       onAdvance();
     }
-  }, [isTyping, isLastDialog, currentText.length, onAdvance, onClose]);
+  }, [isTyping, isLastDialog, currentText.length, onAdvance, onClose, showChoices, hasChoices]);
 
-  // 监听键盘交互（Z / Enter / Space）
+  // 监听键盘交互
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (['z', 'Z', 'Enter', ' '].includes(e.key)) {
-        e.preventDefault();
-        handleInteract();
+      if (showChoices && choices) {
+        // 选项菜单模式：上下键切换，确认键选择
+        if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+          e.preventDefault();
+          setSelectedChoiceIndex((prev) => (prev > 0 ? prev - 1 : choices.length - 1));
+        } else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+          e.preventDefault();
+          setSelectedChoiceIndex((prev) => (prev < choices.length - 1 ? prev + 1 : 0));
+        } else if (['z', 'Z', 'Enter', ' '].includes(e.key)) {
+          e.preventDefault();
+          onChoiceSelect?.(choices[selectedChoiceIndex]);
+        }
+      } else {
+        if (['z', 'Z', 'Enter', ' '].includes(e.key)) {
+          e.preventDefault();
+          handleInteract();
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleInteract]);
+  }, [handleInteract, showChoices, choices, selectedChoiceIndex, onChoiceSelect]);
 
   // 显示的文本（打字机效果截取）
   const visibleText = currentText.slice(0, displayedChars);
@@ -118,9 +153,13 @@ export function DialogBox({
   // 底部提示
   const promptText = isTyping
     ? ''
-    : isLastDialog
-      ? '[ 关闭 ]'
-      : '[ 继续 >> ]';
+    : showChoices
+      ? ''
+      : isLastDialog && hasChoices
+        ? '[ 继续 >> ]'
+        : isLastDialog
+          ? '[ 关闭 ]'
+          : '[ 继续 >> ]';
 
   return (
     <div
@@ -208,6 +247,51 @@ export function DialogBox({
             }}
           >
             {promptText}
+          </div>
+        )}
+
+        {/* 选项菜单 */}
+        {showChoices && choices && (
+          <div
+            style={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4,
+            }}
+          >
+            {choices.map((choice, idx) => (
+              <div
+                key={choice.action}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onChoiceSelect?.(choice);
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onChoiceSelect?.(choice);
+                }}
+                style={{
+                  padding: '6px 12px',
+                  borderRadius: 6,
+                  fontFamily: 'monospace',
+                  fontSize: 14,
+                  cursor: 'pointer',
+                  backgroundColor: idx === selectedChoiceIndex
+                    ? 'rgba(255, 215, 0, 0.25)'
+                    : 'rgba(255, 255, 255, 0.08)',
+                  color: idx === selectedChoiceIndex ? '#FFD700' : '#F0F0F0',
+                  border: idx === selectedChoiceIndex
+                    ? '1px solid rgba(255, 215, 0, 0.5)'
+                    : '1px solid rgba(255, 255, 255, 0.15)',
+                  transition: 'all 0.15s ease',
+                }}
+                onMouseEnter={() => setSelectedChoiceIndex(idx)}
+              >
+                {idx === selectedChoiceIndex ? '▶ ' : '  '}{choice.label}
+              </div>
+            ))}
           </div>
         )}
       </div>
