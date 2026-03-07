@@ -56,7 +56,7 @@ export const createPokemon = (
         moves: initialMoves.map(m => ({ move: m, ppCurrent: m.ppMax })),
         spriteUrl: data.spriteUrl,
         exp: 0,
-        nextLevelExp: expForLevel(level + 1), // Quadratic exp curve: 5 * Level²
+        nextLevelExp: expForLevel(level + 1), // Official Medium Fast: Level³
         speciesData: {
             pokedexId: data.pokedexId,
             catchRate: data.catchRate

@@ -3,8 +3,8 @@ import { SPECIES_DATA, MOVES, findSpeciesKeyByPokedexId } from '../constants/ind
 import { calculateStats } from './stats.js';
 import { checkEvolution } from './evolution.js';
 
-/** 经验曲线公式：总经验 = 5 * Level² */
-export const expForLevel = (level: number) => 5 * level * level;
+/** 经验曲线公式：总经验 = Level³（官方 Medium Fast 曲线） */
+export const expForLevel = (level: number) => level * level * level;
 
 export interface ExperienceGainResult {
   updatedPokemon: Pokemon;
@@ -37,7 +37,7 @@ export const gainExperience = (
     let finalLevel = startLevel;
     
     // Check for level up
-    // Using quadratic curve: Total Exp = 5 * Level²
+    // Using official Medium Fast curve: Total Exp = Level³
     // Current Exp Base = expForLevel(Level)
     // Progress = exp (relative to current level start)
     // Next Level Threshold = expForLevel(Level+1) (absolute total exp)
