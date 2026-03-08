@@ -49,6 +49,9 @@ export function useKeyboard(): UseKeyboardResult {
   const [interactPressed, setInteractPressed] = useState(false);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    // 忽略程序 dispatch 的模拟事件（如虚拟摇杆 A 按钮模拟的按键）
+    if (!e.isTrusted) return;
+
     const direction = DIRECTION_KEY_MAP[e.key];
     if (direction) {
       e.preventDefault();
