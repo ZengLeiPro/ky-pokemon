@@ -164,7 +164,9 @@ export const pokemonCenterMap: MapData = {
           '好的, 让我帮你的宝可梦恢复体力吧!',
           '...好了! 你的宝可梦已经完全恢复了!',
         ]},
-        { label: '合成招式学习器', action: 'open-tm-craft' },
+        { label: '合成招式学习器', action: 'dismiss', followUpDialog: [
+          '这个功能正在开发中, 敬请期待哦!',
+        ]},
         { label: '没事', action: 'dismiss', followUpDialog: [
           '好的, 有需要随时来找我哦!',
         ]},

@@ -254,10 +254,19 @@ export function GameWorld({
   // ---- 摇杆方向变化 ----
   const handleJoystickDirection = useCallback((dir: Direction | null) => {
     joystickDirRef.current = dir;
+    if (dialogActive) {
+      // 对话中，摇杆上下方向模拟键盘事件以切换选项
+      if (dir === 'up') {
+        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+      } else if (dir === 'down') {
+        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      }
+      return;
+    }
     if (!dir) {
       clearPending();
     }
-  }, [clearPending]);
+  }, [clearPending, dialogActive]);
 
   // ---- 摇杆 A 按钮 ----
   const handleJoystickInteract = useCallback(() => {
