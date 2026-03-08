@@ -262,7 +262,8 @@ export function GameWorld({
   // ---- 摇杆 A 按钮 ----
   const handleJoystickInteract = useCallback(() => {
     if (dialogActive) {
-      // 对话中不通过摇杆推进（DialogBox 自己处理点击）
+      // 对话中，模拟按键让 DialogBox 推进对话
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'z' }));
       return;
     }
 
