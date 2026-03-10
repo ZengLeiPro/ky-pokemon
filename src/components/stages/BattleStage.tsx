@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import HPBar from '../ui/HPBar';
 import TypeBadge from '../ui/TypeBadge';
@@ -11,6 +11,21 @@ const BattleStage: React.FC = () => {
   const enemyMon = battle.enemy;
   const [nicknameInput, setNicknameInput] = useState('');
   const [selectedForgetIndex, setSelectedForgetIndex] = useState<number | null>(null);
+
+  // 战斗 BGM
+  const bgmRef = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    const audio = new Audio('/audio/battle-wild.mp3');
+    audio.loop = true;
+    audio.volume = 0.4;
+    bgmRef.current = audio;
+    audio.play().catch(() => {});
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+      bgmRef.current = null;
+    };
+  }, []);
 
   if (!playerMon || !enemyMon) return <div className="flex h-full items-center justify-center text-slate-400 animate-pulse">进入战斗中...</div>;
 
