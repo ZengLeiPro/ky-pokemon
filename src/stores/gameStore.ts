@@ -1426,6 +1426,7 @@ export const useGameStore = create<GameState>()(
     
         if (result.success && result.data) {
           const save = result.data;
+          const currentView = get().view;
           set({
             playerParty: save.team || [],
             playerStorage: save.pcBox || [],
@@ -1437,7 +1438,7 @@ export const useGameStore = create<GameState>()(
             legendaryProgress: save.legendaryProgress || {},
             playerSpriteIndex: save.playerSpriteIndex ?? 0,
             hasSelectedStarter: (save.team?.length > 0),
-            view: 'ROAM',
+            view: currentView === 'INTRO' ? 'INTRO' : 'ROAM',
             isGameLoading: false
           });
           get().addLog('已从云端加载存档。');
