@@ -17,6 +17,7 @@ import MainStageSlider from './components/MainStageSlider';
 import WorldStage from './components/stages/WorldStage';
 import { SpritePreviewScene } from './engine/scenes/SpritePreviewScene';
 import EvolutionView from './components/stages/EvolutionView';
+import IntroVideoView from './components/IntroVideoView';
 
 // Auth Views
 import LoginView from './components/auth/LoginView';
@@ -64,7 +65,7 @@ const App: React.FC = () => {
   }, [currentUser]);
 
   useEffect(() => {
-    if (!isAuthenticated && view !== 'LOGIN' && view !== 'REGISTER') {
+    if (!isAuthenticated && view !== 'LOGIN' && view !== 'REGISTER' && view !== 'INTRO') {
       setView('LOGIN');
     }
   }, [isAuthenticated, view, setView]);
@@ -87,6 +88,11 @@ const App: React.FC = () => {
   }, [view]);
 
   const renderStage = () => {
+    // INTRO 视频页面优先于初始宝可梦选择
+    if (view === 'INTRO') {
+      return <IntroVideoView />;
+    }
+
     if (isAuthenticated && !hasSelectedStarter) {
       return <StarterSelectionView />;
     }
@@ -153,7 +159,7 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     // 认证页面使用全屏布局，无需 Header 和 Footer
-    if (view === 'LOGIN' || view === 'REGISTER') {
+    if (view === 'LOGIN' || view === 'REGISTER' || view === 'INTRO') {
       return (
         <div className="h-screen w-screen bg-black">
           {renderStage()}

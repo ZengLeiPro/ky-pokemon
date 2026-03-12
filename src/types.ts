@@ -13,6 +13,7 @@ export type ViewState =
   | 'SUMMARY'
   | 'LOGIN'
   | 'REGISTER'
+  | 'INTRO'
   | 'PC_BOX'
   // 社交视图
   | 'FRIENDS'      // 好友列表

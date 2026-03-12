@@ -19,7 +19,7 @@ const LoginView: React.FC = () => {
 
     const success = await login({ username, password });
     if (success) {
-      setView('ROAM');
+      setView('INTRO');
     }
   };
 

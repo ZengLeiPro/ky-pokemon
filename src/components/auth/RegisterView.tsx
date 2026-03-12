@@ -31,7 +31,7 @@ const RegisterView: React.FC = () => {
 
     const success = await register({ username, password });
     if (success) {
-      setView('ROAM');
+      setView('INTRO');
     }
   };
 
