@@ -47,3 +47,29 @@ body {
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
 }
+
+/* Battle button flip animation (Black/White style) */
+.flip-container {
+  perspective: 800px;
+}
+
+.flip-card {
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.flip-card.flipped {
+  transform: rotateX(180deg);
+}
+
+.flip-front,
+.flip-back {
+  backface-visibility: hidden;
+}
+
+.flip-back {
+  transform: rotateX(180deg);
+  position: absolute;
+  inset: 0;
+}
