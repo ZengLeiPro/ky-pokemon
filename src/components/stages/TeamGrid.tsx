@@ -22,18 +22,17 @@ const TeamGrid: React.FC = () => {
       setFirstPokemon(id);
   };
 
-  const handleTransfer = async (e: React.MouseEvent, pokemon: typeof playerParty[0]) => {
+  const handleTransfer = (e: React.MouseEvent, pokemon: typeof playerParty[0]) => {
       e.stopPropagation();
       const dexId = pokemon.speciesData.pokedexId;
       setTransferring(pokemon.id);
-      setTransferMsg('');
-      try {
-          const res = await fetch(`${DEVICE_URL}/set?id=${dexId - 1}`, { mode: 'no-cors' });
+      // 用 img 标签发请求，绕过 HTTPS 混合内容限制
+      const img = new Image();
+      img.onload = img.onerror = () => {
           setTransferMsg(`${pokemon.nickname || pokemon.speciesName} 已传送!`);
-      } catch {
-          setTransferMsg('传送失败，设备未连接');
-      }
-      setTimeout(() => { setTransferring(null); setTransferMsg(''); }, 2000);
+          setTimeout(() => { setTransferring(null); setTransferMsg(''); }, 2000);
+      };
+      img.src = `${DEVICE_URL}/set?id=${dexId - 1}&t=${Date.now()}`;
   };
 
   return (
