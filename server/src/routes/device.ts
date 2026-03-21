@@ -12,9 +12,10 @@ let pendingTransfer: number | null = null;
 // POST /transfer - 游戏发送传送请求
 device.post('/transfer', async (c) => {
   const body = await c.req.json().catch(() => null);
-  if (!body || typeof body.pokedexId !== 'number' || body.pokedexId < 1 || body.pokedexId > 251) {
+  if (!body || typeof body.pokedexId !== 'number' || body.pokedexId < 0 || body.pokedexId > 251) {
     return c.json({ success: false, error: 'Invalid pokedexId' }, 400);
   }
+  // pokedexId = 0 means "clear device / return pokemon to game"
   pendingTransfer = body.pokedexId;
   return c.json({ success: true, pokedexId: pendingTransfer });
 });

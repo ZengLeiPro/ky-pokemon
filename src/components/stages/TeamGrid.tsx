@@ -101,6 +101,15 @@ const TeamGrid: React.FC = () => {
           return;
       }
 
+      // 通知设备清除（发送 pokedexId: 0）
+      try {
+          await fetch(`${config.apiUrl}/device/transfer`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ pokedexId: 0 }),
+          });
+      } catch {}
+
       // 放回队伍
       useGameStore.setState((state) => ({
           playerParty: [...state.playerParty, devPkm]
