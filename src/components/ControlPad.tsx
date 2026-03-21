@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../stores/gameStore';
-import { LogOut, Package, User, ArrowLeft, Swords } from 'lucide-react';
+import { LogOut, Package, User, ArrowLeft } from 'lucide-react';
 import { calculateDamage } from '../lib/mechanics';
 import { TYPE_TRANSLATIONS, TYPE_COLORS, BALL_IMAGES } from '../constants';
 import HPBar from './ui/HPBar';
@@ -250,7 +250,7 @@ const ControlPad: React.FC = () => {
               onClick={() => setShowMoves(true)}
               className="w-full h-full bg-gradient-to-br from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 active:from-orange-700 active:to-red-800 rounded-xl flex items-center justify-center gap-3 border border-orange-400/30 shadow-lg transition-all active:scale-[0.98]"
             >
-              <Swords size={32} className="text-white" />
+              <img src={activeMon.spriteUrl} alt={activeMon.speciesName} className="w-10 h-10 object-contain pixelated drop-shadow-lg" style={{ imageRendering: 'pixelated' }} />
               <span className="text-white font-bold text-xl">战斗</span>
             </button>
           </div>
