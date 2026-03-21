@@ -2,11 +2,15 @@ import React from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import HPBar from '../ui/HPBar';
 import TypeBadge from '../ui/TypeBadge';
-import { ChevronRight, Star, HardDrive, Info } from 'lucide-react';
+import { ChevronRight, Star, HardDrive, Info, Zap } from 'lucide-react';
+
+const DEVICE_URL = 'http://192.168.31.152';
 
 const TeamGrid: React.FC = () => {
   const { playerParty, setView, setSelectedPokemon, battle, setFirstPokemon } = useGameStore();
   const activeIndex = battle?.playerActiveIndex ?? 0;
+  const [transferring, setTransferring] = React.useState<string | null>(null);
+  const [transferMsg, setTransferMsg] = React.useState('');
 
   const handleSelect = (e: React.MouseEvent, id: string) => {
       e.stopPropagation();
@@ -16,6 +20,20 @@ const TeamGrid: React.FC = () => {
 
   const handleSetFirst = (id: string) => {
       setFirstPokemon(id);
+  };
+
+  const handleTransfer = async (e: React.MouseEvent, pokemon: typeof playerParty[0]) => {
+      e.stopPropagation();
+      const dexId = pokemon.speciesData.pokedexId;
+      setTransferring(pokemon.id);
+      setTransferMsg('');
+      try {
+          const res = await fetch(`${DEVICE_URL}/set?id=${dexId - 1}`, { mode: 'no-cors' });
+          setTransferMsg(`${pokemon.nickname || pokemon.speciesName} 已传送!`);
+      } catch {
+          setTransferMsg('传送失败，设备未连接');
+      }
+      setTimeout(() => { setTransferring(null); setTransferMsg(''); }, 2000);
   };
 
   return (
@@ -59,13 +77,27 @@ const TeamGrid: React.FC = () => {
                         <HPBar current={pokemon.currentHp} max={pokemon.maxHp} />
                     </div>
                     
-                    <button
-                        onClick={(e) => handleSelect(e, pokemon.id)}
-                        className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-500 hover:text-cyan-400 border border-slate-700 transition-colors z-20"
-                        title="查看详情"
-                    >
-                        <Info size={20} />
-                    </button>
+                    <div className="flex flex-col gap-2 z-20">
+                        <button
+                            onClick={(e) => handleTransfer(e, pokemon)}
+                            disabled={transferring === pokemon.id}
+                            className={`p-2 rounded-full border transition-colors ${
+                                transferring === pokemon.id
+                                    ? 'bg-yellow-500 text-black border-yellow-400 animate-pulse'
+                                    : 'bg-slate-800 hover:bg-yellow-500/20 text-slate-500 hover:text-yellow-400 border-slate-700'
+                            }`}
+                            title="传送到设备"
+                        >
+                            <Zap size={20} />
+                        </button>
+                        <button
+                            onClick={(e) => handleSelect(e, pokemon.id)}
+                            className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-500 hover:text-cyan-400 border border-slate-700 transition-colors"
+                            title="查看详情"
+                        >
+                            <Info size={20} />
+                        </button>
+                    </div>
                 </div>
             ))}
            
@@ -76,6 +108,11 @@ const TeamGrid: React.FC = () => {
                </div>
            ))}
        </div>
+       {transferMsg && (
+           <div className="mt-2 text-center text-sm font-bold text-yellow-400 animate-pulse">
+               ⚡ {transferMsg}
+           </div>
+       )}
     </div>
   );
 };
