@@ -2,11 +2,11 @@ import React from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import HPBar from '../ui/HPBar';
 import TypeBadge from '../ui/TypeBadge';
-import { ChevronRight, Star, HardDrive, Info, Zap } from 'lucide-react';
+import { Star, HardDrive, Info, Zap, Smartphone } from 'lucide-react';
 import { config } from '../../config';
 
 const TeamGrid: React.FC = () => {
-  const { playerParty, setView, setSelectedPokemon, battle, setFirstPokemon } = useGameStore();
+  const { playerParty, devicePokemon, setView, setSelectedPokemon, battle, setFirstPokemon, transferToDevice } = useGameStore();
   const activeIndex = battle?.playerActiveIndex ?? 0;
   const [transferring, setTransferring] = React.useState<string | null>(null);
   const [transferMsg, setTransferMsg] = React.useState('');
@@ -23,17 +23,24 @@ const TeamGrid: React.FC = () => {
 
   const handleTransfer = async (e: React.MouseEvent, pokemon: typeof playerParty[0]) => {
       e.stopPropagation();
+      if (playerParty.length <= 1) return;
+
       const dexId = pokemon.speciesData.pokedexId;
       setTransferring(pokemon.id);
       setTransferMsg('');
+
       try {
+          // 通知服务器（ESP32会来取）
           const res = await fetch(`${config.apiUrl}/device/transfer`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ pokedexId: dexId }),
           });
+
           if (res.ok) {
-              setTransferMsg(`${pokemon.nickname || pokemon.speciesName} 传送中...`);
+              // 游戏里移除宝可梦，旧的回来
+              transferToDevice(pokemon.id);
+              setTransferMsg(`${pokemon.nickname || pokemon.speciesName} 已传送到设备！`);
           } else {
               setTransferMsg('传送失败');
           }
@@ -47,14 +54,25 @@ const TeamGrid: React.FC = () => {
     <div className="h-full bg-slate-950 p-4 flex flex-col" style={{ touchAction: 'pan-y' }}>
        <div className="flex items-center justify-between mb-6">
            <h2 className="text-xl font-bold text-white tracking-wider">队伍宝可梦</h2>
-           
-           <button 
+
+           <button
              onClick={() => setView('PC_BOX')}
              className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 text-xs font-bold transition-colors"
            >
                <HardDrive size={14} /> 盒子
            </button>
        </div>
+
+       {/* 设备上的宝可梦 */}
+       {devicePokemon && (
+           <div className="mb-4 bg-yellow-500/10 p-3 rounded-xl border border-yellow-500/30 flex items-center gap-3">
+               <Smartphone size={16} className="text-yellow-400 shrink-0" />
+               <img src={devicePokemon.spriteUrl} className="w-8 h-8 pixelated" />
+               <span className="text-yellow-400 text-sm font-bold">
+                   {devicePokemon.nickname || devicePokemon.speciesName} 在设备上
+               </span>
+           </div>
+       )}
 
         <div className="grid grid-cols-1 gap-4 overflow-y-auto pb-4">
             {playerParty.map((pokemon, idx) => (
@@ -83,17 +101,19 @@ const TeamGrid: React.FC = () => {
                         </div>
                         <HPBar current={pokemon.currentHp} max={pokemon.maxHp} />
                     </div>
-                    
+
                     <div className="flex flex-col gap-2 z-20">
                         <button
                             onClick={(e) => handleTransfer(e, pokemon)}
-                            disabled={transferring === pokemon.id}
+                            disabled={transferring === pokemon.id || playerParty.length <= 1}
                             className={`p-2 rounded-full border transition-colors ${
                                 transferring === pokemon.id
                                     ? 'bg-yellow-500 text-black border-yellow-400 animate-pulse'
+                                    : playerParty.length <= 1
+                                    ? 'bg-slate-900 text-slate-700 border-slate-800 cursor-not-allowed'
                                     : 'bg-slate-800 hover:bg-yellow-500/20 text-slate-500 hover:text-yellow-400 border-slate-700'
                             }`}
-                            title="传送到设备"
+                            title={playerParty.length <= 1 ? "不能传送最后一只" : "传送到设备"}
                         >
                             <Zap size={20} />
                         </button>
@@ -107,7 +127,7 @@ const TeamGrid: React.FC = () => {
                     </div>
                 </div>
             ))}
-           
+
            {/* Empty Slots */}
            {[...Array(6 - playerParty.length)].map((_, i) => (
                <div key={`empty-${i}`} className="bg-slate-900/30 p-4 rounded-2xl border border-slate-800/50 border-dashed flex items-center justify-center text-slate-700 h-24">
