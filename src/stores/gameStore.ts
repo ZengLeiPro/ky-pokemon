@@ -54,7 +54,6 @@ interface GameState {
   logs: LogEntry[];
   playerParty: Pokemon[];
   playerStorage: Pokemon[];
-  devicePokemon: Pokemon | null;
   inventory: InventoryItem[];
   playerMoney: number;
   playerLocationId: string;
@@ -111,7 +110,6 @@ interface GameState {
   depositPokemon: (pokemonId: string) => boolean;
   withdrawPokemon: (pokemonId: string) => boolean;
   releasePokemon: (pokemonId: string) => boolean;
-  transferToDevice: (pokemonId: string) => Pokemon | null;
   moveTo: (locationId: string) => void;
   selectStarter: (speciesKey: string) => void;
   resetGame: () => void;
@@ -138,7 +136,6 @@ export const useGameStore = create<GameState>()(
   logs: [{ id: 'init', message: '欢迎来到关都传说。', timestamp: Date.now() }],
   playerParty: [],
   playerStorage: [],
-  devicePokemon: null,
   playerMoney: 3000,
   playerLocationId: 'pallet-town',
   pokedex: initialPokedex,
@@ -1361,32 +1358,6 @@ export const useGameStore = create<GameState>()(
       return true;
   },
 
-  transferToDevice: (pokemonId: string) => {
-      const state = get();
-      if (state.playerParty.length <= 1) {
-          state.addLog("不能传送最后一只宝可梦！", 'urgent');
-          return null;
-      }
-      const index = state.playerParty.findIndex(p => p.id === pokemonId);
-      if (index === -1) return null;
-
-      const pokemon = state.playerParty[index];
-      const oldDevice = state.devicePokemon;
-
-      set(produce((state: GameState) => {
-          // 移除队伍中的宝可梦
-          state.playerParty.splice(index, 1);
-          // 如果设备上有旧的宝可梦，放回队伍
-          if (oldDevice) {
-              state.playerParty.push(oldDevice);
-              state.logs.push(createLogEntry(`${oldDevice.nickname || oldDevice.speciesName} 从设备传送回来了！`));
-          }
-          // 新的宝可梦放到设备上
-          state.devicePokemon = pokemon;
-          state.logs.push(createLogEntry(`${pokemon.nickname || pokemon.speciesName} 被传送到了设备上！`));
-      }));
-      return pokemon;
-  },
 
   renamePokemon: (id: string, name: string) => set(produce((state: GameState) => {
       const inParty = state.playerParty.find(p => p.id === id);
@@ -1460,7 +1431,6 @@ export const useGameStore = create<GameState>()(
           set({
             playerParty: save.team || [],
             playerStorage: save.pcBox || [],
-            devicePokemon: save.devicePokemon || null,
             playerLocationId: save.currentLocation || 'pallet-town',
             badges: save.badges || [],
             pokedex: save.pokedex || {},
@@ -1493,7 +1463,6 @@ export const useGameStore = create<GameState>()(
         mode: state.gameMode,
         team: state.playerParty,
         pcBox: state.playerStorage,
-        devicePokemon: state.devicePokemon,
         currentLocationId: state.playerLocationId,
         badges: state.badges,
         pokedex: state.pokedex,
