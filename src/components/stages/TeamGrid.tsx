@@ -6,7 +6,7 @@ import { Star, HardDrive, Info, Zap, Smartphone } from 'lucide-react';
 import { config } from '../../config';
 
 const TeamGrid: React.FC = () => {
-  const { playerParty, devicePokemon, setView, setSelectedPokemon, battle, setFirstPokemon, transferToDevice } = useGameStore();
+  const { playerParty, devicePokemon, setView, setSelectedPokemon, battle, setFirstPokemon, transferToDevice, saveGame } = useGameStore();
   const activeIndex = battle?.playerActiveIndex ?? 0;
   const [transferring, setTransferring] = React.useState<string | null>(null);
   const [transferMsg, setTransferMsg] = React.useState('');
@@ -40,6 +40,9 @@ const TeamGrid: React.FC = () => {
           if (res.ok) {
               // 游戏里移除宝可梦，旧的回来
               transferToDevice(pokemon.id);
+              // 立即存档到服务器，防止刷新后数据丢失
+              const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+              if (userId) saveGame(userId);
               setTransferMsg(`${pokemon.nickname || pokemon.speciesName} 已传送到设备！`);
           } else {
               setTransferMsg('传送失败');
