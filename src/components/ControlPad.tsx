@@ -176,65 +176,73 @@ const ControlPad: React.FC = () => {
 
   // Moves grid (rendered as the back face of the flip card)
   const movesGrid = (
-    <div className="grid grid-cols-2 gap-1.5 h-full">
-      {activeMon.moves.map((m, idx) => {
-         let damageInfo = null;
-         let effectivenessInfo = "";
+    <div className="flex flex-col gap-1.5 h-full">
+      <div className="grid grid-cols-2 gap-1.5 flex-1 min-h-0">
+        {activeMon.moves.map((m, idx) => {
+           let damageInfo = null;
+           let effectivenessInfo = "";
 
-         if (enemyMon && m.move.category !== 'Status') {
-             const { damage, typeEffectiveness } = calculateDamage(activeMon, enemyMon, m.move);
-             damageInfo = damage;
-             if (typeEffectiveness > 1) effectivenessInfo = "效果绝佳";
-             if (typeEffectiveness < 1 && typeEffectiveness > 0) effectivenessInfo = "效果微弱";
-             if (typeEffectiveness === 0) effectivenessInfo = "无效";
-         }
+           if (enemyMon && m.move.category !== 'Status') {
+               const { damage, typeEffectiveness } = calculateDamage(activeMon, enemyMon, m.move);
+               damageInfo = damage;
+               if (typeEffectiveness > 1) effectivenessInfo = "效果绝佳";
+               if (typeEffectiveness < 1 && typeEffectiveness > 0) effectivenessInfo = "效果微弱";
+               if (typeEffectiveness === 0) effectivenessInfo = "无效";
+           }
 
-         return (
-         <button
-            key={idx}
-            onClick={() => { executeMove(idx); setShowMoves(false); }}
-            disabled={m.ppCurrent === 0}
-            className="relative bg-slate-800 hover:bg-slate-700 active:bg-slate-950 rounded-lg p-1.5 flex flex-col justify-between items-start border border-slate-700 shadow-md transition-all active:scale-[0.98] disabled:opacity-40 disabled:grayscale overflow-hidden"
-         >
-            <div className="absolute left-0 top-0 bottom-0 w-1" style={{ backgroundColor: TYPE_COLORS[m.move.type] }}></div>
+           return (
+           <button
+              key={idx}
+              onClick={() => { executeMove(idx); setShowMoves(false); }}
+              disabled={m.ppCurrent === 0}
+              className="relative bg-slate-800 hover:bg-slate-700 active:bg-slate-950 rounded-lg p-1.5 flex flex-col justify-between items-start border border-slate-700 shadow-md transition-all active:scale-[0.98] disabled:opacity-40 disabled:grayscale overflow-hidden"
+           >
+              <div className="absolute left-0 top-0 bottom-0 w-1" style={{ backgroundColor: TYPE_COLORS[m.move.type] }}></div>
 
-            <div className="w-full pl-2 flex justify-between items-start">
-                <span className="font-bold text-slate-100 text-xs truncate">{m.move.name}</span>
-                <span className={`${m.ppCurrent < 5 ? 'text-red-400' : 'text-slate-500'} text-[10px] font-mono`}>
-                    {m.ppCurrent}/{m.move.ppMax}
-                </span>
-            </div>
+              <div className="w-full pl-2 flex justify-between items-start">
+                  <span className="font-bold text-slate-100 text-xs truncate">{m.move.name}</span>
+                  <span className={`${m.ppCurrent < 5 ? 'text-red-400' : 'text-slate-500'} text-[10px] font-mono`}>
+                      {m.ppCurrent}/{m.move.ppMax}
+                  </span>
+              </div>
 
-            <div className="w-full pl-2 mt-0.5">
-                 {damageInfo !== null && (
-                     <div className="flex justify-between items-center">
-                         <span className="text-[10px] font-bold text-amber-500">
-                             预估: {damageInfo}
-                         </span>
-                         {effectivenessInfo && (
-                             <span className={`text-[9px] font-bold px-1 rounded ${
-                                 effectivenessInfo === '效果绝佳' ? 'bg-red-900/40 text-red-300' :
-                                 effectivenessInfo === '无效' ? 'bg-slate-700 text-slate-400' :
-                                 'bg-blue-900/40 text-blue-300'
-                             }`}>
-                                 {effectivenessInfo}
-                             </span>
-                         )}
-                     </div>
-                 )}
-                 {m.move.category === 'Status' && (
-                     <span className="text-[10px] text-slate-500 italic">变化招式</span>
-                 )}
-            </div>
-         </button>
-         );
-      })}
+              <div className="w-full pl-2 mt-0.5">
+                   {damageInfo !== null && (
+                       <div className="flex justify-between items-center">
+                           <span className="text-[10px] font-bold text-amber-500">
+                               预估: {damageInfo}
+                           </span>
+                           {effectivenessInfo && (
+                               <span className={`text-[9px] font-bold px-1 rounded ${
+                                   effectivenessInfo === '效果绝佳' ? 'bg-red-900/40 text-red-300' :
+                                   effectivenessInfo === '无效' ? 'bg-slate-700 text-slate-400' :
+                                   'bg-blue-900/40 text-blue-300'
+                               }`}>
+                                   {effectivenessInfo}
+                               </span>
+                           )}
+                       </div>
+                   )}
+                   {m.move.category === 'Status' && (
+                       <span className="text-[10px] text-slate-500 italic">变化招式</span>
+                   )}
+              </div>
+           </button>
+           );
+        })}
 
-      {[...Array(4 - activeMon.moves.length)].map((_, i) => (
-         <div key={`empty-${i}`} className="bg-slate-900/50 rounded-lg border border-slate-800 border-dashed flex items-center justify-center text-slate-700 text-xs">
-             -
-         </div>
-      ))}
+        {[...Array(4 - activeMon.moves.length)].map((_, i) => (
+           <div key={`empty-${i}`} className="bg-slate-900/50 rounded-lg border border-slate-800 border-dashed flex items-center justify-center text-slate-700 text-xs">
+               -
+           </div>
+        ))}
+      </div>
+      <button
+        onClick={() => setShowMoves(false)}
+        className="w-full bg-slate-700 hover:bg-slate-600 active:bg-slate-800 rounded-lg py-1.5 flex items-center justify-center gap-1 text-slate-300 text-xs font-bold transition-colors shrink-0"
+      >
+        <ArrowLeft size={12} /> 返回
+      </button>
     </div>
   );
 
@@ -242,7 +250,7 @@ const ControlPad: React.FC = () => {
   return (
     <div className="bg-slate-900 p-2 border-t border-slate-800 shadow-2xl z-30 relative">
       {/* Top area: Fight button with flip animation */}
-      <div className="flip-container" style={{ height: '7.5rem' }}>
+      <div className="flip-container" style={{ height: '8.5rem' }}>
         <div className={`flip-card w-full h-full ${showMoves ? 'flipped' : ''}`}>
           {/* Front: 战斗 button */}
           <div className="flip-front w-full h-full">
@@ -261,18 +269,14 @@ const ControlPad: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom row: 3 action buttons */}
+      {/* Bottom row: 3 action buttons (always visible) */}
       <div className="grid grid-cols-3 gap-1.5 mt-1.5">
         <button
-          onClick={() => showMoves ? setShowMoves(false) : setShowBag(true)}
-          className={`rounded-xl py-3 flex flex-col items-center justify-center gap-1 border shadow transition-all active:scale-[0.97] ${
-            showMoves
-              ? 'bg-slate-700 hover:bg-slate-600 border-slate-600 active:bg-slate-800'
-              : 'bg-gradient-to-b from-indigo-600 to-blue-700 hover:from-indigo-500 hover:to-blue-600 border-indigo-500/30'
-          }`}
+          onClick={() => setShowBag(true)}
+          className="bg-gradient-to-b from-indigo-600 to-blue-700 hover:from-indigo-500 hover:to-blue-600 rounded-xl py-3 flex flex-col items-center justify-center gap-1 border border-indigo-500/30 shadow transition-all active:scale-[0.97]"
         >
-          {showMoves ? <ArrowLeft size={18} className="text-slate-200" /> : <Package size={18} className="text-white" />}
-          <span className="text-white text-xs font-bold">{showMoves ? '返回' : '背包'}</span>
+          <Package size={18} className="text-white" />
+          <span className="text-white text-xs font-bold">背包</span>
         </button>
         <button
           onClick={() => setShowPokemon(true)}
