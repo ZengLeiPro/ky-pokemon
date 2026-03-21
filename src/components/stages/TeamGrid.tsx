@@ -3,8 +3,7 @@ import { useGameStore } from '../../stores/gameStore';
 import HPBar from '../ui/HPBar';
 import TypeBadge from '../ui/TypeBadge';
 import { ChevronRight, Star, HardDrive, Info, Zap } from 'lucide-react';
-
-const DEVICE_URL = 'http://192.168.31.152';
+import { config } from '../../config';
 
 const TeamGrid: React.FC = () => {
   const { playerParty, setView, setSelectedPokemon, battle, setFirstPokemon } = useGameStore();
@@ -22,17 +21,26 @@ const TeamGrid: React.FC = () => {
       setFirstPokemon(id);
   };
 
-  const handleTransfer = (e: React.MouseEvent, pokemon: typeof playerParty[0]) => {
+  const handleTransfer = async (e: React.MouseEvent, pokemon: typeof playerParty[0]) => {
       e.stopPropagation();
       const dexId = pokemon.speciesData.pokedexId;
       setTransferring(pokemon.id);
-      // 用 img 标签发请求，绕过 HTTPS 混合内容限制
-      const img = new Image();
-      img.onload = img.onerror = () => {
-          setTransferMsg(`${pokemon.nickname || pokemon.speciesName} 已传送!`);
-          setTimeout(() => { setTransferring(null); setTransferMsg(''); }, 2000);
-      };
-      img.src = `${DEVICE_URL}/set?id=${dexId - 1}&t=${Date.now()}`;
+      setTransferMsg('');
+      try {
+          const res = await fetch(`${config.apiUrl}/device/transfer`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ pokedexId: dexId }),
+          });
+          if (res.ok) {
+              setTransferMsg(`${pokemon.nickname || pokemon.speciesName} 传送中...`);
+          } else {
+              setTransferMsg('传送失败');
+          }
+      } catch {
+          setTransferMsg('传送失败，服务器未连接');
+      }
+      setTimeout(() => { setTransferring(null); setTransferMsg(''); }, 3000);
   };
 
   return (

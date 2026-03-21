@@ -16,6 +16,7 @@ import internal from './routes/internal.js';
 import gift from './routes/gift.js';
 import pokedex from './routes/pokedex.js';
 import redeem from './routes/redeem.js';
+import device from './routes/device.js';
 
 function requireEnv(name: string) {
   const value = process.env[name];
@@ -105,6 +106,7 @@ app.route('/api/internal', internal);
 app.route('/api/gift', gift);
 app.route('/api/pokedex', pokedex);
 app.route('/api/redeem', redeem);
+app.route('/api/device', device);
 
 app.get('/health', (c) => c.json({ status: 'ok' }));
 
