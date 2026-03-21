@@ -51,6 +51,7 @@ game.get('/save', async (c) => {
     ...save,
     team: JSON.parse(save.team),
     pcBox: JSON.parse(save.pcBox),
+    devicePokemon: save.devicePokemon ? JSON.parse(save.devicePokemon) : null,
     badges: JSON.parse(save.badges),
     pokedex: pokedexData,
     inventory: JSON.parse(save.inventory),
@@ -78,7 +79,7 @@ game.post('/save', async (c) => {
     return c.json({ success: false, error: '存档数据格式错误', details: parsed.error.format() }, 400);
   }
 
-  const { team, pcBox, currentLocationId, badges, pokedex, inventory, legendaryProgress, money, playTime, mode } = parsed.data;
+  const { team, pcBox, devicePokemon, currentLocationId, badges, pokedex, inventory, legendaryProgress, money, playTime, mode } = parsed.data;
   const saveMode = (mode || 'NORMAL') as GameMode;
 
   const save = await db.gameSave.upsert({
@@ -93,6 +94,7 @@ game.post('/save', async (c) => {
       mode: saveMode,
       team: JSON.stringify(team),
       pcBox: JSON.stringify(pcBox),
+      devicePokemon: devicePokemon ? JSON.stringify(devicePokemon) : '',
       currentLocation: currentLocationId,
       badges: JSON.stringify(badges),
       pokedex: JSON.stringify(pokedex),
@@ -104,6 +106,7 @@ game.post('/save', async (c) => {
     update: {
       team: JSON.stringify(team),
       pcBox: JSON.stringify(pcBox),
+      devicePokemon: devicePokemon !== undefined ? (devicePokemon ? JSON.stringify(devicePokemon) : '') : undefined,
       currentLocation: currentLocationId,
       badges: JSON.stringify(badges),
       pokedex: JSON.stringify(pokedex),

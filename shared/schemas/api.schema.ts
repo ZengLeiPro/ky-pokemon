@@ -40,6 +40,7 @@ const LegendaryProgressSchema = z.object({
 export const SaveGameRequestSchema = z.object({
   team: z.array(PokemonSchema).min(0).max(6),
   pcBox: z.array(PokemonSchema).max(500),
+  devicePokemon: PokemonSchema.nullable().optional(),
   currentLocationId: z.string(),
   badges: z.array(z.string()),
   pokedex: z.record(z.string(), z.enum(['CAUGHT', 'SEEN', 'UNKNOWN'])),
