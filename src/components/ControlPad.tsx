@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../stores/gameStore';
-import { LogOut, Package, User, ArrowLeft } from 'lucide-react';
+import { LogOut, Package, User, ArrowLeft, Swords } from 'lucide-react';
 import { calculateDamage } from '../lib/mechanics';
 import { TYPE_TRANSLATIONS, TYPE_COLORS, BALL_IMAGES } from '../constants';
 import HPBar from './ui/HPBar';
@@ -9,6 +9,7 @@ const ControlPad: React.FC = () => {
   const { view, battle, playerParty, inventory, executeMove, runAway, applyItem, throwPokeball, switchPokemon } = useGameStore();
   const [showBag, setShowBag] = useState(false);
   const [showPokemon, setShowPokemon] = useState(false);
+  const [showMoves, setShowMoves] = useState(false);
 
   // Roam uses NavigationDock instead
   if (view === 'ROAM') return null;
@@ -173,96 +174,122 @@ const ControlPad: React.FC = () => {
     );
   }
 
-  // Show moves interface
+  // Show moves interface (after pressing "战斗")
+  if (showMoves) {
+    return (
+      <div className="bg-slate-900 p-2 border-t border-slate-800 shadow-2xl z-30 relative">
+        <div className="grid grid-cols-2 gap-2 h-44">
+          {activeMon.moves.map((m, idx) => {
+             let damageInfo = null;
+             let effectivenessInfo = "";
+
+             if (enemyMon && m.move.category !== 'Status') {
+                 const { damage, typeEffectiveness } = calculateDamage(activeMon, enemyMon, m.move);
+                 damageInfo = damage;
+                 if (typeEffectiveness > 1) effectivenessInfo = "效果绝佳";
+                 if (typeEffectiveness < 1 && typeEffectiveness > 0) effectivenessInfo = "效果微弱";
+                 if (typeEffectiveness === 0) effectivenessInfo = "无效";
+             }
+
+             return (
+             <button
+                key={idx}
+                onClick={() => { executeMove(idx); setShowMoves(false); }}
+                disabled={m.ppCurrent === 0}
+                className="relative bg-slate-800 hover:bg-slate-700 active:bg-slate-950 rounded-xl p-2 flex flex-col justify-between items-start border border-slate-700 shadow-md transition-all active:scale-[0.98] disabled:opacity-40 disabled:grayscale overflow-hidden group"
+             >
+                {/* Type accent bar */}
+                <div className="absolute left-0 top-0 bottom-0 w-1" style={{ backgroundColor: TYPE_COLORS[m.move.type] }}></div>
+
+                <div className="w-full pl-2 flex justify-between items-start">
+                    <span className="font-bold text-slate-100 text-sm truncate">{m.move.name}</span>
+                    <span className={`${m.ppCurrent < 5 ? 'text-red-400' : 'text-slate-500'} text-[10px] font-mono`}>
+                        {m.ppCurrent}/{m.move.ppMax}
+                    </span>
+                </div>
+
+                <div className="w-full pl-2 mt-1">
+                     <div className="text-[10px] text-slate-400 leading-tight line-clamp-2 h-6">
+                         {m.move.description}
+                     </div>
+
+                     {damageInfo !== null && (
+                         <div className="flex justify-between items-center mt-1 pt-1 border-t border-slate-700/50">
+                             <span className="text-[10px] font-bold text-amber-500">
+                                 预估: {damageInfo}
+                             </span>
+                             {effectivenessInfo && (
+                                 <span className={`text-[9px] font-bold px-1 rounded ${
+                                     effectivenessInfo === '效果绝佳' ? 'bg-red-900/40 text-red-300' :
+                                     effectivenessInfo === '无效' ? 'bg-slate-700 text-slate-400' :
+                                     'bg-blue-900/40 text-blue-300'
+                                 }`}>
+                                     {effectivenessInfo}
+                                 </span>
+                             )}
+                         </div>
+                     )}
+                     {m.move.category === 'Status' && (
+                         <div className="flex items-center mt-1 pt-1 border-t border-slate-700/50">
+                              <span className="text-[10px] text-slate-500 italic">变化招式</span>
+                         </div>
+                     )}
+                </div>
+             </button>
+             );
+          })}
+
+          {/* Fill empty move slots */}
+          {[...Array(4 - activeMon.moves.length)].map((_, i) => (
+             <div key={`empty-${i}`} className="bg-slate-900/50 rounded-xl border border-slate-800 border-dashed flex items-center justify-center text-slate-700 text-xs">
+                 -
+             </div>
+          ))}
+        </div>
+
+        <div className="mt-2">
+          <button
+            onClick={() => setShowMoves(false)}
+            className="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400 hover:text-slate-200 text-xs font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
+          >
+            <ArrowLeft size={14} /> 返回
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Main action buttons (Black/White style)
   return (
     <div className="bg-slate-900 p-2 border-t border-slate-800 shadow-2xl z-30 relative">
-      <div className="grid grid-cols-2 gap-2 h-44">
-        {activeMon.moves.map((m, idx) => {
-           let damageInfo = null;
-           let effectivenessInfo = "";
-           
-           if (enemyMon && m.move.category !== 'Status') {
-               const { damage, typeEffectiveness } = calculateDamage(activeMon, enemyMon, m.move);
-               damageInfo = damage;
-               if (typeEffectiveness > 1) effectivenessInfo = "效果绝佳";
-               if (typeEffectiveness < 1 && typeEffectiveness > 0) effectivenessInfo = "效果微弱";
-               if (typeEffectiveness === 0) effectivenessInfo = "无效";
-           }
-
-           return (
-           <button
-              key={idx}
-              onClick={() => executeMove(idx)}
-              disabled={m.ppCurrent === 0}
-              className="relative bg-slate-800 hover:bg-slate-700 active:bg-slate-950 rounded-xl p-2 flex flex-col justify-between items-start border border-slate-700 shadow-md transition-all active:scale-[0.98] disabled:opacity-40 disabled:grayscale overflow-hidden group"
-           >
-              {/* Type accent bar */}
-              <div className="absolute left-0 top-0 bottom-0 w-1" style={{ backgroundColor: TYPE_COLORS[m.move.type] }}></div>
-
-              <div className="w-full pl-2 flex justify-between items-start">
-                  <span className="font-bold text-slate-100 text-sm truncate">{m.move.name}</span>
-                  <span className={`${m.ppCurrent < 5 ? 'text-red-400' : 'text-slate-500'} text-[10px] font-mono`}>
-                      {m.ppCurrent}/{m.move.ppMax}
-                  </span>
-              </div>
-
-              <div className="w-full pl-2 mt-1">
-                   <div className="text-[10px] text-slate-400 leading-tight line-clamp-2 h-6">
-                       {m.move.description}
-                   </div>
-                   
-                   {damageInfo !== null && (
-                       <div className="flex justify-between items-center mt-1 pt-1 border-t border-slate-700/50">
-                           <span className="text-[10px] font-bold text-amber-500">
-                               预估: {damageInfo}
-                           </span>
-                           {effectivenessInfo && (
-                               <span className={`text-[9px] font-bold px-1 rounded ${
-                                   effectivenessInfo === '效果绝佳' ? 'bg-red-900/40 text-red-300' : 
-                                   effectivenessInfo === '无效' ? 'bg-slate-700 text-slate-400' :
-                                   'bg-blue-900/40 text-blue-300'
-                               }`}>
-                                   {effectivenessInfo}
-                               </span>
-                           )}
-                       </div>
-                   )}
-                   {m.move.category === 'Status' && (
-                       <div className="flex items-center mt-1 pt-1 border-t border-slate-700/50">
-                            <span className="text-[10px] text-slate-500 italic">变化招式</span>
-                       </div>
-                   )}
-              </div>
-           </button>
-           );
-        })}
-
-        {/* Fill empty move slots */}
-        {[...Array(4 - activeMon.moves.length)].map((_, i) => (
-           <div key={`empty-${i}`} className="bg-slate-900/50 rounded-xl border border-slate-800 border-dashed flex items-center justify-center text-slate-700 text-xs">
-               -
-           </div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-2 gap-2 mt-2">
+      <div className="grid grid-cols-2 gap-2">
         <button
-          onClick={() => setShowPokemon(true)}
-          className="bg-slate-800 hover:bg-emerald-900/30 border border-slate-700 text-slate-400 hover:text-emerald-300 text-xs font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
+          onClick={() => setShowMoves(true)}
+          className="bg-gradient-to-br from-orange-600 to-red-700 hover:from-orange-500 hover:to-red-600 active:from-orange-800 active:to-red-900 rounded-xl py-8 flex flex-col items-center justify-center gap-2 border border-orange-500/30 shadow-lg transition-all active:scale-[0.97]"
         >
-          <User size={14} /> 宝可梦
+          <Swords size={28} className="text-white" />
+          <span className="text-white font-bold text-base">战斗</span>
         </button>
         <button
           onClick={() => setShowBag(true)}
-          className="bg-slate-800 hover:bg-indigo-900/30 border border-slate-700 text-slate-400 hover:text-indigo-300 text-xs font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
+          className="bg-gradient-to-br from-indigo-600 to-blue-700 hover:from-indigo-500 hover:to-blue-600 active:from-indigo-800 active:to-blue-900 rounded-xl py-8 flex flex-col items-center justify-center gap-2 border border-indigo-500/30 shadow-lg transition-all active:scale-[0.97]"
         >
-          <Package size={14} /> 背包
+          <Package size={28} className="text-white" />
+          <span className="text-white font-bold text-base">背包</span>
+        </button>
+        <button
+          onClick={() => setShowPokemon(true)}
+          className="bg-gradient-to-br from-emerald-600 to-green-700 hover:from-emerald-500 hover:to-green-600 active:from-emerald-800 active:to-green-900 rounded-xl py-8 flex flex-col items-center justify-center gap-2 border border-emerald-500/30 shadow-lg transition-all active:scale-[0.97]"
+        >
+          <User size={28} className="text-white" />
+          <span className="text-white font-bold text-base">宝可梦</span>
         </button>
         <button
           onClick={runAway}
-          className="col-span-2 bg-slate-800 hover:bg-red-900/30 border border-slate-700 text-slate-400 hover:text-red-300 text-xs font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
+          className="bg-gradient-to-br from-slate-600 to-slate-700 hover:from-slate-500 hover:to-slate-600 active:from-slate-800 active:to-slate-900 rounded-xl py-8 flex flex-col items-center justify-center gap-2 border border-slate-500/30 shadow-lg transition-all active:scale-[0.97]"
         >
-          <LogOut size={14} /> 逃跑
+          <LogOut size={28} className="text-white" />
+          <span className="text-white font-bold text-base">逃跑</span>
         </button>
       </div>
     </div>
