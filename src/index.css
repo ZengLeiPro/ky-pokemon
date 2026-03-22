@@ -73,3 +73,154 @@ body {
   position: absolute;
   inset: 0;
 }
+
+/* ===== Battle Move Effect Animations ===== */
+
+/* Projectile: fly from attacker to defender */
+@keyframes projectile-to-enemy {
+  0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  15% { opacity: 1; transform: translate(20%, -10%) scale(1); }
+  85% { opacity: 1; transform: translate(80%, -60%) scale(1.2); }
+  100% { opacity: 0; transform: translate(100%, -80%) scale(0.3); }
+}
+
+@keyframes projectile-to-player {
+  0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  15% { opacity: 1; transform: translate(-20%, 10%) scale(1); }
+  85% { opacity: 1; transform: translate(-80%, 60%) scale(1.2); }
+  100% { opacity: 0; transform: translate(-100%, 80%) scale(0.3); }
+}
+
+/* Impact flash on target */
+@keyframes impact-flash {
+  0% { opacity: 0; transform: scale(0.3); }
+  30% { opacity: 1; transform: scale(1.5); }
+  60% { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0; transform: scale(2); }
+}
+
+/* Screen shake */
+@keyframes battle-shake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-4px) translateY(2px); }
+  20% { transform: translateX(4px) translateY(-2px); }
+  30% { transform: translateX(-3px) translateY(1px); }
+  40% { transform: translateX(3px) translateY(-1px); }
+  50% { transform: translateX(-2px); }
+  60% { transform: translateX(2px); }
+  70% { transform: translateX(-1px); }
+}
+
+/* Fire effect: flickering flames */
+@keyframes fire-flicker {
+  0%, 100% { transform: scaleY(1) scaleX(1); opacity: 0.9; }
+  25% { transform: scaleY(1.3) scaleX(0.8); opacity: 1; }
+  50% { transform: scaleY(0.8) scaleX(1.2); opacity: 0.7; }
+  75% { transform: scaleY(1.1) scaleX(0.9); opacity: 1; }
+}
+
+/* Water effect: wave motion */
+@keyframes water-wave {
+  0% { transform: translateX(-10px) scaleX(0.8); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateX(10px) scaleX(1.3); opacity: 0; }
+}
+
+/* Electric effect: zigzag spark */
+@keyframes electric-spark {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  20% { opacity: 0.3; }
+  30% { opacity: 1; }
+  40% { opacity: 0; }
+  50% { opacity: 1; }
+  60% { opacity: 0.2; }
+  70% { opacity: 1; }
+  80% { opacity: 0.5; }
+  100% { opacity: 0; }
+}
+
+/* Grass effect: leaf swirl */
+@keyframes leaf-swirl {
+  0% { transform: rotate(0deg) translateX(0) scale(0.5); opacity: 0; }
+  20% { opacity: 1; transform: rotate(90deg) translateX(15px) scale(1); }
+  60% { opacity: 0.8; transform: rotate(270deg) translateX(-10px) scale(1.1); }
+  100% { opacity: 0; transform: rotate(360deg) translateX(5px) scale(0.3); }
+}
+
+/* Ice effect: crystal shimmer */
+@keyframes ice-crystal {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  30% { transform: scale(1.2) rotate(60deg); opacity: 1; }
+  70% { transform: scale(0.9) rotate(120deg); opacity: 0.8; }
+  100% { transform: scale(0) rotate(180deg); opacity: 0; }
+}
+
+/* Psychic effect: expanding rings */
+@keyframes psychic-ring {
+  0% { transform: scale(0.2); opacity: 0; border-width: 3px; }
+  40% { opacity: 1; border-width: 2px; }
+  100% { transform: scale(2.5); opacity: 0; border-width: 1px; }
+}
+
+/* Ghost effect: shadow fade */
+@keyframes ghost-shadow {
+  0% { transform: scale(0.5) translateY(0); opacity: 0; filter: blur(0px); }
+  30% { opacity: 0.8; filter: blur(2px); }
+  70% { transform: scale(1.5) translateY(-20px); opacity: 0.6; filter: blur(4px); }
+  100% { transform: scale(2) translateY(-40px); opacity: 0; filter: blur(8px); }
+}
+
+/* Dragon effect: energy burst */
+@keyframes dragon-beam {
+  0% { transform: scaleX(0); opacity: 0; }
+  20% { opacity: 1; }
+  50% { transform: scaleX(1.5); opacity: 0.9; }
+  100% { transform: scaleX(2); opacity: 0; }
+}
+
+/* Generic particle rise */
+@keyframes particle-rise {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-30px) scale(0.3); opacity: 0; }
+}
+
+/* Hit flash on sprite */
+@keyframes hit-flash {
+  0%, 100% { filter: brightness(1); }
+  25% { filter: brightness(3) saturate(0); }
+  50% { filter: brightness(1); }
+  75% { filter: brightness(2.5) saturate(0); }
+}
+
+/* Weather: battle rain */
+@keyframes battle-rain {
+  0% { background-position: 0 0; }
+  100% { background-position: 20px 40px; }
+}
+
+/* Weather: battle hail fall */
+@keyframes battle-hail {
+  0% { background-position: 0 0; }
+  100% { background-position: 15px 30px; }
+}
+
+/* Weather: sandstorm drift */
+@keyframes sandstorm-drift {
+  0% { background-position: 0 0; opacity: 0.15; }
+  50% { opacity: 0.3; }
+  100% { background-position: 40px 10px; opacity: 0.15; }
+}
+
+/* Weather: sun rays pulse */
+@keyframes sun-pulse {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.3; }
+}
+
+/* Floating environment particles */
+@keyframes env-float {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.6; }
+  50% { transform: translateY(-15px) translateX(8px) rotate(180deg); opacity: 0.3; }
+  100% { transform: translateY(-30px) translateX(-5px) rotate(360deg); opacity: 0; }
+}

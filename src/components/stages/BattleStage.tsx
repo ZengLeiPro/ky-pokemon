@@ -2,15 +2,26 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import HPBar from '../ui/HPBar';
 import TypeBadge from '../ui/TypeBadge';
-import { MOVES } from '@shared/constants';
+import { MOVES, WORLD_MAP } from '@shared/constants';
 import { TYPE_TRANSLATIONS, TYPE_COLORS } from '../../constants';
+import BattleBackground from '../battle/BattleBackground';
+import BattleWeather from '../battle/BattleWeather';
+import MoveEffect from '../battle/MoveEffect';
+import type { PokemonType } from '@shared/types';
 
 const BattleStage: React.FC = () => {
-  const { battle, playerParty, setView, confirmNickname, learnPendingMove } = useGameStore();
+  const { battle, playerParty, setView, confirmNickname, learnPendingMove, playerLocationId, weather } = useGameStore();
   const playerMon = playerParty[battle.playerActiveIndex];
   const enemyMon = battle.enemy;
   const [nicknameInput, setNicknameInput] = useState('');
   const [selectedForgetIndex, setSelectedForgetIndex] = useState<number | null>(null);
+
+  const location = WORLD_MAP[playerLocationId];
+  const battleAnimation = battle.battleAnimation;
+
+  // 被击中时的闪烁效果
+  const isEnemyHit = battleAnimation && battleAnimation.isPlayerAttack;
+  const isPlayerHit = battleAnimation && !battleAnimation.isPlayerAttack;
 
   // 战斗 BGM
   const bgmRef = useRef<HTMLAudioElement | null>(null);
@@ -30,20 +41,49 @@ const BattleStage: React.FC = () => {
   if (!playerMon || !enemyMon) return <div className="flex h-full items-center justify-center text-slate-400 animate-pulse">进入战斗中...</div>;
 
   return (
-    <div className="flex flex-col h-full bg-slate-900 relative overflow-hidden">
-        {/* Background Design */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-800 via-slate-900 to-black z-0 pointer-events-none"></div>
-        
-        {/* Platform Effects (Circles) */}
-        <div className="absolute top-[25%] right-[-10%] w-48 h-12 bg-black/30 blur-md rounded-[100%] rotate-[-5deg]"></div>
-        <div className="absolute bottom-[28%] left-[-10%] w-64 h-16 bg-black/40 blur-lg rounded-[100%] rotate-[5deg]"></div>
+    <div
+      className="flex flex-col h-full bg-slate-900 relative overflow-hidden"
+      style={battleAnimation ? { animation: 'battle-shake 0.5s ease-out 0.4s' } : undefined}
+    >
+        {/* 地点主题背景 */}
+        {location ? (
+          <BattleBackground location={location} />
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-800 via-slate-900 to-black z-0 pointer-events-none" />
+            <div className="absolute top-[25%] right-[-10%] w-48 h-12 bg-black/30 blur-md rounded-[100%] rotate-[-5deg]" />
+            <div className="absolute bottom-[28%] left-[-10%] w-64 h-16 bg-black/40 blur-lg rounded-[100%] rotate-[5deg]" />
+          </>
+        )}
+
+        {/* 天气效果层 */}
+        <BattleWeather weather={weather} />
+
+        {/* 招式特效层 */}
+        {battleAnimation && (
+          <MoveEffect
+            moveType={battleAnimation.moveType as PokemonType}
+            moveId={battleAnimation.moveId}
+            isPlayerAttack={battleAnimation.isPlayerAttack}
+          />
+        )}
+
+        {/* 天气指示器 */}
+        {weather !== 'None' && (
+          <div className="absolute top-1 right-1 z-40 px-2 py-0.5 rounded-full text-[10px] font-bold bg-black/50 backdrop-blur-sm text-white/80">
+            {weather === 'Rain' && '🌧 下雨'}
+            {weather === 'Sunny' && '☀️ 大晴天'}
+            {weather === 'Sandstorm' && '🌪 沙暴'}
+            {weather === 'Hail' && '🧊 冰雹'}
+          </div>
+        )}
 
         {battle.phase === 'NICKNAME' && (
             <div className="absolute inset-0 z-50 bg-black/80 flex items-center justify-center p-6 backdrop-blur-sm animate-fade-in">
                 <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-2xl w-full max-w-sm">
                     <h3 className="text-xl font-bold text-white mb-2 text-center">恭喜捕获！</h3>
                     <p className="text-slate-400 text-sm text-center mb-6">要给 <span className="text-cyan-400">{enemyMon.speciesName}</span> 取个名字吗？</p>
-                    
+
                     <div className="flex justify-center mb-6">
                          <img src={enemyMon.spriteUrl} alt={enemyMon.speciesName} className="w-24 h-24 object-contain pixelated animate-bounce-slow" />
                     </div>
@@ -179,8 +219,19 @@ const BattleStage: React.FC = () => {
                     </div>
                 </div>
             </div>
+            {/* 敌方精灵 - 被攻击时闪烁 */}
             <div className="w-28 h-28 flex items-center justify-center relative -mt-2">
-                 <img src={enemyMon.spriteUrl} alt={enemyMon.speciesName} className="w-full h-full object-contain pixelated drop-shadow-2xl animate-float-slow" style={{imageRendering: 'pixelated'}} />
+                 <img
+                   src={enemyMon.spriteUrl}
+                   alt={enemyMon.speciesName}
+                   className="w-full h-full object-contain pixelated drop-shadow-2xl animate-float-slow"
+                   style={{
+                     imageRendering: 'pixelated',
+                     animation: isEnemyHit
+                       ? 'hit-flash 0.5s ease-out 0.4s, float 3s ease-in-out infinite'
+                       : undefined,
+                   }}
+                 />
             </div>
         </div>
 
@@ -189,8 +240,19 @@ const BattleStage: React.FC = () => {
 
         {/* Player Info - Bottom Right */}
         <div className="relative z-10 pb-6 px-4 flex justify-between items-end animate-fade-in-up">
+             {/* 我方精灵 - 被攻击时闪烁 */}
              <div className="w-32 h-32 flex items-center justify-center relative -mb-2 z-10">
-                 <img src={playerMon.spriteUrl} alt={playerMon.speciesName} className="w-full h-full object-contain pixelated scale-x-[-1] drop-shadow-2xl" style={{imageRendering: 'pixelated'}} />
+                 <img
+                   src={playerMon.spriteUrl}
+                   alt={playerMon.speciesName}
+                   className="w-full h-full object-contain pixelated scale-x-[-1] drop-shadow-2xl"
+                   style={{
+                     imageRendering: 'pixelated',
+                     animation: isPlayerHit
+                       ? 'hit-flash 0.5s ease-out 0.4s'
+                       : undefined,
+                   }}
+                 />
             </div>
             <div className="flex-1 flex flex-col items-end ml-4">
                 <div className="bg-slate-900/90 backdrop-blur-sm p-3 rounded-lg border-r-4 border-cyan-500 shadow-lg w-full max-w-[200px]">
@@ -198,7 +260,7 @@ const BattleStage: React.FC = () => {
                         <h2 className="text-lg font-bold text-white drop-shadow-md">{playerMon.nickname || playerMon.speciesName}</h2>
                         <span className="text-xs font-mono text-cyan-400">Lv.{playerMon.level}</span>
                     </div>
-                    
+
                     <div className="mb-2">
                         <HPBar current={playerMon.currentHp} max={playerMon.maxHp} />
                     </div>

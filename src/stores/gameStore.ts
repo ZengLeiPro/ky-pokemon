@@ -86,6 +86,12 @@ interface GameState {
       moveId: string;
       remainingMoves: string[]; // 剩余待学的招式 moveId 列表
     };
+    // 招式动画状态
+    battleAnimation?: {
+      moveType: string;  // PokemonType
+      moveId: string;
+      isPlayerAttack: boolean;
+    } | null;
   };
 
   gameMode: 'NORMAL' | 'CHEAT';
@@ -468,8 +474,20 @@ export const useGameStore = create<GameState>()(
              }));
         }
 
+        // 触发招式动画
+        set(produce((state: GameState) => {
+            state.battle.battleAnimation = {
+                moveType: moveData.move.type,
+                moveId: moveData.move.id,
+                isPlayerAttack: isPlayer,
+            };
+        }));
         addLog(`${attacker.speciesName} 使用了 ${moveData.move.name}！`, 'combat');
-        await new Promise(r => setTimeout(r, 800));
+        await new Promise(r => setTimeout(r, 900));
+        // 清除动画
+        set(produce((state: GameState) => {
+            state.battle.battleAnimation = null;
+        }));
 
         // 命中判定（考虑命中/闪避等级）
         let moveAccuracy = moveData.move.accuracy;
