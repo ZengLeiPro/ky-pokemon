@@ -210,7 +210,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '连接紫苑镇与彩虹市的道路。',
       region: '关都',
       connections: ['lavender-town', 'celadon-city'],
-      encounters: ['pidgey', 'meowth', 'ekans', 'vulpix', 'growlithe', 'houndour', 'snubbull', 'granbull'],
+      encounters: ['pidgey', 'meowth', 'ekans', 'vulpix', 'growlithe', 'houndour', 'snubbull', 'granbull', 'ledian'],
     levelRange: [18, 23],
       bgGradient: 'from-emerald-800 via-stone-800 to-black'
   },
@@ -296,7 +296,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '可以遇到稀有宝可梦的自然保护区。',
       region: '关都',
       connections: ['fuchsia-city'],
-      encounters: ['nidorino', 'nidorina', 'parasect', 'venonat', 'exeggcute', 'rhyhorn', 'chansey', 'kangaskhan', 'scyther', 'pinsir', 'tauros', 'dratini', 'teddiursa', 'gligar', 'heracross', 'scizor', 'ursaring', 'wobbuffet', 'stantler', 'miltank'],
+      encounters: ['nidorino', 'nidorina', 'parasect', 'venonat', 'exeggcute', 'rhyhorn', 'chansey', 'kangaskhan', 'scyther', 'pinsir', 'tauros', 'dratini', 'teddiursa', 'gligar', 'heracross', 'scizor', 'ursaring', 'wobbuffet', 'stantler', 'miltank', 'houndoom', 'dugtrio'],
     levelRange: [24, 30],
       bgGradient: 'from-green-700 via-lime-800 to-emerald-900'
   },
@@ -336,7 +336,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '通往双子岛的水上路线。',
       region: '关都',
       connections: ['fuchsia-city', 'route-20'],
-      encounters: ['tentacool', 'tentacruel', 'magikarp', 'horsea', 'staryu', 'chinchou', 'marill', 'qwilfish', 'mantine', 'corsola'],
+      encounters: ['tentacool', 'tentacruel', 'magikarp', 'horsea', 'staryu', 'chinchou', 'marill', 'qwilfish', 'mantine', 'corsola', 'poliwhirl'],
     levelRange: [27, 32],
       bgGradient: 'from-blue-800 via-cyan-900 to-black',
       weatherRates: { Rain: 0.3 }
@@ -357,7 +357,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '寒冷的海岛洞穴。据说有传说的宝可梦栖息。',
       region: '关都',
       connections: ['route-20'],
-      encounters: ['zubat', 'golbat', 'psyduck', 'golduck', 'slowpoke', 'seel', 'dewgong', 'shellder', 'cloyster', 'krabby', 'kingler', 'horsea', 'jynx', 'lapras', 'swinub', 'piloswine', 'delibird', 'smoochum'],
+      encounters: ['zubat', 'golbat', 'psyduck', 'golduck', 'slowpoke', 'seel', 'dewgong', 'shellder', 'cloyster', 'krabby', 'kingler', 'horsea', 'jynx', 'lapras', 'swinub', 'piloswine', 'delibird', 'smoochum', 'seaking'],
     levelRange: [28, 34],
       bgGradient: 'from-cyan-900 via-blue-950 to-black',
       weatherRates: { Hail: 0.4 },
@@ -492,7 +492,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '挑战四天王前的最终试炼。强大的宝可梦栖息于此。据说有传说的宝可梦栖息。',
       region: '关都',
       connections: ['route-23', 'pokemon-league'],
-      encounters: ['zubat', 'golbat', 'geodude', 'graveler', 'onix', 'machop', 'machoke', 'marowak', 'larvitar', 'gligar', 'pupitar', 'crobat', 'skarmory'],
+      encounters: ['zubat', 'golbat', 'geodude', 'graveler', 'onix', 'machop', 'machoke', 'marowak', 'larvitar', 'gligar', 'pupitar', 'crobat', 'skarmory', 'dodrio'],
     levelRange: [32, 38],
       bgGradient: 'from-purple-900 via-slate-900 to-black',
       legendaryEncounter: {
@@ -516,7 +516,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '只有最强训练家才能进入的神秘洞穴。据说有极强的宝可梦栖息。',
       region: '关都',
       connections: ['cerulean-city'],
-      encounters: ['golbat', 'parasect', 'venomoth', 'kadabra', 'hypno', 'magneton', 'electrode', 'rhydon', 'chansey', 'ditto', 'larvitar', 'sneasel', 'blissey', 'crobat', 'forretress'],
+      encounters: ['golbat', 'parasect', 'venomoth', 'kadabra', 'hypno', 'magneton', 'electrode', 'rhydon', 'chansey', 'ditto', 'larvitar', 'sneasel', 'blissey', 'crobat', 'forretress', 'slowbro', 'omastar', 'kabutops'],
     levelRange: [36, 42],
       bgGradient: 'from-indigo-900 via-purple-950 to-black',
       legendaryEncounter: {
@@ -825,7 +825,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '城都地区最深处的洞穴。只有集齐徽章的训练家才能进入。传说中最强训练家在此修行。',
       region: '城都',
       connections: ['blackthorn-city'],
-      encounters: ['larvitar', 'ursaring', 'sneasel', 'golduck', 'crobat', 'steelix', 'skarmory'],
+      encounters: ['larvitar', 'ursaring', 'sneasel', 'golduck', 'crobat', 'steelix', 'skarmory', 'magcargo'],
     levelRange: [36, 42],
       bgGradient: 'from-gray-800 via-slate-900 to-black',
       legendaryEncounter: {
