@@ -35,6 +35,7 @@ export interface LocationData {
   connections: string[];
   encounters?: string[];
   bgGradient?: string;  // 前端可选使用
+  levelRange?: [number, number];  // 野生宝可梦等级范围 [min, max]
   gym?: GymData;
   weatherRates?: Partial<Record<Weather, number>>;
   legendaryEncounter?: LegendaryEncounter;  // 传说宝可梦固定遭遇

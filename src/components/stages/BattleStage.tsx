@@ -7,7 +7,26 @@ import { TYPE_TRANSLATIONS, TYPE_COLORS } from '../../constants';
 import BattleBackground from '../battle/BattleBackground';
 import BattleWeather from '../battle/BattleWeather';
 import MoveEffect from '../battle/MoveEffect';
-import type { PokemonType } from '@shared/types';
+import type { PokemonType, StatusCondition } from '@shared/types';
+
+// 异常状态标签配置
+const STATUS_DISPLAY: Record<StatusCondition, { label: string; color: string; bg: string }> = {
+  BRN: { label: '灼伤', color: 'text-orange-200', bg: 'bg-orange-600' },
+  PSN: { label: '中毒', color: 'text-purple-200', bg: 'bg-purple-600' },
+  PAR: { label: '麻痹', color: 'text-yellow-200', bg: 'bg-yellow-600' },
+  SLP: { label: '睡眠', color: 'text-slate-200', bg: 'bg-slate-500' },
+  FRZ: { label: '冰冻', color: 'text-cyan-200', bg: 'bg-cyan-600' },
+};
+
+function StatusBadge({ status }: { status?: StatusCondition }) {
+  if (!status) return null;
+  const cfg = STATUS_DISPLAY[status];
+  return (
+    <span className={`${cfg.bg} ${cfg.color} text-[10px] font-bold px-1.5 py-0.5 rounded-sm leading-none`}>
+      {cfg.label}
+    </span>
+  );
+}
 
 const BattleStage: React.FC = () => {
   const { battle, playerParty, setView, confirmNickname, learnPendingMove, playerLocationId, weather } = useGameStore();
@@ -212,7 +231,8 @@ const BattleStage: React.FC = () => {
                         <span className="text-xs font-mono text-red-400">Lv.{enemyMon.level}</span>
                     </div>
                     <HPBar current={enemyMon.currentHp} max={enemyMon.maxHp} showText={false} />
-                    <div className="flex justify-end mt-1">
+                    <div className="flex justify-between items-center mt-1">
+                        <StatusBadge status={enemyMon.status} />
                         <span className="text-[10px] font-mono text-slate-400 drop-shadow-md">
                             {enemyMon.currentHp}/{enemyMon.maxHp}
                         </span>
@@ -268,6 +288,7 @@ const BattleStage: React.FC = () => {
                     <div className="flex justify-between items-center">
                          <div className="flex gap-1 scale-90 origin-left">
                             {playerMon.types.map(t => <TypeBadge key={t} type={t} />)}
+                            <StatusBadge status={playerMon.status} />
                         </div>
                         <div className="text-[10px] text-slate-500 font-mono">
                             EXP {playerMon.exp}/{playerMon.nextLevelExp}

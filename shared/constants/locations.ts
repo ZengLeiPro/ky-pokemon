@@ -17,6 +17,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
     region: '关都',
     connections: ['pallet-town', 'viridian-city'],
     encounters: ['pidgey', 'rattata', 'sentret', 'hoothoot', 'igglybuff'],
+    levelRange: [2, 5],
     bgGradient: 'from-emerald-900 via-slate-900 to-black'
   },
   'viridian-city': {
@@ -35,6 +36,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
     region: '关都',
     connections: ['viridian-city', 'route-23'],
     encounters: ['rattata', 'mankey', 'spearow', 'stantler', 'smeargle'],
+    levelRange: [3, 6],
     bgGradient: 'from-slate-800 via-slate-900 to-black'
   },
   'route-2': {
@@ -44,6 +46,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
     region: '关都',
     connections: ['viridian-city', 'viridian-forest', 'digletts-cave'],
     encounters: ['pidgey', 'rattata', 'caterpie', 'weedle', 'sentret', 'ledyba', 'hoppip', 'sunkern'],
+    levelRange: [3, 6],
     bgGradient: 'from-emerald-900 via-slate-900 to-black'
   },
   'viridian-forest': {
@@ -53,6 +56,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
     region: '关都',
     connections: ['route-2', 'pewter-city'],
     encounters: ['caterpie', 'weedle', 'pikachu', 'ledyba', 'spinarak', 'hoothoot', 'pineco', 'yanma', 'pichu'],
+    levelRange: [3, 7],
     bgGradient: 'from-green-950 via-green-900 to-black',
     weatherRates: { Rain: 0.2 }
   },
@@ -80,6 +84,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['pewter-city', 'mt-moon'],
       encounters: ['spearow', 'pidgey', 'jigglypuff', 'mankey', 'stantler', 'phanpy', 'natu'],
+    levelRange: [6, 10],
       bgGradient: 'from-stone-700 via-emerald-900 to-black'
   },
   'mt-moon': {
@@ -89,6 +94,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-3', 'route-4'],
       encounters: ['zubat', 'geodude', 'clefairy', 'paras', 'teddiursa', 'slugma', 'cleffa', 'dunsparce', 'magby'],
+    levelRange: [7, 11],
       bgGradient: 'from-slate-900 via-purple-950 to-black'
   },
   'route-4': {
@@ -98,6 +104,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['mt-moon', 'cerulean-city'],
       encounters: ['rattata', 'spearow', 'ekans', 'sandshrew', 'wooper', 'marill', 'quagsire', 'hoppip'],
+    levelRange: [8, 12],
       bgGradient: 'from-emerald-800 via-cyan-950 to-black'
   },
   'cerulean-city': {
@@ -125,6 +132,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['cerulean-city', 'route-25'],
       encounters: ['caterpie', 'weedle', 'metapod', 'kakuna', 'pidgey', 'abra', 'spinarak', 'ledyba', 'ledian', 'ariados'],
+    levelRange: [10, 14],
       bgGradient: 'from-green-800 via-blue-900 to-black'
   },
   'route-5': {
@@ -134,6 +142,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['cerulean-city', 'vermilion-city'],
       encounters: ['pidgey', 'rattata', 'jigglypuff', 'meowth', 'snubbull', 'aipom', 'girafarig', 'sudowoodo'],
+    levelRange: [12, 16],
       bgGradient: 'from-emerald-700 via-slate-800 to-black'
   },
   'vermilion-city': {
@@ -160,6 +169,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['vermilion-city', 'route-12', 'digletts-cave'],
       encounters: ['ekans', 'sandshrew', 'drowzee', 'houndour', 'murkrow', 'phanpy', 'donphan', 'tyrogue'],
+    levelRange: [14, 18],
       bgGradient: 'from-emerald-800 via-green-900 to-black'
   },
   'route-9': {
@@ -169,6 +179,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['cerulean-city', 'rock-tunnel'],
       encounters: ['rattata', 'spearow', 'ekans', 'sandshrew', 'natu', 'xatu'],
+    levelRange: [15, 19],
       bgGradient: 'from-stone-700 via-emerald-800 to-black'
   },
   'rock-tunnel': {
@@ -178,6 +189,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-9', 'lavender-town', 'route-10'],
       encounters: ['zubat', 'geodude', 'machop', 'onix', 'cubone', 'gligar', 'swinub', 'steelix', 'shuckle'],
+    levelRange: [16, 21],
       bgGradient: 'from-gray-900 via-stone-900 to-black',
       weatherRates: { Sandstorm: 0.3 }
   },
@@ -188,6 +200,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['rock-tunnel', 'route-8', 'route-12', 'pokemon-tower'],
       encounters: ['gastly', 'haunter', 'cubone', 'misdreavus', 'murkrow', 'smoochum'],
+    levelRange: [16, 20],
       bgGradient: 'from-purple-900 via-slate-900 to-black',
       weatherRates: { Rain: 0.2 }
   },
@@ -198,6 +211,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['lavender-town', 'celadon-city'],
       encounters: ['pidgey', 'meowth', 'ekans', 'vulpix', 'growlithe', 'houndour', 'snubbull', 'granbull', 'houndoom'],
+    levelRange: [18, 23],
       bgGradient: 'from-emerald-800 via-stone-800 to-black'
   },
   'celadon-city': {
@@ -207,6 +221,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-8', 'route-7', 'route-16', 'celadon-game-corner'],
       encounters: ['grimer', 'koffing', 'murkrow', 'houndour', 'smeargle'],
+    levelRange: [20, 25],
       bgGradient: 'from-green-800 via-emerald-900 to-slate-900',
       gym: {
           leaderName: '莉佳',
@@ -224,6 +239,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['lavender-town', 'route-11', 'route-13'],
       encounters: ['oddish', 'bellsprout', 'venonat', 'krabby', 'farfetchd', 'marill', 'wooper', 'corsola', 'remoraid', 'politoed'],
+    levelRange: [22, 27],
       bgGradient: 'from-blue-900 via-cyan-900 to-black',
       weatherRates: { Rain: 0.5, Sunny: 0.3 }
   },
@@ -234,6 +250,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-12', 'route-14'],
       encounters: ['pidgey', 'oddish', 'bellsprout', 'venonat', 'ditto', 'skiploom', 'sunflora'],
+    levelRange: [23, 28],
       bgGradient: 'from-emerald-800 via-green-900 to-black'
   },
   'route-14': {
@@ -243,6 +260,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-13', 'route-15', 'fuchsia-city'],
       encounters: ['pidgey', 'oddish', 'gloom', 'venonat', 'venomoth', 'yanma', 'bellossom'],
+    levelRange: [24, 28],
       bgGradient: 'from-green-800 via-emerald-900 to-black'
   },
   'route-15': {
@@ -252,6 +270,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-14', 'fuchsia-city'],
       encounters: ['pidgey', 'oddish', 'bellsprout', 'venonat', 'ditto', 'jumpluff', 'hoppip'],
+    levelRange: [24, 28],
       bgGradient: 'from-emerald-700 via-green-800 to-black'
   },
   'fuchsia-city': {
@@ -278,6 +297,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['fuchsia-city'],
       encounters: ['nidorino', 'nidorina', 'parasect', 'venonat', 'exeggcute', 'rhyhorn', 'chansey', 'kangaskhan', 'scyther', 'pinsir', 'tauros', 'dratini', 'teddiursa', 'gligar', 'heracross', 'scizor', 'ursaring', 'wobbuffet', 'stantler', 'miltank'],
+    levelRange: [24, 30],
       bgGradient: 'from-green-700 via-lime-800 to-emerald-900'
   },
   'route-18': {
@@ -287,6 +307,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['fuchsia-city', 'route-17'],
       encounters: ['rattata', 'raticate', 'spearow', 'fearow', 'doduo', 'furret'],
+    levelRange: [25, 30],
       bgGradient: 'from-stone-700 via-slate-800 to-black'
   },
   'route-17': {
@@ -296,6 +317,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-18', 'route-16'],
       encounters: ['rattata', 'raticate', 'spearow', 'fearow', 'doduo', 'dodrio', 'girafarig', 'stantler'],
+    levelRange: [25, 30],
       bgGradient: 'from-gray-700 via-slate-800 to-black'
   },
   'route-16': {
@@ -305,6 +327,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-17', 'celadon-city'],
       encounters: ['rattata', 'spearow', 'doduo', 'snorlax', 'dunsparce', 'wobbuffet'],
+    levelRange: [20, 25],
       bgGradient: 'from-emerald-700 via-slate-800 to-black'
   },
   'route-19': {
@@ -314,6 +337,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['fuchsia-city', 'route-20'],
       encounters: ['tentacool', 'tentacruel', 'magikarp', 'horsea', 'staryu', 'chinchou', 'marill', 'qwilfish', 'mantine', 'corsola'],
+    levelRange: [27, 32],
       bgGradient: 'from-blue-800 via-cyan-900 to-black',
       weatherRates: { Rain: 0.3 }
   },
@@ -324,6 +348,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-19', 'seafoam-islands', 'cinnabar-island'],
       encounters: ['tentacool', 'magikarp', 'horsea', 'seadra', 'staryu', 'shellder', 'chinchou', 'wooper', 'lanturn', 'octillery', 'remoraid'],
+    levelRange: [27, 32],
       bgGradient: 'from-cyan-800 via-blue-900 to-black'
   },
   'seafoam-islands': {
@@ -333,6 +358,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-20'],
       encounters: ['zubat', 'golbat', 'psyduck', 'golduck', 'slowpoke', 'slowbro', 'seel', 'dewgong', 'shellder', 'cloyster', 'krabby', 'kingler', 'horsea', 'jynx', 'lapras', 'swinub', 'piloswine', 'delibird', 'smoochum'],
+    levelRange: [28, 34],
       bgGradient: 'from-cyan-900 via-blue-950 to-black',
       weatherRates: { Hail: 0.4 },
       legendaryEncounter: {
@@ -364,6 +390,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['cinnabar-island'],
       encounters: ['rattata', 'raticate', 'vulpix', 'growlithe', 'ponyta', 'grimer', 'muk', 'koffing', 'weezing', 'magmar', 'slugma', 'houndour', 'magcargo', 'magby'],
+    levelRange: [28, 34],
       bgGradient: 'from-gray-800 via-slate-900 to-black'
   },
   'route-21': {
@@ -373,6 +400,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['cinnabar-island', 'pallet-town'],
       encounters: ['tentacool', 'magikarp', 'staryu', 'tangela', 'chinchou', 'mantine', 'octillery'],
+    levelRange: [28, 33],
       bgGradient: 'from-blue-700 via-cyan-800 to-black'
   },
   'route-6': {
@@ -382,6 +410,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['vermilion-city', 'route-5'],
       encounters: ['pidgey', 'rattata', 'oddish', 'bellsprout', 'meowth', 'sentret', 'hoothoot', 'noctowl', 'togetic'],
+    levelRange: [12, 16],
       bgGradient: 'from-emerald-700 via-slate-800 to-black'
   },
   'route-7': {
@@ -391,6 +420,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['celadon-city', 'saffron-city'],
       encounters: ['pidgey', 'rattata', 'vulpix', 'meowth', 'growlithe', 'snubbull', 'murkrow', 'umbreon'],
+    levelRange: [18, 23],
       bgGradient: 'from-green-700 via-slate-800 to-black'
   },
   'saffron-city': {
@@ -417,6 +447,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['rock-tunnel', 'power-plant'],
       encounters: ['voltorb', 'magnemite', 'electabuzz', 'mareep', 'flaaffy', 'elekid'],
+    levelRange: [16, 20],
       bgGradient: 'from-yellow-800 via-slate-900 to-black',
       weatherRates: { Rain: 0.2 }
   },
@@ -427,6 +458,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-10'],
       encounters: ['voltorb', 'electrode', 'magnemite', 'magneton', 'electabuzz', 'pikachu', 'raichu', 'ampharos', 'elekid'],
+    levelRange: [25, 32],
       bgGradient: 'from-yellow-700 via-amber-800 to-black',
       weatherRates: { Rain: 0.5 },
       legendaryEncounter: {
@@ -441,6 +473,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-2', 'route-11'],
       encounters: ['diglett', 'dugtrio'],
+    levelRange: [15, 22],
       bgGradient: 'from-amber-900 via-stone-900 to-black'
   },
   'route-23': {
@@ -450,6 +483,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-22', 'victory-road'],
       encounters: ['spearow', 'fearow', 'ekans', 'arbok', 'sandshrew', 'sandslash', 'mankey', 'primeape', 'donphan', 'pupitar'],
+    levelRange: [30, 36],
       bgGradient: 'from-slate-700 via-stone-800 to-black'
   },
   'victory-road': {
@@ -459,6 +493,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-23', 'pokemon-league'],
       encounters: ['zubat', 'golbat', 'geodude', 'graveler', 'onix', 'machop', 'machoke', 'marowak', 'larvitar', 'gligar', 'pupitar', 'crobat', 'skarmory'],
+    levelRange: [32, 38],
       bgGradient: 'from-purple-900 via-slate-900 to-black',
       legendaryEncounter: {
           speciesId: 'moltres',
@@ -472,6 +507,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['lavender-town'],
       encounters: ['gastly', 'haunter', 'cubone', 'marowak', 'misdreavus', 'murkrow'],
+    levelRange: [17, 22],
       bgGradient: 'from-purple-950 via-gray-900 to-black'
   },
   'cerulean-cave': {
@@ -481,6 +517,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['cerulean-city'],
       encounters: ['golbat', 'parasect', 'venomoth', 'kadabra', 'hypno', 'magneton', 'electrode', 'rhydon', 'chansey', 'ditto', 'larvitar', 'sneasel', 'tyranitar', 'blissey', 'crobat', 'forretress'],
+    levelRange: [36, 42],
       bgGradient: 'from-indigo-900 via-purple-950 to-black',
       legendaryEncounter: {
           speciesId: 'mewtwo',
@@ -494,6 +531,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['vermilion-city'],
       encounters: ['tentacool', 'tentacruel', 'magikarp', 'gyarados', 'staryu', 'shellder', 'chinchou', 'wooper', 'lanturn', 'qwilfish'],
+    levelRange: [14, 18],
       bgGradient: 'from-blue-700 via-slate-800 to-black'
   },
   'route-25': {
@@ -503,6 +541,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-24', 'cerulean-cape'],
       encounters: ['pidgey', 'oddish', 'bellsprout', 'abra', 'slowpoke', 'psyduck', 'poliwag', 'goldeen', 'marill', 'wooper', 'sunflora', 'sunkern'],
+    levelRange: [10, 14],
       bgGradient: 'from-blue-800 via-green-900 to-black'
   },
   'cerulean-cape': {
@@ -512,6 +551,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['route-25'],
       encounters: ['magikarp', 'goldeen', 'seaking', 'poliwag', 'tentacool', 'lickitung', 'marill', 'chinchou'],
+    levelRange: [10, 15],
       bgGradient: 'from-cyan-700 via-blue-800 to-black'
   },
   'celadon-game-corner': {
@@ -521,6 +561,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['celadon-city'],
       encounters: ['porygon', 'eevee', 'dratini', 'porygon2', 'togepi', 'espeon', 'slowking'],
+    levelRange: [20, 25],
       bgGradient: 'from-purple-800 via-pink-900 to-slate-900'
   },
   'fighting-dojo': {
@@ -530,6 +571,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['saffron-city'],
       encounters: ['hitmonlee', 'hitmonchan', 'machop', 'machoke', 'primeape', 'heracross', 'tyrogue', 'hitmontop'],
+    levelRange: [25, 30],
       bgGradient: 'from-orange-800 via-red-900 to-slate-900'
   },
   'cinnabar-lab': {
@@ -539,6 +581,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['cinnabar-island'],
       encounters: ['omanyte', 'omastar', 'kabuto', 'kabutops', 'aerodactyl', 'shuckle', 'porygon2'],
+    levelRange: [28, 34],
       bgGradient: 'from-gray-700 via-slate-800 to-black',
       legendaryEncounter: {
           speciesId: 'mew',
@@ -561,6 +604,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '关都',
       connections: ['viridian-city'],
       encounters: ['poliwag', 'poliwhirl', 'goldeen', 'seaking', 'magikarp', 'psyduck', 'wooper', 'marill', 'azumarill', 'politoed'],
+    levelRange: [3, 8],
       bgGradient: 'from-blue-700 via-cyan-800 to-emerald-900'
   },
 
@@ -572,6 +616,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['pokemon-league', 'cherrygrove-city'],
       encounters: ['sentret', 'hoothoot', 'pidgey', 'rattata'],
+    levelRange: [28, 32],
       bgGradient: 'from-green-700 via-emerald-800 to-slate-900'
   },
   'cherrygrove-city': {
@@ -581,6 +626,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['new-bark-town', 'violet-city'],
       encounters: ['ledyba', 'spinarak', 'caterpie', 'weedle', 'hoppip', 'sunkern', 'pichu'],
+    levelRange: [28, 33],
       bgGradient: 'from-pink-700 via-rose-800 to-slate-900'
   },
   'violet-city': {
@@ -590,6 +636,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['cherrygrove-city', 'azalea-town', 'ecruteak-city'],
       encounters: ['pidgey', 'hoothoot', 'bellsprout', 'mareep', 'flaaffy', 'natu', 'hoppip', 'togepi'],
+    levelRange: [29, 34],
       bgGradient: 'from-violet-800 via-purple-900 to-slate-900',
       gym: {
           leaderName: '阿速',
@@ -607,6 +654,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['violet-city', 'ilex-forest', 'goldenrod-city'],
       encounters: ['caterpie', 'weedle', 'spinarak', 'pineco', 'ledyba', 'ariados', 'yanma'],
+    levelRange: [29, 34],
       bgGradient: 'from-lime-800 via-green-900 to-slate-900',
       gym: {
           leaderName: '阿笔',
@@ -624,6 +672,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['azalea-town', 'goldenrod-city'],
       encounters: ['oddish', 'paras', 'pineco', 'hoothoot', 'noctowl', 'forretress', 'sudowoodo'],
+    levelRange: [30, 35],
       bgGradient: 'from-green-950 via-emerald-950 to-black',
       weatherRates: { Rain: 0.3 },
       legendaryEncounter: {
@@ -639,6 +688,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['azalea-town', 'ilex-forest', 'ecruteak-city'],
       encounters: ['rattata', 'meowth', 'snubbull', 'aipom', 'granbull', 'smeargle', 'igglybuff'],
+    levelRange: [30, 35],
       bgGradient: 'from-yellow-700 via-amber-800 to-slate-900',
       gym: {
           leaderName: '小茜',
@@ -656,6 +706,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['goldenrod-city', 'violet-city', 'olivine-city', 'mahogany-town', 'tin-tower'],
       encounters: ['gastly', 'misdreavus', 'murkrow', 'zubat', 'unown', 'natu', 'xatu'],
+    levelRange: [31, 36],
       bgGradient: 'from-amber-800 via-orange-900 to-slate-900',
       gym: {
           leaderName: '松叶',
@@ -673,6 +724,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['ecruteak-city', 'whirl-islands', 'mahogany-town'],
       encounters: ['tentacool', 'magnemite', 'voltorb', 'chinchou', 'lanturn', 'corsola', 'mantine', 'skarmory'],
+    levelRange: [31, 36],
       bgGradient: 'from-cyan-700 via-steel-800 to-slate-900',
       gym: {
           leaderName: '小美',
@@ -690,6 +742,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['ecruteak-city', 'olivine-city', 'blackthorn-city', 'lake-of-rage', 'mt-mortar'],
       encounters: ['swinub', 'sneasel', 'delibird', 'jynx', 'piloswine', 'smoochum'],
+    levelRange: [32, 37],
       bgGradient: 'from-sky-900 via-blue-950 to-slate-900',
       weatherRates: { Hail: 0.3 },
       gym: {
@@ -708,6 +761,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['mahogany-town', 'silver-cave'],
       encounters: ['dratini', 'horsea', 'magikarp', 'larvitar', 'kingdra', 'pupitar'],
+    levelRange: [33, 38],
       bgGradient: 'from-indigo-800 via-violet-900 to-slate-900',
       gym: {
           leaderName: '小椿',
@@ -725,6 +779,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['mahogany-town'],
       encounters: ['magikarp', 'gyarados', 'goldeen', 'psyduck', 'wooper', 'quagsire', 'azumarill'],
+    levelRange: [32, 37],
       bgGradient: 'from-red-900 via-blue-950 to-black',
       weatherRates: { Rain: 0.5 },
       legendaryEncounter: {
@@ -740,6 +795,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['ecruteak-city'],
       encounters: ['gastly', 'misdreavus', 'unown', 'xatu', 'togetic'],
+    levelRange: [33, 38],
       bgGradient: 'from-yellow-700 via-amber-900 to-black',
       legendaryEncounter: {
           speciesId: 'hoOh',
@@ -754,6 +810,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['olivine-city'],
       encounters: ['tentacool', 'seel', 'horsea', 'krabby', 'chinchou', 'corsola', 'qwilfish', 'remoraid'],
+    levelRange: [32, 37],
       bgGradient: 'from-blue-800 via-cyan-950 to-black',
       weatherRates: { Rain: 0.4 },
       legendaryEncounter: {
@@ -769,6 +826,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['blackthorn-city'],
       encounters: ['larvitar', 'ursaring', 'sneasel', 'golduck', 'tyranitar', 'crobat', 'steelix', 'skarmory'],
+    levelRange: [36, 42],
       bgGradient: 'from-gray-800 via-slate-900 to-black',
       legendaryEncounter: {
           speciesId: 'lugia',
@@ -783,6 +841,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       region: '城都',
       connections: ['mahogany-town'],
       encounters: ['machop', 'zubat', 'marill', 'geodude', 'teddiursa', 'ursaring', 'hitmontop', 'tyrogue'],
+    levelRange: [32, 37],
       bgGradient: 'from-stone-800 via-amber-900 to-black',
       legendaryEncounter: {
           speciesId: 'entei',

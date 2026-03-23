@@ -271,7 +271,11 @@ export const useGameStore = create<GameState>()(
     const enemyData = SPECIES_DATA[speciesKey];
     if (!enemyData) return;
 
-    const enemy = createPokemon(speciesKey, 3 + Math.floor(Math.random() * 3), []);
+    // 根据当前地点的等级范围生成敌方等级
+    const location = WORLD_MAP[get().playerLocationId];
+    const [minLv, maxLv] = location?.levelRange || [3, 5];
+    const enemyLevel = minLv + Math.floor(Math.random() * (maxLv - minLv + 1));
+    const enemy = createPokemon(speciesKey, enemyLevel, []);
 
     const defaultStages = () => ({ atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 });
 
