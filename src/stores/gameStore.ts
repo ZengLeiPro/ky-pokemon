@@ -19,6 +19,18 @@ function createLogEntry(message: string, type: LogEntry['type'] = 'info'): LogEn
 
 const starter = createPokemon('charmander', 5, [MOVES.scratch, MOVES.ember]);
 
+// 构建进化最低等级表：进化形态 -> 它从前置形态进化所需的最低等级
+const MIN_EVOLUTION_LEVEL: Record<string, number> = {};
+for (const [id, data] of Object.entries(SPECIES_DATA)) {
+  if (data.evolutions) {
+    for (const evo of data.evolutions) {
+      if (evo.level) {
+        MIN_EVOLUTION_LEVEL[evo.targetSpeciesId] = evo.level;
+      }
+    }
+  }
+}
+
 const initialPokedex: Record<number, PokedexStatus> = {};
 Object.values(SPECIES_DATA).forEach(s => {
       initialPokedex[s.pokedexId!] = 'UNKNOWN';
@@ -102,6 +114,7 @@ interface GameState {
   setSelectedPokemon: (id: string | null) => void;
   addLog: (message: string, type?: LogEntry['type']) => void;
   startBattle: (enemyId: string) => void;
+  startWildBattle: () => boolean;  // 根据当前地点随机遭遇，返回是否成功触发
   startLegendaryBattle: (speciesId: string, level: number) => void;
   startGymBattle: (gym: GymData) => void;
   runAway: () => void;
@@ -300,6 +313,62 @@ export const useGameStore = create<GameState>()(
           state.pokedex[dexId] = 'SEEN';
       }
     }));
+  },
+
+  startWildBattle: () => {
+    const { playerLocationId, addLog } = get();
+    const location = WORLD_MAP[playerLocationId];
+    if (!location?.encounters?.length) return false;
+
+    const [minLv, maxLv] = location.levelRange || [3, 5];
+    const enemyLevel = minLv + Math.floor(Math.random() * (maxLv - minLv + 1));
+
+    // 过滤：只保留等级合理的宝可梦（基础形态 或 进化等级 <= 生成等级）
+    const validPool = location.encounters.filter(id => {
+      const evoLv = MIN_EVOLUTION_LEVEL[id];
+      return !evoLv || evoLv <= enemyLevel;
+    });
+
+    // 如果全被过滤了，退回到只选基础形态
+    const pool = validPool.length > 0
+      ? validPool
+      : location.encounters.filter(id => !MIN_EVOLUTION_LEVEL[id]);
+
+    if (pool.length === 0) {
+      addLog("草丛里有什么东西跑掉了...", "info");
+      return false;
+    }
+
+    const speciesKey = pool[Math.floor(Math.random() * pool.length)];
+    if (!SPECIES_DATA[speciesKey]) {
+      addLog("草丛里有什么东西跑掉了...", "info");
+      return false;
+    }
+
+    const enemy = createPokemon(speciesKey, enemyLevel, []);
+    const defaultStages = () => ({ atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 });
+
+    set(produce((state: GameState) => {
+      enemy.statStages = defaultStages();
+      state.battle.active = true;
+      state.battle.enemy = enemy;
+      state.battle.enemyParty = [];
+      state.battle.turnCount = 1;
+      state.battle.phase = 'INPUT';
+      state.battle.gymBadgeReward = undefined;
+      state.battle.trainerName = undefined;
+      state.battle.isLegendary = false;
+      state.battle.legendarySpeciesId = undefined;
+      state.view = 'BATTLE';
+      state.playerParty[state.battle.playerActiveIndex].statStages = defaultStages();
+      state.logs.push(createLogEntry(`野生的 ${enemy.speciesName} 出现了！`, 'urgent'));
+
+      const dexId = SPECIES_DATA[speciesKey].pokedexId!;
+      if (state.pokedex[dexId] === 'UNKNOWN') {
+        state.pokedex[dexId] = 'SEEN';
+      }
+    }));
+    return true;
   },
 
   startLegendaryBattle: (speciesId: string, level: number) => {

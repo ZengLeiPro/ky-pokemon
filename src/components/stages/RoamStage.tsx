@@ -25,7 +25,7 @@ const PARTICLE_BG_STYLE: React.CSSProperties = {
 };
 
 const RoamStage: React.FC = () => {
-  const { startBattle, startLegendaryBattle, addLog, addItem, playerLocationId, moveTo, setView, weather, legendaryProgress, badges } = useGameStore();
+  const { startBattle, startWildBattle, startLegendaryBattle, addLog, addItem, playerLocationId, moveTo, setView, weather, legendaryProgress, badges } = useGameStore();
   const [showLegendary, setShowLegendary] = useState(false);
 
   const location = WORLD_MAP[playerLocationId];
@@ -72,20 +72,10 @@ const RoamStage: React.FC = () => {
 
   const handleExplore = () => {
     const roll = Math.random();
-    // Use location specific encounters if available, otherwise fallback (for safety)
-    const encounterPool = location.encounters && location.encounters.length > 0
-        ? location.encounters
-        : ['rattata', 'pidgey'];
 
     if (roll < 0.75) {
-      // 75% chance to encounter wild Pokemon
-      const randomEnemy = encounterPool[Math.floor(Math.random() * encounterPool.length)];
-      // Validate species exists
-      if (SPECIES_DATA[randomEnemy]) {
-          startBattle(randomEnemy);
-      } else {
-          addLog("草丛里有什么东西跑掉了...", "info");
-      }
+      // 75% chance to encounter wild Pokemon (level-aware filtering)
+      startWildBattle();
     } else if (roll < 0.85) {
       // 10% chance to find healing item
       addItem('potion', 1);
