@@ -161,8 +161,9 @@ export const pokemonCenterMap: MapData = {
       ],
       choices: [
         { label: '治疗宝可梦', action: 'heal', followUpDialog: [
-          '好的, 让我帮你的宝可梦恢复体力吧!',
-          '...好了! 你的宝可梦已经完全恢复了!',
+          '好的, 请把宝可梦交给我吧!',
+          '......',
+          '让你久等了, 你的宝可梦已经OK了!',
         ]},
         { label: '合成招式学习器', action: 'dismiss', followUpDialog: [
           '这个功能正在开发中, 敬请期待哦!',

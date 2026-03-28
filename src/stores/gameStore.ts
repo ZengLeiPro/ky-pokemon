@@ -89,7 +89,7 @@ interface GameState {
     gymBadgeReward?: string;
     gymBadgeName?: string;
     playerActiveIndex: number;
-    phase: 'INPUT' | 'PROCESSING' | 'ENDED' | 'FORCED_SWITCH' | 'NICKNAME' | 'MOVE_LEARN';
+    phase: 'INPUT' | 'PROCESSING' | 'ENDED' | 'FORCED_SWITCH' | 'NICKNAME' | 'MOVE_LEARN' | 'VICTORY';
     caughtPokemonId?: string;
     isLegendary?: boolean;  // 是否是传说宝可梦战斗
     legendarySpeciesId?: string;  // 传说宝可梦的物种ID
@@ -104,6 +104,8 @@ interface GameState {
       moveId: string;
       isPlayerAttack: boolean;
     } | null;
+    // 胜利结算信息
+    victoryMessages?: string[];
   };
 
   gameMode: 'NORMAL' | 'CHEAT';
@@ -142,6 +144,7 @@ interface GameState {
   advanceEvolutionStage: (stage: EvolutionState['stage']) => void;
   completeEvolution: () => void;
 
+  dismissVictory: () => void;
   // 招式管理
   learnPendingMove: (forgetIndex: number | null) => void;
   forgetMove: (pokemonId: string, moveIndex: number) => void;
@@ -847,6 +850,7 @@ export const useGameStore = create<GameState>()(
         set(produce((state: GameState) => {
             // === 经验共享：参战宝可梦100%，其他存活宝可梦50% ===
             const activeIdx = state.battle.playerActiveIndex;
+            const victoryMsgs: string[] = [];
 
             // 1. 参战宝可梦获得完整经验
             const p = state.playerParty[activeIdx];
@@ -854,13 +858,16 @@ export const useGameStore = create<GameState>()(
 
             state.playerParty[activeIdx] = updatedPokemon;
             state.logs.push(createLogEntry(`${updatedPokemon.speciesName} 获得了 ${expAmount} 点经验值。`));
+            victoryMsgs.push(`${updatedPokemon.speciesName} 获得了 ${expAmount} 点经验值！`);
 
             if (leveledUp) {
                 state.logs.push(createLogEntry(`${updatedPokemon.speciesName} 升到了 Lv.${updatedPokemon.level}！`, 'urgent'));
+                victoryMsgs.push(`${updatedPokemon.speciesName} 升到了 Lv.${updatedPokemon.level}！`);
 
                 if (learnedMoves && learnedMoves.length > 0) {
                     learnedMoves.forEach(m => {
                         state.logs.push(createLogEntry(`${updatedPokemon.speciesName} 学会了 ${m}！`));
+                        victoryMsgs.push(`${updatedPokemon.speciesName} 学会了 ${m}！`);
                     });
                 }
 
@@ -903,12 +910,15 @@ export const useGameStore = create<GameState>()(
                     const result = gainExperience(mon, sharedExp);
                     state.playerParty[i] = result.updatedPokemon;
                     state.logs.push(createLogEntry(`${result.updatedPokemon.speciesName} 也获得了 ${sharedExp} 点经验值！`, 'info'));
+                    victoryMsgs.push(`${result.updatedPokemon.speciesName} 获得了 ${sharedExp} 点经验值！`);
 
                     if (result.leveledUp) {
                         state.logs.push(createLogEntry(`${result.updatedPokemon.speciesName} 升到了 Lv.${result.updatedPokemon.level}！`, 'urgent'));
+                        victoryMsgs.push(`${result.updatedPokemon.speciesName} 升到了 Lv.${result.updatedPokemon.level}！`);
                         if (result.learnedMoves && result.learnedMoves.length > 0) {
                             result.learnedMoves.forEach(m => {
                                 state.logs.push(createLogEntry(`${result.updatedPokemon.speciesName} 学会了 ${m}！`));
+                                victoryMsgs.push(`${result.updatedPokemon.speciesName} 学会了 ${m}！`);
                             });
                         }
                         // 非参战宝可梦：招式满了自动跳过，不弹选择界面
@@ -934,7 +944,7 @@ export const useGameStore = create<GameState>()(
                     state.battle.turnCount = 1;
                     state.battle.phase = 'INPUT';
                     state.logs.push(createLogEntry(`${state.battle.trainerName} 派出了 ${nextEnemy.speciesName}！`, 'urgent'));
-                    
+
                     const dexId = nextEnemy.speciesData.pokedexId;
                     if (state.pokedex[dexId] === 'UNKNOWN') {
                         state.pokedex[dexId] = 'SEEN';
@@ -942,12 +952,14 @@ export const useGameStore = create<GameState>()(
                     return;
                 }
             }
-            
+
             if (state.battle.gymBadgeReward && state.battle.gymBadgeName) {
                 if (!state.badges.includes(state.battle.gymBadgeReward)) {
                     state.badges.push(state.battle.gymBadgeReward);
                     state.logs.push(createLogEntry(`恭喜！你战胜了 ${state.battle.trainerName}！`, 'urgent'));
                     state.logs.push(createLogEntry(`获得了 ${state.battle.gymBadgeName}！`, 'urgent'));
+                    victoryMsgs.push(`恭喜！战胜了 ${state.battle.trainerName}！`);
+                    victoryMsgs.push(`获得了 ${state.battle.gymBadgeName}！`);
                 }
             }
 
@@ -960,17 +972,16 @@ export const useGameStore = create<GameState>()(
                 state.logs.push(createLogEntry(`传说的宝可梦逃走了...`, 'urgent'));
             }
 
-            state.battle.active = false;
-            state.battle.enemy = null;
-            state.battle.enemyParty = [];
-            state.battle.gymBadgeReward = undefined;
-            state.battle.trainerName = undefined;
-            state.battle.isLegendary = false;
-            state.battle.legendarySpeciesId = undefined;
+            // 金钱奖励
             state.playerMoney += 120;
-            state.view = 'ROAM';
-            // 战斗结束，清除所有宝可梦的能力等级
-            state.playerParty.forEach(p => { p.statStages = undefined; });
+            victoryMsgs.push(`获得了 ¥120！`);
+
+            // 存储胜利信息，进入胜利结算阶段
+            state.battle.victoryMessages = victoryMsgs;
+            // 如果没有 MOVE_LEARN 中断，直接进入 VICTORY 阶段
+            if (state.battle.phase !== 'MOVE_LEARN') {
+                state.battle.phase = 'VICTORY';
+            }
         }));
     } else if (currentPlayer.currentHp <= 0) {
         addLog(`${currentPlayer.speciesName} 倒下了！`);
@@ -1330,6 +1341,20 @@ export const useGameStore = create<GameState>()(
       return true;
   },
 
+  dismissVictory: () => set(produce((state: GameState) => {
+      state.battle.active = false;
+      state.battle.enemy = null;
+      state.battle.enemyParty = [];
+      state.battle.victoryMessages = undefined;
+      state.battle.gymBadgeReward = undefined;
+      state.battle.trainerName = undefined;
+      state.battle.isLegendary = false;
+      state.battle.legendarySpeciesId = undefined;
+      state.battle.phase = 'INPUT';
+      state.view = 'ROAM';
+      state.playerParty.forEach(p => { p.statStages = undefined; });
+  })),
+
   healParty: () => set(produce((state: GameState) => {
       state.playerParty.forEach(p => {
           p.currentHp = p.maxHp;
@@ -1674,14 +1699,14 @@ export const useGameStore = create<GameState>()(
           const stillRemaining = state.battle.pendingMoveLearn.remainingMoves;
           if (stillRemaining.length === 0) {
             state.battle.pendingMoveLearn = undefined;
-            state.battle.phase = 'ENDED';
+            state.battle.phase = state.battle.victoryMessages ? 'VICTORY' : 'ENDED';
           }
         }
         // 否则保持 MOVE_LEARN phase
       }
     } else {
       state.battle.pendingMoveLearn = undefined;
-      state.battle.phase = 'ENDED';
+      state.battle.phase = state.battle.victoryMessages ? 'VICTORY' : 'ENDED';
     }
   })),
 

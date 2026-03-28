@@ -29,7 +29,7 @@ function StatusBadge({ status }: { status?: StatusCondition }) {
 }
 
 const BattleStage: React.FC = () => {
-  const { battle, playerParty, setView, confirmNickname, learnPendingMove, playerLocationId, weather } = useGameStore();
+  const { battle, playerParty, setView, confirmNickname, learnPendingMove, dismissVictory, playerLocationId, weather } = useGameStore();
   const playerMon = playerParty[battle.playerActiveIndex];
   const enemyMon = battle.enemy;
   const [nicknameInput, setNicknameInput] = useState('');
@@ -41,6 +41,10 @@ const BattleStage: React.FC = () => {
   // 被击中时的闪烁效果
   const isEnemyHit = battleAnimation && battleAnimation.isPlayerAttack;
   const isPlayerHit = battleAnimation && !battleAnimation.isPlayerAttack;
+
+  // 胜利画面状态
+  const [victoryMsgIndex, setVictoryMsgIndex] = useState(-1);
+  const victoryBgmRef = useRef<HTMLAudioElement | null>(null);
 
   // 战斗 BGM
   const bgmRef = useRef<HTMLAudioElement | null>(null);
@@ -56,6 +60,41 @@ const BattleStage: React.FC = () => {
       bgmRef.current = null;
     };
   }, []);
+
+  // 胜利音乐 & 消息逐条展示
+  useEffect(() => {
+    if (battle.phase === 'VICTORY' && battle.victoryMessages) {
+      // 停止战斗 BGM
+      if (bgmRef.current) {
+        bgmRef.current.pause();
+        bgmRef.current.currentTime = 0;
+      }
+      // 播放胜利音乐
+      const audio = new Audio('/audio/victory-wild.mp3');
+      audio.volume = 0.5;
+      audio.play().catch(() => {});
+      victoryBgmRef.current = audio;
+      // 从第 0 条开始逐条展示
+      setVictoryMsgIndex(0);
+      return () => {
+        audio.pause();
+        audio.currentTime = 0;
+        victoryBgmRef.current = null;
+      };
+    }
+  }, [battle.phase]);
+
+  // 自动逐条展示胜利消息（每条间隔 1.2 秒）
+  useEffect(() => {
+    if (battle.phase !== 'VICTORY' || !battle.victoryMessages) return;
+    if (victoryMsgIndex < 0) return;
+    if (victoryMsgIndex < battle.victoryMessages.length - 1) {
+      const timer = setTimeout(() => {
+        setVictoryMsgIndex(prev => prev + 1);
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [battle.phase, victoryMsgIndex, battle.victoryMessages]);
 
   if (!playerMon || !enemyMon) return <div className="flex h-full items-center justify-center text-slate-400 animate-pulse">进入战斗中...</div>;
 
@@ -297,6 +336,56 @@ const BattleStage: React.FC = () => {
                 </div>
             </div>
         </div>
+
+        {/* 胜利结算画面 */}
+        {battle.phase === 'VICTORY' && battle.victoryMessages && (
+          <div
+            className="absolute inset-0 z-50 flex flex-col"
+            onClick={() => {
+              // 点击加速：跳到最后一条或关闭
+              if (victoryMsgIndex < battle.victoryMessages!.length - 1) {
+                setVictoryMsgIndex(battle.victoryMessages!.length - 1);
+              } else {
+                dismissVictory();
+              }
+            }}
+          >
+            {/* 半透明黑色遮罩 */}
+            <div className="absolute inset-0 bg-black/75" />
+
+            {/* 上方：胜利标题 */}
+            <div className="relative z-10 flex-1 flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-3xl font-black text-yellow-400 drop-shadow-lg tracking-wider">
+                  胜利！
+                </div>
+              </div>
+            </div>
+
+            {/* 下方：消息列表 */}
+            <div className="relative z-10 bg-slate-900/95 border-t-2 border-yellow-500/50 p-4 max-h-[45%] overflow-y-auto">
+              <div className="space-y-2">
+                {battle.victoryMessages.slice(0, victoryMsgIndex + 1).map((msg, i) => (
+                  <div
+                    key={i}
+                    className={`text-sm font-bold transition-opacity duration-300 ${
+                      i === victoryMsgIndex ? 'text-white' : 'text-slate-400'
+                    }`}
+                  >
+                    ▸ {msg}
+                  </div>
+                ))}
+              </div>
+              {victoryMsgIndex >= battle.victoryMessages.length - 1 && (
+                <div className="mt-4 text-center">
+                  <span className="text-xs text-yellow-400/80 animate-pulse">
+                    点击继续
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
     </div>
   );
 };

@@ -15,6 +15,8 @@ const ControlPad: React.FC = () => {
   if (view === 'ROAM') return null;
   // Other views use their own full screen layout
   if (view !== 'BATTLE') return null;
+  // 胜利结算阶段不显示操作按钮
+  if (battle.phase === 'VICTORY') return null;
 
   // Battle Controls
   const activeMon = playerParty[battle.playerActiveIndex];

@@ -81,6 +81,8 @@ export function PokemonCenterScene({
       switch (type) {
         case 'heal':
           onHealTeam();
+          // 播放治疗音效
+          new Audio('/audio/pokemon-heal.mp3').play().catch(() => {});
           break;
         case 'open-pc':
           onOpenPC();
