@@ -61,6 +61,8 @@ export interface DialogChoice {
   action: string;
   /** 选择后显示的后续对话（对话结束后才触发 action） */
   followUpDialog?: string[];
+  /** 为 true 时，选择选项后立即触发 action（不等后续对话结束） */
+  triggerOnStart?: boolean;
 }
 
 /** NPC 数据 */

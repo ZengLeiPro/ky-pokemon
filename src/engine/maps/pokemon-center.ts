@@ -160,7 +160,7 @@ export const pokemonCenterMap: MapData = {
         '请问你需要什么服务呢?',
       ],
       choices: [
-        { label: '治疗宝可梦', action: 'heal', followUpDialog: [
+        { label: '治疗宝可梦', action: 'heal', triggerOnStart: true, followUpDialog: [
           '好的, 请把宝可梦交给我吧!',
           '......',
           '让你久等了, 你的宝可梦已经OK了!',
