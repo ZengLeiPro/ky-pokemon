@@ -44,10 +44,18 @@ export function ShopScene({ onExit }: ShopSceneProps) {
     audio.volume = 0.35;
     bgmRef.current = audio;
     audio.play().catch(() => {});
+    // 如果浏览器阻止了自动播放，在用户下次点击/触摸时播放
+    const resume = () => {
+      if (bgmRef.current?.paused) bgmRef.current.play().catch(() => {});
+    };
+    document.addEventListener('touchstart', resume, { once: true });
+    document.addEventListener('click', resume, { once: true });
     return () => {
       audio.pause();
       audio.currentTime = 0;
       bgmRef.current = null;
+      document.removeEventListener('touchstart', resume);
+      document.removeEventListener('click', resume);
     };
   }, []);
 
