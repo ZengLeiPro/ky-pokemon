@@ -2,7 +2,7 @@
 // 宝可梦中心场景组件
 // ============================================================
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { GameWorld } from '../components/GameWorld';
 import { pokemonCenterMap } from '../maps/pokemon-center';
 
@@ -42,6 +42,21 @@ export function PokemonCenterScene({
     // 短暂延迟后移除淡入遮罩
     const timer = setTimeout(() => setFadeIn(false), 50);
     return () => clearTimeout(timer);
+  }, []);
+
+  // 宝可梦中心 BGM（火红叶绿版）
+  const bgmRef = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    const audio = new Audio('/audio/pokemon-center.mp3');
+    audio.loop = true;
+    audio.volume = 0.35;
+    bgmRef.current = audio;
+    audio.play().catch(() => {});
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+      bgmRef.current = null;
+    };
   }, []);
 
   // 场景切换：玩家踩到 warp 区域

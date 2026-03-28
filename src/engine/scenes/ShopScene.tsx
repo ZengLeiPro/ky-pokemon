@@ -2,7 +2,7 @@
 // 商店场景组件
 // ============================================================
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { GameWorld } from '../components/GameWorld';
 import { shopMap } from '../maps/shop';
 import { useGameStore } from '@/stores/gameStore';
@@ -34,6 +34,21 @@ export function ShopScene({ onExit }: ShopSceneProps) {
   useEffect(() => {
     const timer = setTimeout(() => setFadeIn(false), 50);
     return () => clearTimeout(timer);
+  }, []);
+
+  // 商店 BGM（宝可梦红宝石/蓝宝石版经典商店音乐）
+  const bgmRef = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    const audio = new Audio('/audio/poke-mart.mp3');
+    audio.loop = true;
+    audio.volume = 0.35;
+    bgmRef.current = audio;
+    audio.play().catch(() => {});
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+      bgmRef.current = null;
+    };
   }, []);
 
   // 场景切换：玩家踩到 warp 区域
