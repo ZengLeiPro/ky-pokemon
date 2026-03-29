@@ -125,92 +125,121 @@ const EvolutionView: React.FC = () => {
   );
 };
 
+/**
+ * 生成进化动画的形态闪烁关键帧。
+ * 模拟原版宝可梦：旧形态剪影和新形态剪影交替出现，越来越快。
+ */
+function buildMorphKeyframes(duration: number) {
+  // 0 ~ 0.06: 旧形态正常 → 变剪影
+  const oldOpacity: number[] = [1, 1];
+  const newOpacity: number[] = [0, 0];
+  const times: number[] = [0, 0.06];
+
+  // 0.09 开始交替闪烁，间隔越来越短
+  let t = 0.09;
+  let interval = 0.07; // 起始间隔 (~2.3s)
+  let showOld = false; // 下一帧先显示新形态
+
+  while (t < 0.90) {
+    oldOpacity.push(showOld ? 1 : 0);
+    newOpacity.push(showOld ? 0 : 1);
+    times.push(Math.min(t, 0.90));
+    t += interval;
+    showOld = !showOld;
+    interval *= 0.82; // 加速
+    if (interval < 0.012) interval = 0.012; // 最快 ~0.4s
+  }
+
+  // 最后：新形态留下
+  oldOpacity.push(0);
+  newOpacity.push(1);
+  times.push(1.0);
+
+  return { oldOpacity, newOpacity, times };
+}
+
+const EVOLUTION_DURATION = 33; // 秒，匹配 BGM
+
 // 进化动画子组件
 const EvolutionAnimation: React.FC<{ fromSprite: string, toSprite: string, onComplete: () => void }> = ({ fromSprite, toSprite, onComplete }) => {
+  const { oldOpacity, newOpacity, times } = buildMorphKeyframes(EVOLUTION_DURATION);
+
   useEffect(() => {
-     const timer = setTimeout(onComplete, 5000); // 5秒动画
+     const timer = setTimeout(onComplete, EVOLUTION_DURATION * 1000);
      return () => clearTimeout(timer);
   }, [onComplete]);
 
   return (
     <div className="relative w-full h-full flex items-center justify-center">
-       {/* 强烈的光环背景 */}
-       <motion.div 
+       {/* 光环背景：缓慢增强 */}
+       <motion.div
          className="absolute w-96 h-96 bg-gradient-radial from-white via-blue-500 to-transparent opacity-0 rounded-full blur-3xl"
-         animate={{ 
-            opacity: [0, 0.8, 1, 0.8, 0],
-            scale: [0.5, 1.2, 1.5, 1.2, 0.5]
+         animate={{
+            opacity: [0, 0.3, 0.6, 0.9, 1, 0.8, 0],
+            scale: [0.5, 0.8, 1.0, 1.3, 1.5, 1.2, 0.5]
          }}
-         transition={{ duration: 5, times: [0, 0.2, 0.5, 0.8, 1] }}
+         transition={{ duration: EVOLUTION_DURATION, times: [0, 0.05, 0.2, 0.6, 0.85, 0.93, 1] }}
        />
 
        {/* 粒子效果 */}
-       {[...Array(10)].map((_, i) => (
+       {[...Array(15)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-2 h-2 bg-white rounded-full"
             initial={{ x: 0, y: 0, opacity: 0 }}
-            animate={{ 
+            animate={{
                 x: (Math.random() - 0.5) * 300,
                 y: (Math.random() - 0.5) * 300,
                 opacity: [0, 1, 0],
                 scale: [0, 1.5, 0]
             }}
-            transition={{ 
-                duration: 2, 
-                repeat: 2, 
-                delay: Math.random() * 2 
+            transition={{
+                duration: 3,
+                repeat: Math.floor(EVOLUTION_DURATION / 3),
+                delay: Math.random() * 8
             }}
           />
        ))}
 
-       {/* 进化前形态：渐变黑 -> 快速闪烁 -> 消失 */}
+       {/* 进化前形态：正常 → 剪影 → 交替闪烁 → 消失 */}
        <motion.img
          src={fromSprite}
          className="absolute w-48 h-48 object-contain pixelated z-10"
+         style={{ filter: 'brightness(0)' }}
          animate={{
             filter: [
-                'brightness(1)', 
-                'brightness(0)', // 变剪影
+                'brightness(1)',
                 'brightness(0)',
-                'brightness(0)',
-                'brightness(0)', 
+                ...Array(times.length - 2).fill('brightness(0)'),
             ],
-            opacity: [1, 1, 1, 0, 0] // 最后时刻消失
+            opacity: oldOpacity,
          }}
-         transition={{ duration: 5, times: [0, 0.2, 0.8, 0.85, 1] }}
+         transition={{ duration: EVOLUTION_DURATION, times }}
        />
-       
-       {/* 进化后形态：初始隐藏 -> 快速闪烁出现 -> 定格 */}
+
+       {/* 进化后形态：隐藏 → 交替闪烁 → 留下（剪影） */}
        <motion.img
          src={toSprite}
          className="absolute w-48 h-48 object-contain pixelated z-10"
-         initial={{ opacity: 0, filter: 'brightness(0)' }}
-         animate={{ 
-            opacity: [0, 0, 0, 1, 1],
-            filter: [
-                'brightness(0)', 
-                'brightness(0)', 
-                'brightness(0)', 
-                'brightness(0)', // 依然是剪影
-            ]
-         }}
-         transition={{ duration: 5, times: [0, 0.2, 0.8, 0.85, 1] }}
+         initial={{ opacity: 0 }}
+         style={{ filter: 'brightness(0)' }}
+         animate={{ opacity: newOpacity }}
+         transition={{ duration: EVOLUTION_DURATION, times }}
        />
 
-       {/* 闪烁覆盖层 (模拟 morphing 闪烁) */}
+       {/* 中段闪烁覆盖层 */}
        <motion.div
           className="absolute w-48 h-48 z-20 bg-white mix-blend-overlay"
-          animate={{ opacity: [0, 0, 1, 0, 1, 0, 1, 0] }}
-          transition={{ duration: 3, delay: 1.5, times: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 1] }}
+          animate={{ opacity: [0, 0, 1, 0, 1, 0, 1, 0, 0] }}
+          transition={{ duration: 8, delay: EVOLUTION_DURATION * 0.35, times: [0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 1] }}
        />
-       
+
        {/* 最终白屏闪光 */}
        <motion.div
          className="fixed inset-0 bg-white z-50 pointer-events-none"
          initial={{ opacity: 0 }}
          animate={{ opacity: [0, 0, 1, 0] }}
-         transition={{ duration: 1, delay: 4, times: [0, 0.1, 0.5, 1] }}
+         transition={{ duration: 2, delay: EVOLUTION_DURATION - 2, times: [0, 0.1, 0.5, 1] }}
        />
     </div>
   );
