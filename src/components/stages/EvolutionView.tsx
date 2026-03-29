@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '../../stores/gameStore';
 import { SPECIES_DATA } from '../../constants';
@@ -9,11 +9,29 @@ const EvolutionView: React.FC = () => {
   const { pokemon, targetSpeciesId, stage } = evolution;
   const [targetSpecies, setTargetSpecies] = useState<SpeciesData | null>(null);
 
+  // 进化 BGM
+  const bgmRef = useRef<HTMLAudioElement | null>(null);
+
   useEffect(() => {
     if (targetSpeciesId && SPECIES_DATA[targetSpeciesId]) {
       setTargetSpecies(SPECIES_DATA[targetSpeciesId]);
     }
   }, [targetSpeciesId]);
+
+  // 进入 ANIMATION 阶段时播放进化音乐
+  useEffect(() => {
+    if (stage === 'ANIMATION') {
+      const audio = new Audio('/audio/evolution.mp3');
+      audio.volume = 0.5;
+      audio.play().catch(() => {});
+      bgmRef.current = audio;
+      return () => {
+        audio.pause();
+        audio.currentTime = 0;
+        bgmRef.current = null;
+      };
+    }
+  }, [stage]);
 
   if (!pokemon || !targetSpecies) return null;
 
@@ -21,6 +39,12 @@ const EvolutionView: React.FC = () => {
     if (stage === 'START') {
       advanceEvolutionStage('ANIMATION');
     } else if (stage === 'FINISHED') {
+      // 停止进化音乐
+      if (bgmRef.current) {
+        bgmRef.current.pause();
+        bgmRef.current.currentTime = 0;
+        bgmRef.current = null;
+      }
       completeEvolution();
     }
   };
