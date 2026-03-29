@@ -25,12 +25,25 @@ const EvolutionView: React.FC = () => {
       audio.volume = 0.5;
       audio.play().catch(() => {});
       bgmRef.current = audio;
-      return () => {
-        audio.pause();
-        audio.currentTime = 0;
-        bgmRef.current = null;
-      };
     }
+    if (stage === 'FINISHED') {
+      // 停掉进化过程BGM，播放进化成功音乐
+      if (bgmRef.current) {
+        bgmRef.current.pause();
+        bgmRef.current.currentTime = 0;
+      }
+      const successAudio = new Audio('/audio/evolution-success.mp3');
+      successAudio.volume = 0.5;
+      successAudio.play().catch(() => {});
+      bgmRef.current = successAudio;
+    }
+    return () => {
+      if (bgmRef.current) {
+        bgmRef.current.pause();
+        bgmRef.current.currentTime = 0;
+        bgmRef.current = null;
+      }
+    };
   }, [stage]);
 
   if (!pokemon || !targetSpecies) return null;
@@ -39,7 +52,7 @@ const EvolutionView: React.FC = () => {
     if (stage === 'START') {
       advanceEvolutionStage('ANIMATION');
     } else if (stage === 'FINISHED') {
-      // 停止进化音乐
+      // 停止音乐
       if (bgmRef.current) {
         bgmRef.current.pause();
         bgmRef.current.currentTime = 0;
