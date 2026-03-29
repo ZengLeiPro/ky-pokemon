@@ -106,6 +106,7 @@ model GameSave {
   legendaryProgress String @default("{}") // Record<string, LegendaryProgress> (JSON string)
   money           Int      @default(3000)
   playTime        Int      @default(0) // 秒
+  playerSpriteIndex Int    @default(0) // 玩家皮肤索引
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

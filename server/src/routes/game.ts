@@ -79,7 +79,7 @@ game.post('/save', async (c) => {
     return c.json({ success: false, error: '存档数据格式错误', details: parsed.error.format() }, 400);
   }
 
-  const { team, pcBox, devicePokemon, currentLocationId, badges, pokedex, inventory, legendaryProgress, money, playTime, mode } = parsed.data;
+  const { team, pcBox, devicePokemon, currentLocationId, badges, pokedex, inventory, legendaryProgress, money, playTime, playerSpriteIndex, mode } = parsed.data;
   const saveMode = (mode || 'NORMAL') as GameMode;
 
   const save = await db.gameSave.upsert({
@@ -101,7 +101,8 @@ game.post('/save', async (c) => {
       inventory: JSON.stringify(inventory ?? []),
       legendaryProgress: JSON.stringify(legendaryProgress ?? {}),
       money: money ?? 3000,
-      playTime: playTime ?? 0
+      playTime: playTime ?? 0,
+      playerSpriteIndex: playerSpriteIndex ?? 0
     },
     update: {
       team: JSON.stringify(team),
@@ -113,7 +114,8 @@ game.post('/save', async (c) => {
       inventory: inventory ? JSON.stringify(inventory) : undefined,
       legendaryProgress: legendaryProgress ? JSON.stringify(legendaryProgress) : undefined,
       money: money ?? undefined,
-      playTime: playTime ?? undefined
+      playTime: playTime ?? undefined,
+      playerSpriteIndex: playerSpriteIndex ?? undefined
     }
   });
 

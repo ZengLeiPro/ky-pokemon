@@ -48,6 +48,7 @@ export const SaveGameRequestSchema = z.object({
   legendaryProgress: z.record(z.string(), LegendaryProgressSchema).optional(),
   money: z.number().int().min(0).optional(),
   playTime: z.number().int().min(0).optional(),
+  playerSpriteIndex: z.number().int().min(0).max(99).optional(),
   mode: z.enum(['NORMAL', 'CHEAT']).optional().default('NORMAL')
 });
 
