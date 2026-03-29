@@ -540,6 +540,12 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
       if (data.success) {
         get().loadReceivedTradeRequests();
         get().loadSentTradeRequests();
+        // 刷新存档以同步服务端对 GameSave 的修改
+        const userId = localStorage.getItem('userId');
+        if (userId) {
+          const { useGameStore } = await import('./gameStore');
+          await useGameStore.getState().loadGame(userId);
+        }
         return true;
       }
       set({ error: data.error });
@@ -559,6 +565,12 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
       const data = await res.json();
       if (data.success) {
         get().loadSentTradeRequests();
+        // 刷新存档以同步服务端对 GameSave 的修改
+        const userId = localStorage.getItem('userId');
+        if (userId) {
+          const { useGameStore } = await import('./gameStore');
+          await useGameStore.getState().loadGame(userId);
+        }
         return true;
       }
       set({ error: data.error });
@@ -651,6 +663,12 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
       const data = await res.json();
       if (data.success) {
         get().loadSentGiftRequests();
+        // 刷新存档以同步服务端对 GameSave 的修改
+        const userId = localStorage.getItem('userId');
+        if (userId) {
+          const { useGameStore } = await import('./gameStore');
+          await useGameStore.getState().loadGame(userId);
+        }
         return true;
       }
       set({ error: data.error });
@@ -698,6 +716,12 @@ export const useSocialStore = create<SocialState>()((set, get) => ({
       const data = await res.json();
       if (data.success) {
         get().loadReceivedGiftRequests();
+        // 刷新存档以同步服务端对 GameSave 的修改
+        const userId = localStorage.getItem('userId');
+        if (userId) {
+          const { useGameStore } = await import('./gameStore');
+          await useGameStore.getState().loadGame(userId);
+        }
         return true;
       }
       set({ error: data.error });

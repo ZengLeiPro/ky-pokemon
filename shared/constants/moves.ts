@@ -25,7 +25,7 @@ export const MOVES: Record<string, Move> = {
   rage: { id: 'rage', name: '愤怒', type: 'Normal', category: 'Physical', power: 20, accuracy: 100, ppMax: 20, description: '如果在使出招式后 受到攻击的话， 会因愤怒的力量而提高攻击。' },
   gust: { id: 'gust', name: '起风', type: 'Flying', category: 'Special', power: 40, accuracy: 100, ppMax: 35, description: '用翅膀将刮起的狂风 袭向对手进行攻击。' },
   sandAttack: { id: 'sandAttack', name: '泼沙', type: 'Ground', category: 'Status', power: 0, accuracy: 100, ppMax: 15, description: '向对手脸上泼沙子， 从而降低命中率。' },
-  quickAttack: { id: 'quickAttack', name: '电光一闪', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 30, description: '以迅雷不及掩耳之势扑向对手。 必定能够先制攻击。' },
+  quickAttack: { id: 'quickAttack', name: '电光一闪', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 30, priority: 1, description: '以迅雷不及掩耳之势扑向对手。 必定能够先制攻击。' },
   hyperFang: { id: 'hyperFang', name: '必杀门牙', type: 'Normal', category: 'Physical', power: 80, accuracy: 90, ppMax: 15, description: '用锋利的门牙 牢牢地咬住对手进行攻击。 有时会使对手畏缩。' },
   peck: { id: 'peck', name: '啄', type: 'Flying', category: 'Physical', power: 35, accuracy: 100, ppMax: 35, description: '用尖锐的喙或角 刺向对手进行攻击。' },
   wrap: { id: 'wrap', name: '紧束', type: 'Normal', category: 'Physical', power: 15, accuracy: 90, ppMax: 20, description: '使用长长的身体或藤蔓等， 在４～５回合内 紧束对手进行攻击。' },
@@ -34,7 +34,7 @@ export const MOVES: Record<string, Move> = {
   thunderWave: { id: 'thunderWave', name: '电磁波', type: 'Electric', category: 'Status', power: 0, accuracy: 90, ppMax: 20, description: '向对手发出 微弱的电击， 从而让对手陷入麻痹状态。' },
   thunderbolt: { id: 'thunderbolt', name: '十万伏特', type: 'Electric', category: 'Special', power: 90, accuracy: 100, ppMax: 15, description: '向对手发出 强力电击进行攻击。 有时会让对手陷入麻痹状态。' },
   defenseCurl: { id: 'defenseCurl', name: '变圆', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '将身体蜷曲变圆， 从而提高自己的防御。' },
-  slash: { id: 'slash', name: '劈开', type: 'Normal', category: 'Physical', power: 70, accuracy: 100, ppMax: 20, description: '用爪子或镰刀等 劈开对手进行攻击。 容易击中要害。' },
+  slash: { id: 'slash', name: '劈开', type: 'Normal', category: 'Physical', power: 70, accuracy: 100, ppMax: 20, highCritRate: true, description: '用爪子或镰刀等 劈开对手进行攻击。 容易击中要害。' },
   bodySlam: { id: 'bodySlam', name: '泰山压顶', type: 'Normal', category: 'Physical', power: 85, accuracy: 100, ppMax: 15, description: '用整个身体 压住对手进行攻击。 有时会让对手陷入麻痹状态。' },
   hornAttack: { id: 'hornAttack', name: '角撞', type: 'Normal', category: 'Physical', power: 65, accuracy: 100, ppMax: 25, description: '用尖锐的角攻击对手。' },
   thrash: { id: 'thrash', name: '大闹一番', type: 'Normal', category: 'Physical', power: 120, accuracy: 100, ppMax: 10, description: '在２～３回合内， 乱打一气地攻击对手。 大闹一番后自己会陷入混乱。' },
@@ -56,13 +56,13 @@ export const MOVES: Record<string, Move> = {
   acid: { id: 'acid', name: '溶解液', type: 'Poison', category: 'Special', power: 40, accuracy: 100, ppMax: 30, description: '将强酸泼向对手进行攻击。 有时会降低对手的特防。' },
   megaDrain: { id: 'megaDrain', name: '超级吸取', type: 'Grass', category: 'Special', power: 40, accuracy: 100, ppMax: 15, description: '吸取对手的养分进行攻击。 可以回复给予对手 伤害的一半ＨＰ。' },
   foresight: { id: 'foresight', name: '识破', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '对幽灵属性宝可梦没有效果的招式 以及闪避率高的对手， 使用后变得能够打中。' },
-  magnitude: { id: 'magnitude', name: '震级', type: 'Ground', category: 'Physical', power: 0, accuracy: 100, ppMax: 30, description: '晃动地面，攻击自己 周围所有的宝可梦。 招式的威力会有各种变化。' },
+  magnitude: { id: 'magnitude', name: '震级', type: 'Ground', category: 'Physical', power: 71, accuracy: 100, ppMax: 30, description: '晃动地面，攻击自己 周围所有的宝可梦。 招式的威力会有各种变化。' },
   dig: { id: 'dig', name: '挖洞', type: 'Ground', category: 'Physical', power: 80, accuracy: 100, ppMax: 10, description: '第１回合钻入， 第２回合攻击对手。' },
   triAttack: { id: 'triAttack', name: '三重攻击', type: 'Normal', category: 'Special', power: 80, accuracy: 100, ppMax: 10, description: '用３种光线进行攻击。 有时会让对手陷入 麻痹、灼伤或冰冻的状态。' },
   payDay: { id: 'payDay', name: '聚宝功', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 20, description: '向对手的身体 投掷小金币进行攻击。 战斗后可以拿到钱。' },
   waterSport: { id: 'waterSport', name: '玩水', type: 'Water', category: 'Status', power: 0, accuracy: 100, ppMax: 15, description: '用水湿透周围。 在５回合内 减弱火属性的招式。' },
-  lowKick: { id: 'lowKick', name: '踢倒', type: 'Fighting', category: 'Physical', power: 0, accuracy: 100, ppMax: 20, description: '用力踢对手的脚， 使其摔倒进行攻击。 对手越重，威力越大。' },
-  karateChop: { id: 'karateChop', name: '空手劈', type: 'Fighting', category: 'Physical', power: 50, accuracy: 100, ppMax: 25, description: '用锋利的手刀 劈向对手进行攻击。 容易击中要害。' },
+  lowKick: { id: 'lowKick', name: '踢倒', type: 'Fighting', category: 'Physical', power: 60, accuracy: 100, ppMax: 20, description: '用力踢对手的脚， 使其摔倒进行攻击。 对手越重，威力越大。' },
+  karateChop: { id: 'karateChop', name: '空手劈', type: 'Fighting', category: 'Physical', power: 50, accuracy: 100, ppMax: 25, highCritRate: true, description: '用锋利的手刀 劈向对手进行攻击。 容易击中要害。' },
   odorSleuth: { id: 'odorSleuth', name: '气味侦测', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '对幽灵属性宝可梦没有效果的招式 以及闪避率高的对手， 使用后变得能够打中。' },
   takeDown: { id: 'takeDown', name: '猛撞', type: 'Normal', category: 'Physical', power: 90, accuracy: 85, ppMax: 20, description: '以惊人的气势 撞向对手进行攻击。 自己也会受到少许伤害。' },
   hypnosis: { id: 'hypnosis', name: '催眠术', type: 'Psychic', category: 'Status', power: 0, accuracy: 60, ppMax: 20, description: '施以诱导睡意的暗示， 让对手陷入睡眠状态。' },
@@ -70,7 +70,7 @@ export const MOVES: Record<string, Move> = {
   teleport: { id: 'teleport', name: '瞬间移动', type: 'Psychic', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '停止和野生宝可梦战斗并逃走。' },
   kinesis: { id: 'kinesis', name: '折弯汤匙', type: 'Psychic', category: 'Status', power: 0, accuracy: 80, ppMax: 15, description: '折弯汤匙引开注意， 从而降低对手的命中率。' },
   growth: { id: 'growth', name: '生长', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '让身体一下子长大， 从而提高攻击和特攻。' },
-  razorLeaf: { id: 'razorLeaf', name: '飞叶快刀', type: 'Grass', category: 'Physical', power: 55, accuracy: 95, ppMax: 25, description: '飞出叶片， 切斩对手进行攻击。 容易击中要害。' },
+  razorLeaf: { id: 'razorLeaf', name: '飞叶快刀', type: 'Grass', category: 'Physical', power: 55, accuracy: 95, ppMax: 25, highCritRate: true, description: '飞出叶片， 切斩对手进行攻击。 容易击中要害。' },
   mudSport: { id: 'mudSport', name: '玩泥巴', type: 'Ground', category: 'Status', power: 0, accuracy: 100, ppMax: 15, description: '一旦使用此招式， 周围就会弄得到处是泥。 在５回合内减弱电属性的招式。' },
   rockThrow: { id: 'rockThrow', name: '落石', type: 'Rock', category: 'Physical', power: 50, accuracy: 90, ppMax: 15, description: '拿起小岩石， 投掷对手进行攻击。' },
   stomp: { id: 'stomp', name: '踩踏', type: 'Normal', category: 'Physical', power: 65, accuracy: 100, ppMax: 20, description: '用大脚踩踏对手进行攻击。 有时会使对手畏缩。' },
@@ -110,7 +110,7 @@ export const MOVES: Record<string, Move> = {
   refresh: { id: 'refresh', name: '焕然一新', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '让身体休息， 治愈自己身上所中的 毒、麻痹、灼伤的异常状态。' },
   constrict: { id: 'constrict', name: '缠绕', type: 'Normal', category: 'Physical', power: 10, accuracy: 100, ppMax: 35, description: '用触手或青藤等缠绕进行攻击。 有时会降低对手的速度。' },
   ingrain: { id: 'ingrain', name: '扎根', type: 'Grass', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '在大地上扎根， 每回合回复自己的ＨＰ。 因为扎根了，所以不能替换宝可梦。' },
-  fakeOut: { id: 'fakeOut', name: '击掌奇袭', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 10, description: '进行先制攻击，使对手畏缩。 要在出场后立刻使出才能成功。' },
+  fakeOut: { id: 'fakeOut', name: '击掌奇袭', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, ppMax: 10, priority: 1, description: '进行先制攻击，使对手畏缩。 要在出场后立刻使出才能成功。' },
   smokescreen: { id: 'smokescreen', name: '烟幕', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '向对手喷出烟或墨汁等， 从而降低对手的命中率。' },
   twister: { id: 'twister', name: '龙卷风', type: 'Dragon', category: 'Special', power: 40, accuracy: 100, ppMax: 20, description: '兴起龙卷风， 将对手卷入进行攻击。 有时会使对手畏缩。' },
   rapidSpin: { id: 'rapidSpin', name: '高速旋转', type: 'Normal', category: 'Physical', power: 50, accuracy: 100, ppMax: 40, description: '通过旋转来攻击对手。 还可以摆脱绑紧、紧束、 寄生种子和撒菱等招式。' },
@@ -129,7 +129,7 @@ export const MOVES: Record<string, Move> = {
   hail: { id: 'hail', name: '冰雹', type: 'Ice', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '在５回合内降下冰雹， 除冰属性以外的宝可梦， 都会受到伤害。' },
   seismicToss: { id: 'seismicToss', name: '地球上投', type: 'Fighting', category: 'Physical', power: 0, accuracy: 100, ppMax: 20, description: '利用引力将对手甩飞出去。 给予对手和自己等级相同的伤害。' },
   splash: { id: 'splash', name: '跃起', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 40, description: '也不攻击只是一蹦一蹦地跳， 什么都不会发生……' },
-  flail: { id: 'flail', name: '抓狂', type: 'Normal', category: 'Physical', power: 0, accuracy: 100, ppMax: 15, description: '抓狂般乱打进行攻击。 自己的ＨＰ越少， 招式的威力越大。' },
+  flail: { id: 'flail', name: '抓狂', type: 'Normal', category: 'Physical', power: 80, accuracy: 100, ppMax: 15, description: '抓狂般乱打进行攻击。 自己的ＨＰ越少， 招式的威力越大。' },
   mist: { id: 'mist', name: '白雾', type: 'Ice', category: 'Status', power: 0, accuracy: 100, ppMax: 30, description: '用白雾覆盖身体。 在５回合内不会让对手 降低自己的能力。' },
   transform: { id: 'transform', name: '变身', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 10, description: '变身成对手宝可梦的样子， 能够使用和对手 完全相同的招式。' },
   helpingHand: { id: 'helpingHand', name: '帮助', type: 'Normal', category: 'Status', power: 0, accuracy: 100, ppMax: 20, description: '帮助伙伴。 被帮助的宝可梦， 其招式威力变得比平时大。' },
@@ -152,7 +152,7 @@ export const MOVES: Record<string, Move> = {
   hydroPump: { id: 'hydroPump', name: '水炮', type: 'Water', category: 'Special', power: 110, accuracy: 80, ppMax: 5, description: '向对手猛烈地喷射大量水流进行攻击。' },
   solarBeam: { id: 'solarBeam', name: '日光束', type: 'Grass', category: 'Special', power: 120, accuracy: 100, ppMax: 10, description: '第1回合收集满满的日光，第2回合发射光束进行攻击。' },
   dragonBreath: { id: 'dragonBreath', name: '龙息', type: 'Dragon', category: 'Special', power: 60, accuracy: 100, ppMax: 20, description: '将骇人的气息吹向对手进行攻击。有时会让对手陷入麻痹状态。' },
-  crossChop: { id: 'crossChop', name: '十字劈', type: 'Fighting', category: 'Physical', power: 100, accuracy: 80, ppMax: 5, description: '以交叉手刀劈向对手进行攻击。容易击中要害。' },
+  crossChop: { id: 'crossChop', name: '十字劈', type: 'Fighting', category: 'Physical', power: 100, accuracy: 80, ppMax: 5, highCritRate: true, description: '以交叉手刀劈向对手进行攻击。容易击中要害。' },
   dynamicPunch: { id: 'dynamicPunch', name: '爆裂拳', type: 'Fighting', category: 'Physical', power: 100, accuracy: 50, ppMax: 5, description: '用全力出拳进行攻击。必定会使对手混乱。' },
   crunch: { id: 'crunch', name: '咬碎', type: 'Dark', category: 'Physical', power: 80, accuracy: 100, ppMax: 15, description: '用利牙咬碎对手进行攻击。有时会降低对手的防御。' },
   shadowBall: { id: 'shadowBall', name: '暗影球', type: 'Ghost', category: 'Special', power: 80, accuracy: 100, ppMax: 15, description: '投掷一团黑影进行攻击。有时会降低对手的特防。' },
@@ -164,7 +164,7 @@ export const MOVES: Record<string, Move> = {
   outrage: { id: 'outrage', name: '逆鳞', type: 'Dragon', category: 'Physical', power: 120, accuracy: 100, ppMax: 10, description: '在2～3回合内乱打一气地攻击对手。大闹一番后自己会陷入混乱。' },
   extremeSpeed: { id: 'extremeSpeed', name: '神速', type: 'Normal', category: 'Physical', power: 80, accuracy: 100, ppMax: 5, priority: 2, description: '以迅雷不及掩耳之势扑向对手进行攻击。必定能够先制攻击。' },
   sacredFire: { id: 'sacredFire', name: '神圣之火', type: 'Fire', category: 'Physical', power: 100, accuracy: 95, ppMax: 5, description: '用神秘的火焰烧尽对手进行攻击。有时会让对手陷入灼伤状态。' },
-  aeroblast: { id: 'aeroblast', name: '气旋攻击', type: 'Flying', category: 'Special', power: 100, accuracy: 95, ppMax: 5, description: '放出空气的旋涡进行攻击。容易击中要害。' },
+  aeroblast: { id: 'aeroblast', name: '气旋攻击', type: 'Flying', category: 'Special', power: 100, accuracy: 95, ppMax: 5, highCritRate: true, description: '放出空气的旋涡进行攻击。容易击中要害。' },
   futureSight: { id: 'futureSight', name: '预知未来', type: 'Psychic', category: 'Special', power: 120, accuracy: 100, ppMax: 10, description: '将一团念力发向对手。在2回合后对手会受到攻击。' },
   moonblast: { id: 'moonblast', name: '月亮之力', type: 'Fairy', category: 'Special', power: 95, accuracy: 100, ppMax: 15, description: '借用月亮的力量进行攻击。有时会降低对手的特攻。' },
   playRough: { id: 'playRough', name: '嬉闹', type: 'Fairy', category: 'Physical', power: 90, accuracy: 90, ppMax: 10, description: '与对手嬉闹同时进行攻击。有时会降低对手的攻击。' },
@@ -182,7 +182,7 @@ export const MOVES: Record<string, Move> = {
 
 // 招式效果类型定义
 export interface MoveEffect {
-  type: 'status' | 'weather' | 'stat' | 'heal' | 'drain' | 'recoil' | 'fixed_damage' | 'false_swipe' | 'multi_hit' | 'self_status';
+  type: 'status' | 'weather' | 'stat' | 'heal' | 'drain' | 'recoil' | 'fixed_damage' | 'false_swipe' | 'multi_hit' | 'self_status' | 'flinch' | 'flee' | 'leech_seed' | 'variable_power';
   id?: string;
   chance: number;
   value?: number;
@@ -190,6 +190,11 @@ export interface MoveEffect {
   target?: 'self' | 'opponent';
   stat?: string;    // atk, def, spa, spd, spe, accuracy, evasion
   stages?: number;  // +1, -1, +2, -2 等
+  // multi_hit 效果专用
+  minHits?: number;
+  maxHits?: number;
+  // variable_power 效果专用
+  variant?: string;
 }
 
 export const MOVE_EFFECTS: Record<string, MoveEffect[]> = {
@@ -197,7 +202,7 @@ export const MOVE_EFFECTS: Record<string, MoveEffect[]> = {
     ember: [{ type: 'status', id: 'BRN', chance: 0.1 }],
     flamethrower: [{ type: 'status', id: 'BRN', chance: 0.1 }],
     fireBlast: [{ type: 'status', id: 'BRN', chance: 0.1 }],
-    willOWisp: [{ type: 'status', id: 'BRN', chance: 0.85 }],
+    willOWisp: [{ type: 'status', id: 'BRN', chance: 1.0 }],
     sacredFire: [{ type: 'status', id: 'BRN', chance: 0.5 }],
     flameWheel: [{ type: 'status', id: 'BRN', chance: 0.1 }],
     fireSpin: [{ type: 'status', id: 'BRN', chance: 0.1 }],
@@ -262,7 +267,7 @@ export const MOVE_EFFECTS: Record<string, MoveEffect[]> = {
     ],
     minimize: [{ type: 'stat', target: 'self', stat: 'evasion', stages: 2, chance: 1.0 }],
     charge: [{ type: 'stat', target: 'self', stat: 'spd', stages: 1, chance: 1.0 }],
-    focusEnergy: [{ type: 'stat', target: 'self', stat: 'atk', stages: 1, chance: 1.0 }],
+    focusEnergy: [{ type: 'stat', target: 'self', stat: 'spe', stages: 0, chance: 1.0 }], // 聚气：提高暴击率，用spe+0占位
 
     // === 攻击招式附带能力变化（有概率触发）===
     metalClaw: [{ type: 'stat', target: 'self', stat: 'atk', stages: 1, chance: 0.1 }],
@@ -285,7 +290,7 @@ export const MOVE_EFFECTS: Record<string, MoveEffect[]> = {
     icyWind: [{ type: 'stat', target: 'opponent', stat: 'spe', stages: -1, chance: 1.0 }],
     constrict: [{ type: 'stat', target: 'opponent', stat: 'spe', stages: -1, chance: 0.1 }],
     bubble: [{ type: 'stat', target: 'opponent', stat: 'spe', stages: -1, chance: 0.1 }],
-    rockSlide: [{ type: 'stat', target: 'opponent', stat: 'spe', stages: 0, chance: 0.3 }], // 畏缩用spe占位，后续可扩展
+    rockSlide: [{ type: 'flinch', chance: 0.3 }],
 
     // === 吸血/回复效果 ===
     absorb: [{ type: 'drain', chance: 1.0, value: 0.5 }],
@@ -305,4 +310,59 @@ export const MOVE_EFFECTS: Record<string, MoveEffect[]> = {
 
     // === 点到为止 ===
     falseSwipe: [{ type: 'false_swipe', chance: 1.0 }],
+
+    // === 畏缩效果 ===
+    hyperFang: [{ type: 'flinch', chance: 0.1 }],
+    bite: [{ type: 'flinch', chance: 0.3 }],
+    astonish: [{ type: 'flinch', chance: 0.3 }],
+    stomp: [{ type: 'flinch', chance: 0.3 }],
+    headbutt: [{ type: 'flinch', chance: 0.3 }],
+    boneClub: [{ type: 'flinch', chance: 0.1 }],
+    twister: [{ type: 'flinch', chance: 0.2 }],
+    fakeOut: [{ type: 'flinch', chance: 1.0 }],
+
+    // === 混乱效果 ===
+    confuseRay: [{ type: 'status', id: 'CNF', chance: 1.0 }],
+    supersonic: [{ type: 'status', id: 'CNF', chance: 1.0 }],
+    confusion: [{ type: 'status', id: 'CNF', chance: 0.1 }],
+    dynamicPunch: [{ type: 'status', id: 'CNF', chance: 1.0 }],
+    signalBeam: [{ type: 'status', id: 'CNF', chance: 0.1 }],
+
+    // === 攻击招式附带状态（补充）===
+    shadowBall: [{ type: 'stat', target: 'opponent', stat: 'spd', stages: -1, chance: 0.2 }],
+    triAttack: [{ type: 'status', id: 'BRN', chance: 0.2 }], // 简化为20%灼伤
+
+    // === 催眠（简化）===
+    yawn: [{ type: 'status', id: 'SLP', chance: 1.0 }],
+
+    // === 能力变化（简化实现）===
+    reflect: [{ type: 'stat', target: 'self', stat: 'def', stages: 2, chance: 1.0 }],
+    mist: [{ type: 'stat', target: 'self', stat: 'spd', stages: 1, chance: 1.0 }],
+    curse: [{ type: 'stat', target: 'self', stat: 'atk', stages: 1, chance: 1.0 }],
+    encore: [{ type: 'stat', target: 'opponent', stat: 'spa', stages: -1, chance: 1.0 }],
+    disable: [{ type: 'stat', target: 'opponent', stat: 'spa', stages: -1, chance: 1.0 }],
+    spite: [{ type: 'stat', target: 'opponent', stat: 'spa', stages: -1, chance: 1.0 }],
+
+    // === 回复效果（简化）===
+    refresh: [{ type: 'heal', chance: 1.0, value: 0.25 }],
+    ingrain: [{ type: 'heal', chance: 1.0, value: 0.25 }],
+
+    // === 逃跑效果 ===
+    teleport: [{ type: 'flee', chance: 1.0 }],
+    roar: [{ type: 'flee', chance: 1.0 }],
+
+    // === 寄生种子 ===
+    leechSeed: [{ type: 'leech_seed', target: 'opponent', chance: 1.0 }],
+
+    // === 可变威力 ===
+    magnitude: [{ type: 'variable_power', variant: 'magnitude', chance: 1.0 }],
+
+    // === 多段攻击 ===
+    furyAttack: [{ type: 'multi_hit', chance: 1.0, minHits: 2, maxHits: 5 }],
+    doubleSlap: [{ type: 'multi_hit', chance: 1.0, minHits: 2, maxHits: 5 }],
+    icicleSpear: [{ type: 'multi_hit', chance: 1.0, minHits: 2, maxHits: 5 }],
+    barrage: [{ type: 'multi_hit', chance: 1.0, minHits: 2, maxHits: 5 }],
+    doubleKick: [{ type: 'multi_hit', chance: 1.0, minHits: 2, maxHits: 2 }],
+    cometPunch: [{ type: 'multi_hit', chance: 1.0, minHits: 2, maxHits: 5 }],
+    rockBlast: [{ type: 'multi_hit', chance: 1.0, minHits: 2, maxHits: 5 }],
 };

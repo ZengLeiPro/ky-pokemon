@@ -29,6 +29,7 @@ export const createPokemon = (
     if (moves.length === 0 && data.learnset) {
         const learnedMoves = data.learnset
             .filter(l => l.level <= level)
+            .sort((a, b) => a.level - b.level)
             .map(l => MOVES[l.moveId])
             .filter(m => !!m); // Filter out undefined moves if any
         

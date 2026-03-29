@@ -1,6 +1,6 @@
 import type { PokemonType } from '../types/index.js';
 
-// 完整的 18x18 属性克制表 (Gen 3+ 官方数据)
+// 完整的 18x18 属性克制表 (Gen 6+ 官方数据)
 // 格式: TYPE_CHART[攻击属性][防御属性] = 倍率
 // 倍率: 0 = 无效, 0.5 = 效果不佳, 1 = 普通, 2 = 效果拔群
 export const TYPE_CHART: Record<PokemonType, Partial<Record<PokemonType, number>>> = {
@@ -12,27 +12,27 @@ export const TYPE_CHART: Record<PokemonType, Partial<Record<PokemonType, number>
   Fire: {
     Normal: 1, Fire: 0.5, Water: 0.5, Grass: 2, Electric: 1, Ice: 2,
     Fighting: 1, Poison: 1, Ground: 1, Flying: 1, Psychic: 1, Bug: 2,
-    Rock: 0.5, Ghost: 1, Dragon: 0.5, Steel: 2, Dark: 1, Fairy: 0.5
+    Rock: 0.5, Ghost: 1, Dragon: 0.5, Steel: 2, Dark: 1, Fairy: 1
   },
   Water: {
     Normal: 1, Fire: 2, Water: 0.5, Grass: 0.5, Electric: 1, Ice: 1,
     Fighting: 1, Poison: 1, Ground: 2, Flying: 1, Psychic: 1, Bug: 1,
-    Rock: 2, Ghost: 1, Dragon: 0.5, Steel: 1, Dark: 1, Fairy: 0.5
+    Rock: 2, Ghost: 1, Dragon: 0.5, Steel: 1, Dark: 1, Fairy: 1
   },
   Grass: {
     Normal: 1, Fire: 0.5, Water: 2, Grass: 0.5, Electric: 1, Ice: 1,
     Fighting: 1, Poison: 0.5, Ground: 2, Flying: 0.5, Psychic: 1, Bug: 0.5,
-    Rock: 2, Ghost: 1, Dragon: 0.5, Steel: 0.5, Dark: 1, Fairy: 0.5
+    Rock: 2, Ghost: 1, Dragon: 0.5, Steel: 0.5, Dark: 1, Fairy: 1
   },
   Electric: {
     Normal: 1, Fire: 1, Water: 2, Grass: 0.5, Electric: 0.5, Ice: 1,
     Fighting: 1, Poison: 1, Ground: 0, Flying: 2, Psychic: 1, Bug: 1,
-    Rock: 1, Ghost: 1, Dragon: 0.5, Steel: 1, Dark: 1, Fairy: 0.5
+    Rock: 1, Ghost: 1, Dragon: 0.5, Steel: 1, Dark: 1, Fairy: 1
   },
   Ice: {
     Normal: 1, Fire: 0.5, Water: 0.5, Grass: 2, Electric: 1, Ice: 0.5,
     Fighting: 1, Poison: 1, Ground: 2, Flying: 2, Psychic: 1, Bug: 1,
-    Rock: 1, Ghost: 1, Dragon: 2, Steel: 0.5, Dark: 1, Fairy: 0.5
+    Rock: 1, Ghost: 1, Dragon: 2, Steel: 0.5, Dark: 1, Fairy: 1
   },
   Fighting: {
     Normal: 2, Fire: 1, Water: 1, Grass: 1, Electric: 1, Ice: 2,
@@ -47,12 +47,12 @@ export const TYPE_CHART: Record<PokemonType, Partial<Record<PokemonType, number>
   Ground: {
     Normal: 1, Fire: 2, Water: 1, Grass: 0.5, Electric: 2, Ice: 1,
     Fighting: 1, Poison: 2, Ground: 1, Flying: 0, Psychic: 1, Bug: 0.5,
-    Rock: 2, Ghost: 1, Dragon: 1, Steel: 2, Dark: 1, Fairy: 0.5
+    Rock: 2, Ghost: 1, Dragon: 1, Steel: 2, Dark: 1, Fairy: 1
   },
   Flying: {
     Normal: 1, Fire: 1, Water: 1, Grass: 2, Electric: 0.5, Ice: 1,
     Fighting: 2, Poison: 1, Ground: 1, Flying: 1, Psychic: 1, Bug: 2,
-    Rock: 0.5, Ghost: 1, Dragon: 1, Steel: 0.5, Dark: 1, Fairy: 0.5
+    Rock: 0.5, Ghost: 1, Dragon: 1, Steel: 0.5, Dark: 1, Fairy: 1
   },
   Psychic: {
     Normal: 1, Fire: 1, Water: 1, Grass: 1, Electric: 1, Ice: 1,
@@ -67,12 +67,12 @@ export const TYPE_CHART: Record<PokemonType, Partial<Record<PokemonType, number>
   Rock: {
     Normal: 1, Fire: 2, Water: 1, Grass: 1, Electric: 1, Ice: 2,
     Fighting: 0.5, Poison: 1, Ground: 0.5, Flying: 2, Psychic: 1, Bug: 2,
-    Rock: 1, Ghost: 1, Dragon: 1, Steel: 0.5, Dark: 1, Fairy: 0.5
+    Rock: 1, Ghost: 1, Dragon: 1, Steel: 0.5, Dark: 1, Fairy: 1
   },
   Ghost: {
     Normal: 0, Fire: 1, Water: 1, Grass: 1, Electric: 1, Ice: 1,
     Fighting: 1, Poison: 1, Ground: 1, Flying: 1, Psychic: 2, Bug: 1,
-    Rock: 1, Ghost: 2, Dragon: 1, Steel: 0.5, Dark: 2, Fairy: 0.5
+    Rock: 1, Ghost: 2, Dragon: 1, Steel: 0.5, Dark: 0.5, Fairy: 1
   },
   Dragon: {
     Normal: 1, Fire: 1, Water: 1, Grass: 1, Electric: 1, Ice: 2,
@@ -80,19 +80,19 @@ export const TYPE_CHART: Record<PokemonType, Partial<Record<PokemonType, number>
     Rock: 1, Ghost: 1, Dragon: 2, Steel: 0.5, Dark: 1, Fairy: 0
   },
   Steel: {
-    Normal: 1, Fire: 0.5, Water: 0.5, Grass: 0.5, Electric: 0.5, Ice: 2,
+    Normal: 1, Fire: 0.5, Water: 0.5, Grass: 1, Electric: 0.5, Ice: 2,
     Fighting: 1, Poison: 1, Ground: 1, Flying: 1, Psychic: 1, Bug: 1,
-    Rock: 2, Ghost: 1, Dragon: 1, Steel: 0.5, Dark: 1, Fairy: 0.5
+    Rock: 2, Ghost: 1, Dragon: 1, Steel: 0.5, Dark: 1, Fairy: 2
   },
   Dark: {
     Normal: 1, Fire: 1, Water: 1, Grass: 1, Electric: 1, Ice: 1,
     Fighting: 0.5, Poison: 1, Ground: 1, Flying: 1, Psychic: 2, Bug: 1,
-    Rock: 1, Ghost: 2, Dragon: 1, Steel: 1, Dark: 0.5, Fairy: 0.5
+    Rock: 1, Ghost: 2, Dragon: 1, Steel: 0.5, Dark: 0.5, Fairy: 0.5
   },
   Fairy: {
     Normal: 1, Fire: 0.5, Water: 1, Grass: 1, Electric: 1, Ice: 1,
     Fighting: 2, Poison: 0.5, Ground: 1, Flying: 1, Psychic: 1, Bug: 1,
-    Rock: 1, Ghost: 1, Dragon: 2, Steel: 0.5, Dark: 2, Fairy: 0.5
+    Rock: 1, Ghost: 1, Dragon: 2, Steel: 0.5, Dark: 2, Fairy: 1
   }
 };
 

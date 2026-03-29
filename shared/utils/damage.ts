@@ -76,9 +76,10 @@ export const calculateDamage = (
   const levelFactor = (2 * attacker.level) / 5 + 2;
   const baseDamage = (levelFactor * power * (a / d)) / 50 + 2;
 
-  // 暴击判定
+  // 暴击判定（highCritRate 的招式暴击率 1/8，普通 1/16）
   const critRoll = randomFactor ?? Math.random();
-  const isCritical = critRoll < 0.0625;
+  const critThreshold = move.highCritRate ? 0.125 : 0.0625;
+  const isCritical = critRoll < critThreshold;
   const critMod = isCritical ? 1.5 : 1.0;
 
   // 随机浮动 (85-100%)

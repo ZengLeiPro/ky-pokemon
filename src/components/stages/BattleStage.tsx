@@ -16,6 +16,7 @@ const STATUS_DISPLAY: Record<StatusCondition, { label: string; color: string; bg
   PAR: { label: '麻痹', color: 'text-yellow-200', bg: 'bg-yellow-600' },
   SLP: { label: '睡眠', color: 'text-slate-200', bg: 'bg-slate-500' },
   FRZ: { label: '冰冻', color: 'text-cyan-200', bg: 'bg-cyan-600' },
+  CNF: { label: '混乱', color: 'text-pink-200', bg: 'bg-pink-600' },
 };
 
 function StatusBadge({ status }: { status?: StatusCondition }) {

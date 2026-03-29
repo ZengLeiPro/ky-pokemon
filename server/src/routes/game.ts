@@ -79,8 +79,23 @@ game.post('/save', async (c) => {
     return c.json({ success: false, error: '存档数据格式错误', details: parsed.error.format() }, 400);
   }
 
-  const { team, pcBox, devicePokemon, currentLocationId, badges, pokedex, inventory, legendaryProgress, money, playTime, playerSpriteIndex, mode } = parsed.data;
+  const { team, pcBox, devicePokemon, currentLocationId, badges, pokedex, inventory, legendaryProgress, money, playTime, playerSpriteIndex, mode, lastSyncedAt } = parsed.data;
   const saveMode = (mode || 'NORMAL') as GameMode;
+
+  // 乐观锁：检查 lastSyncedAt 是否与数据库中的 updatedAt 一致
+  if (lastSyncedAt) {
+    const existing = await db.gameSave.findUnique({
+      where: { userId_mode: { userId: user.userId, mode: saveMode } },
+      select: { updatedAt: true }
+    });
+    if (existing) {
+      const dbTime = new Date(existing.updatedAt).getTime();
+      const clientTime = new Date(lastSyncedAt).getTime();
+      if (dbTime > clientTime) {
+        return c.json({ success: false, code: 'SAVE_CONFLICT' }, 409);
+      }
+    }
+  }
 
   const save = await db.gameSave.upsert({
     where: {
@@ -176,7 +191,7 @@ game.post('/save', async (c) => {
     }
   }
 
-  return c.json({ success: true, data: { savedAt: save.updatedAt } });
+  return c.json({ success: true, data: { savedAt: save.updatedAt, updatedAt: save.updatedAt } });
 });
 
 game.delete('/save', async (c) => {

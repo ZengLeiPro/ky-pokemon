@@ -25,6 +25,7 @@ export interface Move {
   accuracy: number;
   ppMax: number;
   priority?: number;
+  highCritRate?: boolean;
   description?: string;
 }
 
@@ -33,7 +34,7 @@ export interface PokemonMove {
   ppCurrent: number;
 }
 
-export type StatusCondition = 'BRN' | 'PAR' | 'SLP' | 'PSN' | 'FRZ';
+export type StatusCondition = 'BRN' | 'PAR' | 'SLP' | 'PSN' | 'FRZ' | 'CNF';
 
 export interface StatStages {
   atk: number;   // -6 ~ +6
