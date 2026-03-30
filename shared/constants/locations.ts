@@ -249,7 +249,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '连接多个道路的复杂路段。',
       region: '关都',
       connections: ['route-12', 'route-14'],
-      encounters: ['pidgey', 'oddish', 'bellsprout', 'venonat', 'ditto', 'skiploom', 'sunflora'],
+      encounters: ['pidgeotto', 'oddish', 'bellsprout', 'venonat', 'ditto', 'skiploom', 'sunflora'],
     levelRange: [23, 28],
       bgGradient: 'from-emerald-800 via-green-900 to-black'
   },
@@ -259,7 +259,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '草丛茂密的自然道路。',
       region: '关都',
       connections: ['route-13', 'route-15', 'fuchsia-city'],
-      encounters: ['pidgey', 'oddish', 'gloom', 'venonat', 'yanma', 'bellossom'],
+      encounters: ['pidgeotto', 'oddish', 'gloom', 'venonat', 'yanma', 'bellossom'],
     levelRange: [24, 28],
       bgGradient: 'from-green-800 via-emerald-900 to-black'
   },
@@ -269,7 +269,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '通往浅红市的林间小路。',
       region: '关都',
       connections: ['route-14', 'fuchsia-city'],
-      encounters: ['pidgey', 'oddish', 'bellsprout', 'venonat', 'ditto', 'jumpluff', 'hoppip'],
+      encounters: ['pidgeotto', 'oddish', 'bellsprout', 'venonat', 'ditto', 'jumpluff', 'skiploom'],
     levelRange: [24, 28],
       bgGradient: 'from-emerald-700 via-green-800 to-black'
   },
@@ -306,7 +306,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '通往自行车道的起点。',
       region: '关都',
       connections: ['fuchsia-city', 'route-17'],
-      encounters: ['rattata', 'raticate', 'spearow', 'fearow', 'doduo', 'furret'],
+      encounters: ['raticate', 'fearow', 'doduo', 'furret'],
     levelRange: [25, 30],
       bgGradient: 'from-stone-700 via-slate-800 to-black'
   },
@@ -316,7 +316,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '著名的自行车道。',
       region: '关都',
       connections: ['route-18', 'route-16'],
-      encounters: ['rattata', 'raticate', 'spearow', 'fearow', 'doduo', 'girafarig', 'stantler'],
+      encounters: ['raticate', 'fearow', 'doduo', 'girafarig', 'stantler'],
     levelRange: [25, 30],
       bgGradient: 'from-gray-700 via-slate-800 to-black'
   },
@@ -336,7 +336,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '通往双子岛的水上路线。',
       region: '关都',
       connections: ['fuchsia-city', 'route-20'],
-      encounters: ['tentacool', 'tentacruel', 'magikarp', 'horsea', 'staryu', 'chinchou', 'marill', 'qwilfish', 'mantine', 'corsola', 'poliwhirl'],
+      encounters: ['tentacool', 'tentacruel', 'gyarados', 'horsea', 'staryu', 'chinchou', 'azumarill', 'qwilfish', 'mantine', 'corsola', 'poliwhirl'],
     levelRange: [27, 32],
       bgGradient: 'from-blue-800 via-cyan-900 to-black',
       weatherRates: { Rain: 0.3 }
@@ -347,7 +347,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '双子岛附近的海域。',
       region: '关都',
       connections: ['route-19', 'seafoam-islands', 'cinnabar-island'],
-      encounters: ['tentacool', 'magikarp', 'horsea', 'seadra', 'staryu', 'shellder', 'chinchou', 'wooper', 'lanturn', 'octillery', 'remoraid'],
+      encounters: ['tentacool', 'gyarados', 'horsea', 'seadra', 'staryu', 'shellder', 'chinchou', 'quagsire', 'lanturn', 'octillery', 'remoraid'],
     levelRange: [27, 32],
       bgGradient: 'from-cyan-800 via-blue-900 to-black'
   },
@@ -357,7 +357,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '寒冷的海岛洞穴。据说有传说的宝可梦栖息。',
       region: '关都',
       connections: ['route-20'],
-      encounters: ['zubat', 'golbat', 'psyduck', 'golduck', 'slowpoke', 'seel', 'dewgong', 'shellder', 'cloyster', 'krabby', 'kingler', 'horsea', 'jynx', 'lapras', 'swinub', 'piloswine', 'delibird', 'smoochum', 'seaking'],
+      encounters: ['golbat', 'psyduck', 'golduck', 'slowpoke', 'seel', 'dewgong', 'shellder', 'cloyster', 'krabby', 'kingler', 'horsea', 'jynx', 'lapras', 'swinub', 'piloswine', 'delibird', 'smoochum', 'seaking'],
     levelRange: [28, 34],
       bgGradient: 'from-cyan-900 via-blue-950 to-black',
       weatherRates: { Hail: 0.4 },
@@ -389,7 +389,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '废弃的研究所。曾经进行过秘密实验。',
       region: '关都',
       connections: ['cinnabar-island'],
-      encounters: ['rattata', 'raticate', 'vulpix', 'growlithe', 'ponyta', 'grimer', 'koffing', 'magmar', 'slugma', 'houndour', 'magby'],
+      encounters: ['raticate', 'vulpix', 'growlithe', 'ponyta', 'grimer', 'koffing', 'magmar', 'slugma', 'houndour', 'magby'],
     levelRange: [28, 34],
       bgGradient: 'from-gray-800 via-slate-900 to-black'
   },
@@ -399,7 +399,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '从红莲岛返回真新镇的水路。',
       region: '关都',
       connections: ['cinnabar-island', 'pallet-town'],
-      encounters: ['tentacool', 'magikarp', 'staryu', 'tangela', 'chinchou', 'mantine', 'octillery'],
+      encounters: ['tentacool', 'gyarados', 'staryu', 'tangela', 'chinchou', 'mantine', 'octillery'],
     levelRange: [28, 33],
       bgGradient: 'from-blue-700 via-cyan-800 to-black'
   },
@@ -482,7 +482,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '通往宝可梦联盟的最后道路。',
       region: '关都',
       connections: ['route-22', 'victory-road'],
-      encounters: ['spearow', 'fearow', 'ekans', 'arbok', 'sandshrew', 'sandslash', 'mankey', 'primeape', 'donphan', 'pupitar'],
+      encounters: ['fearow', 'arbok', 'sandslash', 'mankey', 'primeape', 'donphan', 'pupitar'],
     levelRange: [30, 36],
       bgGradient: 'from-slate-700 via-stone-800 to-black'
   },
@@ -492,7 +492,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '挑战四天王前的最终试炼。强大的宝可梦栖息于此。据说有传说的宝可梦栖息。',
       region: '关都',
       connections: ['route-23', 'pokemon-league'],
-      encounters: ['zubat', 'golbat', 'geodude', 'graveler', 'onix', 'machop', 'machoke', 'marowak', 'larvitar', 'gligar', 'pupitar', 'crobat', 'skarmory', 'dodrio'],
+      encounters: ['golbat', 'graveler', 'onix', 'machop', 'machoke', 'marowak', 'larvitar', 'gligar', 'pupitar', 'crobat', 'skarmory', 'dodrio'],
     levelRange: [32, 38],
       bgGradient: 'from-purple-900 via-slate-900 to-black',
       legendaryEncounter: {
@@ -570,7 +570,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '玉虹市的格斗道场。曾经是正式道馆。',
       region: '关都',
       connections: ['saffron-city'],
-      encounters: ['hitmonlee', 'hitmonchan', 'machop', 'machoke', 'primeape', 'heracross', 'tyrogue', 'hitmontop'],
+      encounters: ['hitmonlee', 'hitmonchan', 'machop', 'machoke', 'primeape', 'heracross', 'hitmontop'],
     levelRange: [25, 30],
       bgGradient: 'from-orange-800 via-red-900 to-slate-900'
   },
@@ -615,7 +615,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '风起之镇。城都地区冒险的起点。',
       region: '城都',
       connections: ['pokemon-league', 'cherrygrove-city'],
-      encounters: ['sentret', 'hoothoot', 'pidgey', 'rattata'],
+      encounters: ['furret', 'noctowl', 'pidgeotto', 'raticate'],
     levelRange: [28, 32],
       bgGradient: 'from-green-700 via-emerald-800 to-slate-900'
   },
@@ -625,7 +625,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '花香四溢的美丽小城。',
       region: '城都',
       connections: ['new-bark-town', 'violet-city'],
-      encounters: ['ledyba', 'spinarak', 'caterpie', 'weedle', 'hoppip', 'sunkern', 'pichu'],
+      encounters: ['ledian', 'ariados', 'butterfree', 'beedrill', 'jumpluff', 'sunflora', 'pichu'],
     levelRange: [28, 33],
       bgGradient: 'from-pink-700 via-rose-800 to-slate-900'
   },
@@ -635,7 +635,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '高耸入云的壮丽之城。有着古老的宝可梦塔。',
       region: '城都',
       connections: ['cherrygrove-city', 'azalea-town', 'ecruteak-city'],
-      encounters: ['pidgey', 'hoothoot', 'bellsprout', 'mareep', 'flaaffy', 'natu', 'hoppip', 'togepi'],
+      encounters: ['pidgeotto', 'noctowl', 'weepinbell', 'flaaffy', 'natu', 'jumpluff', 'togetic'],
     levelRange: [29, 34],
       bgGradient: 'from-violet-800 via-purple-900 to-slate-900',
       gym: {
@@ -653,7 +653,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '与自然共存的小镇。以虫系宝可梦闻名。',
       region: '城都',
       connections: ['violet-city', 'ilex-forest', 'goldenrod-city'],
-      encounters: ['caterpie', 'weedle', 'spinarak', 'pineco', 'ledyba', 'ariados', 'yanma'],
+      encounters: ['butterfree', 'beedrill', 'pineco', 'ledian', 'ariados', 'yanma'],
     levelRange: [29, 34],
       bgGradient: 'from-lime-800 via-green-900 to-slate-900',
       gym: {
@@ -671,7 +671,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '古老而神秘的森林。据说有守护森林的神奇宝可梦。',
       region: '城都',
       connections: ['azalea-town', 'goldenrod-city'],
-      encounters: ['oddish', 'paras', 'pineco', 'hoothoot', 'noctowl', 'forretress', 'sudowoodo'],
+      encounters: ['gloom', 'parasect', 'pineco', 'noctowl', 'forretress', 'sudowoodo'],
     levelRange: [30, 35],
       bgGradient: 'from-green-950 via-emerald-950 to-black',
       weatherRates: { Rain: 0.3 },
@@ -687,7 +687,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '城都地区最繁华的大都市。拥有百货大楼和广播塔。',
       region: '城都',
       connections: ['azalea-town', 'ilex-forest', 'ecruteak-city'],
-      encounters: ['rattata', 'meowth', 'snubbull', 'aipom', 'granbull', 'smeargle', 'igglybuff'],
+      encounters: ['raticate', 'meowth', 'aipom', 'granbull', 'smeargle', 'igglybuff'],
     levelRange: [30, 35],
       bgGradient: 'from-yellow-700 via-amber-800 to-slate-900',
       gym: {
@@ -705,7 +705,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '承载历史与传统的古都。钟楼与烧焦塔矗立于此。',
       region: '城都',
       connections: ['goldenrod-city', 'violet-city', 'olivine-city', 'mahogany-town', 'tin-tower'],
-      encounters: ['gastly', 'misdreavus', 'murkrow', 'zubat', 'unown', 'natu', 'xatu'],
+      encounters: ['haunter', 'misdreavus', 'murkrow', 'golbat', 'unown', 'xatu'],
     levelRange: [31, 36],
       bgGradient: 'from-amber-800 via-orange-900 to-slate-900',
       gym: {
@@ -760,7 +760,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '龙之传承者所守护的山中之城。',
       region: '城都',
       connections: ['mahogany-town', 'silver-cave'],
-      encounters: ['dratini', 'horsea', 'magikarp', 'larvitar', 'kingdra', 'pupitar'],
+      encounters: ['dratini', 'horsea', 'gyarados', 'larvitar', 'kingdra', 'pupitar'],
     levelRange: [33, 38],
       bgGradient: 'from-indigo-800 via-violet-900 to-slate-900',
       gym: {
@@ -778,7 +778,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '传闻有红色暴鲤龙出没的神秘湖泊。',
       region: '城都',
       connections: ['mahogany-town'],
-      encounters: ['magikarp', 'gyarados', 'goldeen', 'psyduck', 'wooper', 'quagsire', 'azumarill'],
+      encounters: ['gyarados', 'goldeen', 'psyduck', 'quagsire', 'azumarill'],
     levelRange: [32, 37],
       bgGradient: 'from-red-900 via-blue-950 to-black',
       weatherRates: { Rain: 0.5 },
@@ -794,7 +794,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '供奉凤王的神圣高塔。据说彩虹羽毛可以召唤凤王。',
       region: '城都',
       connections: ['ecruteak-city'],
-      encounters: ['gastly', 'misdreavus', 'unown', 'xatu', 'togetic'],
+      encounters: ['haunter', 'misdreavus', 'unown', 'xatu', 'togetic'],
     levelRange: [33, 38],
       bgGradient: 'from-yellow-700 via-amber-900 to-black',
       legendaryEncounter: {
@@ -809,7 +809,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '被漩涡包围的神秘岛群。据说海之神栖息于最深处。',
       region: '城都',
       connections: ['olivine-city'],
-      encounters: ['tentacool', 'seel', 'horsea', 'krabby', 'chinchou', 'corsola', 'qwilfish', 'remoraid'],
+      encounters: ['tentacool', 'seel', 'horsea', 'krabby', 'lanturn', 'corsola', 'qwilfish', 'octillery'],
     levelRange: [32, 37],
       bgGradient: 'from-blue-800 via-cyan-950 to-black',
       weatherRates: { Rain: 0.4 },
@@ -825,7 +825,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '城都地区最深处的洞穴。只有集齐徽章的训练家才能进入。传说中最强训练家在此修行。',
       region: '城都',
       connections: ['blackthorn-city'],
-      encounters: ['larvitar', 'ursaring', 'sneasel', 'golduck', 'crobat', 'steelix', 'skarmory', 'magcargo'],
+      encounters: ['pupitar', 'ursaring', 'sneasel', 'golduck', 'crobat', 'steelix', 'skarmory', 'magcargo'],
     levelRange: [36, 42],
       bgGradient: 'from-gray-800 via-slate-900 to-black',
       legendaryEncounter: {
@@ -840,7 +840,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '崎岖险峻的山地。许多格斗系宝可梦在此修炼。',
       region: '城都',
       connections: ['mahogany-town'],
-      encounters: ['machop', 'zubat', 'marill', 'geodude', 'teddiursa', 'ursaring', 'hitmontop', 'tyrogue'],
+      encounters: ['machoke', 'golbat', 'azumarill', 'graveler', 'teddiursa', 'ursaring', 'hitmontop'],
     levelRange: [32, 37],
       bgGradient: 'from-stone-800 via-amber-900 to-black',
       legendaryEncounter: {
