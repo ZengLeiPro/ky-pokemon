@@ -163,11 +163,13 @@ const EVOLUTION_DURATION = 33; // 秒，匹配 BGM
 // 进化动画子组件
 const EvolutionAnimation: React.FC<{ fromSprite: string, toSprite: string, onComplete: () => void }> = ({ fromSprite, toSprite, onComplete }) => {
   const { oldOpacity, newOpacity, times } = buildMorphKeyframes(EVOLUTION_DURATION);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
-     const timer = setTimeout(onComplete, EVOLUTION_DURATION * 1000);
+     const timer = setTimeout(() => onCompleteRef.current(), EVOLUTION_DURATION * 1000);
      return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps -- 只在挂载时启动一次定时器
 
   return (
     <div className="relative w-full h-full flex items-center justify-center">
