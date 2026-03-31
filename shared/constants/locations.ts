@@ -35,7 +35,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
     description: '通往宝可梦联盟大门的必经之路。',
     region: '关都',
     connections: ['viridian-city', 'route-23'],
-    encounters: ['rattata', 'mankey', 'spearow', 'stantler', 'smeargle'],
+    encounters: ['rattata', 'mankey', 'spearow', 'nidoran-f', 'nidoran-m', 'stantler', 'smeargle'],
     levelRange: [3, 6],
     bgGradient: 'from-slate-800 via-slate-900 to-black'
   },
@@ -83,7 +83,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '通往月见山的山路。',
       region: '关都',
       connections: ['pewter-city', 'mt-moon'],
-      encounters: ['spearow', 'pidgey', 'jigglypuff', 'mankey', 'stantler', 'phanpy', 'natu'],
+      encounters: ['spearow', 'pidgey', 'jigglypuff', 'mankey', 'nidoran-f', 'nidoran-m', 'stantler', 'phanpy', 'natu'],
     levelRange: [6, 10],
       bgGradient: 'from-stone-700 via-emerald-900 to-black'
   },
@@ -419,7 +419,7 @@ export const WORLD_MAP: Record<string, LocationData> = {
       description: '连接彩虹市与玉虹市的短道。',
       region: '关都',
       connections: ['celadon-city', 'saffron-city'],
-      encounters: ['pidgey', 'rattata', 'vulpix', 'meowth', 'growlithe', 'snubbull', 'murkrow', 'umbreon'],
+      encounters: ['pidgey', 'rattata', 'vulpix', 'meowth', 'growlithe', 'snubbull', 'murkrow', 'umbreon', 'mr-mime'],
     levelRange: [18, 23],
       bgGradient: 'from-green-700 via-slate-800 to-black'
   },

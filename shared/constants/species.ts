@@ -613,6 +613,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     catchRate: 100,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/64.png',
     learnset: [{ moveId: 'disable', level: 1 }, { moveId: 'confusion', level: 1 }, { moveId: 'teleport', level: 1 }, { moveId: 'kinesis', level: 1 }, { moveId: 'reflect', level: 22 }, { moveId: 'recover', level: 28 }, { moveId: 'barrier', level: 33 }, { moveId: 'psychic', level: 38 }, { moveId: 'futureSight', level: 44 }],
+    evolutions: [{ targetSpeciesId: 'alakazam', level: 36 }],
   },
   alakazam: {
     pokedexId: 65,
@@ -641,6 +642,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     catchRate: 90,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/67.png',
     learnset: [{ moveId: 'karateChop', level: 1 }, { moveId: 'leer', level: 1 }, { moveId: 'lowKick', level: 1 }, { moveId: 'foresight', level: 22 }, { moveId: 'focusEnergy', level: 10 }, { moveId: 'revenge', level: 28 }, { moveId: 'seismicToss', level: 32 }, { moveId: 'brickBreak', level: 36 }, { moveId: 'bodySlam', level: 40 }, { moveId: 'crossChop', level: 44 }],
+    evolutions: [{ targetSpeciesId: 'machamp', level: 36 }],
   },
   machamp: {
     pokedexId: 68,
@@ -717,6 +719,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     catchRate: 120,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/75.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'defenseCurl', level: 1 }, { moveId: 'mudSport', level: 1 }, { moveId: 'rockThrow', level: 16 }, { moveId: 'magnitude', level: 18 }, { moveId: 'sandstorm', level: 22 }, { moveId: 'rollout', level: 25 }, { moveId: 'rockBlast', level: 30 }, { moveId: 'dig', level: 35 }, { moveId: 'rockSlide', level: 40 }],
+    evolutions: [{ targetSpeciesId: 'golem', level: 36 }],
   },
   golem: {
     pokedexId: 76,
@@ -906,6 +909,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/95.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'screech', level: 1 }, { moveId: 'bind', level: 15 }, { moveId: 'rockThrow', level: 19 }, { moveId: 'sandstorm', level: 25 }, { moveId: 'harden', level: 9 }, { moveId: 'dig', level: 28 }, { moveId: 'rockSlide', level: 33 }, { moveId: 'ironTail', level: 38 }, { moveId: 'earthquake', level: 44 }],
+    evolutions: [{ targetSpeciesId: 'steelix', level: 35 }],
   },
   drowzee: {
     pokedexId: 96,
@@ -1112,6 +1116,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     catchRate: 75,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/117.png',
     learnset: [{ moveId: 'smokescreen', level: 1 }, { moveId: 'bubble', level: 1 }, { moveId: 'leer', level: 24 }, { moveId: 'twister', level: 29 }, { moveId: 'waterGun', level: 1 }, { moveId: 'agility', level: 22 }, { moveId: 'dragonBreath', level: 33 }, { moveId: 'surf', level: 38 }, { moveId: 'iceBeam', level: 42 }, { moveId: 'hydroPump', level: 48 }],
+    evolutions: [{ targetSpeciesId: 'kingdra', level: 42 }],
   },
   goldeen: {
     pokedexId: 118,
@@ -1168,6 +1173,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/123.png',
     learnset: [{ moveId: 'quickAttack', level: 1 }, { moveId: 'pursuit', level: 11 }, { moveId: 'falseSwipe', level: 16 }, { moveId: 'leer', level: 17 }, { moveId: 'focusEnergy', level: 6 }, { moveId: 'agility', level: 21 }, { moveId: 'wingAttack', level: 25 }, { moveId: 'furyCutter', level: 29 }, { moveId: 'slash', level: 33 }, { moveId: 'signalBeam', level: 42 }],
+    evolutions: [{ targetSpeciesId: 'scizor', level: 35 }],
   },
   jynx: {
     pokedexId: 124,
@@ -1296,6 +1302,7 @@ export const SPECIES_DATA: Record<string, SpeciesData> = {
     catchRate: 45,
     spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/137.png',
     learnset: [{ moveId: 'tackle', level: 1 }, { moveId: 'sharpen', level: 1 }, { moveId: 'conversion', level: 1 }, { moveId: 'conversion2', level: 1 }, { moveId: 'agility', level: 12 }, { moveId: 'recover', level: 24 }, { moveId: 'triAttack', level: 30 }, { moveId: 'swift', level: 36 }, { moveId: 'thunderbolt', level: 42 }, { moveId: 'iceBeam', level: 46 }],
+    evolutions: [{ targetSpeciesId: 'porygon2', level: 35 }],
   },
   omanyte: {
     pokedexId: 138,
