@@ -8,6 +8,7 @@ import { TYPE_TRANSLATIONS, TYPE_COLORS } from '../../constants';
 import BattleBackground from '../battle/BattleBackground';
 import BattleWeather from '../battle/BattleWeather';
 import MoveEffect from '../battle/MoveEffect';
+import BattleLogPanel from '../battle/BattleLogPanel';
 import type { PokemonType, StatusCondition } from '@shared/types';
 
 // 异常状态标签配置
@@ -300,7 +301,7 @@ const BattleStage: React.FC = () => {
         <div className="flex-grow"></div>
 
         {/* Player Info - Bottom Right */}
-        <div className="relative z-10 pb-6 px-4 flex justify-between items-end animate-fade-in-up">
+        <div className="relative z-10 pb-0 px-4 flex justify-between items-end animate-fade-in-up">
              {/* 我方精灵 - 被攻击时闪烁 */}
              <div className="w-32 h-32 flex items-end justify-center relative mb-2 z-10">
                  <img
@@ -346,6 +347,9 @@ const BattleStage: React.FC = () => {
                 </div>
             </div>
         </div>
+
+        {/* 火红风格对战日志面板（紧贴宝可梦下方） */}
+        <BattleLogPanel />
 
         {/* 胜利结算画面 */}
         {battle.phase === 'VICTORY' && battle.victoryMessages && (

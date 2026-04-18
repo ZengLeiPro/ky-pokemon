@@ -153,7 +153,8 @@ const App: React.FC = () => {
   const scene2DViews = ['POKEMON_CENTER', 'GYM', 'SHOP', 'SPRITE_PREVIEW'];
   const isChoosingStarter = isAuthenticated && !hasSelectedStarter;
   const showNavDock = !isChoosingStarter && ['ROAM', 'TEAM', 'BAG', 'PROFILE', 'DEX'].includes(view);
-  const showMessageBox = !isChoosingStarter && (view === 'ROAM' || view === 'BATTLE') && !scene2DViews.includes(view);
+  // 对战画面在 BattleStage 内部自带火红风格日志面板，不再使用外部 MessageBox
+  const showMessageBox = !isChoosingStarter && view === 'ROAM' && !scene2DViews.includes(view);
   const showControlPad = !isChoosingStarter && view === 'BATTLE' && !scene2DViews.includes(view);
   const showHeader = !isChoosingStarter && !['FRIENDS', 'CHAT', 'PVP_BATTLE', 'TRADE', 'GIFT', 'REDEEM_CODE', ...scene2DViews].includes(view);
 
