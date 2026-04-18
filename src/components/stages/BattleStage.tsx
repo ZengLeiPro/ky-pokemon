@@ -3,7 +3,7 @@ import { useGameStore } from '../../stores/gameStore';
 import HPBar from '../ui/HPBar';
 import TypeBadge from '../ui/TypeBadge';
 import { MOVES, WORLD_MAP } from '@shared/constants';
-import { getBackSpriteUrl } from '@shared/utils/sprites';
+import { getBackSpriteUrl, getBackSpriteFallbackUrl } from '@shared/utils/sprites';
 import { TYPE_TRANSLATIONS, TYPE_COLORS } from '../../constants';
 import BattleBackground from '../battle/BattleBackground';
 import BattleWeather from '../battle/BattleWeather';
@@ -312,6 +312,14 @@ const BattleStage: React.FC = () => {
                      animation: isPlayerHit
                        ? 'hit-flash 0.5s ease-out 0.4s'
                        : undefined,
+                   }}
+                   onError={(e) => {
+                     // 主选背面加载失败时，降级到心金魂银
+                     const img = e.currentTarget;
+                     const fallback = getBackSpriteFallbackUrl(playerMon.speciesData.pokedexId);
+                     if (img.src !== fallback) {
+                       img.src = fallback;
+                     }
                    }}
                  />
             </div>

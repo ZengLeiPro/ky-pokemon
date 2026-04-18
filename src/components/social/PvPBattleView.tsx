@@ -4,7 +4,7 @@ import { useGameStore } from '@/stores/gameStore';
 import { useToast } from '@/components/ui/Toast';
 import HPBar from '@/components/ui/HPBar';
 import TypeBadge from '@/components/ui/TypeBadge';
-import { getBackSpriteUrl } from '@shared/utils/sprites';
+import { getBackSpriteUrl, getBackSpriteFallbackUrl } from '@shared/utils/sprites';
 
 interface PvPBattleViewProps {
   battleId: string;
@@ -507,6 +507,14 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
                   alt={myActivePokemon.speciesName}
                   className="w-full h-full object-contain pixelated drop-shadow-2xl relative z-10"
                   style={{ imageRendering: 'pixelated' }}
+                  onError={(e) => {
+                    // 主选背面加载失败时，降级到心金魂银
+                    const img = e.currentTarget;
+                    const fallback = getBackSpriteFallbackUrl(myActivePokemon.speciesData.pokedexId);
+                    if (img.src !== fallback) {
+                      img.src = fallback;
+                    }
+                  }}
                 />
               </div>
 
