@@ -302,7 +302,7 @@ const BattleStage: React.FC = () => {
         {/* Player Info - Bottom Right */}
         <div className="relative z-10 pb-6 px-4 flex justify-between items-end animate-fade-in-up">
              {/* 我方精灵 - 被攻击时闪烁 */}
-             <div className="w-32 h-32 flex items-center justify-center relative -mb-2 z-10">
+             <div className="w-32 h-32 flex items-end justify-center relative mb-2 z-10">
                  <img
                    src={getBackSpriteUrl(playerMon.speciesData.pokedexId)}
                    alt={playerMon.speciesName}
