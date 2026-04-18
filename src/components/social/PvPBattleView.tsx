@@ -4,6 +4,7 @@ import { useGameStore } from '@/stores/gameStore';
 import { useToast } from '@/components/ui/Toast';
 import HPBar from '@/components/ui/HPBar';
 import TypeBadge from '@/components/ui/TypeBadge';
+import { getBackSpriteUrl } from '@shared/utils/sprites';
 
 interface PvPBattleViewProps {
   battleId: string;
@@ -502,9 +503,9 @@ export function PvPBattleView({ battleId }: PvPBattleViewProps) {
               <div className="w-36 h-36 flex items-center justify-center relative">
                 <div className="absolute inset-0 bg-gradient-to-t from-transparent to-black/10 rounded-full blur-xl" />
                 <img
-                  src={myActivePokemon.spriteUrl}
+                  src={getBackSpriteUrl(myActivePokemon.speciesData.pokedexId)}
                   alt={myActivePokemon.speciesName}
-                  className="w-full h-full object-contain pixelated scale-x-[-1] drop-shadow-2xl relative z-10"
+                  className="w-full h-full object-contain pixelated drop-shadow-2xl relative z-10"
                   style={{ imageRendering: 'pixelated' }}
                 />
               </div>

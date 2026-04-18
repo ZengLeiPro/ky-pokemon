@@ -142,6 +142,7 @@ interface GameState {
   healParty: () => void;
   switchPokemon: (pokemonId: string) => void;
   setFirstPokemon: (pokemonId: string) => void;
+  swapPartyPosition: (indexA: number, indexB: number) => void;
   depositPokemon: (pokemonId: string) => boolean;
   withdrawPokemon: (pokemonId: string) => boolean;
   releasePokemon: (pokemonId: string) => boolean;
@@ -1641,11 +1642,21 @@ export const useGameStore = create<GameState>()(
       if (targetIndex <= 0) return;
 
       const targetPokemon = state.playerParty[targetIndex];
-      
+
       state.playerParty.splice(targetIndex, 1);
       state.playerParty.unshift(targetPokemon);
-      
+
       state.logs.push(createLogEntry(`${targetPokemon.speciesName} 被设置为了首发宝可梦。`));
+  })),
+
+  // 交换队伍中两个位置的宝可梦
+  swapPartyPosition: (indexA: number, indexB: number) => set(produce((state: GameState) => {
+      if (indexA === indexB) return;
+      if (indexA < 0 || indexA >= state.playerParty.length) return;
+      if (indexB < 0 || indexB >= state.playerParty.length) return;
+      const temp = state.playerParty[indexA];
+      state.playerParty[indexA] = state.playerParty[indexB];
+      state.playerParty[indexB] = temp;
   })),
 
   depositPokemon: (pokemonId: string) => {

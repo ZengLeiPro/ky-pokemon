@@ -3,6 +3,7 @@ import { useGameStore } from '../../stores/gameStore';
 import HPBar from '../ui/HPBar';
 import TypeBadge from '../ui/TypeBadge';
 import { MOVES, WORLD_MAP } from '@shared/constants';
+import { getBackSpriteUrl } from '@shared/utils/sprites';
 import { TYPE_TRANSLATIONS, TYPE_COLORS } from '../../constants';
 import BattleBackground from '../battle/BattleBackground';
 import BattleWeather from '../battle/BattleWeather';
@@ -303,9 +304,9 @@ const BattleStage: React.FC = () => {
              {/* 我方精灵 - 被攻击时闪烁 */}
              <div className="w-32 h-32 flex items-center justify-center relative -mb-2 z-10">
                  <img
-                   src={playerMon.spriteUrl}
+                   src={getBackSpriteUrl(playerMon.speciesData.pokedexId)}
                    alt={playerMon.speciesName}
-                   className="w-full h-full object-contain pixelated scale-x-[-1] drop-shadow-2xl"
+                   className="w-full h-full object-contain pixelated drop-shadow-2xl"
                    style={{
                      imageRendering: 'pixelated',
                      animation: isPlayerHit
