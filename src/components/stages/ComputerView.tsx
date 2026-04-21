@@ -107,9 +107,6 @@ const ComputerView: React.FC = () => {
           >
             宝可梦电脑
           </h2>
-          <div className="text-[11px] text-red-100/80 font-mono">
-            BILL'S PC TERMINAL
-          </div>
         </div>
         {/* 右上角亮起的绿色状态灯 */}
         <div className="flex items-center gap-2">
