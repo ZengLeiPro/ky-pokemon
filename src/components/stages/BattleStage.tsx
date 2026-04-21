@@ -303,11 +303,11 @@ const BattleStage: React.FC = () => {
         {/* Player Info - Bottom Right */}
         <div className="relative z-10 pb-0 px-4 flex justify-between items-end animate-fade-in-up">
              {/* 我方精灵 - 被攻击时闪烁 */}
-             <div className="w-32 h-32 flex items-end justify-center relative mb-2 z-10">
+             <div className="w-32 h-32 flex items-end justify-center relative mb-0 z-30">
                  <img
                    src={getBackSpriteUrl(playerMon.speciesData.pokedexId)}
                    alt={playerMon.speciesName}
-                   className="w-full h-full object-contain pixelated drop-shadow-2xl"
+                   className="w-full h-full object-contain pixelated drop-shadow-2xl translate-y-3"
                    style={{
                      imageRendering: 'pixelated',
                      animation: isPlayerHit
