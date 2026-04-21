@@ -12,6 +12,7 @@ import BattleStage from './components/stages/BattleStage';
 import SummaryView from './components/stages/SummaryView';
 import DexView from './components/stages/DexView';
 import PCBoxView from './components/stages/PCBoxView';
+import ComputerView from './components/stages/ComputerView';
 import StarterSelectionView from './components/stages/StarterSelectionView';
 import MainStageSlider from './components/MainStageSlider';
 import WorldStage from './components/stages/WorldStage';
@@ -108,6 +109,8 @@ const App: React.FC = () => {
         return <SummaryView />;
       case 'PC_BOX':
         return <PCBoxView />;
+      case 'COMPUTER':
+        return <ComputerView />;
       case 'FRIENDS':
         return <FriendsView />;
       case 'CHAT':

@@ -120,6 +120,37 @@ pokedex.get('/stats', async (c) => {
   });
 });
 
+// 查询当前用户在图鉴排行榜中的排名
+pokedex.get('/me-rank', async (c) => {
+  const user = c.get('user');
+
+  // 当前用户已捕获数量
+  const myCount = await db.pokedexEntry.count({
+    where: { userId: user.userId, status: 'CAUGHT' }
+  });
+
+  // 所有玩家按捕获数分组（只统计有至少 1 只 CAUGHT 的）
+  const allPlayers = await db.pokedexEntry.groupBy({
+    by: ['userId'],
+    where: { status: 'CAUGHT' },
+    _count: { speciesId: true },
+    orderBy: { _count: { speciesId: 'desc' } }
+  });
+
+  // 排名 = 捕获数严格多于自己的玩家数 + 1（并列取较高排名）
+  const betterCount = allPlayers.filter(p => p._count.speciesId > myCount).length;
+  const rank = myCount > 0 ? betterCount + 1 : null; // 未抓到任何宝可梦则不参与排名
+
+  return c.json({
+    success: true,
+    data: {
+      rank,
+      caughtCount: myCount,
+      totalRankedPlayers: allPlayers.length
+    }
+  });
+});
+
 // 获取图鉴排行榜
 pokedex.get('/leaderboard', async (c) => {
   // 统计每个用户捕获的宝可梦数量

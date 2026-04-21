@@ -60,10 +60,11 @@ export const pokemonCenterMap: MapData = {
     // --------------------------------------------------------
     objects: [
       // 行0: 墙壁顶部（家具位置用对应的 -top 瓦片替代 wall-top，形成完整的 2 格高物体）
-      ['wall-top', 'shelf-potions-top', 'wall-top', 'healing-machine-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'pc-terminal-top', 'wall-top', 'trade-machine-top', 'wall-top'],
+      // 注意：(2,0)/(2,1) 放火红风格电脑（computer-fr），用于盒子/排名/排行榜；原 (8,0)/(8,1) PC 终端已移除恢复为墙壁
+      ['wall-top', 'shelf-potions-top', 'computer-fr-top', 'healing-machine-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'wall-top', 'trade-machine-top', 'wall-top'],
       // 行1: 墙壁正面 + 家具设备
-      //  列:  0            1           2     3                  4               5                6               7      8              9        10              11
-      ['wall-front', 'shelf-potions', 'wall-front', 'healing-machine', 'counter-left', 'counter-center', 'counter-right', 'wall-front', 'pc-terminal', 'plant', 'trade-machine', 'wall-front'],
+      //  列:  0            1                2                3                  4               5                6               7              8              9        10              11
+      ['wall-front', 'shelf-potions', 'computer-fr', 'healing-machine', 'counter-left', 'counter-center', 'counter-right', 'wall-front', 'wall-front', 'plant', 'trade-machine', 'wall-front'],
       // 行2: 柜台正面 + 地板
       [null, null, null, null, 'counter-front', 'counter-front', 'counter-front', null, null, null, null, null],
       // 行3: 开阔地板
@@ -214,13 +215,14 @@ export const pokemonCenterMap: MapData = {
       type: 'item',
       linkedNpcId: 'nurse-joy',
     },
-    // PC 终端交互（PC 在 (8,1)，从 (8,2) 面朝上交互）
+    // 火红风格电脑交互（电脑在 (2,0)/(2,1)，玩家站 (2,2) 面朝上即可触发）
+    // position 与家具瓦片同格：玩家朝上时 facing=(2,1) 匹配 → 触发，体感自然
     {
-      id: 'pc-terminal',
-      position: { x: 8, y: 2 },
+      id: 'computer-fr',
+      position: { x: 2, y: 1 },
       type: 'item',
-      message: '宝可梦存储系统已启动...',
-      onInteract: 'open-pc',
+      message: '多功能电脑已启动...',
+      onInteract: 'open-computer',
     },
     // 交换终端交互
     {

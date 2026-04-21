@@ -15,6 +15,7 @@ export type ViewState =
   | 'REGISTER'
   | 'INTRO'
   | 'PC_BOX'
+  | 'COMPUTER'     // 宝可梦中心多功能电脑（盒子/我的排名/排行榜）
   // 社交视图
   | 'FRIENDS'      // 好友列表
   | 'CHAT'         // 聊天界面

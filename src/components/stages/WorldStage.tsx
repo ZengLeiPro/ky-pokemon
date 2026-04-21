@@ -42,6 +42,10 @@ const WorldStage: React.FC<WorldStageProps> = ({ scene }) => {
     setView('PC_BOX');
   }, [setView]);
 
+  const handleOpenComputer = useCallback(() => {
+    setView('COMPUTER');
+  }, [setView]);
+
   const handleTrade = useCallback(() => {
     setView('TRADE');
   }, [setView]);
@@ -90,6 +94,7 @@ const WorldStage: React.FC<WorldStageProps> = ({ scene }) => {
         onExit={handlePokemonCenterExit}
         onHealTeam={handleHealTeam}
         onOpenPC={handleOpenPC}
+        onOpenComputer={handleOpenComputer}
         onTrade={handleTrade}
         onOpenTMCraft={handleOpenTMCraft}
       />

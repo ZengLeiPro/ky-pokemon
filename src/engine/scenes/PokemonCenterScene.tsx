@@ -11,8 +11,10 @@ interface PokemonCenterSceneProps {
   onExit: () => void;
   /** 治愈队伍 */
   onHealTeam: () => void;
-  /** 打开 PC 箱 */
+  /** 打开 PC 箱（旧单功能入口，保留兼容） */
   onOpenPC: () => void;
+  /** 打开多功能电脑（盒子/我的排名/排行榜） */
+  onOpenComputer: () => void;
   /** 打开交换界面 */
   onTrade: () => void;
   /** 打开招式学习器合成界面 */
@@ -32,6 +34,7 @@ export function PokemonCenterScene({
   onExit,
   onHealTeam,
   onOpenPC,
+  onOpenComputer,
   onTrade,
   onOpenTMCraft,
 }: PokemonCenterSceneProps) {
@@ -87,6 +90,9 @@ export function PokemonCenterScene({
         case 'open-pc':
           onOpenPC();
           break;
+        case 'open-computer':
+          onOpenComputer();
+          break;
         case 'open-trade':
           onTrade();
           break;
@@ -97,7 +103,7 @@ export function PokemonCenterScene({
           break;
       }
     },
-    [onHealTeam, onOpenPC, onTrade, onOpenTMCraft],
+    [onHealTeam, onOpenPC, onOpenComputer, onTrade, onOpenTMCraft],
   );
 
   return (

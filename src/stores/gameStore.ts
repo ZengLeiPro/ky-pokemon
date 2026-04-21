@@ -1388,6 +1388,12 @@ export const useGameStore = create<GameState>()(
       const { battle, playerParty, addLog } = get();
       if (!battle.active || !battle.enemy || battle.phase !== 'INPUT') return;
 
+      // 训练家战禁止捕捉
+      if (battle.trainerName) {
+          addLog(`这是别人的宝可梦，不可以抢！`, 'urgent');
+          return;
+      }
+
       const pokeballItem = get().inventory.find(i => i.id === ballId);
       if (!pokeballItem || pokeballItem.quantity <= 0) {
           addLog(`${pokeballItem?.name || '精灵球'}没有了！`, 'urgent');
