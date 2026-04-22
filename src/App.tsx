@@ -127,6 +127,8 @@ const App: React.FC = () => {
         return <WorldStage scene="GYM" />;
       case 'SHOP':
         return <WorldStage scene="SHOP" />;
+      case 'PALLET_TOWN':
+        return <WorldStage scene="PALLET_TOWN" />;
       case 'SPRITE_PREVIEW':
         return <SpritePreviewScene onExit={() => setView('ROAM')} />;
       case 'PVP_BATTLE': {

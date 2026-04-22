@@ -27,6 +27,7 @@ export type ViewState =
   | 'POKEMON_CENTER'  // 宝可梦中心 (2D场景)
   | 'GYM'             // 道馆 (2D场景)
   | 'SHOP'            // 商店 (2D场景)
+  | 'PALLET_TOWN'     // 真新镇 (2D户外场景)
   | 'SPRITE_PREVIEW'; // 精灵预览 (调试)
 
 export interface LogEntry {

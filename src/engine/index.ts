@@ -53,3 +53,4 @@ export { GameWorld } from './components/GameWorld';
 // 场景
 export { PokemonCenterScene } from './scenes/PokemonCenterScene';
 export { GymScene } from './scenes/GymScene';
+export { PalletTownScene } from './scenes/PalletTownScene';

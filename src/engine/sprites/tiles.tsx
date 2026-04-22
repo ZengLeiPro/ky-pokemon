@@ -1,4 +1,5 @@
 import type { JSX } from 'react';
+import { palletTownTileRenderers } from './pallet-town-tiles';
 
 /**
  * 瓦片 PNG 渲染 - 使用 Tuxemon 图块集提取的 16x16 像素图块
@@ -129,4 +130,5 @@ const customTileRenderers: Record<string, (size: number) => JSX.Element> = {
 export const tileRenderers: Record<string, (size: number) => JSX.Element> = {
   ...Object.fromEntries(TILE_IDS.map((id) => [id, createTileRenderer(id)])),
   ...customTileRenderers,
+  ...palletTownTileRenderers,
 };

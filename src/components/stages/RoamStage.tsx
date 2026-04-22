@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
-import { Compass, HardDrive, Crown, Navigation, ShoppingBag, House, Swords, Users, Eye, Gift } from 'lucide-react';
+import { Compass, HardDrive, Crown, Navigation, ShoppingBag, House, Swords, Users, Eye, Gift, MapPin } from 'lucide-react';
 import { WORLD_MAP, SPECIES_DATA } from '../../constants';
 
 const TOUCH_PAN_Y_STYLE: React.CSSProperties = { touchAction: 'pan-y' };
@@ -33,6 +33,9 @@ const RoamStage: React.FC = () => {
 
   const isTown = location.id.includes('town') || location.id.includes('city');
   const hasGym = !!location.gym;
+
+  // 是否支持 2D 户外漫游（目前仅真新镇）
+  const has2DExplore = location.id === 'pallet-town';
 
   // 检查传说宝可梦是否可遭遇
   const legendaryEncounter = location.legendaryEncounter;
@@ -120,7 +123,7 @@ const RoamStage: React.FC = () => {
 
             {/* Main Action - Explore */}
             <div className="w-full max-w-xs mb-6 shrink-0">
-                <button 
+                <button
                     onClick={handleExplore}
                     className="w-full group relative overflow-hidden bg-emerald-600 active:bg-emerald-700 text-white p-1 rounded-[2.5rem] shadow-xl transition-all transform active:scale-[0.98]"
                 >
@@ -134,6 +137,25 @@ const RoamStage: React.FC = () => {
                     </div>
                 </button>
             </div>
+
+            {/* 2D 漫步按钮 - 仅当前区域支持 2D 户外场景时显示 */}
+            {has2DExplore && (
+                <div className="w-full max-w-xs mb-6 shrink-0">
+                    <button
+                        onClick={() => setView('PALLET_TOWN')}
+                        className="w-full group relative overflow-hidden bg-gradient-to-r from-sky-600 via-cyan-600 to-teal-600 active:from-sky-700 active:via-cyan-700 active:to-teal-700 text-white p-1 rounded-[2.5rem] shadow-xl transition-all transform active:scale-[0.98]"
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-b from-white/15 to-transparent pointer-events-none"></div>
+                        <div className="bg-slate-900/20 h-24 flex items-center justify-between px-8 rounded-[2.3rem] border border-white/20 relative z-10">
+                            <div className="flex flex-col items-start">
+                                <span className="text-xl font-bold tracking-wide italic">漫步街道</span>
+                                <span className="text-cyan-100/70 text-[10px] font-mono mt-1">WALK THE TOWN</span>
+                            </div>
+                            <MapPin size={36} className="text-cyan-100 opacity-80 group-hover:scale-110 transition-transform duration-500" strokeWidth={1.5} />
+                        </div>
+                    </button>
+                </div>
+            )}
 
             {/* Travel / Connections Section */}
             <div className="w-full max-w-xs mb-6">

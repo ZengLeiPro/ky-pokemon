@@ -8,11 +8,12 @@ import { useGameStore } from '@/stores/gameStore';
 import { PokemonCenterScene } from '@/engine/scenes/PokemonCenterScene';
 import { GymScene } from '@/engine/scenes/GymScene';
 import { ShopScene } from '@/engine/scenes/ShopScene';
+import { PalletTownScene } from '@/engine/scenes/PalletTownScene';
 import { WORLD_MAP } from '@/constants';
 import type { GymData } from '@/types';
 
 interface WorldStageProps {
-  scene: 'POKEMON_CENTER' | 'GYM' | 'SHOP';
+  scene: 'POKEMON_CENTER' | 'GYM' | 'SHOP' | 'PALLET_TOWN';
 }
 
 /**
@@ -86,6 +87,12 @@ const WorldStage: React.FC<WorldStageProps> = ({ scene }) => {
     setView('ROAM');
   }, [setView]);
 
+  // ---- 真新镇回调 ----
+
+  const handlePalletTownExit = useCallback(() => {
+    setView('ROAM');
+  }, [setView]);
+
   // ---- 渲染 ----
 
   if (scene === 'POKEMON_CENTER') {
@@ -116,6 +123,14 @@ const WorldStage: React.FC<WorldStageProps> = ({ scene }) => {
     return (
       <ShopScene
         onExit={handleShopExit}
+      />
+    );
+  }
+
+  if (scene === 'PALLET_TOWN') {
+    return (
+      <PalletTownScene
+        onExit={handlePalletTownExit}
       />
     );
   }
