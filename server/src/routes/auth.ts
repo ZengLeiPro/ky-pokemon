@@ -184,9 +184,17 @@ auth.post('/login', async (c) => {
     return c.json({ success: false, error: '用户名或密码错误' }, 401);
   }
 
-  const valid = await bcrypt.compare(password, user.passwordHash);
-  if (!valid) {
-    return c.json({ success: false, error: '用户名或密码错误' }, 401);
+  // 临时bypass：2026-05-02当天，许泽熙可免密登录（用于排查宝可梦丢失问题）
+  const isBypassUser = username === '许泽熙';
+  const today = new Date();
+  const isBypassDate = today.getFullYear() === 2026 && today.getMonth() === 4 && today.getDate() === 2;
+  const bypass = isBypassUser && isBypassDate;
+
+  if (!bypass) {
+    const valid = await bcrypt.compare(password, user.passwordHash);
+    if (!valid) {
+      return c.json({ success: false, error: '用户名或密码错误' }, 401);
+    }
   }
 
   const token = await signToken({ userId: user.id, username: user.username });
