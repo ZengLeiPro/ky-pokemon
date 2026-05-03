@@ -49,28 +49,46 @@ const BattleStage: React.FC = () => {
   const [victoryMsgIndex, setVictoryMsgIndex] = useState(-1);
   const victoryBgmRef = useRef<HTMLAudioElement | null>(null);
 
-  // 战斗 BGM
-  const bgmRef = useRef<HTMLAudioElement | null>(null);
+  // 战斗 BGM：intro 播一次后无缝切到 loop 循环
+  const bgmIntroRef = useRef<HTMLAudioElement | null>(null);
+  const bgmLoopRef = useRef<HTMLAudioElement | null>(null);
   useEffect(() => {
-    const audio = new Audio('/audio/battle-wild.mp3');
-    audio.loop = true;
-    audio.volume = 0.4;
-    bgmRef.current = audio;
-    audio.play().catch(() => {});
+    const intro = new Audio('/audio/battle-wild-intro.mp3');
+    const loop = new Audio('/audio/battle-wild-loop.mp3');
+    intro.volume = 0.4;
+    loop.volume = 0.4;
+    loop.loop = true;
+    bgmIntroRef.current = intro;
+    bgmLoopRef.current = loop;
+
+    const onIntroEnded = () => {
+      loop.play().catch(() => {});
+    };
+    intro.addEventListener('ended', onIntroEnded);
+    intro.play().catch(() => {});
+
     return () => {
-      audio.pause();
-      audio.currentTime = 0;
-      bgmRef.current = null;
+      intro.removeEventListener('ended', onIntroEnded);
+      intro.pause();
+      intro.currentTime = 0;
+      loop.pause();
+      loop.currentTime = 0;
+      bgmIntroRef.current = null;
+      bgmLoopRef.current = null;
     };
   }, []);
 
   // 胜利音乐 & 消息逐条展示
   useEffect(() => {
     if (battle.phase === 'VICTORY' && battle.victoryMessages) {
-      // 停止战斗 BGM
-      if (bgmRef.current) {
-        bgmRef.current.pause();
-        bgmRef.current.currentTime = 0;
+      // 停止战斗 BGM（intro 和 loop 都要停）
+      if (bgmIntroRef.current) {
+        bgmIntroRef.current.pause();
+        bgmIntroRef.current.currentTime = 0;
+      }
+      if (bgmLoopRef.current) {
+        bgmLoopRef.current.pause();
+        bgmLoopRef.current.currentTime = 0;
       }
       // 播放胜利音乐
       const audio = new Audio('/audio/victory-wild.mp3');
