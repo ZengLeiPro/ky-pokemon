@@ -58,17 +58,29 @@ const BattleStage: React.FC = () => {
     intro.volume = 0.4;
     loop.volume = 0.4;
     loop.loop = true;
+    // 关键：让 loop 在 intro 播放期间就预加载，避免切换时空白
+    loop.preload = 'auto';
+    loop.load();
     bgmIntroRef.current = intro;
     bgmLoopRef.current = loop;
 
-    const onIntroEnded = () => {
-      loop.play().catch(() => {});
+    // 用 timeupdate 在 intro 还剩 50ms 时启动 loop（比等 ended 事件更精准、无空白）
+    let switched = false;
+    const tryStartLoop = () => {
+      if (switched) return;
+      if (intro.duration > 0 && intro.currentTime >= intro.duration - 0.05) {
+        switched = true;
+        loop.play().catch(() => {});
+      }
     };
-    intro.addEventListener('ended', onIntroEnded);
+    intro.addEventListener('timeupdate', tryStartLoop);
+    // 兜底：如果 timeupdate 没触发到（罕见），ended 时也启动
+    intro.addEventListener('ended', tryStartLoop);
     intro.play().catch(() => {});
 
     return () => {
-      intro.removeEventListener('ended', onIntroEnded);
+      intro.removeEventListener('timeupdate', tryStartLoop);
+      intro.removeEventListener('ended', tryStartLoop);
       intro.pause();
       intro.currentTime = 0;
       loop.pause();
