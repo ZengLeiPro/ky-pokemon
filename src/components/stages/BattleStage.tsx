@@ -49,44 +49,59 @@ const BattleStage: React.FC = () => {
   const [victoryMsgIndex, setVictoryMsgIndex] = useState(-1);
   const victoryBgmRef = useRef<HTMLAudioElement | null>(null);
 
-  // 战斗 BGM：intro 播一次后无缝切到 loop 循环
-  const bgmIntroRef = useRef<HTMLAudioElement | null>(null);
-  const bgmLoopRef = useRef<HTMLAudioElement | null>(null);
+  // 战斗 BGM：用 Web Audio API 实现 intro→loop 帧级精度无缝衔接
+  const bgmCtxRef = useRef<AudioContext | null>(null);
+  const bgmIntroSourceRef = useRef<AudioBufferSourceNode | null>(null);
+  const bgmLoopSourceRef = useRef<AudioBufferSourceNode | null>(null);
   useEffect(() => {
-    const intro = new Audio('/audio/battle-wild-intro.mp3');
-    const loop = new Audio('/audio/battle-wild-loop.mp3');
-    intro.volume = 0.4;
-    loop.volume = 0.4;
-    loop.loop = true;
-    // 关键：让 loop 在 intro 播放期间就预加载，避免切换时空白
-    loop.preload = 'auto';
-    loop.load();
-    bgmIntroRef.current = intro;
-    bgmLoopRef.current = loop;
+    let cancelled = false;
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    const ctx: AudioContext = new AudioCtx();
+    const gain = ctx.createGain();
+    gain.gain.value = 0.4;
+    gain.connect(ctx.destination);
+    bgmCtxRef.current = ctx;
 
-    // 用 timeupdate 在 intro 还剩 50ms 时启动 loop（比等 ended 事件更精准、无空白）
-    let switched = false;
-    const tryStartLoop = () => {
-      if (switched) return;
-      if (intro.duration > 0 && intro.currentTime >= intro.duration - 0.05) {
-        switched = true;
-        loop.play().catch(() => {});
-      }
+    const loadBuffer = async (url: string): Promise<AudioBuffer> => {
+      const res = await fetch(url);
+      const arr = await res.arrayBuffer();
+      return await ctx.decodeAudioData(arr);
     };
-    intro.addEventListener('timeupdate', tryStartLoop);
-    // 兜底：如果 timeupdate 没触发到（罕见），ended 时也启动
-    intro.addEventListener('ended', tryStartLoop);
-    intro.play().catch(() => {});
+
+    Promise.all([
+      loadBuffer('/audio/battle-wild-intro.mp3'),
+      loadBuffer('/audio/battle-wild-loop.mp3'),
+    ]).then(([introBuf, loopBuf]) => {
+      if (cancelled) return;
+      // 浏览器自动播放策略下可能需要 resume
+      if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+
+      const introSource = ctx.createBufferSource();
+      introSource.buffer = introBuf;
+      introSource.connect(gain);
+
+      const loopSource = ctx.createBufferSource();
+      loopSource.buffer = loopBuf;
+      loopSource.loop = true;
+      loopSource.connect(gain);
+
+      bgmIntroSourceRef.current = introSource;
+      bgmLoopSourceRef.current = loopSource;
+
+      // 精确调度：loop 在 intro 时长结束的那一刻开始
+      const startAt = ctx.currentTime + 0.05; // 留 50ms 缓冲，确保 ctx 已就绪
+      introSource.start(startAt);
+      loopSource.start(startAt + introBuf.duration);
+    }).catch(() => {});
 
     return () => {
-      intro.removeEventListener('timeupdate', tryStartLoop);
-      intro.removeEventListener('ended', tryStartLoop);
-      intro.pause();
-      intro.currentTime = 0;
-      loop.pause();
-      loop.currentTime = 0;
-      bgmIntroRef.current = null;
-      bgmLoopRef.current = null;
+      cancelled = true;
+      try { bgmIntroSourceRef.current?.stop(); } catch {}
+      try { bgmLoopSourceRef.current?.stop(); } catch {}
+      bgmIntroSourceRef.current = null;
+      bgmLoopSourceRef.current = null;
+      ctx.close().catch(() => {});
+      bgmCtxRef.current = null;
     };
   }, []);
 
@@ -94,14 +109,10 @@ const BattleStage: React.FC = () => {
   useEffect(() => {
     if (battle.phase === 'VICTORY' && battle.victoryMessages) {
       // 停止战斗 BGM（intro 和 loop 都要停）
-      if (bgmIntroRef.current) {
-        bgmIntroRef.current.pause();
-        bgmIntroRef.current.currentTime = 0;
-      }
-      if (bgmLoopRef.current) {
-        bgmLoopRef.current.pause();
-        bgmLoopRef.current.currentTime = 0;
-      }
+      try { bgmIntroSourceRef.current?.stop(); } catch {}
+      try { bgmLoopSourceRef.current?.stop(); } catch {}
+      bgmIntroSourceRef.current = null;
+      bgmLoopSourceRef.current = null;
       // 播放胜利音乐
       const audio = new Audio('/audio/victory-wild.mp3');
       audio.volume = 0.5;
