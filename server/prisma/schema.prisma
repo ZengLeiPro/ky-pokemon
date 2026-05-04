@@ -297,3 +297,11 @@ model PokedexEntry {
   @@index([speciesId])
   @@index([status])
 }
+
+// ========== 一次性事件（用于每日活动结算等幂等场景） ==========
+model DailyEvent {
+  id        String   @id @default(uuid())
+  eventKey  String   @unique  // 例如 'master_ball_grant_2026-05-04'
+  payload   String?  // JSON 字符串，记录结算结果（如获奖者 userId）
+  createdAt DateTime @default(now())
+}

@@ -32,8 +32,9 @@ import GiftView from './components/social/GiftView';
 import { PvPBattleView } from './components/social/PvPBattleView';
 import RedeemCodeView from './components/stages/RedeemCodeView';
 
-import { Toast } from './components/ui/Toast';
+import { Toast, useToast } from './components/ui/Toast';
 import CheatConsole from './components/CheatConsole';
+import { config } from './config';
 
 const App: React.FC = () => {
   const { view, setView, hasSelectedStarter, isGameLoading, evolution } = useGameStore();
@@ -41,6 +42,19 @@ const App: React.FC = () => {
 
   // 用于保存当前 PvP 对战 ID，防止重新渲染时丢失
   const pvpBattleIdRef = useRef<string | null>(null);
+
+  // 开发预览模式：URL 带 ?preview=<scene> 可以跳过登录直接看某个 2D 场景
+  // 例如：http://localhost:3001/?preview=pallet-town
+  const previewScene = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search).get('preview')
+    : null;
+  if (previewScene === 'pallet-town') {
+    return (
+      <div className="h-screen w-screen bg-black overflow-hidden relative">
+        <WorldStage scene="PALLET_TOWN" />
+      </div>
+    );
+  }
 
   useEffect(() => {
     checkAuth();
@@ -87,6 +101,68 @@ const App: React.FC = () => {
       pvpBattleIdRef.current = null;
     }
   }, [view]);
+
+  // 每日大师球结算（一次性活动：2026-05-04 北京时间 15:30 后）
+  // 任何登录用户都能触发，后端用唯一约束保证全局只发放一次
+  useEffect(() => {
+    if (!isAuthenticated || !currentUser) return;
+    const SESSION_KEY = 'masterBallChecked_2026-05-04';
+    if (sessionStorage.getItem(SESSION_KEY) === 'done') return;
+
+    let cancelled = false;
+    const tryGrant = async () => {
+      if (cancelled) return;
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        const res = await fetch(`${config.apiUrl}/pokedex/grant-daily-master-ball`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const json = await res.json();
+        if (!json.success) return;
+        const data = json.data;
+        if (!data) return;
+
+        if (data.status === 'pending') {
+          // 还没到 15:30，安排在 15:30 时再试
+          const wait = Math.max(1000, data.startsAt - Date.now() + 500);
+          setTimeout(tryGrant, wait);
+          return;
+        }
+        if (data.status === 'expired' || data.status === 'no_winner' || data.status === 'no_save') {
+          sessionStorage.setItem(SESSION_KEY, 'done');
+          return;
+        }
+        if (data.status === 'granted') {
+          sessionStorage.setItem(SESSION_KEY, 'done');
+          if (data.winner?.userId === currentUser.id) {
+            alert(`🎉 恭喜！你是今日排行榜第一名（捕获 ${data.winner.caughtCount} 只）！\n获得了一个【大师球】，请刷新页面查看～`);
+          } else {
+            useToast.getState().show(`今日排行榜第一名 ${data.winner?.username} 获得了大师球！`, 'info');
+          }
+          return;
+        }
+        if (data.status === 'already_granted') {
+          sessionStorage.setItem(SESSION_KEY, 'done');
+          // 不打扰，只在中奖者本人是当前用户时提示
+          if (data.winner?.userId === currentUser.id) {
+            useToast.getState().show(`你已获得今日大师球（排行榜第一名），请检查背包`, 'success');
+          }
+          return;
+        }
+      } catch (e) {
+        // 网络失败，60 秒后重试
+        setTimeout(tryGrant, 60_000);
+      }
+    };
+    // 进入游戏后稍等 2 秒再触发，让其他初始化先跑完
+    const initTimer = setTimeout(tryGrant, 2000);
+    return () => {
+      cancelled = true;
+      clearTimeout(initTimer);
+    };
+  }, [isAuthenticated, currentUser]);
 
   const renderStage = () => {
     // INTRO 视频页面优先于初始宝可梦选择

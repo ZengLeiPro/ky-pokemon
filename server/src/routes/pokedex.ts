@@ -181,4 +181,79 @@ pokedex.get('/leaderboard', async (c) => {
   return c.json({ success: true, data: { leaderboard: rankings } });
 });
 
+// ===== 每日大师球结算（一次性活动：2026-05-04）=====
+// 北京时间 2026-05-04 15:30 后，给排行榜第 1 名发 1 个大师球
+// 全局只结算一次，由用户访问触发（任何登录用户都可以触发，幂等保证只执行一次）
+const MASTER_BALL_EVENT_KEY = 'master_ball_grant_2026-05-04';
+const MASTER_BALL_GRANT_AT_MS = Date.UTC(2026, 4, 4, 7, 30); // 北京时间 2026-05-04 15:30 = UTC 07:30
+const MASTER_BALL_DEADLINE_MS = Date.UTC(2026, 4, 4, 16, 0); // 北京时间 2026-05-05 00:00 截止
+
+pokedex.post('/grant-daily-master-ball', async (c) => {
+  const now = Date.now();
+  if (now < MASTER_BALL_GRANT_AT_MS) {
+    return c.json({ success: true, data: { granted: false, status: 'pending', startsAt: MASTER_BALL_GRANT_AT_MS } });
+  }
+  if (now >= MASTER_BALL_DEADLINE_MS) {
+    return c.json({ success: true, data: { granted: false, status: 'expired' } });
+  }
+
+  // 先看是否已结算过
+  const existing = await db.dailyEvent.findUnique({ where: { eventKey: MASTER_BALL_EVENT_KEY } });
+  if (existing) {
+    const payload = existing.payload ? JSON.parse(existing.payload) : null;
+    return c.json({ success: true, data: { granted: false, status: 'already_granted', winner: payload } });
+  }
+
+  // 查排行榜第 1 名
+  const top = await db.pokedexEntry.groupBy({
+    by: ['userId'],
+    where: { status: 'CAUGHT' },
+    _count: { speciesId: true },
+    orderBy: { _count: { speciesId: 'desc' } },
+    take: 1
+  });
+  if (top.length === 0) {
+    return c.json({ success: true, data: { granted: false, status: 'no_winner' } });
+  }
+  const winnerId = top[0].userId;
+  const caughtCount = top[0]._count.speciesId;
+  const winnerUser = await db.user.findUnique({ where: { id: winnerId }, select: { username: true } });
+
+  // 加大师球到第一名 NORMAL 存档
+  const save = await db.gameSave.findUnique({ where: { userId_mode: { userId: winnerId, mode: 'NORMAL' } } });
+  if (!save) {
+    return c.json({ success: true, data: { granted: false, status: 'no_save' } });
+  }
+  const inventory = JSON.parse(save.inventory) as Array<{ id: string; name: string; description: string; category: string; quantity: number }>;
+  const masterBall = inventory.find(i => i.id === 'masterball');
+  if (masterBall) {
+    masterBall.quantity += 1;
+  } else {
+    inventory.push({ id: 'masterball', name: '大师球', description: '必定能捉到的终极球', category: 'POKEBALLS', quantity: 1 });
+  }
+
+  const winnerPayload = { userId: winnerId, username: winnerUser?.username ?? '未知', caughtCount };
+
+  // 事务：写 DailyEvent（唯一约束保证幂等）+ 更新 inventory
+  try {
+    await db.$transaction([
+      db.dailyEvent.create({ data: { eventKey: MASTER_BALL_EVENT_KEY, payload: JSON.stringify(winnerPayload) } }),
+      db.gameSave.update({
+        where: { userId_mode: { userId: winnerId, mode: 'NORMAL' } },
+        data: { inventory: JSON.stringify(inventory) }
+      })
+    ]);
+  } catch (e: any) {
+    // 唯一约束冲突 = 并发请求中另一个已经成功，重新读一次返回
+    const after = await db.dailyEvent.findUnique({ where: { eventKey: MASTER_BALL_EVENT_KEY } });
+    if (after) {
+      const payload = after.payload ? JSON.parse(after.payload) : null;
+      return c.json({ success: true, data: { granted: false, status: 'already_granted', winner: payload } });
+    }
+    throw e;
+  }
+
+  return c.json({ success: true, data: { granted: true, status: 'granted', winner: winnerPayload } });
+});
+
 export default pokedex;
